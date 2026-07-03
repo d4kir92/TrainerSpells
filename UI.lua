@@ -29,6 +29,13 @@ local function GetLevelDiffColorCode(level)
     return RANK_COLOR
 end
 
+local function IsBaseRankKnownByName(name)
+    if not name or not GetSpellInfo then return false end
+    local _, _, _, _, _, _, spellID = GetSpellInfo(name)
+
+    return spellID and IsSpellKnown and IsSpellKnown(spellID) or false
+end
+
 local function FormatCost(copper)
     if not copper or copper == 0 then return "kostenlos" end
 
@@ -266,7 +273,7 @@ function TrainerSpells_Refresh()
     local available, missingTalents, future = {}, {}, {}
     for _, entry in ipairs(remaining) do
         local baseRank = minRankByName[entry.name]
-        local looksTalentGated = baseRank > 1 and (knownMaxRank[entry.name] or 0) < baseRank
+        local looksTalentGated = baseRank > 1 and not IsBaseRankKnownByName(entry.name)
         if looksTalentGated then
             table.insert(missingTalents, entry)
         elseif entry.level > selectedLevel then
