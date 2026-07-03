@@ -588,26 +588,6 @@ end
 SLASH_TRAINERSPELLSDEBUG1 = "/tsdebug"
 SlashCmdList["TRAINERSPELLSDEBUG"] = PrintFrameDebug
 
-local function PrintListBgDebug()
-    if not SpellBookFrame then return end
-    for _, child in ipairs({SpellBookFrame:GetChildren()}) do
-        local name = child.GetName and child:GetName()
-        if name and name:find("Scroll") then
-            print(("TSBG child: %s shown=%s"):format(name, tostring(child:IsShown())))
-        end
-    end
-
-    for _, region in ipairs({SpellBookFrame:GetRegions()}) do
-        local name = region.GetName and region:GetName()
-        if name and name:find("Scroll") then
-            print(("TSBG region: %s shown=%s"):format(name, tostring(region:IsShown())))
-        end
-    end
-end
-
-SLASH_TRAINERSPELLSBG1 = "/tsbg"
-SlashCmdList["TRAINERSPELLSBG"] = PrintListBgDebug
-frame:HookScript("OnShow", PrintListBgDebug)
 if SpellBookFrame then
     local tab = CreateFrame("Button", "TrainerSpellsSpellbookTab", SpellBookFrame)
     tab:SetSize(32, 32)
@@ -624,7 +604,7 @@ if SpellBookFrame then
     ourTabGlow:SetBlendMode("ADD")
     ourTabGlow:Hide()
     local lastTab = _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
-    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -17)
+    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -51)
     tab:Hide()
     tab:SetScript("OnClick", OpenFrame)
     tab:SetScript(
