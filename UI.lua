@@ -179,7 +179,6 @@ local function InitScrollRow(rowFrame, elementData)
                     GameTooltip:AddLine("Kosten: " .. FormatCost(entry.cost), 1, 1, 1)
                 end
 
-                GameTooltip:AddLine("Rechtsklick: ignorieren", 0.6, 0.6, 0.6)
                 GameTooltip:Show()
             end
         )
@@ -406,11 +405,7 @@ if SpellBookFrame then
     )
 end
 
-local NATIVE_EXTRA_WIDGETS = {
-    "SpellBookPageNavigationFrame",
-    "SpellBookFrameShowAllSpellRanksCheckbox",
-    "ShowAllSpellRanksCheckbox",
-}
+local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame", "SpellBookFrameShowAllSpellRanksCheckbox", "ShowAllSpellRanksCheckbox",}
 local spellButtonsHidden = false
 local hiddenPageRegions = {}
 local function HideNativeSpellButtons()
