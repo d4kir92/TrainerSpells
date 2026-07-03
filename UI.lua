@@ -11,9 +11,24 @@ local NOTYET_COLOR = "|cffff4444"
 local TALENT_COLOR = "|cffff9933"
 local KNOWN_COLOR = "|cff888888"
 local IGNORED_COLOR = "|cff666666"
-local SPELL_NAME_COLOR = "|cff71d5ff"
+local SPELL_NAME_COLOR = "|cffffffff"
 local DIM_NAME_COLOR = "|cff999999"
 local RANK_COLOR = "|cffaaaaaa"
+local function GetLevelDiffColorCode(level)
+    if GetQuestDifficultyColor then
+        local r, g, b = GetQuestDifficultyColor(level)
+        if type(r) == "table" then
+            r, g, b = r.r, r.g, r.b
+        end
+
+        if r then
+            return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
+        end
+    end
+
+    return RANK_COLOR
+end
+
 local function FormatCost(copper)
     if not copper or copper == 0 then return "kostenlos" end
 
@@ -145,7 +160,7 @@ local function InitScrollRow(rowFrame, elementData)
         local nameColor = elementData.dimName and DIM_NAME_COLOR or SPELL_NAME_COLOR
         nameFS:SetText(nameColor .. entry.name .. "|r" .. rankText)
         if elementData.showLevel then
-            levelFS:SetText(elementData.color .. "Level " .. entry.level .. "|r")
+            levelFS:SetText(GetLevelDiffColorCode(entry.level) .. "Level " .. entry.level .. "|r")
         end
 
         rowFrame:EnableMouse(true)
