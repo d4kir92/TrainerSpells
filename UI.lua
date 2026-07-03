@@ -152,7 +152,9 @@ local function InitScrollRow(rowFrame, elementData)
                 function(sel)
                     GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
                     GameTooltip:AddLine(elementData.text)
-                    GameTooltip:AddLine("Gesamtkosten: " .. FormatCost(elementData.totalCost), 1, 1, 1)
+                    local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
+                    local costColor = canAfford and "|cffffffff" or "|cffff3333"
+                    GameTooltip:AddLine("Gesamtkosten: " .. costColor .. FormatCost(elementData.totalCost) .. "|r", 1, 1, 1)
                     GameTooltip:Show()
                 end
             )
