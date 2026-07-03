@@ -25,5 +25,5 @@ locale\ptBR.lua
 locale\ruRU.lua
 locale\zhCN.lua
 
-settings.lua
-core.lua
+Data.lua
+UI.lua
