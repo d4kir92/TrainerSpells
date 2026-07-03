@@ -1,11 +1,11 @@
-TrainerSkills_Data = TrainerSkills_Data or {}
-TrainerSkills_Ignored = TrainerSkills_Ignored or {}
-TrainerSkills_IgnoredNames = TrainerSkills_IgnoredNames or {}
+TrainerSpells_Data = TrainerSpells_Data or {}
+TrainerSpells_Ignored = TrainerSpells_Ignored or {}
+TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("TRAINER_SHOW")
 f:RegisterEvent("TRAINER_UPDATE")
-local scanTooltip = CreateFrame("GameTooltip", "TrainerSkillsScanTooltip", nil, "GameTooltipTemplate")
+local scanTooltip = CreateFrame("GameTooltip", "TrainerSpellsScanTooltip", nil, "GameTooltipTemplate")
 scanTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 local function GetSpellIDForService(i)
     scanTooltip:ClearLines()
@@ -16,22 +16,22 @@ local function GetSpellIDForService(i)
 end
 
 local function EnsurePath(class, level)
-    TrainerSkills_Data[class] = TrainerSkills_Data[class] or {}
-    TrainerSkills_Data[class][level] = TrainerSkills_Data[class][level] or {}
+    TrainerSpells_Data[class] = TrainerSpells_Data[class] or {}
+    TrainerSpells_Data[class][level] = TrainerSpells_Data[class][level] or {}
 
-    return TrainerSkills_Data[class][level]
+    return TrainerSpells_Data[class][level]
 end
 
 local function CaptureTrainerInner()
     local _, classToken = UnitClass("player")
     if not classToken then
-        print("|cffff5555TrainerSkills:|r UnitClass(\"player\") lieferte keinen Klassen-Token.")
+        print("|cffff5555TrainerSpells:|r UnitClass(\"player\") lieferte keinen Klassen-Token.")
 
         return
     end
 
     if not GetNumTrainerServices then
-        print("|cffff5555TrainerSkills:|r GetNumTrainerServices existiert nicht (API in dieser Client-Version anders).")
+        print("|cffff5555TrainerSpells:|r GetNumTrainerServices existiert nicht (API in dieser Client-Version anders).")
 
         return
     end
@@ -60,14 +60,14 @@ local function CaptureTrainerInner()
     end
 
     if neu > 0 then
-        print(("|cff33ff99TrainerSkills:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
+        print(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
     end
 end
 
 local function CaptureTrainer()
     local ok, err = pcall(CaptureTrainerInner)
     if not ok then
-        print("|cffff5555TrainerSkills Fehler:|r " .. tostring(err))
+        print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
     end
 end
 
@@ -75,10 +75,10 @@ local captureScheduled = false
 f:SetScript(
     "OnEvent",
     function(self, event, addonName)
-        if event == "ADDON_LOADED" and addonName == "TrainerSkills" then
-            TrainerSkills_Data = TrainerSkills_Data or {}
-            TrainerSkills_Ignored = TrainerSkills_Ignored or {}
-            TrainerSkills_IgnoredNames = TrainerSkills_IgnoredNames or {}
+        if event == "ADDON_LOADED" and addonName == "TrainerSpells" then
+            TrainerSpells_Data = TrainerSpells_Data or {}
+            TrainerSpells_Ignored = TrainerSpells_Ignored or {}
+            TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             if C_Timer then
                 if not captureScheduled then
@@ -98,12 +98,12 @@ f:SetScript(
     end
 )
 
-TrainerSkills_Capture = CaptureTrainer
-function TrainerSkills_ToggleIgnoreSpell(spellID)
+TrainerSpells_Capture = CaptureTrainer
+function TrainerSpells_ToggleIgnoreSpell(spellID)
     local _, classToken = UnitClass("player")
     if not classToken or not spellID then return end
-    TrainerSkills_Ignored[classToken] = TrainerSkills_Ignored[classToken] or {}
-    local ignored = TrainerSkills_Ignored[classToken]
+    TrainerSpells_Ignored[classToken] = TrainerSpells_Ignored[classToken] or {}
+    local ignored = TrainerSpells_Ignored[classToken]
     if ignored[spellID] then
         ignored[spellID] = nil
     else
@@ -111,11 +111,11 @@ function TrainerSkills_ToggleIgnoreSpell(spellID)
     end
 end
 
-function TrainerSkills_ToggleIgnoreName(name)
+function TrainerSpells_ToggleIgnoreName(name)
     local _, classToken = UnitClass("player")
     if not classToken or not name then return end
-    TrainerSkills_IgnoredNames[classToken] = TrainerSkills_IgnoredNames[classToken] or {}
-    local ignored = TrainerSkills_IgnoredNames[classToken]
+    TrainerSpells_IgnoredNames[classToken] = TrainerSpells_IgnoredNames[classToken] or {}
+    local ignored = TrainerSpells_IgnoredNames[classToken]
     if ignored[name] then
         ignored[name] = nil
     else
@@ -123,20 +123,20 @@ function TrainerSkills_ToggleIgnoreName(name)
     end
 end
 
-function TrainerSkills_IsSpellIgnored(spellID)
+function TrainerSpells_IsSpellIgnored(spellID)
     local _, classToken = UnitClass("player")
     if not classToken or not spellID then return false end
 
-    return TrainerSkills_Ignored[classToken] and TrainerSkills_Ignored[classToken][spellID] or false
+    return TrainerSpells_Ignored[classToken] and TrainerSpells_Ignored[classToken][spellID] or false
 end
 
-function TrainerSkills_IsNameIgnored(name)
+function TrainerSpells_IsNameIgnored(name)
     local _, classToken = UnitClass("player")
     if not classToken or not name then return false end
 
-    return TrainerSkills_IgnoredNames[classToken] and TrainerSkills_IgnoredNames[classToken][name] or false
+    return TrainerSpells_IgnoredNames[classToken] and TrainerSpells_IgnoredNames[classToken][name] or false
 end
 
-function TrainerSkills_IsIgnored(spellID, name)
-    return TrainerSkills_IsSpellIgnored(spellID) or TrainerSkills_IsNameIgnored(name)
+function TrainerSpells_IsIgnored(spellID, name)
+    return TrainerSpells_IsSpellIgnored(spellID) or TrainerSpells_IsNameIgnored(name)
 end

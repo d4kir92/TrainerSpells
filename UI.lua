@@ -1,4 +1,4 @@
-local frame = CreateFrame("Frame", "TrainerSkillsFrame", UIParent)
+local frame = CreateFrame("Frame", "TrainerSpellsFrame", UIParent)
 frame:SetSize(420, 480)
 frame:SetPoint("CENTER")
 frame:SetFrameStrata("TOOLTIP")
@@ -31,13 +31,13 @@ local function SortEntries(list)
     )
 end
 
-local ignoreMenuFrame = CreateFrame("Frame", "TrainerSkillsIgnoreMenu", UIParent, "UIDropDownMenuTemplate")
+local ignoreMenuFrame = CreateFrame("Frame", "TrainerSpellsIgnoreMenu", UIParent, "UIDropDownMenuTemplate")
 local ignoreMenuEntry
 local function IgnoreMenu_Initialize(self, level)
     local entry = ignoreMenuEntry
     if not entry then return end
-    local spellIgnored = TrainerSkills_IsSpellIgnored and TrainerSkills_IsSpellIgnored(entry.spellID)
-    local nameIgnored = TrainerSkills_IsNameIgnored and TrainerSkills_IsNameIgnored(entry.name)
+    local spellIgnored = TrainerSpells_IsSpellIgnored and TrainerSpells_IsSpellIgnored(entry.spellID)
+    local nameIgnored = TrainerSpells_IsNameIgnored and TrainerSpells_IsNameIgnored(entry.name)
     local rankText = (entry.rank and entry.rank ~= "") and (" " .. entry.rank) or ""
     local info = UIDropDownMenu_CreateInfo()
     info.text = entry.name .. rankText
@@ -48,8 +48,8 @@ local function IgnoreMenu_Initialize(self, level)
     info.text = spellIgnored and "Diesen Rang nicht mehr ignorieren" or "Diesen Rang ignorieren"
     info.notCheckable = true
     info.func = function()
-        TrainerSkills_ToggleIgnoreSpell(entry.spellID)
-        TrainerSkills_Refresh()
+        TrainerSpells_ToggleIgnoreSpell(entry.spellID)
+        TrainerSpells_Refresh()
     end
 
     UIDropDownMenu_AddButton(info, level)
@@ -57,8 +57,8 @@ local function IgnoreMenu_Initialize(self, level)
     info.text = nameIgnored and "Alle Ränge nicht mehr ignorieren" or "Alle Ränge ignorieren"
     info.notCheckable = true
     info.func = function()
-        TrainerSkills_ToggleIgnoreName(entry.name)
-        TrainerSkills_Refresh()
+        TrainerSpells_ToggleIgnoreName(entry.name)
+        TrainerSpells_Refresh()
     end
 
     UIDropDownMenu_AddButton(info, level)
@@ -78,14 +78,14 @@ local function ShowIgnoreMenu(anchor, entry)
     end
 end
 
-local scrollBox = CreateFrame("Frame", "TrainerSkillsScrollBox", frame, "WowScrollBoxList")
+local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", frame, "WowScrollBoxList")
 scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -12)
 scrollBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 15)
 local listBg = frame:CreateTexture(nil, "BACKGROUND")
-listBg:SetTexture("Interface\\AddOns\\TrainerSkills\\media\\inset")
+listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
 listBg:SetPoint("TOPLEFT", scrollBox, "TOPLEFT", -4, 4)
 listBg:SetPoint("BOTTOMRIGHT", scrollBox, "BOTTOMRIGHT", 4, -4)
-local scrollBar = CreateFrame("EventFrame", "TrainerSkillsScrollBar", frame, "MinimalScrollBar")
+local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", frame, "MinimalScrollBar")
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, 0)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 0)
 local function InitScrollRow(rowFrame, elementData)
@@ -180,10 +180,10 @@ local scrollView = CreateScrollBoxListLinearView()
 scrollView:SetElementExtent(ROW_HEIGHT)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
-function TrainerSkills_Refresh()
+function TrainerSpells_Refresh()
     local selectedLevel = UnitLevel("player") or 1
     local selectedClass = select(2, UnitClass("player"))
-    local classData = selectedClass and TrainerSkills_Data and TrainerSkills_Data[selectedClass]
+    local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]
     if not classData then
         local items = {
             {
@@ -233,7 +233,7 @@ function TrainerSkills_Refresh()
 
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
-        if TrainerSkills_IsIgnored and TrainerSkills_IsIgnored(entry.spellID, entry.name) then
+        if TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name) then
             table.insert(ignored, entry)
         else
             local maxKnown = knownMaxRank[entry.name] or 0
@@ -356,7 +356,7 @@ function TrainerSkills_Refresh()
     scrollBox:SetDataProvider(CreateDataProvider(items))
 end
 
-frame:SetScript("OnShow", TrainerSkills_Refresh)
+frame:SetScript("OnShow", TrainerSpells_Refresh)
 local function PositionFrame()
     frame:ClearAllPoints()
     if SpellBookFrame and SpellBookFrame:IsShown() then
@@ -477,17 +477,17 @@ local function ToggleFrame()
     end
 end
 
-SLASH_TRAINERSKILLS1 = "/ts"
-SlashCmdList["TRAINERSKILLS"] = ToggleFrame
+SLASH_TRAINERSPELLS1 = "/ts"
+SlashCmdList["TRAINERSPELLS"] = ToggleFrame
 local function PrintFrameDebug()
     if not SpellBookFrame then
-        print("TrainerSkills Debug: SpellBookFrame existiert nicht.")
+        print("TrainerSpells Debug: SpellBookFrame existiert nicht.")
 
         return
     end
 
     if not SpellBookFrame:IsShown() then
-        print("TrainerSkills Debug: Bitte zuerst das Spellbook öffnen.")
+        print("TrainerSpells Debug: Bitte zuerst das Spellbook öffnen.")
 
         return
     end
@@ -585,10 +585,10 @@ local function PrintFrameDebug()
     end
 end
 
-SLASH_TRAINERSKILLSDEBUG1 = "/tsdebug"
-SlashCmdList["TRAINERSKILLSDEBUG"] = PrintFrameDebug
+SLASH_TRAINERSPELLSDEBUG1 = "/tsdebug"
+SlashCmdList["TRAINERSPELLSDEBUG"] = PrintFrameDebug
 if SpellBookFrame then
-    local tab = CreateFrame("Button", "TrainerSkillsSpellbookTab", SpellBookFrame)
+    local tab = CreateFrame("Button", "TrainerSpellsSpellbookTab", SpellBookFrame)
     tab:SetSize(32, 32)
     tab:SetNormalTexture("Interface\\Icons\\INV_Misc_Book_09")
     tab:SetHighlightTexture(130718, "ADD")
@@ -610,7 +610,7 @@ if SpellBookFrame then
         "OnEnter",
         function(self)
             GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-            GameTooltip:SetText("TrainerSkills")
+            GameTooltip:SetText("TrainerSpells")
             GameTooltip:Show()
         end
     )

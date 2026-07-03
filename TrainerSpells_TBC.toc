@@ -1,6 +1,6 @@
 ## Interface: 20505
 ## Version: 0.1.24
-## Title: TrainerSkills |T136142:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
+## Title: TrainerSpells |T136142:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: An add-on that shows you what you can learn at a trainer.
 ## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Lehrer anzeigt.
 ## Notes-ruRU: An add-on that shows you what you can learn at a trainer.
