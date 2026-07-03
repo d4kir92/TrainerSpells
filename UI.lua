@@ -1,10 +1,11 @@
 local frame = CreateFrame("Frame", "TrainerSpellsFrame", UIParent)
 frame:SetSize(420, 480)
 frame:SetPoint("CENTER")
-frame:SetFrameStrata("TOOLTIP")
+frame:SetFrameStrata("HIGH")
 frame:SetFrameLevel(500)
 frame:Hide()
-local ROW_HEIGHT = 28
+local ROW_HEIGHT = 22
+local ICON_SIZE = 20
 local AVAILABLE_COLOR = "|cff30d030"
 local SOON_COLOR = "|cff4db8ff"
 local NOTYET_COLOR = "|cffff4444"
@@ -21,9 +22,7 @@ local function GetLevelDiffColorCode(level)
             r, g, b = r.r, r.g, r.b
         end
 
-        if r then
-            return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
-        end
+        if r then return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255) end
     end
 
     return RANK_COLOR
@@ -112,7 +111,7 @@ scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 0)
 local function InitScrollRow(rowFrame, elementData)
     if not rowFrame.icon then
         local icon = rowFrame:CreateTexture(nil, "ARTWORK")
-        icon:SetSize(24, 24)
+        icon:SetSize(ICON_SIZE, ICON_SIZE)
         icon:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
         icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
         rowFrame.icon = icon
@@ -150,8 +149,8 @@ local function InitScrollRow(rowFrame, elementData)
             rowFrame:EnableMouse(true)
             rowFrame:SetScript(
                 "OnEnter",
-                function(self)
-                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                function(sel)
+                    GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
                     GameTooltip:AddLine(elementData.text)
                     GameTooltip:AddLine("Gesamtkosten: " .. FormatCost(elementData.totalCost), 1, 1, 1)
                     GameTooltip:Show()
@@ -396,11 +395,15 @@ local function PositionFrame()
 end
 
 if SpellBookFrame then
-    hooksecurefunc(SpellBookFrame, "SetScale", function()
-        if frame:IsShown() then
-            PositionFrame()
+    hooksecurefunc(
+        SpellBookFrame,
+        "SetScale",
+        function()
+            if frame:IsShown() then
+                PositionFrame()
+            end
         end
-    end)
+    )
 end
 
 local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame",}
@@ -534,8 +537,8 @@ if SpellBookFrame then
     tab:SetScript("OnClick", OpenFrame)
     tab:SetScript(
         "OnEnter",
-        function(self)
-            GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+        function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
             GameTooltip:SetText("TrainerSpells")
             GameTooltip:Show()
         end
