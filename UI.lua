@@ -4,7 +4,7 @@ frame:SetPoint("CENTER")
 frame:SetFrameStrata("TOOLTIP")
 frame:SetFrameLevel(500)
 frame:Hide()
-local ROW_HEIGHT = 20
+local ROW_HEIGHT = 28
 local AVAILABLE_COLOR = "|cff30d030"
 local SOON_COLOR = "|cff4db8ff"
 local NOTYET_COLOR = "|cffff4444"
@@ -90,7 +90,7 @@ scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 0)
 local function InitScrollRow(rowFrame, elementData)
     if not rowFrame.icon then
         local icon = rowFrame:CreateTexture(nil, "ARTWORK")
-        icon:SetSize(16, 16)
+        icon:SetSize(24, 24)
         icon:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
         icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
         rowFrame.icon = icon
@@ -199,6 +199,7 @@ function TrainerSpells_Refresh()
 
     local allEntries = {}
     local knownMaxRank = {}
+    local minRankByName = {}
     for lvl, spells in pairs(classData) do
         for spellID, data in pairs(spells) do
             local cost, rank, status
@@ -227,6 +228,8 @@ function TrainerSpells_Refresh()
             if IsSpellKnown and IsSpellKnown(spellID) then
                 knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
             end
+
+            minRankByName[name] = math.min(minRankByName[name] or rankNum, rankNum)
         end
     end
 
@@ -247,14 +250,16 @@ function TrainerSpells_Refresh()
 
     local available, missingTalents, future = {}, {}, {}
     for _, entry in ipairs(remaining) do
-        if entry.level <= selectedLevel then
-            if entry.status == "unavailable" then
-                table.insert(missingTalents, entry)
-            else
-                table.insert(available, entry)
-            end
-        else
+        local baseRank = minRankByName[entry.name]
+        local looksTalentGated = baseRank > 1 and (knownMaxRank[entry.name] or 0) < baseRank
+        if looksTalentGated then
+            table.insert(missingTalents, entry)
+        elseif entry.level > selectedLevel then
             table.insert(future, entry)
+        elseif entry.status == "unavailable" then
+            table.insert(missingTalents, entry)
+        else
+            table.insert(available, entry)
         end
     end
 
@@ -320,7 +325,7 @@ function TrainerSpells_Refresh()
 
     if #available > 0 then
         AddHeader("Available Now", AVAILABLE_COLOR, SumCost(available))
-        AddEntries(available, AVAILABLE_COLOR, false, true, false)
+        AddEntries(available, AVAILABLE_COLOR, true, true, false)
     end
 
     if #soon > 0 then
@@ -335,17 +340,17 @@ function TrainerSpells_Refresh()
 
     if #missingTalents > 0 then
         AddHeader("Missing Required Talents", TALENT_COLOR, SumCost(missingTalents))
-        AddEntries(missingTalents, TALENT_COLOR, false, true, false)
+        AddEntries(missingTalents, TALENT_COLOR, true, true, false)
     end
 
     if #ignored > 0 then
         AddHeader("Ignored", IGNORED_COLOR)
-        AddEntries(ignored, IGNORED_COLOR, false, true, true)
+        AddEntries(ignored, IGNORED_COLOR, true, true, true)
     end
 
     if #known > 0 then
         AddHeader("Already Known", KNOWN_COLOR)
-        AddEntries(known, KNOWN_COLOR, false, false, true)
+        AddEntries(known, KNOWN_COLOR, true, false, true)
     end
 
     if #items == 0 then
