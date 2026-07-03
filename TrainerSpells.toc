@@ -5,7 +5,7 @@
 ## Interface-Mists: 50504
 ## Interface: 120007, 120005, 120001, 120000
 
-## Version: 0.1.24
+## Version: 0.1.0
 ## Title: TrainerSpells by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: An add-on that shows you what you can learn at a trainer.
 ## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Lehrer anzeigt.
@@ -16,8 +16,8 @@
 ## DefaultState: enabled
 ## SavedVariables: TrainerSpells_Global
 ## SavedVariablesPerCharacter: TrainerSpells_Data, TrainerSpells_Ignored, TrainerSpells_IgnoredNames
-## X-Curse-Project-ID: 1360002
-## X-Wago-ID: mKOvW16x
+## X-Curse-Project-ID: 1596644
+## X-Wago-ID: L6J9VWNv
 ## IconTexture: 136142
 
 libs\D4Lib\D4Lib.xml
