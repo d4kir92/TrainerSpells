@@ -290,9 +290,8 @@ function TrainerSpells_Refresh()
             table.insert(ignored, entry)
         else
             local maxKnown = knownMaxRank[entry.name] or 0
-            if entry.rankNum == maxKnown then
+            if entry.rankNum <= maxKnown then
                 table.insert(known, entry)
-            elseif entry.rankNum < maxKnown then
             else
                 table.insert(remaining, entry)
             end
