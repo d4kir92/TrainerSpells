@@ -14,8 +14,8 @@
 ## Category: D4KiR |T132115:16:16:0:0|t
 ## X-Category: D4KiR |T132115:16:16:0:0|t
 ## DefaultState: enabled
-## SavedVariables: TRSK
-## SavedVariablesPerCharacter: TRSKPC
+## SavedVariables: TrainerSkills_Global
+## SavedVariablesPerCharacter: TrainerSkills_Data, TrainerSkills_Ignored, TrainerSkills_IgnoredNames
 ## X-Curse-Project-ID: 1360002
 ## X-Wago-ID: mKOvW16x
 ## IconTexture: 136142
@@ -31,5 +31,5 @@ locale\ptBR.lua
 locale\ruRU.lua
 locale\zhCN.lua
 
-settings.lua
-core.lua
+Data.lua
+UI.lua
