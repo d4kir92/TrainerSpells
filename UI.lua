@@ -125,14 +125,14 @@ searchBox:SetScript(
 )
 
 local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", frame, "WowScrollBoxList")
-scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -12)
-scrollBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 15)
+scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -4)
+scrollBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -24, 4)
 local listBg = frame:CreateTexture(nil, "BACKGROUND")
 listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
 listBg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, -2)
 local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", frame, "MinimalScrollBar")
-scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, 0)
-scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 0)
+scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
+scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
 local function InitScrollRow(rowFrame, elementData)
     if not rowFrame.icon then
         local icon = rowFrame:CreateTexture(nil, "ARTWORK")
