@@ -83,8 +83,7 @@ scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -12)
 scrollBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 15)
 local listBg = frame:CreateTexture(nil, "BACKGROUND")
 listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
-listBg:SetPoint("TOPLEFT", scrollBox, "TOPLEFT", -4, 4)
-listBg:SetPoint("BOTTOMRIGHT", scrollBox, "BOTTOMRIGHT", 4, -4)
+listBg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, -2)
 local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", frame, "MinimalScrollBar")
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, 0)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 0)
@@ -476,117 +475,6 @@ local function ToggleFrame()
         OpenFrame()
     end
 end
-
-SLASH_TRAINERSPELLS1 = "/ts"
-SlashCmdList["TRAINERSPELLS"] = ToggleFrame
-local function PrintFrameDebug()
-    if not SpellBookFrame then
-        print("TrainerSpells Debug: SpellBookFrame existiert nicht.")
-
-        return
-    end
-
-    if not SpellBookFrame:IsShown() then
-        print("TrainerSpells Debug: Bitte zuerst das Spellbook öffnen.")
-
-        return
-    end
-
-    local f = SpellBookFrame
-    print(("MTD SBF %.0fx%.0f  L%.0f R%.0f T%.0f B%.0f"):format(f:GetWidth(), f:GetHeight(), f:GetLeft() or -1, f:GetRight() or -1, f:GetTop() or -1, f:GetBottom() or -1))
-    if f.Inset then
-        local i = f.Inset
-        print(("MTD Inset %.0fx%.0f  L%.0f R%.0f T%.0f B%.0f"):format(i:GetWidth(), i:GetHeight(), i:GetLeft() or -1, i:GetRight() or -1, i:GetTop() or -1, i:GetBottom() or -1))
-    else
-        print("MTD: kein f.Inset")
-    end
-
-    local t1 = _G["SpellBookSkillLineTab1"]
-    if t1 then
-        print(("MTD Tab1 L%.0f R%.0f T%.0f B%.0f W%.0f H%.0f"):format(t1:GetLeft() or -1, t1:GetRight() or -1, t1:GetTop() or -1, t1:GetBottom() or -1, t1:GetWidth() or -1, t1:GetHeight() or -1))
-        local function texOf(getter)
-            local tx = t1[getter] and t1[getter](t1)
-
-            return tx and tx:GetTexture()
-        end
-
-        print(("MTD SkillTab1 Normal=%s Pushed=%s Highlight=%s Disabled=%s"):format(tostring(texOf("GetNormalTexture")), tostring(texOf("GetPushedTexture")), tostring(texOf("GetHighlightTexture")), tostring(texOf("GetDisabledTexture"))))
-        print(("MTD Tab1 selected=%s  SetSkillLineTab existiert=%s"):format(tostring(SpellBookFrame.selectedSkillLine), tostring(SpellBookFrame_SetSkillLineTab ~= nil)))
-        for ridx, region in ipairs({t1:GetRegions()}) do
-            if region.GetObjectType and region:GetObjectType() == "Texture" then
-                print(("MTD SkillTab1 region#%d tex=%s shown=%s alpha=%.2f"):format(ridx, tostring(region:GetTexture()), tostring(region:IsShown()), region:GetAlpha() or -1))
-            end
-        end
-    else
-        print("MTD: kein SpellBookSkillLineTab1")
-    end
-
-    for i = 1, 6 do
-        local t = _G["SpellBookSkillLineTab" .. i]
-        if t then
-            print(("MTD SkillTab%d exists=true shown=%s  L%.0f R%.0f T%.0f B%.0f"):format(i, tostring(t:IsShown()), t:GetLeft() or -1, t:GetRight() or -1, t:GetTop() or -1, t:GetBottom() or -1))
-        else
-            print(("MTD SkillTab%d exists=false"):format(i))
-        end
-    end
-
-    local close = f.CloseButton or _G["SpellBookFrameCloseButton"]
-    if close then
-        print(("MTD Close T%.0f B%.0f  (Abstand von SBF-Top: %.0f)"):format(close:GetTop() or -1, close:GetBottom() or -1, (f:GetTop() or 0) - (close:GetBottom() or 0)))
-    else
-        print("MTD: kein CloseButton gefunden")
-    end
-
-    local sbfTop = f:GetTop() or 0
-    for _, child in ipairs({f:GetChildren()}) do
-        local name = child.GetName and child:GetName()
-        if name then
-            print(("MTD child %s  T%.0f B%.0f  (dTop %.0f)"):format(name, child:GetTop() or -1, child:GetBottom() or -1, sbfTop - (child:GetTop() or sbfTop)))
-        end
-    end
-
-    for i = 1, 3 do
-        local tab = _G["SpellBookFrameTabButton" .. i]
-        if tab then
-            print(("MTD Tab%d L%.0f R%.0f W%.0f H%.0f T%.0f B%.0f"):format(i, tab:GetLeft() or -1, tab:GetRight() or -1, tab:GetWidth() or -1, tab:GetHeight() or -1, tab:GetTop() or -1, tab:GetBottom() or -1))
-            if i == 1 then
-                local function texOf(getter)
-                    local t = tab[getter] and tab[getter](tab)
-
-                    return t and t:GetTexture()
-                end
-
-                print(("MTD Tab1 Normal=%s Pushed=%s Highlight=%s Disabled=%s"):format(tostring(texOf("GetNormalTexture")), tostring(texOf("GetPushedTexture")), tostring(texOf("GetHighlightTexture")), tostring(texOf("GetDisabledTexture"))))
-            end
-        end
-    end
-
-    for _, region in ipairs({f:GetRegions()}) do
-        if region.GetObjectType and region:GetObjectType() == "FontString" and region:GetText() then
-            print(("MTD text '%s'  T%.0f B%.0f  (dTop %.0f)"):format(region:GetText(), region:GetTop() or -1, region:GetBottom() or -1, sbfTop - (region:GetTop() or sbfTop)))
-        end
-    end
-
-    local sbfBottom = f:GetBottom() or 0
-    for idx, region in ipairs({f:GetRegions()}) do
-        if region.GetObjectType and region:GetObjectType() == "Texture" then
-            local w, h = region:GetWidth() or 0, region:GetHeight() or 0
-            if w > 100 and h > 100 then
-                print(("MTD texture #%d %s  %.0fx%.0f  T%.0f B%.0f  (dBottom %.0f)"):format(idx, tostring(region:GetTexture()), w, h, region:GetTop() or -1, region:GetBottom() or -1, (region:GetBottom() or sbfBottom) - sbfBottom))
-            end
-        end
-    end
-
-    local title = f.TitleText or _G["SpellBookFrameTitleText"]
-    if title then
-        print(("MTD Title T%.0f B%.0f  (Abstand von SBF-Top: %.0f)"):format(title:GetTop() or -1, title:GetBottom() or -1, (f:GetTop() or 0) - (title:GetBottom() or 0)))
-    else
-        print("MTD: kein TitleText gefunden")
-    end
-end
-
-SLASH_TRAINERSPELLSDEBUG1 = "/tsdebug"
-SlashCmdList["TRAINERSPELLSDEBUG"] = PrintFrameDebug
 
 if SpellBookFrame then
     local tab = CreateFrame("Button", "TrainerSpellsSpellbookTab", SpellBookFrame)
