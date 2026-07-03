@@ -379,11 +379,21 @@ frame:SetScript("OnShow", TrainerSpells_Refresh)
 local function PositionFrame()
     frame:ClearAllPoints()
     if SpellBookFrame and SpellBookFrame:IsShown() then
+        frame:SetScale(SpellBookFrame:GetScale())
         frame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 14, -70)
         frame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -36, 78)
     else
+        frame:SetScale(1)
         frame:SetPoint("CENTER")
     end
+end
+
+if SpellBookFrame then
+    hooksecurefunc(SpellBookFrame, "SetScale", function()
+        if frame:IsShown() then
+            PositionFrame()
+        end
+    end)
 end
 
 local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame",}
