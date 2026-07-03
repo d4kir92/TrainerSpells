@@ -364,7 +364,7 @@ function TrainerSpells_Refresh()
     end
 
     if #known > 0 then
-        AddHeader("Already Known", KNOWN_COLOR)
+        AddHeader("Already Known", KNOWN_COLOR, SumCost(known))
         AddEntries(known, KNOWN_COLOR, true, false, true)
     end
 
