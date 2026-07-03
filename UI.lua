@@ -41,6 +41,14 @@ local function FormatCost(copper)
     return GetMoneyString(copper, true)
 end
 
+local function EntryMatchesSearch(entry, search)
+    if not search or search == "" then return true end
+    if entry.name and entry.name:lower():find(search, 1, true) then return true end
+    if entry.level and tostring(entry.level):find(search, 1, true) then return true end
+
+    return false
+end
+
 local function SortEntries(list)
     table.sort(
         list,
@@ -98,6 +106,23 @@ local function ShowIgnoreMenu(anchor, entry)
         DropDownList1:SetFrameLevel(600)
     end
 end
+
+local searchBox = CreateFrame("EditBox", "TrainerSpellsSearchBox", frame, "SearchBoxTemplate")
+searchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", -60, -6)
+searchBox:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -10, -6)
+searchBox:SetHeight(20)
+searchBox:SetAutoFocus(false)
+searchBox:SetScript(
+    "OnTextChanged",
+    function(self)
+        if SearchBoxTemplate_OnTextChanged then
+            SearchBoxTemplate_OnTextChanged(self)
+        end
+
+        TrainerSpells_SearchText = self:GetText() or ""
+        TrainerSpells_Refresh()
+    end
+)
 
 local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", frame, "WowScrollBoxList")
 scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -12)
@@ -204,6 +229,7 @@ scrollView:SetElementExtent(ROW_HEIGHT)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
 function TrainerSpells_Refresh()
+    local searchText = (TrainerSpells_SearchText or ""):lower()
     local selectedLevel = UnitLevel("player") or 1
     local selectedClass = select(2, UnitClass("player"))
     local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]
@@ -259,7 +285,8 @@ function TrainerSpells_Refresh()
 
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
-        if TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name) then
+        if not EntryMatchesSearch(entry, searchText) then
+        elseif TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name) then
             table.insert(ignored, entry)
         else
             local maxKnown = knownMaxRank[entry.name] or 0
@@ -394,6 +421,17 @@ local function PositionFrame()
     else
         frame:SetScale(1)
         frame:SetPoint("CENTER")
+    end
+
+    searchBox:ClearAllPoints()
+    local titleText = SpellBookFrame and _G["SpellBookTitleText"]
+    if titleText and frame:GetTop() and titleText:GetBottom() then
+        local topOffset = titleText:GetBottom() - frame:GetTop() - 4
+        searchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 66, topOffset)
+        searchBox:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -4, topOffset)
+    else
+        searchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -6)
+        searchBox:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -30, -6)
     end
 end
 
