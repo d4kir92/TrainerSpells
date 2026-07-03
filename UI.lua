@@ -406,7 +406,11 @@ if SpellBookFrame then
     )
 end
 
-local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame",}
+local NATIVE_EXTRA_WIDGETS = {
+    "SpellBookPageNavigationFrame",
+    "SpellBookFrameShowAllSpellRanksCheckbox",
+    "ShowAllSpellRanksCheckbox",
+}
 local spellButtonsHidden = false
 local hiddenPageRegions = {}
 local function HideNativeSpellButtons()
