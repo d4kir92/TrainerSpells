@@ -176,7 +176,9 @@ local function InitScrollRow(rowFrame, elementData)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
                 GameTooltip:SetSpellByID(entry.spellID)
                 if elementData.showCostTooltip then
-                    GameTooltip:AddLine("Kosten: " .. FormatCost(entry.cost), 1, 1, 1)
+                    local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
+                    local costColor = canAfford and "|cffffffff" or "|cffff3333"
+                    GameTooltip:AddLine("Kosten: " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
                 end
 
                 GameTooltip:Show()
