@@ -412,10 +412,11 @@ end
 
 frame:SetScript("OnShow", TrainerSpells_Refresh)
 frame:RegisterEvent("PLAYER_LEVEL_UP")
+frame:RegisterEvent("SPELLS_CHANGED")
 frame:HookScript(
     "OnEvent",
     function(self, event)
-        if event == "PLAYER_LEVEL_UP" then
+        if event == "PLAYER_LEVEL_UP" or event == "SPELLS_CHANGED" then
             TrainerSpells_Refresh()
         end
     end
