@@ -25,5 +25,17 @@ locale\ptBR.lua
 locale\ruRU.lua
 locale\zhCN.lua
 
+data\classicera\Warrior.lua
+data\classicera\Paladin.lua
+data\classicera\Hunter.lua
+data\classicera\Rogue.lua
+data\classicera\Priest.lua
+data\classicera\Shaman.lua
+data\classicera\Mage.lua
+data\classicera\Warlock.lua
+data\classicera\Druid.lua
+data\classicera\HunterPet.lua
+data\classicera\WarlockPet.lua
+
 Data.lua
 UI.lua

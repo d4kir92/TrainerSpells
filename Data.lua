@@ -114,6 +114,39 @@ local function EnsurePetPath(pet, level)
     return TrainerSpells_PetData[pet][level]
 end
 
+local function MergeBuiltinData()
+    if TrainerSpellsBuiltin then
+        for class, spells in pairs(TrainerSpellsBuiltin) do
+            for spellID, data in pairs(spells) do
+                local bucket = EnsurePath(class, data.level or 0)
+                if bucket[spellID] == nil then
+                    bucket[spellID] = {cost = data.cost or 0, rank = data.rank}
+                end
+            end
+        end
+    end
+
+    if TrainerSpellsBuiltin_WarlockPet then
+        for pet, spells in pairs(TrainerSpellsBuiltin_WarlockPet) do
+            for spellID, data in pairs(spells) do
+                local bucket = EnsurePetPath(pet, data.level or 0)
+                if bucket[spellID] == nil then
+                    bucket[spellID] = {cost = data.cost or 0, rank = data.rank}
+                end
+            end
+        end
+    end
+
+    if TrainerSpellsBuiltin_HunterPet then
+        for spellID, data in pairs(TrainerSpellsBuiltin_HunterPet) do
+            local bucket = EnsurePetTrainerPath("HUNTER", data.level or 0)
+            if bucket[spellID] == nil then
+                bucket[spellID] = {cost = data.cost or 0, rank = data.rank}
+            end
+        end
+    end
+end
+
 local function DetectPetFromTooltip(tooltip)
     for i = 1, tooltip:NumLines() do
         local fs = _G[tooltip:GetName() .. "TextLeft" .. i]
@@ -234,6 +267,7 @@ f:SetScript(
             TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
+            MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             if C_Timer then
                 if not captureScheduled then
