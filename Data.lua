@@ -7,8 +7,61 @@ TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpe
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 local debug_trainer = false
-local PET_NAMES = {"Imp", "Voidwalker", "Succubus", "Incubus", "Felhunter"}
-local PET_TRAINER_SKILL_LINE = "Beast Training"
+local BEAST_TRAINING_SPELL_ID = 5149 -- Zauber-ID für "Wildtierausbildung" (Beast Training)
+local PET_TRAINER_SKILL_LINE = ""
+local trainingSpellInfo = C_Spell.GetSpellInfo(BEAST_TRAINING_SPELL_ID)
+if trainingSpellInfo and trainingSpellInfo.name then
+    PET_TRAINER_SKILL_LINE = trainingSpellInfo.name -- Setzt z.B. "Wildtierausbildung"
+end
+
+local PROFESSION_SKILL_LINES = {}
+local PROFESSION_SPELLS = {
+    ["Alchemy"] = 28596,
+    ["Blacksmithing"] = 2018,
+    ["Cooking"] = 2550,
+    ["Enchanting"] = 7411,
+    ["Engineering"] = 4036,
+    ["First Aid"] = 3273,
+    ["Fishing"] = 7620,
+    ["Herbalism"] = 2366,
+    ["Leatherworking"] = 2108,
+    ["Mining"] = 2575,
+    ["Skinning"] = 8613,
+    ["Tailoring"] = 3908,
+    ["Jewelcrafting"] = 25229,
+}
+
+for key, spellID in pairs(PROFESSION_SPELLS) do
+    local spellInfo = C_Spell.GetSpellInfo(spellID)
+    if spellInfo and spellInfo.name then
+        PROFESSION_SKILL_LINES[spellInfo.name] = true
+    end
+end
+
+local PET_SPELL_IDS = {688, 697, 712, 101822, 691,}
+local PET_NAMES = {}
+for _, spellID in ipairs(PET_SPELL_IDS) do
+    local spellInfo = C_Spell.GetSpellInfo(spellID)
+    if spellInfo and spellInfo.name then
+        table.insert(PET_NAMES, spellInfo.name)
+    end
+end
+
+for i, v in pairs(PET_NAMES) do
+    print(i, v)
+end
+
+C_Timer.After(
+    1,
+    function()
+        for i, v in pairs(_G) do
+            if v == "Imp" then
+                print(i, v)
+            end
+        end
+    end
+)
+
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("TRAINER_SHOW")
@@ -123,8 +176,9 @@ local function CaptureTrainerInner()
             local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
             local spellID = GetSpellIDForService(i)
-            if spellID then
-                local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
+            local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
+            print(skillLine)
+            if spellID and not PROFESSION_SKILL_LINES[skillLine] then
                 local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
                 if isPetTraining then
                     local oldBucket = TrainerSpells_Data[classToken] and TrainerSpells_Data[classToken][levelReq or 0]
@@ -465,39 +519,37 @@ f:SetScript(
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
-            if debug_trainer then
-                if ClassTrainerFrame and TrainerSpellsScanButton == nil then
-                    local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
-                    scanButton:SetSize(80, 22)
-                    scanButton:SetText("Scan")
-                    scanButton:SetPoint("TOPRIGHT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
-                    scanButton:SetScript(
-                        "OnClick",
+            if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
+                local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
+                scanButton:SetSize(80, 22)
+                scanButton:SetText("Scan")
+                scanButton:SetPoint("TOPRIGHT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
+                scanButton:SetScript(
+                    "OnClick",
+                    function()
+                        local ok, err = pcall(ScanAllTrainerRequirements)
+                        if not ok then
+                            print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+                        end
+                    end
+                )
+            end
+
+            if C_Timer then
+                if not captureScheduled then
+                    captureScheduled = true
+                    C_Timer.After(
+                        0.1,
                         function()
-                            local ok, err = pcall(ScanAllTrainerRequirements)
-                            if not ok then
-                                print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
-                            end
+                            captureScheduled = false
+                            CaptureTrainer()
+                            CaptureTrainerRequirements()
                         end
                     )
                 end
-
-                if C_Timer then
-                    if not captureScheduled then
-                        captureScheduled = true
-                        C_Timer.After(
-                            0.1,
-                            function()
-                                captureScheduled = false
-                                CaptureTrainer()
-                                CaptureTrainerRequirements()
-                            end
-                        )
-                    end
-                else
-                    CaptureTrainer()
-                    CaptureTrainerRequirements()
-                end
+            else
+                CaptureTrainer()
+                CaptureTrainerRequirements()
             end
         elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
             if C_Timer then
