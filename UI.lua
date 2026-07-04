@@ -1,3 +1,4 @@
+local _, TrainerSpells = ...
 local frame = CreateFrame("Frame", "TrainerSpellsFrame", UIParent)
 frame:SetSize(420, 480)
 frame:SetPoint("CENTER")
@@ -67,9 +68,7 @@ local function RequiresUnknownTalent(entry, talentNames)
     if not entry.requires then return false end
     for _, reqSpellID in ipairs(entry.requires) do
         local reqName = GetSpellInfo(reqSpellID)
-        if reqName and talentNames[reqName] and not IsReqSpellKnown(reqSpellID) then
-            return true
-        end
+        if reqName and talentNames[reqName] and not IsReqSpellKnown(reqSpellID) then return true end
     end
 
     return false
@@ -229,8 +228,8 @@ local function InitScrollRow(rowFrame, elementData)
                     GameTooltip:AddLine(elementData.text)
                     local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
                     local costColor = canAfford and "|cffffffff" or "|cffff3333"
-                    GameTooltip:AddLine("Gesamtkosten: " .. costColor .. FormatCost(elementData.totalCost) .. "|r", 1, 1, 1)
-                    GameTooltip:AddLine("Eigenes Gold: " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_TOTALCOST") .. ": " .. costColor .. FormatCost(elementData.totalCost) .. "|r", 1, 1, 1)
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
                     GameTooltip:Show()
                 end
             )
