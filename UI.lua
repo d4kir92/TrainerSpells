@@ -352,7 +352,7 @@ local function BuildEntriesFromData(dataTable)
     return allEntries, knownMaxRank, minRankByName
 end
 
-local function ClassifyEntries(dataTable, searchText, selectedLevel)
+local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck)
     local allEntries, knownMaxRank, minRankByName = BuildEntriesFromData(dataTable)
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
@@ -372,7 +372,7 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel)
     local available, missingTalents, future = {}, {}, {}
     for _, entry in ipairs(remaining) do
         local baseRank = minRankByName[entry.name]
-        local looksTalentGated = baseRank > 1 and not IsBaseRankKnownByName(entry.name)
+        local looksTalentGated = not skipTalentCheck and baseRank > 1 and not IsBaseRankKnownByName(entry.name)
         if looksTalentGated then
             table.insert(missingTalents, entry)
         elseif entry.level > selectedLevel then
@@ -485,7 +485,7 @@ local function AppendPetAbilities(items, searchText, selectedLevel)
         local merged = MergePetData(petGroup.keys)
         if next(merged) then
             local groupKey = "pet_" .. table.concat(petGroup.keys, "_")
-            local groups = ClassifyEntries(merged, searchText, selectedLevel)
+            local groups = ClassifyEntries(merged, searchText, selectedLevel, true)
             local subItems = {}
             AppendGroupItems(subItems, groups, groupKey .. "_", petGroup.label)
             if #subItems > 0 then
@@ -682,8 +682,7 @@ if SpellBookFrame then
     ourTabGlow:SetBlendMode("ADD")
     ourTabGlow:Hide()
     local lastTab = _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
-    print("LASTTAB", lastTab:GetName())
-    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -14)
+    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -34)
     tab:Hide()
     tab:SetScript("OnClick", OpenFrame)
     tab:SetScript(
