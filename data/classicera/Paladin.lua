@@ -1,6 +1,5 @@
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
-TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
-    [1] = {
+TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {} --[[[1] = {
         [465] = {
             ["rank"] = "Rank 1",
             ["cost"] = 10,
@@ -603,5 +602,4 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             ["rank"] = "Rank 2",
             ["cost"] = 1000,
         },
-    },
-}
+    },]]

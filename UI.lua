@@ -56,6 +56,24 @@ local function GetTalentNameSet()
     return names
 end
 
+local function IsSpellNameKnown(name)
+    if not name or not GetSpellInfo then return false end
+    local _, _, _, _, _, _, spellID = GetSpellInfo(name)
+
+    return spellID and IsSpellKnown and IsSpellKnown(spellID) or false
+end
+
+local function RequiresUnknownTalent(entry, talentNames)
+    if not entry.requires then return false end
+    for _, reqName in ipairs(entry.requires) do
+        if talentNames[reqName] and not IsSpellNameKnown(reqName) then
+            return true
+        end
+    end
+
+    return false
+end
+
 local function FormatCost(copper)
     if not copper or copper == 0 then return "kostenlos" end
 
@@ -327,9 +345,9 @@ local function BuildEntriesFromData(dataTable)
     local knownMaxRank = {}
     for lvl, spells in pairs(dataTable) do
         for spellID, data in pairs(spells) do
-            local cost, rank, status
+            local cost, rank, status, requires
             if type(data) == "table" then
-                cost, rank, status = data.cost, data.rank, data.status
+                cost, rank, status, requires = data.cost, data.rank, data.status, data.requires
             else
                 cost = data
             end
@@ -346,6 +364,7 @@ local function BuildEntriesFromData(dataTable)
                 name = name,
                 icon = icon,
                 rankNum = rankNum,
+                requires = requires,
             }
 
             table.insert(allEntries, entry)
@@ -379,13 +398,11 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
 
     local available, missingTalents, future = {}, {}, {}
     for _, entry in ipairs(remaining) do
-        local looksTalentGated = talentNames and talentNames[entry.name]
+        local looksTalentGated = talentNames and (talentNames[entry.name] or RequiresUnknownTalent(entry, talentNames))
         if looksTalentGated then
             table.insert(missingTalents, entry)
         elseif entry.level > selectedLevel then
             table.insert(future, entry)
-        elseif entry.status == "unavailable" then
-            table.insert(missingTalents, entry)
         else
             table.insert(available, entry)
         end

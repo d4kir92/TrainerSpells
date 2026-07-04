@@ -26,6 +26,22 @@ local function GetSpellIDForService(i)
     return spellID
 end
 
+local function ParseRequirementText(text)
+    text = text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+    local reqText = text:match("^Requires:%s*(.+)$") or text
+    local names = {}
+    for part in reqText:gmatch("[^,]+") do
+        part = part:match("^%s*(.-)%s*$")
+        if part ~= "" and not part:match("^Level %d+$") then
+            table.insert(names, part)
+        end
+    end
+
+    if #names == 0 then return nil end
+
+    return names
+end
+
 local function EnsurePath(class, level)
     TrainerSpells_Data[class] = TrainerSpells_Data[class] or {}
     TrainerSpells_Data[class][level] = TrainerSpells_Data[class][level] or {}
@@ -74,7 +90,8 @@ local function CaptureTrainerInner()
                 end
 
                 local bucket = isPetTraining and EnsurePetTrainerPath(classToken, levelReq or 0) or EnsurePath(classToken, levelReq or 0)
-                if bucket[spellID] == nil then
+                local existing = bucket[spellID]
+                if existing == nil then
                     if isPetTraining then
                         neuPet = neuPet + 1
                     else
@@ -84,7 +101,8 @@ local function CaptureTrainerInner()
 
                 bucket[spellID] = {
                     cost = cost,
-                    rank = rank
+                    rank = rank,
+                    requires = existing and existing.requires
                 }
             end
         end
@@ -103,6 +121,50 @@ local function CaptureTrainer()
     local ok, err = pcall(CaptureTrainerInner)
     if not ok then
         print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+    end
+end
+
+local function OnTrainerServiceSelectedInner(id)
+    local _, classToken = UnitClass("player")
+    if not classToken or not id then return end
+    local fs = _G["ClassTrainerSkillRequirements"]
+    local text = fs and fs:GetText()
+    local requires = text and ParseRequirementText(text)
+    if not requires then return end
+    local spellID = GetSpellIDForService(id)
+    if not spellID then return end
+    local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(id) or 0
+    local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(id)
+    local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
+    local levels = isPetTraining and TrainerSpells_PetTrainerData[classToken] or TrainerSpells_Data[classToken]
+    local bucket = levels and levels[levelReq]
+    if bucket and bucket[spellID] then
+        bucket[spellID].requires = requires
+        if TrainerSpells_Refresh then
+            TrainerSpells_Refresh()
+        end
+    end
+end
+
+local function OnTrainerServiceButtonClicked(self)
+    local id = self:GetID()
+    local ok, err = pcall(OnTrainerServiceSelectedInner, id)
+    if not ok then
+        print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+    end
+end
+
+local hookedTrainerButtons = {}
+local function CaptureTrainerRequirements()
+    local i = 1
+    while _G["ClassTrainerSkill" .. i] do
+        local button = _G["ClassTrainerSkill" .. i]
+        if not hookedTrainerButtons[button] then
+            hookedTrainerButtons[button] = true
+            button:HookScript("OnClick", OnTrainerServiceButtonClicked)
+        end
+
+        i = i + 1
     end
 end
 
@@ -291,11 +353,13 @@ f:SetScript(
                         function()
                             captureScheduled = false
                             CaptureTrainer()
+                            CaptureTrainerRequirements()
                         end
                     )
                 end
             else
                 CaptureTrainer()
+                CaptureTrainerRequirements()
             end
         elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
             if C_Timer then
