@@ -36,6 +36,10 @@ local PET_GROUPS = {
         label = TrainerSpells:GetPetNameById(691),
         keys = {"Felhunter"}
     },
+    {
+        label = TrainerSpells:GetPetNameById(30146),
+        keys = {"Felguard"}
+    },
 }
 
 local function IsGroupCollapsed(groupKey)

@@ -39,7 +39,13 @@ for key, spellID in pairs(PROFESSION_SPELLS) do
     end
 end
 
-local PET_SUMMON_SPELL_IDS = {688, 697, 712, 101822, 691}
+--688, -- Imp
+--697, -- Voidwalker
+--712, -- Succubus
+--101822, -- Incubus
+--691, -- Felhunter
+--30146 -- Felguard
+local PET_SUMMON_SPELL_IDS = {688, 697, 712, 101822, 691, 30146}
 local function CommonAffixLength(a, b, fromEnd)
     local maxLen = math.min(#a, #b)
     local len = 0
@@ -436,9 +442,9 @@ local function DetectPetFromTooltip(tooltip)
     for i = 1, tooltip:NumLines() do
         local fs = _G[tooltip:GetName() .. "TextLeft" .. i]
         local text = fs and fs:GetText()
-        local petWord = text and text:match("Teaches%s+(%a+)")
+        local petWord = text and text:match("Teaches%s+(%S+)") or text and text:match("Lehrt%s+(%S+)")
         if petWord then
-            for _, pet in ipairs(PET_NAMES) do
+            for _, pet in pairs(PET_NAMES) do
                 if petWord:lower() == pet:lower() then return pet end
             end
         end
