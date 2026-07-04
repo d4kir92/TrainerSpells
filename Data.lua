@@ -39,7 +39,7 @@ local function CaptureTrainerInner()
     local numServices = GetNumTrainerServices()
     local neu = 0
     for i = 1, numServices do
-        local name, rank, sType = GetTrainerServiceInfo(i)
+        local _, rank, sType = GetTrainerServiceInfo(i)
         if sType == "available" or sType == "unavailable" or sType == "used" then
             local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0

@@ -421,6 +421,7 @@ frame:HookScript(
         end
     end
 )
+
 local function PositionFrame()
     frame:ClearAllPoints()
     if SpellBookFrame and SpellBookFrame:IsShown() then
@@ -520,14 +521,6 @@ local function HideNativeSkillTabGlows()
     end
 end
 
-local function RestoreNativeSkillTabGlow()
-    local idx = SpellBookFrame and SpellBookFrame.selectedSkillLine
-    local glow = idx and GetTabGlow(_G["SpellBookSkillLineTab" .. idx])
-    if glow then
-        glow:Show()
-    end
-end
-
 local function OpenFrame()
     PositionFrame()
     frame:Show()
@@ -535,20 +528,6 @@ local function OpenFrame()
     HideNativeSkillTabGlows()
     if ourTabGlow then
         ourTabGlow:Show()
-    end
-end
-
-local function ToggleFrame()
-    if frame:IsShown() then
-        frame:Hide()
-        ShowNativeSpellButtons()
-        if ourTabGlow then
-            ourTabGlow:Hide()
-        end
-
-        RestoreNativeSkillTabGlow()
-    else
-        OpenFrame()
     end
 end
 
