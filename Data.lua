@@ -1,4 +1,5 @@
 local _, TrainerSpells = ...
+local debug_trainer = true
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
@@ -7,29 +8,28 @@ TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroup
 TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
-local debug_trainer = false
-local BEAST_TRAINING_SPELL_ID = 5149 -- Zauber-ID für "Wildtierausbildung" (Beast Training)
+local BEAST_TRAINING_SPELL_ID = 5149
 local PET_TRAINER_SKILL_LINE = ""
 local trainingSpellInfo = C_Spell.GetSpellInfo(BEAST_TRAINING_SPELL_ID)
 if trainingSpellInfo and trainingSpellInfo.name then
-    PET_TRAINER_SKILL_LINE = trainingSpellInfo.name -- Setzt z.B. "Wildtierausbildung"
+    PET_TRAINER_SKILL_LINE = trainingSpellInfo.name
 end
 
 local PROFESSION_SKILL_LINES = {}
 local PROFESSION_SPELLS = {
-    ["Alchemy"] = 28596,
-    ["Blacksmithing"] = 2018,
-    ["Cooking"] = 2550,
-    ["Enchanting"] = 7411,
+    ["Alchemy"] = 3101,
+    ["Blacksmithing"] = 9785,
+    ["Cooking"] = 18260,
+    ["Enchanting"] = 7413,
     ["Engineering"] = 4036,
-    ["First Aid"] = 3273,
+    ["First Aid"] = 7924,
     ["Fishing"] = 7620,
-    ["Herbalism"] = 2366,
-    ["Leatherworking"] = 2108,
+    ["Herbalism"] = 13614,
+    ["Leatherworking"] = 10662,
     ["Mining"] = 2575,
-    ["Skinning"] = 8613,
-    ["Tailoring"] = 3908,
-    ["Jewelcrafting"] = 25229,
+    ["Skinning"] = 10768,
+    ["Tailoring"] = 3910,
+    ["Jewelcrafting"] = 28897,
 }
 
 for key, spellID in pairs(PROFESSION_SPELLS) do
