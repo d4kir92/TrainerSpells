@@ -343,7 +343,7 @@ local function BuildEntriesFromData(dataTable)
 
             table.insert(allEntries, entry)
             local isLearnedPetSpell = TrainerSpells_Character and TrainerSpells_Character.learnedPetSpells and TrainerSpells_Character.learnedPetSpells[spellID]
-            if (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell then
+            if (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used" then
                 knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
             end
 

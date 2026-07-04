@@ -187,15 +187,9 @@ local function GetKnownPetSpellRanks()
     return known
 end
 
-local function SyncKnownPetSpellsForActivePet()
-    if not UnitCreatureFamily or not GetSpellInfo then return end
-    local family = UnitCreatureFamily("pet")
-    if not family then return end
-    local petData = TrainerSpells_PetData[family]
-    if not petData then return end
-    local knownRanks = GetKnownPetSpellRanks()
+local function MarkKnownPetSpells(dataTable, knownRanks)
     local changed = false
-    for _, spells in pairs(petData) do
+    for _, spells in pairs(dataTable) do
         for spellID, data in pairs(spells) do
             if not TrainerSpells_Character.learnedPetSpells[spellID] then
                 local name = GetSpellInfo(spellID)
@@ -210,6 +204,16 @@ local function SyncKnownPetSpellsForActivePet()
         end
     end
 
+    return changed
+end
+
+local function SyncKnownPetSpellsForActivePet()
+    if not GetSpellInfo or not UnitCreatureFamily then return end
+    local family = UnitCreatureFamily("pet")
+    local petData = family and TrainerSpells_PetData[family]
+    if not petData then return end
+    local knownRanks = GetKnownPetSpellRanks()
+    local changed = MarkKnownPetSpells(petData, knownRanks)
     if changed and TrainerSpells_Refresh then
         TrainerSpells_Refresh()
     end
