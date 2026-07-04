@@ -15,6 +15,17 @@ local IGNORED_COLOR = "|cff666666"
 local SPELL_NAME_COLOR = "|cffffffff"
 local DIM_NAME_COLOR = "|cff999999"
 local RANK_COLOR = "|cffaaaaaa"
+local COLLAPSE_EXPANDED_ICON = "|cffffffff-|r "
+local COLLAPSE_COLLAPSED_ICON = "|cffffffff+|r "
+local function IsGroupCollapsed(groupKey)
+    return groupKey and TrainerSpells_Global and TrainerSpells_Global.collapsedGroups[groupKey] or false
+end
+
+local function ToggleGroup(groupKey)
+    if not groupKey or not TrainerSpells_Global then return end
+    TrainerSpells_Global.collapsedGroups[groupKey] = not TrainerSpells_Global.collapsedGroups[groupKey] or nil
+end
+
 local function GetLevelDiffColorCode(level)
     if GetQuestDifficultyColor then
         local r, g, b = GetQuestDifficultyColor(level)
@@ -169,12 +180,14 @@ local function InitScrollRow(rowFrame, elementData)
         nameFS:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
         nameFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
         nameFS:SetJustifyH("CENTER")
-        nameFS:SetText(elementData.color .. elementData.text .. "|r")
-        if elementData.totalCost then
+        local collapseIcon = elementData.groupKey and (elementData.collapsed and COLLAPSE_COLLAPSED_ICON or COLLAPSE_EXPANDED_ICON) or ""
+        nameFS:SetText(collapseIcon .. elementData.color .. elementData.text .. "|r")
+        if elementData.totalCost or elementData.groupKey then
             rowFrame:EnableMouse(true)
             rowFrame:SetScript(
                 "OnEnter",
                 function(sel)
+                    if not elementData.totalCost then return end
                     GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
                     GameTooltip:AddLine(elementData.text)
                     local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
@@ -185,6 +198,15 @@ local function InitScrollRow(rowFrame, elementData)
             )
 
             rowFrame:SetScript("OnLeave", GameTooltip_Hide)
+            rowFrame:SetScript(
+                "OnMouseUp",
+                function(self, button)
+                    if button == "LeftButton" and elementData.groupKey then
+                        ToggleGroup(elementData.groupKey)
+                        TrainerSpells_Refresh()
+                    end
+                end
+            )
         end
     else
         local entry = elementData.entry
@@ -336,14 +358,16 @@ function TrainerSpells_Refresh()
     SortEntries(higher)
     SortEntries(known)
     local items = {}
-    local function AddHeader(text, colorCode, totalCost)
+    local function AddHeader(text, colorCode, totalCost, groupKey)
         table.insert(
             items,
             {
                 isHeader = true,
                 text = text,
                 color = colorCode,
-                totalCost = totalCost
+                totalCost = totalCost,
+                groupKey = groupKey,
+                collapsed = IsGroupCollapsed(groupKey)
             }
         )
     end
@@ -374,33 +398,45 @@ function TrainerSpells_Refresh()
     end
 
     if #available > 0 then
-        AddHeader("Available Now", AVAILABLE_COLOR, SumCost(available))
-        AddEntries(available, AVAILABLE_COLOR, true, true, false)
+        AddHeader("Available Now", AVAILABLE_COLOR, SumCost(available), "available")
+        if not IsGroupCollapsed("available") then
+            AddEntries(available, AVAILABLE_COLOR, true, true, false)
+        end
     end
 
     if #soon > 0 then
-        AddHeader(("Coming Soon (Lvl %d)"):format(nextLevel), SOON_COLOR, SumCost(soon))
-        AddEntries(soon, SOON_COLOR, true, true, false)
+        AddHeader(("Coming Soon (Lvl %d)"):format(nextLevel), SOON_COLOR, SumCost(soon), "soon")
+        if not IsGroupCollapsed("soon") then
+            AddEntries(soon, SOON_COLOR, true, true, false)
+        end
     end
 
     if #higher > 0 then
-        AddHeader("Not Yet Available", NOTYET_COLOR, SumCost(higher))
-        AddEntries(higher, NOTYET_COLOR, true, true, false)
+        AddHeader("Not Yet Available", NOTYET_COLOR, SumCost(higher), "higher")
+        if not IsGroupCollapsed("higher") then
+            AddEntries(higher, NOTYET_COLOR, true, true, false)
+        end
     end
 
     if #missingTalents > 0 then
-        AddHeader("Missing Required Talents", TALENT_COLOR, SumCost(missingTalents))
-        AddEntries(missingTalents, TALENT_COLOR, true, true, false)
+        AddHeader("Missing Required Talents", TALENT_COLOR, SumCost(missingTalents), "missingTalents")
+        if not IsGroupCollapsed("missingTalents") then
+            AddEntries(missingTalents, TALENT_COLOR, true, true, false)
+        end
     end
 
     if #ignored > 0 then
-        AddHeader("Ignored", IGNORED_COLOR)
-        AddEntries(ignored, IGNORED_COLOR, true, true, true)
+        AddHeader("Ignored", IGNORED_COLOR, nil, "ignored")
+        if not IsGroupCollapsed("ignored") then
+            AddEntries(ignored, IGNORED_COLOR, true, true, true)
+        end
     end
 
     if #known > 0 then
-        AddHeader("Already Known", KNOWN_COLOR, SumCost(known))
-        AddEntries(known, KNOWN_COLOR, true, false, true)
+        AddHeader("Already Known", KNOWN_COLOR, SumCost(known), "known")
+        if not IsGroupCollapsed("known") then
+            AddEntries(known, KNOWN_COLOR, true, false, true)
+        end
     end
 
     if #items == 0 then
