@@ -1,7 +1,10 @@
 -- Trainer-Daten: TBC, Hunter
--- Format: [spellID] = {level = Levelvoraussetzung beim Trainer, cost = Kosten in Kupfer, rank = "Rank N" oder nil}
+-- Gleiche Struktur wie TrainerSpells_Data im WTF-SavedVariables-Ordner: [level][spellID] = {cost, rank}
+-- Einfach den Inhalt von TrainerSpells_Data["HUNTER"] aus der WTF-Datei hier reinkopieren (status-Feld wird ignoriert).
 -- Hinweis: Beast-Training-Faehigkeiten (Pet-Trainer) gehoeren NICHT hier rein, sondern in HunterPet.lua
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
-    -- [75] = {level = 1, cost = 0, rank = nil}, -- Auto Shot
+    -- [1] = {
+    --     [75] = {cost = 0, rank = nil}, -- Auto Shot
+    -- },
 }

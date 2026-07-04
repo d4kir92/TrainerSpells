@@ -1,6 +1,9 @@
 -- Trainer-Daten: TBC, Mage
--- Format: [spellID] = {level = Levelvoraussetzung beim Trainer, cost = Kosten in Kupfer, rank = "Rank N" oder nil}
+-- Gleiche Struktur wie TrainerSpells_Data im WTF-SavedVariables-Ordner: [level][spellID] = {cost, rank}
+-- Einfach den Inhalt von TrainerSpells_Data["MAGE"] aus der WTF-Datei hier reinkopieren (status-Feld wird ignoriert).
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
-    -- [133] = {level = 1, cost = 0, rank = nil}, -- Fireball
+    -- [1] = {
+    --     [133] = {cost = 0, rank = nil}, -- Fireball
+    -- },
 }
