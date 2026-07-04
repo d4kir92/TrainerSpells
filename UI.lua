@@ -452,13 +452,6 @@ local hiddenPageRegions = {}
 local function HideNativeSpellButtons()
     if spellButtonsHidden then return end
     spellButtonsHidden = true
-    for i = 1, 12 do
-        local btn = _G["SpellButton" .. i]
-        if btn then
-            btn:Hide()
-        end
-    end
-
     for _, name in ipairs(NATIVE_EXTRA_WIDGETS) do
         local widget = _G[name]
         if widget then
@@ -483,13 +476,6 @@ end
 local function ShowNativeSpellButtons()
     if not spellButtonsHidden then return end
     spellButtonsHidden = false
-    for i = 1, 12 do
-        local btn = _G["SpellButton" .. i]
-        if btn then
-            btn:Show()
-        end
-    end
-
     for _, name in ipairs(NATIVE_EXTRA_WIDGETS) do
         local widget = _G[name]
         if widget then
@@ -561,7 +547,7 @@ if SpellBookFrame then
     tab:SetSize(32, 32)
     tab:SetNormalTexture("Interface\\Icons\\INV_Misc_Book_09")
     tab:SetHighlightTexture(130718, "ADD")
-    local border = tab:CreateTexture(nil, "BACKGROUND")
+    local border = tab:CreateTexture("TrainerSpellsSpellbookTabBorder", "BACKGROUND")
     border:SetSize(64, 64)
     border:SetPoint("TOPLEFT", tab, "TOPLEFT", -3, 11)
     border:SetTexture(136831)
