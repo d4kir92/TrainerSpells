@@ -329,7 +329,8 @@ local function BuildEntriesFromData(dataTable)
             }
 
             table.insert(allEntries, entry)
-            if IsSpellKnown and IsSpellKnown(spellID) then
+            local isLearnedPetSpell = TrainerSpells_Character and TrainerSpells_Character.learnedPetSpells and TrainerSpells_Character.learnedPetSpells[spellID]
+            if (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell then
                 knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
             end
 
@@ -524,7 +525,16 @@ function TrainerSpells_Refresh()
     scrollBox:SetDataProvider(CreateDataProvider(items))
 end
 
-frame:SetScript("OnShow", TrainerSpells_Refresh)
+frame:SetScript(
+    "OnShow",
+    function()
+        if TrainerSpells_SyncPetSpells then
+            TrainerSpells_SyncPetSpells()
+        end
+
+        TrainerSpells_Refresh()
+    end
+)
 frame:RegisterEvent("PLAYER_LEVEL_UP")
 frame:RegisterEvent("SPELLS_CHANGED")
 frame:HookScript(

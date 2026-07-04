@@ -3,6 +3,7 @@ TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
 TrainerSpells_Character = TrainerSpells_Character or {}
 TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
+TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 local PET_NAMES = {"Imp", "Voidwalker", "Succubus", "Incubus", "Felhunter"}
 local f = CreateFrame("Frame")
@@ -11,6 +12,9 @@ f:RegisterEvent("TRAINER_SHOW")
 f:RegisterEvent("TRAINER_UPDATE")
 f:RegisterEvent("MERCHANT_SHOW")
 f:RegisterEvent("MERCHANT_UPDATE")
+f:RegisterEvent("LEARNED_SPELL_IN_TAB")
+f:RegisterEvent("UNIT_PET")
+f:RegisterEvent("SPELLS_CHANGED")
 local scanTooltip = CreateFrame("GameTooltip", "TrainerSpellsScanTooltip", nil, "GameTooltipTemplate")
 scanTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 local function GetSpellIDForService(i)
@@ -143,18 +147,64 @@ local function CaptureMerchant()
     end
 end
 
+local function IsPetSpellID(spellID)
+    for _, levels in pairs(TrainerSpells_PetData) do
+        for _, spells in pairs(levels) do
+            if spells[spellID] then return true end
+        end
+    end
+
+    return false
+end
+
+local function OnLearnedSpell(spellID)
+    if not spellID or not IsPetSpellID(spellID) then return end
+    if TrainerSpells_Character.learnedPetSpells[spellID] then return end
+    TrainerSpells_Character.learnedPetSpells[spellID] = true
+    if TrainerSpells_Refresh then
+        TrainerSpells_Refresh()
+    end
+end
+
+local function SyncKnownPetSpellsForActivePet()
+    if not IsSpellKnown or not UnitCreatureFamily then return end
+    local family = UnitCreatureFamily("pet")
+    if not family then return end
+
+    local petData = TrainerSpells_PetData[family]
+    if not petData then return end
+
+    local changed = false
+    for _, spells in pairs(petData) do
+        for spellID in pairs(spells) do
+            if not TrainerSpells_Character.learnedPetSpells[spellID] and IsSpellKnown(spellID, true) then
+                TrainerSpells_Character.learnedPetSpells[spellID] = true
+                changed = true
+            end
+        end
+    end
+
+    if changed and TrainerSpells_Refresh then
+        TrainerSpells_Refresh()
+    end
+end
+
 local captureScheduled = false
 local merchantCaptureScheduled = false
+local petSyncScheduled = false
 f:SetScript(
     "OnEvent",
-    function(self, event, addonName)
-        if event == "ADDON_LOADED" and addonName == "TrainerSpells" then
+    function(self, event, arg1)
+        if event == "ADDON_LOADED" and arg1 == "TrainerSpells" then
             TrainerSpells_Data = TrainerSpells_Data or {}
             TrainerSpells_Ignored = TrainerSpells_Ignored or {}
             TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
             TrainerSpells_Character = TrainerSpells_Character or {}
             TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
+            TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
             TrainerSpells_PetData = TrainerSpells_PetData or {}
+        elseif event == "LEARNED_SPELL_IN_TAB" then
+            OnLearnedSpell(arg1)
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             if C_Timer then
                 if not captureScheduled then
@@ -185,12 +235,28 @@ f:SetScript(
             else
                 CaptureMerchant()
             end
+        elseif event == "SPELLS_CHANGED" or (event == "UNIT_PET" and arg1 == "player") then
+            if C_Timer then
+                if not petSyncScheduled then
+                    petSyncScheduled = true
+                    C_Timer.After(
+                        0.1,
+                        function()
+                            petSyncScheduled = false
+                            SyncKnownPetSpellsForActivePet()
+                        end
+                    )
+                end
+            else
+                SyncKnownPetSpellsForActivePet()
+            end
         end
     end
 )
 
 TrainerSpells_Capture = CaptureTrainer
 TrainerSpells_CaptureMerchant = CaptureMerchant
+TrainerSpells_SyncPetSpells = SyncKnownPetSpellsForActivePet
 function TrainerSpells_ToggleIgnoreSpell(spellID)
     local _, classToken = UnitClass("player")
     if not classToken or not spellID then return end
