@@ -12,6 +12,7 @@ local NOTYET_COLOR = "|cffff4444"
 local TALENT_COLOR = "|cffff9933"
 local KNOWN_COLOR = "|cff888888"
 local IGNORED_COLOR = "|cff666666"
+local PET_HEADER_COLOR = "|cffcc66ff"
 local SPELL_NAME_COLOR = "|cffffffff"
 local DIM_NAME_COLOR = "|cff999999"
 local RANK_COLOR = "|cffaaaaaa"
@@ -181,7 +182,8 @@ local function InitScrollRow(rowFrame, elementData)
         nameFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
         nameFS:SetJustifyH("CENTER")
         local collapseIcon = elementData.groupKey and (elementData.collapsed and COLLAPSE_COLLAPSED_ICON or COLLAPSE_EXPANDED_ICON) or ""
-        nameFS:SetText(collapseIcon .. elementData.color .. elementData.text .. "|r")
+        local prefix = elementData.prefixText and (PET_HEADER_COLOR .. "[" .. elementData.prefixText .. "] |r") or ""
+        nameFS:SetText(collapseIcon .. prefix .. elementData.color .. elementData.text .. "|r")
         if elementData.totalCost or elementData.groupKey then
             rowFrame:EnableMouse(true)
             rowFrame:SetScript(
@@ -250,29 +252,59 @@ local scrollView = CreateScrollBoxListLinearView()
 scrollView:SetElementExtent(ROW_HEIGHT)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
-function TrainerSpells_Refresh()
-    local searchText = (TrainerSpells_SearchText or ""):lower()
-    local selectedLevel = UnitLevel("player") or 1
-    local selectedClass = select(2, UnitClass("player"))
-    local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]
-    if not classData then
-        local items = {
-            {
-                isHeader = true,
-                color = "|cffff5555",
-                text = "Keine Daten für " .. tostring(selectedClass) .. " gesammelt. Lehrer besuchen!"
-            },
+
+local PET_GROUPS = {
+    {label = "Imp", keys = {"Imp"}},
+    {label = "Voidwalker", keys = {"Voidwalker"}},
+    {label = "Succubus/Incubus", keys = {"Succubus", "Incubus"}},
+    {label = "Felhunter", keys = {"Felhunter"}},
+}
+
+local function AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText)
+    table.insert(
+        items,
+        {
+            isHeader = true,
+            text = text,
+            color = colorCode,
+            totalCost = totalCost,
+            groupKey = groupKey,
+            collapsed = IsGroupCollapsed(groupKey),
+            prefixText = prefixText
         }
+    )
+end
 
-        scrollBox:SetDataProvider(CreateDataProvider(items))
+local function AddEntryItems(items, list, colorCode, showLevel, showCostTooltip, dimName)
+    for _, entry in ipairs(list) do
+        table.insert(
+            items,
+            {
+                isHeader = false,
+                entry = entry,
+                color = colorCode,
+                showLevel = showLevel,
+                showCostTooltip = showCostTooltip,
+                dimName = dimName,
+            }
+        )
+    end
+end
 
-        return
+local function SumCost(list)
+    local total = 0
+    for _, entry in ipairs(list) do
+        total = total + (entry.cost or 0)
     end
 
+    return total
+end
+
+local function BuildEntriesFromData(dataTable)
     local allEntries = {}
     local knownMaxRank = {}
     local minRankByName = {}
-    for lvl, spells in pairs(classData) do
+    for lvl, spells in pairs(dataTable) do
         for spellID, data in pairs(spells) do
             local cost, rank, status
             if type(data) == "table" then
@@ -305,6 +337,11 @@ function TrainerSpells_Refresh()
         end
     end
 
+    return allEntries, knownMaxRank, minRankByName
+end
+
+local function ClassifyEntries(dataTable, searchText, selectedLevel)
+    local allEntries, knownMaxRank, minRankByName = BuildEntriesFromData(dataTable)
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
         if not EntryMatchesSearch(entry, searchText) then
@@ -357,90 +394,131 @@ function TrainerSpells_Refresh()
     SortEntries(soon)
     SortEntries(higher)
     SortEntries(known)
+
+    return {
+        available = available,
+        soon = soon,
+        higher = higher,
+        missingTalents = missingTalents,
+        ignored = ignored,
+        known = known,
+        nextLevel = nextLevel,
+    }
+end
+
+local function AppendGroupItems(items, groups, keyPrefix, labelPrefix)
+    if #groups.available > 0 then
+        AddHeaderItem(items, "Available Now", AVAILABLE_COLOR, SumCost(groups.available), keyPrefix .. "available", labelPrefix)
+        if not IsGroupCollapsed(keyPrefix .. "available") then
+            AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, true, false)
+        end
+    end
+
+    if #groups.soon > 0 then
+        AddHeaderItem(items, ("Coming Soon (Lvl %d)"):format(groups.nextLevel), SOON_COLOR, SumCost(groups.soon), keyPrefix .. "soon", labelPrefix)
+        if not IsGroupCollapsed(keyPrefix .. "soon") then
+            AddEntryItems(items, groups.soon, SOON_COLOR, true, true, false)
+        end
+    end
+
+    if #groups.higher > 0 then
+        AddHeaderItem(items, "Not Yet Available", NOTYET_COLOR, SumCost(groups.higher), keyPrefix .. "higher", labelPrefix)
+        if not IsGroupCollapsed(keyPrefix .. "higher") then
+            AddEntryItems(items, groups.higher, NOTYET_COLOR, true, true, false)
+        end
+    end
+
+    if #groups.missingTalents > 0 then
+        AddHeaderItem(items, "Missing Required Talents", TALENT_COLOR, SumCost(groups.missingTalents), keyPrefix .. "missingTalents", labelPrefix)
+        if not IsGroupCollapsed(keyPrefix .. "missingTalents") then
+            AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, true, false)
+        end
+    end
+
+    if #groups.ignored > 0 then
+        AddHeaderItem(items, "Ignored", IGNORED_COLOR, nil, keyPrefix .. "ignored", labelPrefix)
+        if not IsGroupCollapsed(keyPrefix .. "ignored") then
+            AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, true, true)
+        end
+    end
+
+    if #groups.known > 0 then
+        AddHeaderItem(items, "Already Known", KNOWN_COLOR, SumCost(groups.known), keyPrefix .. "known", labelPrefix)
+        if not IsGroupCollapsed(keyPrefix .. "known") then
+            AddEntryItems(items, groups.known, KNOWN_COLOR, true, false, true)
+        end
+    end
+end
+
+local function MergePetData(keys)
+    local merged = {}
+    for _, key in ipairs(keys) do
+        local data = TrainerSpells_PetData and TrainerSpells_PetData[key]
+        if data then
+            for lvl, spells in pairs(data) do
+                merged[lvl] = merged[lvl] or {}
+                for spellID, entryData in pairs(spells) do
+                    merged[lvl][spellID] = entryData
+                end
+            end
+        end
+    end
+
+    return merged
+end
+
+local function AppendPetAbilities(items, searchText, selectedLevel)
+    local petItems = {}
+    for _, petGroup in ipairs(PET_GROUPS) do
+        local merged = MergePetData(petGroup.keys)
+        if next(merged) then
+            local groupKey = "pet_" .. table.concat(petGroup.keys, "_")
+            local groups = ClassifyEntries(merged, searchText, selectedLevel)
+            local subItems = {}
+            AppendGroupItems(subItems, groups, groupKey .. "_", petGroup.label)
+            if #subItems > 0 then
+                AddHeaderItem(petItems, petGroup.label, PET_HEADER_COLOR, nil, groupKey)
+                if not IsGroupCollapsed(groupKey) then
+                    for _, item in ipairs(subItems) do
+                        table.insert(petItems, item)
+                    end
+                end
+            end
+        end
+    end
+
+    if #petItems > 0 then
+        AddHeaderItem(items, "Pet Abilities", PET_HEADER_COLOR, nil, "petAbilities")
+        if not IsGroupCollapsed("petAbilities") then
+            for _, item in ipairs(petItems) do
+                table.insert(items, item)
+            end
+        end
+    end
+end
+
+function TrainerSpells_Refresh()
+    local searchText = (TrainerSpells_SearchText or ""):lower()
+    local selectedLevel = UnitLevel("player") or 1
+    local selectedClass = select(2, UnitClass("player"))
+    local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]
     local items = {}
-    local function AddHeader(text, colorCode, totalCost, groupKey)
-        table.insert(
-            items,
-            {
-                isHeader = true,
-                text = text,
-                color = colorCode,
-                totalCost = totalCost,
-                groupKey = groupKey,
-                collapsed = IsGroupCollapsed(groupKey)
-            }
-        )
+
+    if classData then
+        local groups = ClassifyEntries(classData, searchText, selectedLevel)
+        AppendGroupItems(items, groups, "")
     end
 
-    local function AddEntries(list, colorCode, showLevel, showCostTooltip, dimName)
-        for _, entry in ipairs(list) do
-            table.insert(
-                items,
-                {
-                    isHeader = false,
-                    entry = entry,
-                    color = colorCode,
-                    showLevel = showLevel,
-                    showCostTooltip = showCostTooltip,
-                    dimName = dimName,
-                }
-            )
-        end
-    end
-
-    local function SumCost(list)
-        local total = 0
-        for _, entry in ipairs(list) do
-            total = total + (entry.cost or 0)
-        end
-
-        return total
-    end
-
-    if #available > 0 then
-        AddHeader("Available Now", AVAILABLE_COLOR, SumCost(available), "available")
-        if not IsGroupCollapsed("available") then
-            AddEntries(available, AVAILABLE_COLOR, true, true, false)
-        end
-    end
-
-    if #soon > 0 then
-        AddHeader(("Coming Soon (Lvl %d)"):format(nextLevel), SOON_COLOR, SumCost(soon), "soon")
-        if not IsGroupCollapsed("soon") then
-            AddEntries(soon, SOON_COLOR, true, true, false)
-        end
-    end
-
-    if #higher > 0 then
-        AddHeader("Not Yet Available", NOTYET_COLOR, SumCost(higher), "higher")
-        if not IsGroupCollapsed("higher") then
-            AddEntries(higher, NOTYET_COLOR, true, true, false)
-        end
-    end
-
-    if #missingTalents > 0 then
-        AddHeader("Missing Required Talents", TALENT_COLOR, SumCost(missingTalents), "missingTalents")
-        if not IsGroupCollapsed("missingTalents") then
-            AddEntries(missingTalents, TALENT_COLOR, true, true, false)
-        end
-    end
-
-    if #ignored > 0 then
-        AddHeader("Ignored", IGNORED_COLOR, nil, "ignored")
-        if not IsGroupCollapsed("ignored") then
-            AddEntries(ignored, IGNORED_COLOR, true, true, true)
-        end
-    end
-
-    if #known > 0 then
-        AddHeader("Already Known", KNOWN_COLOR, SumCost(known), "known")
-        if not IsGroupCollapsed("known") then
-            AddEntries(known, KNOWN_COLOR, true, false, true)
-        end
+    if selectedClass == "WARLOCK" then
+        AppendPetAbilities(items, searchText, selectedLevel)
     end
 
     if #items == 0 then
-        AddHeader("Keine Einträge vorhanden.", "|cffaaaaaa")
+        if not classData then
+            AddHeaderItem(items, "Keine Daten für " .. tostring(selectedClass) .. " gesammelt. Lehrer besuchen!", "|cffff5555")
+        else
+            AddHeaderItem(items, "Keine Einträge vorhanden.", "|cffaaaaaa")
+        end
     end
 
     scrollBox:SetDataProvider(CreateDataProvider(items))
