@@ -38,30 +38,46 @@ for key, spellID in pairs(PROFESSION_SPELLS) do
     end
 end
 
-local PET_SPELL_IDS = {688, 697, 712, 101822, 691,}
-local PET_NAMES = {}
-for _, spellID in ipairs(PET_SPELL_IDS) do
+local PET_SUMMON_SPELL_IDS = {688, 697, 712, 101822, 691}
+local function CommonAffixLength(a, b, fromEnd)
+    local maxLen = math.min(#a, #b)
+    local len = 0
+    while len < maxLen do
+        local posA = fromEnd and (#a - len) or (len + 1)
+        local posB = fromEnd and (#b - len) or (len + 1)
+        if a:sub(posA, posA) ~= b:sub(posB, posB) then break end
+        len = len + 1
+    end
+
+    return len
+end
+
+local function StripCommonAffixes(names)
+    if #names < 2 then return names end
+    local prefixLen, suffixLen = #names[1], #names[1]
+    for i = 2, #names do
+        prefixLen = math.min(prefixLen, CommonAffixLength(names[1], names[i], false))
+        suffixLen = math.min(suffixLen, CommonAffixLength(names[1], names[i], true))
+    end
+
+    local result = {}
+    for i, name in ipairs(names) do
+        local suffixStart = math.max(prefixLen, #name - suffixLen)
+        result[i] = name:sub(prefixLen + 1, suffixStart)
+    end
+
+    return result
+end
+
+local rawPetSummonNames = {}
+for _, spellID in ipairs(PET_SUMMON_SPELL_IDS) do
     local spellInfo = C_Spell.GetSpellInfo(spellID)
     if spellInfo and spellInfo.name then
-        table.insert(PET_NAMES, spellInfo.name)
+        table.insert(rawPetSummonNames, spellInfo.name)
     end
 end
 
-for i, v in pairs(PET_NAMES) do
-    print(i, v)
-end
-
-C_Timer.After(
-    1,
-    function()
-        for i, v in pairs(_G) do
-            if v == "Imp" then
-                print(i, v)
-            end
-        end
-    end
-)
-
+local PET_NAMES = StripCommonAffixes(rawPetSummonNames)
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("TRAINER_SHOW")
