@@ -492,7 +492,7 @@ local function AppendGroupItems(items, groups, keyPrefix, labelPrefix)
     if #groups.known > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_ALREADYKNOWN"), KNOWN_COLOR, SumCost(groups.known), keyPrefix .. "known", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "known") then
-            AddEntryItems(items, groups.known, KNOWN_COLOR, true, false, true)
+            AddEntryItems(items, groups.known, KNOWN_COLOR, true, true, true)
         end
     end
 end

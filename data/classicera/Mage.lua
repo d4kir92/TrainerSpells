@@ -174,6 +174,26 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 2,
             requires = {118}
         },
+        [3561] = {
+            cost = 2000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [3562] = {
+            cost = 2000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [3563] = {
+            cost = 2000,
+            rank = nil,
+            faction = "Horde"
+        },
+        [3567] = {
+            cost = 2000,
+            rank = nil,
+            faction = "Horde"
+        }
     },
     [22] = {
         [990] = {
@@ -303,6 +323,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 3,
             requires = {11366}
         },
+        [3565] = {
+            cost = 8000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [3566] = {
+            cost = 8000,
+            rank = nil,
+            faction = "Horde"
+        }
     },
     [32] = {
         [6129] = {
@@ -427,6 +457,26 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 15000,
             rank = 3,
             requires = {118}
+        },
+        [10059] = {
+            cost = 15000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [11416] = {
+            cost = 15000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [11417] = {
+            cost = 15000,
+            rank = nil,
+            faction = "Horde"
+        },
+        [11418] = {
+            cost = 15000,
+            rank = nil,
+            faction = "Horde"
         },
     },
     [42] = {
@@ -559,9 +609,15 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 32000,
             rank = 4
         },
+        [11419] = {
+            cost = 32000,
+            rank = nil,
+            faction = "Alliance"
+        },
         [11420] = {
-            cost = 28800,
-            rank = nil
+            cost = 32000,
+            rank = nil,
+            faction = "Horde"
         }
     },
     [52] = {
