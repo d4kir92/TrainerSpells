@@ -1,3 +1,4 @@
+local _, TrainerSpells = ...
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
@@ -52,16 +53,31 @@ local function CommonAffixLength(a, b, fromEnd)
     return len
 end
 
+local function GetMapLength(tbl)
+    local count = 0
+    for _ in pairs(tbl) do
+        count = count + 1
+    end
+
+    return count
+end
+
 local function StripCommonAffixes(names)
-    if #names < 2 then return names end
-    local prefixLen, suffixLen = #names[1], #names[1]
-    for i = 2, #names do
-        prefixLen = math.min(prefixLen, CommonAffixLength(names[1], names[i], false))
-        suffixLen = math.min(suffixLen, CommonAffixLength(names[1], names[i], true))
+    if GetMapLength(names) < 2 then return names end
+    local prefixLen, suffixLen = nil, nil
+    local firstElement = nil
+    for i, v in pairs(names) do
+        if firstElement == nil then
+            firstElement = v
+            prefixLen, suffixLen = #v, #v
+        else
+            prefixLen = math.min(prefixLen, CommonAffixLength(firstElement, v, false))
+            suffixLen = math.min(suffixLen, CommonAffixLength(firstElement, v, true))
+        end
     end
 
     local result = {}
-    for i, name in ipairs(names) do
+    for i, name in pairs(names) do
         local suffixStart = math.max(prefixLen, #name - suffixLen)
         result[i] = name:sub(prefixLen + 1, suffixStart)
     end
@@ -73,11 +89,15 @@ local rawPetSummonNames = {}
 for _, spellID in ipairs(PET_SUMMON_SPELL_IDS) do
     local spellInfo = C_Spell.GetSpellInfo(spellID)
     if spellInfo and spellInfo.name then
-        table.insert(rawPetSummonNames, spellInfo.name)
+        rawPetSummonNames[spellID] = spellInfo.name
     end
 end
 
 local PET_NAMES = StripCommonAffixes(rawPetSummonNames)
+function TrainerSpells:GetPetNameById(id)
+    return PET_NAMES[id]
+end
+
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("TRAINER_SHOW")
@@ -193,7 +213,6 @@ local function CaptureTrainerInner()
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
             local spellID = GetSpellIDForService(i)
             local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
-            print(skillLine)
             if spellID and not PROFESSION_SKILL_LINES[skillLine] then
                 local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
                 if isPetTraining then

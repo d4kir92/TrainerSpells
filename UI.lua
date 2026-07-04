@@ -19,6 +19,25 @@ local DIM_NAME_COLOR = "|cff999999"
 local RANK_COLOR = "|cffaaaaaa"
 local COLLAPSE_EXPANDED_ICON = "|cffffffff-|r "
 local COLLAPSE_COLLAPSED_ICON = "|cffffffff+|r "
+local PET_GROUPS = {
+    {
+        label = TrainerSpells:GetPetNameById(688),
+        keys = {"Imp"}
+    },
+    {
+        label = TrainerSpells:GetPetNameById(697),
+        keys = {"Voidwalker"}
+    },
+    {
+        label = TrainerSpells:GetPetNameById(712),
+        keys = {"Succubus", "Incubus"}
+    },
+    {
+        label = TrainerSpells:GetPetNameById(691),
+        keys = {"Felhunter"}
+    },
+}
+
 local function IsGroupCollapsed(groupKey)
     return groupKey and TrainerSpells_Character and TrainerSpells_Character.collapsedGroups[groupKey] or false
 end
@@ -120,7 +139,7 @@ local function IgnoreMenu_Initialize(self, level)
     info.notCheckable = true
     UIDropDownMenu_AddButton(info, level)
     info = UIDropDownMenu_CreateInfo()
-    info.text = spellIgnored and "Diesen Rang nicht mehr ignorieren" or "Diesen Rang ignorieren"
+    info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
     info.notCheckable = true
     info.func = function()
         TrainerSpells_ToggleIgnoreSpell(entry.spellID)
@@ -129,7 +148,7 @@ local function IgnoreMenu_Initialize(self, level)
 
     UIDropDownMenu_AddButton(info, level)
     info = UIDropDownMenu_CreateInfo()
-    info.text = nameIgnored and "Alle Ränge nicht mehr ignorieren" or "Alle Ränge ignorieren"
+    info.text = nameIgnored and TrainerSpells:Trans("LID_STOPIGNOREINGALLRANKS") or TrainerSpells:Trans("LID_IGNOREALLRANKS")
     info.notCheckable = true
     info.func = function()
         TrainerSpells_ToggleIgnoreName(entry.name)
@@ -138,7 +157,7 @@ local function IgnoreMenu_Initialize(self, level)
 
     UIDropDownMenu_AddButton(info, level)
     info = UIDropDownMenu_CreateInfo()
-    info.text = "Abbrechen"
+    info.text = TrainerSpells:Trans("LID_CANCEL")
     info.notCheckable = true
     UIDropDownMenu_AddButton(info, level)
 end
@@ -265,8 +284,8 @@ local function InitScrollRow(rowFrame, elementData)
                 if elementData.showCostTooltip then
                     local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
                     local costColor = canAfford and "|cffffffff" or "|cffff3333"
-                    GameTooltip:AddLine("Kosten: " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
-                    GameTooltip:AddLine("Eigenes Gold: " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
                 end
 
                 GameTooltip:Show()
@@ -289,25 +308,6 @@ local scrollView = CreateScrollBoxListLinearView()
 scrollView:SetElementExtent(ROW_HEIGHT)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
-local PET_GROUPS = {
-    {
-        label = "Imp",
-        keys = {"Imp"}
-    },
-    {
-        label = "Voidwalker",
-        keys = {"Voidwalker"}
-    },
-    {
-        label = "Succubus/Incubus",
-        keys = {"Succubus", "Incubus"}
-    },
-    {
-        label = "Felhunter",
-        keys = {"Felhunter"}
-    },
-}
-
 local function AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText)
     table.insert(
         items,
@@ -451,42 +451,42 @@ end
 
 local function AppendGroupItems(items, groups, keyPrefix, labelPrefix)
     if #groups.available > 0 then
-        AddHeaderItem(items, "Available Now", AVAILABLE_COLOR, SumCost(groups.available), keyPrefix .. "available", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_AVAILABLENOW"), AVAILABLE_COLOR, SumCost(groups.available), keyPrefix .. "available", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "available") then
             AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, true, false)
         end
     end
 
     if #groups.soon > 0 then
-        AddHeaderItem(items, ("Coming Soon (Lvl %d)"):format(groups.nextLevel), SOON_COLOR, SumCost(groups.soon), keyPrefix .. "soon", labelPrefix)
+        AddHeaderItem(items, ("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), TrainerSpells:Trans("LID_LVL"), groups.nextLevel), SOON_COLOR, SumCost(groups.soon), keyPrefix .. "soon", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "soon") then
             AddEntryItems(items, groups.soon, SOON_COLOR, true, true, false)
         end
     end
 
     if #groups.higher > 0 then
-        AddHeaderItem(items, "Not Yet Available", NOTYET_COLOR, SumCost(groups.higher), keyPrefix .. "higher", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_NOTYETAVAILABLE"), NOTYET_COLOR, SumCost(groups.higher), keyPrefix .. "higher", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "higher") then
             AddEntryItems(items, groups.higher, NOTYET_COLOR, true, true, false)
         end
     end
 
     if #groups.missingTalents > 0 then
-        AddHeaderItem(items, "Missing Required Talents", TALENT_COLOR, SumCost(groups.missingTalents), keyPrefix .. "missingTalents", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_MISSINGREQUIREDTALENTS"), TALENT_COLOR, SumCost(groups.missingTalents), keyPrefix .. "missingTalents", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "missingTalents") then
             AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, true, false)
         end
     end
 
     if #groups.ignored > 0 then
-        AddHeaderItem(items, "Ignored", IGNORED_COLOR, nil, keyPrefix .. "ignored", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_IGNORED"), IGNORED_COLOR, nil, keyPrefix .. "ignored", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "ignored") then
             AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, true, true)
         end
     end
 
     if #groups.known > 0 then
-        AddHeaderItem(items, "Already Known", KNOWN_COLOR, SumCost(groups.known), keyPrefix .. "known", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_ALREADYKNOWN"), KNOWN_COLOR, SumCost(groups.known), keyPrefix .. "known", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "known") then
             AddEntryItems(items, groups.known, KNOWN_COLOR, true, false, true)
         end
@@ -531,7 +531,7 @@ local function AppendPetAbilities(items, searchText, selectedLevel)
     end
 
     if #petItems > 0 then
-        AddHeaderItem(items, "Pet Abilities", PET_HEADER_COLOR, nil, "petAbilities")
+        AddHeaderItem(items, TrainerSpells:Trans("LID_PETTRAINING"), PET_HEADER_COLOR, nil, "petAbilities")
         if not IsGroupCollapsed("petAbilities") then
             for _, item in ipairs(petItems) do
                 table.insert(items, item)
@@ -547,7 +547,7 @@ local function AppendPetTrainerAbilities(items, searchText, selectedLevel, class
     local subItems = {}
     AppendGroupItems(subItems, groups, "pettrainer_")
     if #subItems == 0 then return end
-    AddHeaderItem(items, "Pet Training", PET_HEADER_COLOR, nil, "petTraining")
+    AddHeaderItem(items, TrainerSpells:Trans("LID_PETTRAINING"), PET_HEADER_COLOR, nil, "petTraining")
     if not IsGroupCollapsed("petTraining") then
         for _, item in ipairs(subItems) do
             table.insert(items, item)
