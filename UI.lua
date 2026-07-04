@@ -80,6 +80,10 @@ local function GetTalentNameSet()
     return names
 end
 
+local function GetPlayerFaction()
+    return UnitFactionGroup and UnitFactionGroup("player")
+end
+
 local function IsReqSpellKnown(spellID)
     if not IsSpellKnown or type(spellID) ~= "number" then return false end
     local ok, known = pcall(IsSpellKnown, spellID)
@@ -355,33 +359,36 @@ end
 local function BuildEntriesFromData(dataTable)
     local allEntries = {}
     local knownMaxRank = {}
+    local playerFaction = GetPlayerFaction()
     for lvl, spells in pairs(dataTable) do
         for spellID, data in pairs(spells) do
-            local cost, rank, status, requires
+            local cost, rank, status, requires, faction
             if type(data) == "table" then
-                cost, rank, status, requires = data.cost, data.rank, data.status, data.requires
+                cost, rank, status, requires, faction = data.cost, data.rank, data.status, data.requires, data.faction
             else
                 cost = data
             end
 
-            local name, _, icon = GetSpellInfo(spellID)
-            name = name or ("SpellID " .. spellID)
-            icon = icon or "Interface\\Icons\\INV_Misc_QuestionMark"
-            local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
-            local entry = {
-                level = lvl,
-                spellID = spellID,
-                cost = cost,
-                name = name,
-                icon = icon,
-                rankNum = rankNum,
-                requires = requires,
-            }
+            if not faction or not playerFaction or faction == playerFaction then
+                local name, _, icon = GetSpellInfo(spellID)
+                name = name or ("SpellID " .. spellID)
+                icon = icon or "Interface\\Icons\\INV_Misc_QuestionMark"
+                local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
+                local entry = {
+                    level = lvl,
+                    spellID = spellID,
+                    cost = cost,
+                    name = name,
+                    icon = icon,
+                    rankNum = rankNum,
+                    requires = requires,
+                }
 
-            table.insert(allEntries, entry)
-            local isLearnedPetSpell = TrainerSpells_Character and TrainerSpells_Character.learnedPetSpells and TrainerSpells_Character.learnedPetSpells[spellID]
-            if (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used" then
-                knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
+                table.insert(allEntries, entry)
+                local isLearnedPetSpell = TrainerSpells_Character and TrainerSpells_Character.learnedPetSpells and TrainerSpells_Character.learnedPetSpells[spellID]
+                if (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used" then
+                    knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
+                end
             end
         end
     end

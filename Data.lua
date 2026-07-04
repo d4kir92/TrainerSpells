@@ -242,7 +242,8 @@ local function CaptureTrainerInner()
                     cost = cost,
                     rank = rank,
                     status = sType,
-                    requires = existing and existing.requires
+                    requires = existing and existing.requires,
+                    faction = existing and existing.faction
                 }
             end
         end
@@ -399,8 +400,11 @@ local function MergeBuiltinData()
                     if bucket[spellID] == nil then
                         bucket[spellID] = {
                             cost = data.cost or 0,
-                            rank = data.rank
+                            rank = data.rank,
+                            faction = data.faction
                         }
+                    elseif data.faction and bucket[spellID].faction == nil then
+                        bucket[spellID].faction = data.faction
                     end
                 end
             end
@@ -415,8 +419,11 @@ local function MergeBuiltinData()
                     if bucket[spellID] == nil then
                         bucket[spellID] = {
                             cost = data.cost or 0,
-                            rank = data.rank
+                            rank = data.rank,
+                            faction = data.faction
                         }
+                    elseif data.faction and bucket[spellID].faction == nil then
+                        bucket[spellID].faction = data.faction
                     end
                 end
             end
@@ -430,8 +437,11 @@ local function MergeBuiltinData()
                 if bucket[spellID] == nil then
                     bucket[spellID] = {
                         cost = data.cost or 0,
-                        rank = data.rank
+                        rank = data.rank,
+                        faction = data.faction
                     }
+                elseif data.faction and bucket[spellID].faction == nil then
+                    bucket[spellID].faction = data.faction
                 end
             end
         end
