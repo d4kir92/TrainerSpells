@@ -1,6 +1,9 @@
 -- Trainer-Daten: Classic Era, Rogue
--- Format: [spellID] = {level = Levelvoraussetzung beim Trainer, cost = Kosten in Kupfer, rank = "Rank N" oder nil}
+-- Gleiche Struktur wie TrainerSpells_Data im WTF-SavedVariables-Ordner: [level][spellID] = {cost, rank}
+-- Einfach den Inhalt von TrainerSpells_Data["ROGUE"] aus der WTF-Datei hier reinkopieren (status-Feld wird ignoriert).
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
-    -- [1752] = {level = 1, cost = 0, rank = nil}, -- Sinister Strike
+    -- [1] = {
+    --     [1752] = {cost = 0, rank = nil}, -- Sinister Strike
+    -- },
 }

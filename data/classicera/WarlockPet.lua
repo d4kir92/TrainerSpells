@@ -1,72 +1,177 @@
 -- Grimoire-Daten (Pet-Faehigkeiten) fuer Warlock, Classic Era, pro Pet-Familie
--- Format: [spellID] = {level = Levelanforderung des Grimoire-Items, cost = Kosten in Kupfer, rank = "Rank N" oder nil}
+-- Gleiche Struktur wie TrainerSpells_PetData im WTF-SavedVariables-Ordner: [level][spellID] = {cost, rank}
+-- Einfach den Inhalt von TrainerSpells_PetData["Imp"] usw. aus der WTF-Datei hier reinkopieren.
 TrainerSpellsBuiltin_WarlockPet = TrainerSpellsBuiltin_WarlockPet or {}
 TrainerSpellsBuiltin_WarlockPet.Imp = TrainerSpellsBuiltin_WarlockPet.Imp or {
-    [20397] = {level = 4, cost = 100, rank = "Rank 1"},
-    [20270] = {level = 8, cost = 100, rank = "Rank 2"},
-    [20329] = {level = 12, cost = 600, rank = nil},
-    [20318] = {level = 14, cost = 900, rank = "Rank 2"},
-    [20322] = {level = 14, cost = 900, rank = "Rank 1"},
-    [20312] = {level = 18, cost = 1500, rank = "Rank 3"},
-    [20323] = {level = 24, cost = 3000, rank = "Rank 2"},
-    [20319] = {level = 26, cost = 4000, rank = "Rank 3"},
-    [20313] = {level = 28, cost = 5000, rank = "Rank 4"},
-    [20324] = {level = 34, cost = 8000, rank = "Rank 3"},
-    [20314] = {level = 38, cost = 10000, rank = "Rank 5"},
-    [20320] = {level = 38, cost = 10000, rank = "Rank 4"},
-    [20326] = {level = 44, cost = 12000, rank = "Rank 4"},
-    [20315] = {level = 48, cost = 14000, rank = "Rank 6"},
-    [20321] = {level = 50, cost = 15000, rank = "Rank 5"},
-    [20327] = {level = 54, cost = 20000, rank = "Rank 5"},
-    [20316] = {level = 58, cost = 24000, rank = "Rank 7"},
+    [4] = {
+        [20397] = {cost = 100, rank = "Rank 1"},
+    },
+    [8] = {
+        [20270] = {cost = 100, rank = "Rank 2"},
+    },
+    [12] = {
+        [20329] = {cost = 600, rank = nil},
+    },
+    [14] = {
+        [20318] = {cost = 900, rank = "Rank 2"},
+        [20322] = {cost = 900, rank = "Rank 1"},
+    },
+    [18] = {
+        [20312] = {cost = 1500, rank = "Rank 3"},
+    },
+    [24] = {
+        [20323] = {cost = 3000, rank = "Rank 2"},
+    },
+    [26] = {
+        [20319] = {cost = 4000, rank = "Rank 3"},
+    },
+    [28] = {
+        [20313] = {cost = 5000, rank = "Rank 4"},
+    },
+    [34] = {
+        [20324] = {cost = 8000, rank = "Rank 3"},
+    },
+    [38] = {
+        [20314] = {cost = 10000, rank = "Rank 5"},
+        [20320] = {cost = 10000, rank = "Rank 4"},
+    },
+    [44] = {
+        [20326] = {cost = 12000, rank = "Rank 4"},
+    },
+    [48] = {
+        [20315] = {cost = 14000, rank = "Rank 6"},
+    },
+    [50] = {
+        [20321] = {cost = 15000, rank = "Rank 5"},
+    },
+    [54] = {
+        [20327] = {cost = 20000, rank = "Rank 5"},
+    },
+    [58] = {
+        [20316] = {cost = 24000, rank = "Rank 7"},
+    },
 }
 TrainerSpellsBuiltin_WarlockPet.Voidwalker = TrainerSpellsBuiltin_WarlockPet.Voidwalker or {
-    [20381] = {level = 16, cost = 1200, rank = "Rank 1"},
-    [20387] = {level = 18, cost = 1500, rank = "Rank 1"},
-    [20317] = {level = 20, cost = 2000, rank = "Rank 2"},
-    [20382] = {level = 24, cost = 3000, rank = "Rank 2"},
-    [20393] = {level = 24, cost = 3000, rank = "Rank 1"},
-    [20388] = {level = 26, cost = 4000, rank = "Rank 2"},
-    [20377] = {level = 30, cost = 6000, rank = "Rank 3"},
-    [20383] = {level = 32, cost = 7000, rank = "Rank 3"},
-    [20389] = {level = 34, cost = 8000, rank = "Rank 3"},
-    [20394] = {level = 36, cost = 9000, rank = "Rank 2"},
-    [20378] = {level = 40, cost = 11000, rank = "Rank 4"},
-    [20384] = {level = 40, cost = 11000, rank = "Rank 4"},
-    [20390] = {level = 42, cost = 11000, rank = "Rank 4"},
-    [20385] = {level = 48, cost = 14000, rank = "Rank 5"},
-    [20395] = {level = 48, cost = 14000, rank = "Rank 3"},
-    [20379] = {level = 50, cost = 15000, rank = "Rank 5"},
-    [20391] = {level = 50, cost = 15000, rank = "Rank 5"},
-    [20386] = {level = 56, cost = 22000, rank = "Rank 6"},
-    [20392] = {level = 58, cost = 24000, rank = "Rank 6"},
-    [20380] = {level = 60, cost = 26000, rank = "Rank 6"},
-    [20396] = {level = 60, cost = 26000, rank = "Rank 4"},
+    [16] = {
+        [20381] = {cost = 1200, rank = "Rank 1"},
+    },
+    [18] = {
+        [20387] = {cost = 1500, rank = "Rank 1"},
+    },
+    [20] = {
+        [20317] = {cost = 2000, rank = "Rank 2"},
+    },
+    [24] = {
+        [20382] = {cost = 3000, rank = "Rank 2"},
+        [20393] = {cost = 3000, rank = "Rank 1"},
+    },
+    [26] = {
+        [20388] = {cost = 4000, rank = "Rank 2"},
+    },
+    [30] = {
+        [20377] = {cost = 6000, rank = "Rank 3"},
+    },
+    [32] = {
+        [20383] = {cost = 7000, rank = "Rank 3"},
+    },
+    [34] = {
+        [20389] = {cost = 8000, rank = "Rank 3"},
+    },
+    [36] = {
+        [20394] = {cost = 9000, rank = "Rank 2"},
+    },
+    [40] = {
+        [20378] = {cost = 11000, rank = "Rank 4"},
+        [20384] = {cost = 11000, rank = "Rank 4"},
+    },
+    [42] = {
+        [20390] = {cost = 11000, rank = "Rank 4"},
+    },
+    [48] = {
+        [20385] = {cost = 14000, rank = "Rank 5"},
+        [20395] = {cost = 14000, rank = "Rank 3"},
+    },
+    [50] = {
+        [20379] = {cost = 15000, rank = "Rank 5"},
+        [20391] = {cost = 15000, rank = "Rank 5"},
+    },
+    [56] = {
+        [20386] = {cost = 22000, rank = "Rank 6"},
+    },
+    [58] = {
+        [20392] = {cost = 24000, rank = "Rank 6"},
+    },
+    [60] = {
+        [20380] = {cost = 26000, rank = "Rank 6"},
+        [20396] = {cost = 26000, rank = "Rank 4"},
+    },
 }
 TrainerSpellsBuiltin_WarlockPet.Succubus = TrainerSpellsBuiltin_WarlockPet.Succubus or {
-    [20403] = {level = 22, cost = 2500, rank = "Rank 1"},
-    [20407] = {level = 26, cost = 4000, rank = nil},
-    [20398] = {level = 28, cost = 5000, rank = "Rank 2"},
-    [20408] = {level = 32, cost = 7000, rank = nil},
-    [20404] = {level = 34, cost = 8000, rank = "Rank 2"},
-    [20399] = {level = 36, cost = 9000, rank = "Rank 3"},
-    [20400] = {level = 44, cost = 12000, rank = "Rank 4"},
-    [20405] = {level = 46, cost = 13000, rank = "Rank 3"},
-    [20401] = {level = 52, cost = 18000, rank = "Rank 5"},
-    [20406] = {level = 58, cost = 24000, rank = "Rank 4"},
-    [20402] = {level = 60, cost = 26000, rank = "Rank 6"},
+    [22] = {
+        [20403] = {cost = 2500, rank = "Rank 1"},
+    },
+    [26] = {
+        [20407] = {cost = 4000, rank = nil},
+    },
+    [28] = {
+        [20398] = {cost = 5000, rank = "Rank 2"},
+    },
+    [32] = {
+        [20408] = {cost = 7000, rank = nil},
+    },
+    [34] = {
+        [20404] = {cost = 8000, rank = "Rank 2"},
+    },
+    [36] = {
+        [20399] = {cost = 9000, rank = "Rank 3"},
+    },
+    [44] = {
+        [20400] = {cost = 12000, rank = "Rank 4"},
+    },
+    [46] = {
+        [20405] = {cost = 13000, rank = "Rank 3"},
+    },
+    [52] = {
+        [20401] = {cost = 18000, rank = "Rank 5"},
+    },
+    [58] = {
+        [20406] = {cost = 24000, rank = "Rank 4"},
+    },
+    [60] = {
+        [20402] = {cost = 26000, rank = "Rank 6"},
+    },
 }
 TrainerSpellsBuiltin_WarlockPet.Incubus = TrainerSpellsBuiltin_WarlockPet.Incubus or {
 }
 TrainerSpellsBuiltin_WarlockPet.Felhunter = TrainerSpellsBuiltin_WarlockPet.Felhunter or {
-    [20429] = {level = 32, cost = 7000, rank = "Rank 1"},
-    [20433] = {level = 36, cost = 9000, rank = "Rank 1"},
-    [20426] = {level = 38, cost = 10000, rank = "Rank 2"},
-    [20430] = {level = 40, cost = 11000, rank = "Rank 2"},
-    [20435] = {level = 42, cost = 11000, rank = nil},
-    [20427] = {level = 46, cost = 13000, rank = "Rank 3"},
-    [20431] = {level = 48, cost = 14000, rank = "Rank 3"},
-    [20434] = {level = 52, cost = 18000, rank = "Rank 2"},
-    [20428] = {level = 54, cost = 20000, rank = "Rank 4"},
-    [20432] = {level = 56, cost = 22000, rank = "Rank 4"},
+    [32] = {
+        [20429] = {cost = 7000, rank = "Rank 1"},
+    },
+    [36] = {
+        [20433] = {cost = 9000, rank = "Rank 1"},
+    },
+    [38] = {
+        [20426] = {cost = 10000, rank = "Rank 2"},
+    },
+    [40] = {
+        [20430] = {cost = 11000, rank = "Rank 2"},
+    },
+    [42] = {
+        [20435] = {cost = 11000, rank = nil},
+    },
+    [46] = {
+        [20427] = {cost = 13000, rank = "Rank 3"},
+    },
+    [48] = {
+        [20431] = {cost = 14000, rank = "Rank 3"},
+    },
+    [52] = {
+        [20434] = {cost = 18000, rank = "Rank 2"},
+    },
+    [54] = {
+        [20428] = {cost = 20000, rank = "Rank 4"},
+    },
+    [56] = {
+        [20432] = {cost = 22000, rank = "Rank 4"},
+    },
 }
