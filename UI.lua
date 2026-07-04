@@ -40,11 +40,20 @@ local function GetLevelDiffColorCode(level)
     return RANK_COLOR
 end
 
-local function IsBaseRankKnownByName(name)
-    if not name or not GetSpellInfo then return false end
-    local _, _, _, _, _, _, spellID = GetSpellInfo(name)
+local function GetTalentNameSet()
+    local names = {}
+    if GetNumTalentTabs and GetNumTalents and GetTalentInfo then
+        for tab = 1, GetNumTalentTabs() do
+            for i = 1, GetNumTalents(tab) do
+                local talentName = GetTalentInfo(tab, i)
+                if talentName then
+                    names[talentName] = true
+                end
+            end
+        end
+    end
 
-    return spellID and IsSpellKnown and IsSpellKnown(spellID) or false
+    return names
 end
 
 local function FormatCost(copper)
@@ -316,7 +325,6 @@ end
 local function BuildEntriesFromData(dataTable)
     local allEntries = {}
     local knownMaxRank = {}
-    local minRankByName = {}
     for lvl, spells in pairs(dataTable) do
         for spellID, data in pairs(spells) do
             local cost, rank, status
@@ -338,7 +346,6 @@ local function BuildEntriesFromData(dataTable)
                 name = name,
                 icon = icon,
                 rankNum = rankNum,
-                status = status,
             }
 
             table.insert(allEntries, entry)
@@ -346,16 +353,15 @@ local function BuildEntriesFromData(dataTable)
             if (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used" then
                 knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
             end
-
-            minRankByName[name] = math.min(minRankByName[name] or rankNum, rankNum)
         end
     end
 
-    return allEntries, knownMaxRank, minRankByName
+    return allEntries, knownMaxRank
 end
 
 local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck)
-    local allEntries, knownMaxRank, minRankByName = BuildEntriesFromData(dataTable)
+    local allEntries, knownMaxRank = BuildEntriesFromData(dataTable)
+    local talentNames = not skipTalentCheck and GetTalentNameSet() or nil
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
         if not EntryMatchesSearch(entry, searchText) then
@@ -373,8 +379,7 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
 
     local available, missingTalents, future = {}, {}, {}
     for _, entry in ipairs(remaining) do
-        local baseRank = minRankByName[entry.name]
-        local looksTalentGated = not skipTalentCheck and baseRank > 1 and not IsBaseRankKnownByName(entry.name)
+        local looksTalentGated = talentNames and talentNames[entry.name]
         if looksTalentGated then
             table.insert(missingTalents, entry)
         elseif entry.level > selectedLevel then

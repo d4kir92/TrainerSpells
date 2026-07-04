@@ -84,8 +84,7 @@ local function CaptureTrainerInner()
 
                 bucket[spellID] = {
                     cost = cost,
-                    rank = rank,
-                    status = sType
+                    rank = rank
                 }
             end
         end
@@ -121,7 +120,10 @@ local function MergeBuiltinData()
                 local bucket = EnsurePath(class, level)
                 for spellID, data in pairs(spells) do
                     if bucket[spellID] == nil then
-                        bucket[spellID] = {cost = data.cost or 0, rank = data.rank}
+                        bucket[spellID] = {
+                            cost = data.cost or 0,
+                            rank = data.rank
+                        }
                     end
                 end
             end
@@ -134,7 +136,10 @@ local function MergeBuiltinData()
                 local bucket = EnsurePetPath(pet, level)
                 for spellID, data in pairs(spells) do
                     if bucket[spellID] == nil then
-                        bucket[spellID] = {cost = data.cost or 0, rank = data.rank}
+                        bucket[spellID] = {
+                            cost = data.cost or 0,
+                            rank = data.rank
+                        }
                     end
                 end
             end
@@ -146,7 +151,10 @@ local function MergeBuiltinData()
             local bucket = EnsurePetTrainerPath("HUNTER", level)
             for spellID, data in pairs(spells) do
                 if bucket[spellID] == nil then
-                    bucket[spellID] = {cost = data.cost or 0, rank = data.rank}
+                    bucket[spellID] = {
+                        cost = data.cost or 0,
+                        rank = data.rank
+                    }
                 end
             end
         end
