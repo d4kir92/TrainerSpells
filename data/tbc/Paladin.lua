@@ -1,3 +1,2 @@
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
-TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
-}
+TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {}

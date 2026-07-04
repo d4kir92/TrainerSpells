@@ -1,3 +1,2 @@
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
-TrainerSpellsBuiltin.WARLOCK = TrainerSpellsBuiltin.WARLOCK or {
-}
+TrainerSpellsBuiltin.WARLOCK = TrainerSpellsBuiltin.WARLOCK or {}

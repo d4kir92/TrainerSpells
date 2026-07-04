@@ -1,2 +1,1 @@
-TrainerSpellsBuiltin_HunterPet = TrainerSpellsBuiltin_HunterPet or {
-}
+TrainerSpellsBuiltin_HunterPet = TrainerSpellsBuiltin_HunterPet or {}

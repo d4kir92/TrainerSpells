@@ -1,3 +1,2 @@
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
-TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
-}
+TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {}
