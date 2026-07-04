@@ -7,42 +7,231 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["cost"] = 10,
         },
     },
-    [58] = {
-        [17348] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 3",
-            ["cost"] = 13000,
+    [4] = {
+        [53] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 100,
         },
-        [11305] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 3",
-            ["cost"] = 52000,
+        [921] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 100,
         },
-        [1769] = {
+    },
+    [6] = {
+        [1757] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 100,
+        },
+        [1776] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 100,
+        },
+    },
+    [8] = {
+        [5277] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 200,
+        },
+        [6760] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 200,
+        },
+    },
+    [10] = {
+        [674] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 300,
+        },
+        [2983] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 300,
+        },
+        [5171] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 300,
+        },
+        [6770] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 300,
+        },
+    },
+    [12] = {
+        [1766] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 800,
+        },
+        [2589] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 800,
+        },
+        [3127] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 800,
+        },
+    },
+    [14] = {
+        [703] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 1200,
+        },
+        [1758] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 3",
+            ["cost"] = 1200,
+        },
+        [8647] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 1200,
+        },
+    },
+    [16] = {
+        [1804] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 1800,
+        },
+        [1966] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 1800,
+        },
+        [6761] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 3",
+            ["cost"] = 1800,
+        },
+    },
+    [18] = {
+        [1777] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 2900,
+        },
+        [8676] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 2900,
+        },
+    },
+    [20] = {
+        [1785] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 3000,
+        },
+        [1943] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 3000,
+        },
+        [2590] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 3",
+            ["cost"] = 3000,
+        },
+        [2842] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 0,
+        },
+    },
+    [22] = {
+        [1725] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 4000,
+        },
+        [1759] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 4",
+            ["cost"] = 4000,
+        },
+        [1856] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 1",
+            ["cost"] = 4000,
+        },
+        [8631] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 4000,
+        },
+    },
+    [24] = {
+        [2836] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 5000,
+        },
+        [6762] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 4",
+            ["cost"] = 5000,
+        },
+    },
+    [26] = {
+        [1767] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 6000,
+        },
+        [1833] = {
+            ["status"] = "used",
+            ["rank"] = nil,
+            ["cost"] = 6000,
+        },
+        [8649] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 6000,
+        },
+        [8724] = {
+            ["status"] = "used",
+            ["rank"] = "Rank 2",
+            ["cost"] = 6000,
+        },
+    },
+    [28] = {
+        [2070] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 2",
+            ["cost"] = 8000,
+        },
+        [2591] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 4",
-            ["cost"] = 52000,
+            ["cost"] = 8000,
         },
-        [11269] = {
+        [6768] = {
             ["status"] = "unavailable",
-            ["rank"] = "Rank 6",
-            ["cost"] = 52000,
+            ["rank"] = "Rank 2",
+            ["cost"] = 8000,
+        },
+        [8639] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 2",
+            ["cost"] = 8000,
         },
     },
     [30] = {
-        [1842] = {
-            ["status"] = "unavailable",
-            ["rank"] = "",
-            ["cost"] = 10000,
-        },
         [408] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 1",
-            ["cost"] = 10000,
-        },
-        [8632] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 3",
             ["cost"] = 10000,
         },
         [1760] = {
@@ -50,56 +239,15 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["rank"] = "Rank 5",
             ["cost"] = 10000,
         },
-    },
-    [60] = {
-        [11286] = {
+        [1842] = {
             ["status"] = "unavailable",
-            ["rank"] = "Rank 5",
-            ["cost"] = 54000,
+            ["rank"] = nil,
+            ["cost"] = 10000,
         },
-        [1787] = {
+        [8632] = {
             ["status"] = "unavailable",
-            ["rank"] = "Rank 4",
-            ["cost"] = 54000,
-        },
-        [11281] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 8",
-            ["cost"] = 54000,
-        },
-        [11275] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 6",
-            ["cost"] = 54000,
-        },
-    },
-    [8] = {
-        [6760] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 200,
-        },
-        [5277] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 200,
-        },
-    },
-    [16] = {
-        [1966] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 1800,
-        },
-        [1804] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 1800,
-        },
-        [6761] = {
-            ["status"] = "used",
             ["rank"] = "Rank 3",
-            ["cost"] = 1800,
+            ["cost"] = 10000,
         },
     },
     [32] = {
@@ -115,6 +263,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         },
     },
     [34] = {
+        [2094] = {
+            ["status"] = "unavailable",
+            ["rank"] = nil,
+            ["cost"] = 14000,
+        },
         [8696] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 2",
@@ -124,23 +277,6 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["status"] = "unavailable",
             ["rank"] = "Rank 3",
             ["cost"] = 14000,
-        },
-        [2094] = {
-            ["status"] = "unavailable",
-            ["rank"] = "",
-            ["cost"] = 14000,
-        },
-    },
-    [18] = {
-        [8676] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 2900,
-        },
-        [1777] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 2900,
         },
     },
     [36] = {
@@ -161,50 +297,18 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         },
     },
     [38] = {
-        [8633] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 4",
-            ["cost"] = 18000,
-        },
         [8621] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 6",
             ["cost"] = 18000,
         },
-    },
-    [20] = {
-        [2590] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 3",
-            ["cost"] = 3000,
-        },
-        [1785] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 3000,
-        },
-        [1943] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 3000,
-        },
-        [2842] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 0,
+        [8633] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 4",
+            ["cost"] = 18000,
         },
     },
     [40] = {
-        [8637] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 3",
-            ["cost"] = 20000,
-        },
-        [8624] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 6",
-            ["cost"] = 20000,
-        },
         [1786] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 3",
@@ -215,9 +319,29 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["rank"] = "Passive",
             ["cost"] = 20000,
         },
+        [8624] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 6",
+            ["cost"] = 20000,
+        },
+        [8637] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 3",
+            ["cost"] = 20000,
+        },
     },
     [42] = {
+        [1768] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 3",
+            ["cost"] = 27000,
+        },
         [1857] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 2",
+            ["cost"] = 27000,
+        },
+        [6774] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 2",
             ["cost"] = 27000,
@@ -226,38 +350,6 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["status"] = "unavailable",
             ["rank"] = "Rank 4",
             ["cost"] = 27000,
-        },
-        [6774] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 2",
-            ["cost"] = 27000,
-        },
-        [1768] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 3",
-            ["cost"] = 27000,
-        },
-    },
-    [22] = {
-        [8631] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 4000,
-        },
-        [1759] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 4",
-            ["cost"] = 4000,
-        },
-        [1856] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 4000,
-        },
-        [1725] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 4000,
         },
     },
     [44] = {
@@ -272,29 +364,7 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["cost"] = 29000,
         },
     },
-    [6] = {
-        [1776] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 100,
-        },
-        [1757] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 100,
-        },
-    },
     [46] = {
-        [11293] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 7",
-            ["cost"] = 31000,
-        },
-        [17347] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 2",
-            ["cost"] = 7750,
-        },
         [11197] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 4",
@@ -310,83 +380,47 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["rank"] = "Rank 5",
             ["cost"] = 31000,
         },
-    },
-    [24] = {
-        [6762] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 4",
-            ["cost"] = 5000,
+        [11293] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 7",
+            ["cost"] = 31000,
         },
-        [2836] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 5000,
+        [17347] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 2",
+            ["cost"] = 7750,
         },
     },
     [48] = {
-        [11299] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 7",
-            ["cost"] = 33000,
-        },
         [11297] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 3",
             ["cost"] = 33000,
         },
-    },
-    [12] = {
-        [3127] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 800,
-        },
-        [2589] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 800,
-        },
-        [1766] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 800,
+        [11299] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 7",
+            ["cost"] = 33000,
         },
     },
     [50] = {
-        [11268] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 5",
-            ["cost"] = 35000,
-        },
         [8643] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 2",
             ["cost"] = 35000,
         },
-    },
-    [26] = {
-        [1833] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 6000,
-        },
-        [1767] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 6000,
-        },
-        [8649] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 6000,
-        },
-        [8724] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 2",
-            ["cost"] = 6000,
+        [11268] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 5",
+            ["cost"] = 35000,
         },
     },
     [52] = {
+        [11274] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 5",
+            ["cost"] = 46000,
+        },
         [11280] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 7",
@@ -396,23 +430,6 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["status"] = "unavailable",
             ["rank"] = "Rank 4",
             ["cost"] = 46000,
-        },
-        [11274] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 5",
-            ["cost"] = 46000,
-        },
-    },
-    [4] = {
-        [53] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 100,
-        },
-        [921] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 100,
         },
     },
     [54] = {
@@ -427,77 +444,60 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             ["cost"] = 48000,
         },
     },
-    [28] = {
-        [2070] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 2",
-            ["cost"] = 8000,
-        },
-        [8639] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 2",
-            ["cost"] = 8000,
-        },
-        [2591] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 4",
-            ["cost"] = 8000,
-        },
-        [6768] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 2",
-            ["cost"] = 8000,
-        },
-    },
     [56] = {
-        [11300] = {
-            ["status"] = "unavailable",
-            ["rank"] = "Rank 8",
-            ["cost"] = 50000,
-        },
         [11198] = {
             ["status"] = "unavailable",
             ["rank"] = "Rank 5",
             ["cost"] = 50000,
         },
+        [11300] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 8",
+            ["cost"] = 50000,
+        },
     },
-    [14] = {
-        [1758] = {
-            ["status"] = "used",
+    [58] = {
+        [1769] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 4",
+            ["cost"] = 52000,
+        },
+        [11269] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 6",
+            ["cost"] = 52000,
+        },
+        [11305] = {
+            ["status"] = "unavailable",
             ["rank"] = "Rank 3",
-            ["cost"] = 1200,
+            ["cost"] = 52000,
         },
-        [703] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 1200,
-        },
-        [8647] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 1200,
+        [17348] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 3",
+            ["cost"] = 13000,
         },
     },
-    [10] = {
-        [2983] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 300,
+    [60] = {
+        [1787] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 4",
+            ["cost"] = 54000,
         },
-        [5171] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 300,
+        [11275] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 6",
+            ["cost"] = 54000,
         },
-        [6770] = {
-            ["status"] = "used",
-            ["rank"] = "Rank 1",
-            ["cost"] = 300,
+        [11281] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 8",
+            ["cost"] = 54000,
         },
-        [674] = {
-            ["status"] = "used",
-            ["rank"] = "",
-            ["cost"] = 300,
+        [11286] = {
+            ["status"] = "unavailable",
+            ["rank"] = "Rank 5",
+            ["cost"] = 54000,
         },
     },
 }
