@@ -1,6 +1,3 @@
--- Grimoire-Daten (Pet-Faehigkeiten) fuer Warlock, Classic Era, pro Pet-Familie
--- Gleiche Struktur wie TrainerSpells_PetData im WTF-SavedVariables-Ordner: [level][spellID] = {cost, rank}
--- Einfach den Inhalt von TrainerSpells_PetData["Imp"] usw. aus der WTF-Datei hier reinkopieren.
 TrainerSpellsBuiltin_WarlockPet = TrainerSpellsBuiltin_WarlockPet or {}
 TrainerSpellsBuiltin_WarlockPet.Imp = TrainerSpellsBuiltin_WarlockPet.Imp or {
     [4] = {
