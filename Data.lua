@@ -194,8 +194,37 @@ local function CountRealTrainerServices()
     return real
 end
 
+local function ScanTrainerServicesStep(button, offset, maxOffset, targetCount, visited, visitedCount)
+    if visitedCount >= targetCount or offset > maxOffset then
+        FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, 0)
+        ClassTrainerFrame_Update()
+        print(("|cff33ff99TrainerSpells:|r Scan abgeschlossen (%d/%d erfasst)."):format(visitedCount, targetCount))
+
+        return
+    end
+
+    FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, offset)
+    ClassTrainerFrame_Update()
+    local id = button:GetID()
+    if button:IsShown() and id and id >= 1 and not visited[id] then
+        local _, _, category = GetTrainerServiceInfo(id)
+        if category ~= "header" then
+            visited[id] = true
+            visitedCount = visitedCount + 1
+            button:Click()
+        end
+    end
+
+    C_Timer.After(
+        0.05,
+        function()
+            ScanTrainerServicesStep(button, offset + 1, maxOffset, targetCount, visited, visitedCount)
+        end
+    )
+end
+
 local function ScanAllTrainerRequirements()
-    if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine or not ClassTrainerListScrollFrame or not FauxScrollFrame_SetOffset or not ClassTrainerFrame_Update then
+    if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine or not ClassTrainerListScrollFrame or not FauxScrollFrame_SetOffset or not ClassTrainerFrame_Update or not C_Timer then
         print("|cffff5555TrainerSpells:|r Scan nicht möglich, benötigte API fehlt.")
 
         return
@@ -210,30 +239,9 @@ local function ScanAllTrainerRequirements()
 
     ExpandAllTrainerHeaders()
     local targetCount = CountRealTrainerServices()
-
-    local visited = {}
-    local visitedCount = 0
-    local offset = 0
     local maxOffset = GetNumTrainerServices() + 200
-    while visitedCount < targetCount and offset <= maxOffset do
-        FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, offset)
-        ClassTrainerFrame_Update()
-        local id = button:GetID()
-        if button:IsShown() and id and id >= 1 and not visited[id] then
-            local _, _, category = GetTrainerServiceInfo(id)
-            if category ~= "header" then
-                visited[id] = true
-                visitedCount = visitedCount + 1
-                button:Click()
-            end
-        end
-
-        offset = offset + 1
-    end
-
-    FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, 0)
-    ClassTrainerFrame_Update()
-    print(("|cff33ff99TrainerSpells:|r Scan abgeschlossen (%d/%d erfasst)."):format(visitedCount, targetCount))
+    print(("|cff33ff99TrainerSpells:|r Scan gestartet (%d Einträge, das dauert einen Moment)..."):format(targetCount))
+    ScanTrainerServicesStep(button, 0, maxOffset, targetCount, {}, 0)
 end
 
 local function EnsurePetPath(pet, level)
