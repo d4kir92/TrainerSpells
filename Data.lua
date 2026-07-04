@@ -42,9 +42,7 @@ local function ResolveTalentSpellIDByName(name)
                     scanTooltip:ClearLines()
                     scanTooltip:SetHyperlink(link)
                     local _, spellID = scanTooltip:GetSpell()
-                    if IsSaneSpellID(spellID) then
-                        return spellID
-                    end
+                    if IsSaneSpellID(spellID) then return spellID end
                 end
 
                 return nil
