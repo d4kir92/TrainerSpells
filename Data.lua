@@ -6,6 +6,7 @@ TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroup
 TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
+local debug_trainer = true
 local PET_NAMES = {"Imp", "Voidwalker", "Succubus", "Incubus", "Felhunter"}
 local PET_TRAINER_SKILL_LINE = "Beast Training"
 local f = CreateFrame("Frame")
@@ -166,6 +167,73 @@ local function CaptureTrainerRequirements()
 
         i = i + 1
     end
+end
+
+local function ExpandAllTrainerHeaders()
+    local i = 1
+    while i <= GetNumTrainerServices() do
+        local _, _, category, expanded = GetTrainerServiceInfo(i)
+        if category == "header" and not expanded then
+            ExpandTrainerSkillLine(i)
+        end
+
+        i = i + 1
+    end
+end
+
+local function CountRealTrainerServices()
+    local total = GetNumTrainerServices()
+    local real = 0
+    for i = 1, total do
+        local _, _, category = GetTrainerServiceInfo(i)
+        if category ~= "header" then
+            real = real + 1
+        end
+    end
+
+    return real
+end
+
+local function ScanAllTrainerRequirements()
+    if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine or not ClassTrainerListScrollFrame or not FauxScrollFrame_SetOffset or not ClassTrainerFrame_Update then
+        print("|cffff5555TrainerSpells:|r Scan nicht möglich, benötigte API fehlt.")
+
+        return
+    end
+
+    local button = _G["ClassTrainerSkill1"]
+    if not button then
+        print("|cffff5555TrainerSpells:|r Scan nicht möglich, Trainer-Button nicht gefunden.")
+
+        return
+    end
+
+    ExpandAllTrainerHeaders()
+    local targetCount = CountRealTrainerServices()
+
+    local visited = {}
+    local visitedCount = 0
+    local offset = 0
+    local maxOffset = GetNumTrainerServices() + 200
+    while visitedCount < targetCount and offset <= maxOffset do
+        FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, offset)
+        ClassTrainerFrame_Update()
+        local id = button:GetID()
+        if button:IsShown() and id and id >= 1 and not visited[id] then
+            local _, _, category = GetTrainerServiceInfo(id)
+            if category ~= "header" then
+                visited[id] = true
+                visitedCount = visitedCount + 1
+                button:Click()
+            end
+        end
+
+        offset = offset + 1
+    end
+
+    FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, 0)
+    ClassTrainerFrame_Update()
+    print(("|cff33ff99TrainerSpells:|r Scan abgeschlossen (%d/%d erfasst)."):format(visitedCount, targetCount))
 end
 
 local function EnsurePetPath(pet, level)
@@ -345,6 +413,22 @@ f:SetScript(
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
+            if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
+                local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
+                scanButton:SetSize(80, 22)
+                scanButton:SetText("Scan")
+                scanButton:SetPoint("TOPRIGHT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
+                scanButton:SetScript(
+                    "OnClick",
+                    function()
+                        local ok, err = pcall(ScanAllTrainerRequirements)
+                        if not ok then
+                            print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+                        end
+                    end
+                )
+            end
+
             if C_Timer then
                 if not captureScheduled then
                     captureScheduled = true
