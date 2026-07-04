@@ -511,6 +511,21 @@ local function AppendPetAbilities(items, searchText, selectedLevel)
     end
 end
 
+local function AppendPetTrainerAbilities(items, searchText, selectedLevel, classToken)
+    local petTrainerData = TrainerSpells_PetTrainerData and TrainerSpells_PetTrainerData[classToken]
+    if not petTrainerData or not next(petTrainerData) then return end
+    local groups = ClassifyEntries(petTrainerData, searchText, selectedLevel, true)
+    local subItems = {}
+    AppendGroupItems(subItems, groups, "pettrainer_")
+    if #subItems == 0 then return end
+    AddHeaderItem(items, "Pet Training", PET_HEADER_COLOR, nil, "petTraining")
+    if not IsGroupCollapsed("petTraining") then
+        for _, item in ipairs(subItems) do
+            table.insert(items, item)
+        end
+    end
+end
+
 function TrainerSpells_Refresh()
     local searchText = (TrainerSpells_SearchText or ""):lower()
     local selectedLevel = UnitLevel("player") or 1
@@ -524,6 +539,10 @@ function TrainerSpells_Refresh()
 
     if selectedClass == "WARLOCK" then
         AppendPetAbilities(items, searchText, selectedLevel)
+    end
+
+    if selectedClass == "HUNTER" then
+        AppendPetTrainerAbilities(items, searchText, selectedLevel, selectedClass)
     end
 
     if #items == 0 then

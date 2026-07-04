@@ -8,7 +8,7 @@
 ## Category: D4KiR |T132115:16:16:0:0|t
 ## X-Category: D4KiR |T132115:16:16:0:0|t
 ## DefaultState: enabled
-## SavedVariables: TrainerSpells_Global, TrainerSpells_Data, TrainerSpells_PetData
+## SavedVariables: TrainerSpells_Global, TrainerSpells_Data, TrainerSpells_PetData, TrainerSpells_PetTrainerData
 ## SavedVariablesPerCharacter: TrainerSpells_Character, TrainerSpells_Ignored, TrainerSpells_IgnoredNames
 ## X-Curse-Project-ID: 1596644
 ## X-Wago-ID: L6J9VWNv

@@ -5,7 +5,9 @@ TrainerSpells_Character = TrainerSpells_Character or {}
 TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
 TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
 TrainerSpells_PetData = TrainerSpells_PetData or {}
+TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 local PET_NAMES = {"Imp", "Voidwalker", "Succubus", "Incubus", "Felhunter"}
+local PET_TRAINER_SKILL_LINE = "Beast Training"
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("TRAINER_SHOW")
@@ -31,6 +33,13 @@ local function EnsurePath(class, level)
     return TrainerSpells_Data[class][level]
 end
 
+local function EnsurePetTrainerPath(class, level)
+    TrainerSpells_PetTrainerData[class] = TrainerSpells_PetTrainerData[class] or {}
+    TrainerSpells_PetTrainerData[class][level] = TrainerSpells_PetTrainerData[class][level] or {}
+
+    return TrainerSpells_PetTrainerData[class][level]
+end
+
 local function CaptureTrainerInner()
     local _, classToken = UnitClass("player")
     if not classToken then
@@ -47,6 +56,7 @@ local function CaptureTrainerInner()
 
     local numServices = GetNumTrainerServices()
     local neu = 0
+    local neuPet = 0
     for i = 1, numServices do
         local _, rank, sType = GetTrainerServiceInfo(i)
         if sType == "available" or sType == "unavailable" or sType == "used" then
@@ -54,9 +64,22 @@ local function CaptureTrainerInner()
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
             local spellID = GetSpellIDForService(i)
             if spellID then
-                local bucket = EnsurePath(classToken, levelReq or 0)
+                local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
+                local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
+                if isPetTraining then
+                    local oldBucket = TrainerSpells_Data[classToken] and TrainerSpells_Data[classToken][levelReq or 0]
+                    if oldBucket then
+                        oldBucket[spellID] = nil
+                    end
+                end
+
+                local bucket = isPetTraining and EnsurePetTrainerPath(classToken, levelReq or 0) or EnsurePath(classToken, levelReq or 0)
                 if bucket[spellID] == nil then
-                    neu = neu + 1
+                    if isPetTraining then
+                        neuPet = neuPet + 1
+                    else
+                        neu = neu + 1
+                    end
                 end
 
                 bucket[spellID] = {
@@ -70,6 +93,10 @@ local function CaptureTrainerInner()
 
     if neu > 0 then
         print(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
+    end
+
+    if neuPet > 0 then
+        print(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken))
     end
 end
 
@@ -202,6 +229,7 @@ f:SetScript(
             TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
             TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
             TrainerSpells_PetData = TrainerSpells_PetData or {}
+            TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             if C_Timer then
                 if not captureScheduled then
