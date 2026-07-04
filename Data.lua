@@ -557,8 +557,8 @@ f:SetScript(
             if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
                 local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
                 scanButton:SetSize(80, 22)
-                scanButton:SetText("Scan")
-                scanButton:SetPoint("TOPRIGHT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
+                scanButton:SetText("Scannen")
+                scanButton:SetPoint("BOTTOMLEFT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
                 scanButton:SetScript(
                     "OnClick",
                     function()
