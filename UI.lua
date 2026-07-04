@@ -66,7 +66,8 @@ end
 local function RequiresUnknownTalent(entry, talentNames)
     if not entry.requires then return false end
     for _, reqName in ipairs(entry.requires) do
-        if talentNames[reqName] and not IsSpellNameKnown(reqName) then
+        local baseName = reqName:match("^(.-)%s*%(Rank %d+%)$") or reqName
+        if talentNames[baseName] and not IsSpellNameKnown(baseName) then
             return true
         end
     end
