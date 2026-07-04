@@ -6,7 +6,7 @@ TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroup
 TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
-local debug_trainer = true
+local debug_trainer = false
 local PET_NAMES = {"Imp", "Voidwalker", "Succubus", "Incubus", "Felhunter"}
 local PET_TRAINER_SKILL_LINE = "Beast Training"
 local f = CreateFrame("Frame")
@@ -465,37 +465,39 @@ f:SetScript(
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
-            if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
-                local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
-                scanButton:SetSize(80, 22)
-                scanButton:SetText("Scan")
-                scanButton:SetPoint("TOPRIGHT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
-                scanButton:SetScript(
-                    "OnClick",
-                    function()
-                        local ok, err = pcall(ScanAllTrainerRequirements)
-                        if not ok then
-                            print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
-                        end
-                    end
-                )
-            end
-
-            if C_Timer then
-                if not captureScheduled then
-                    captureScheduled = true
-                    C_Timer.After(
-                        0.1,
+            if debug_trainer then
+                if ClassTrainerFrame and TrainerSpellsScanButton == nil then
+                    local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
+                    scanButton:SetSize(80, 22)
+                    scanButton:SetText("Scan")
+                    scanButton:SetPoint("TOPRIGHT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
+                    scanButton:SetScript(
+                        "OnClick",
                         function()
-                            captureScheduled = false
-                            CaptureTrainer()
-                            CaptureTrainerRequirements()
+                            local ok, err = pcall(ScanAllTrainerRequirements)
+                            if not ok then
+                                print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+                            end
                         end
                     )
                 end
-            else
-                CaptureTrainer()
-                CaptureTrainerRequirements()
+
+                if C_Timer then
+                    if not captureScheduled then
+                        captureScheduled = true
+                        C_Timer.After(
+                            0.1,
+                            function()
+                                captureScheduled = false
+                                CaptureTrainer()
+                                CaptureTrainerRequirements()
+                            end
+                        )
+                    end
+                else
+                    CaptureTrainer()
+                    CaptureTrainerRequirements()
+                end
             end
         elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
             if C_Timer then
