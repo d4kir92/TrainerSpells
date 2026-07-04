@@ -148,6 +148,7 @@ local function CaptureTrainerInner()
                 bucket[spellID] = {
                     cost = cost,
                     rank = rank,
+                    status = sType,
                     requires = existing and existing.requires
                 }
             end

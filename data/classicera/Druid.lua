@@ -9,14 +9,17 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
     [58] = {
         [17329] = {
             ["cost"] = 1600,
+            ["requires"] = {16689, 1062,},
             ["rank"] = 6,
         },
         [9876] = {
             ["cost"] = 32000,
+            ["requires"] = {2912,},
             ["rank"] = 6,
         },
         [9850] = {
             ["cost"] = 32000,
+            ["requires"] = {3029,},
             ["rank"] = 5,
         },
         [9867] = {
@@ -25,41 +28,48 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9841] = {
             ["cost"] = 32000,
+            ["requires"] = {2091,},
             ["rank"] = 10,
         },
         [9835] = {
             ["cost"] = 32000,
+            ["requires"] = {8927,},
             ["rank"] = 10,
         },
         [9881] = {
             ["cost"] = 32000,
+            ["requires"] = {6809,},
             ["rank"] = 7,
         },
         [9853] = {
             ["cost"] = 32000,
+            ["requires"] = {1062,},
             ["rank"] = 6,
         },
         [18658] = {
             ["cost"] = 32000,
+            ["requires"] = {2637,},
             ["rank"] = 3,
         },
     },
     [30] = {
         [8940] = {
             ["cost"] = 6000,
+            ["requires"] = {8939,},
             ["rank"] = 4,
         },
         [6798] = {
             ["cost"] = 6000,
+            ["requires"] = {5211,},
             ["rank"] = 2,
         },
         [5180] = {
             ["cost"] = 6000,
+            ["requires"] = {5179,},
             ["rank"] = 5,
         },
         [783] = {
             ["cost"] = 6000,
-            ["rank"] = nil,
         },
         [740] = {
             ["cost"] = 6000,
@@ -71,41 +81,49 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [778] = {
             ["cost"] = 6000,
+            ["requires"] = {770,},
             ["rank"] = 2,
         },
         [24974] = {
             ["cost"] = 300,
+            ["requires"] = {5570,},
             ["rank"] = 2,
         },
         [5234] = {
             ["cost"] = 6000,
+            ["requires"] = {6756,},
             ["rank"] = 4,
         },
         [6800] = {
             ["cost"] = 6000,
+            ["requires"] = {5221,},
             ["rank"] = 2,
         },
         [17390] = {
             ["cost"] = 300,
+            ["requires"] = {16857,},
             ["rank"] = 2,
         },
     },
     [60] = {
         [9885] = {
             ["cost"] = 34000,
+            ["requires"] = {6756,},
             ["rank"] = 7,
         },
         [9846] = {
             ["cost"] = 34000,
+            ["requires"] = {5217,},
             ["rank"] = 4,
         },
         [9863] = {
             ["cost"] = 34000,
             ["rank"] = 4,
         },
-        [9858] = {
-            ["cost"] = 34000,
-            ["rank"] = 9,
+        [24977] = {
+            ["cost"] = 1700,
+            ["requires"] = {5570,},
+            ["rank"] = 5,
         },
         [17402] = {
             ["cost"] = 34000,
@@ -117,20 +135,24 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9896] = {
             ["cost"] = 34000,
+            ["requires"] = {9492,},
             ["rank"] = 6,
         },
         [9913] = {
             ["cost"] = 34000,
+            ["requires"] = {5215,},
             ["rank"] = 3,
         },
-        [24977] = {
-            ["cost"] = 1700,
-            ["rank"] = 5,
+        [9858] = {
+            ["cost"] = 34000,
+            ["requires"] = {8939,},
+            ["rank"] = 9,
         },
     },
     [8] = {
         [5186] = {
             ["cost"] = 200,
+            ["requires"] = {5189,},
             ["rank"] = 2,
         },
         [339] = {
@@ -141,65 +163,80 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
     [16] = {
         [8925] = {
             ["cost"] = 1800,
+            ["requires"] = {8927,},
             ["rank"] = 3,
         },
         [1430] = {
             ["cost"] = 1800,
+            ["requires"] = {2091,},
             ["rank"] = 3,
         },
         [779] = {
             ["cost"] = 1800,
+            ["requires"] = {5487,},
             ["rank"] = 1,
         },
     },
     [32] = {
         [6785] = {
             ["cost"] = 8000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [5225] = {
+            ["requires"] = {768,},
             ["cost"] = 8000,
         },
         [6778] = {
             ["cost"] = 8000,
+            ["requires"] = {5189,},
             ["rank"] = 6,
         },
         [9490] = {
             ["cost"] = 8000,
+            ["requires"] = {1735,},
             ["rank"] = 3,
         },
         [22568] = {
             ["cost"] = 8000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
     },
     [34] = {
-        [8928] = {
-            ["cost"] = 10000,
-            ["rank"] = 6,
-        },
         [8914] = {
             ["cost"] = 10000,
+            ["requires"] = {1075,},
             ["rank"] = 4,
+        },
+        [8928] = {
+            ["cost"] = 10000,
+            ["requires"] = {8927,},
+            ["rank"] = 6,
         },
         [3627] = {
             ["cost"] = 10000,
+            ["requires"] = {2091,},
             ["rank"] = 6,
         },
         [769] = {
             ["cost"] = 10000,
+            ["requires"] = {780,},
             ["rank"] = 3,
         },
         [1823] = {
             ["cost"] = 10000,
+            ["requires"] = {1822,},
             ["rank"] = 2,
         },
         [8972] = {
             ["cost"] = 10000,
+            ["requires"] = {6809,},
             ["rank"] = 4,
         },
         [8950] = {
             ["cost"] = 10000,
+            ["requires"] = {2912,},
             ["rank"] = 3,
         },
     },
@@ -208,81 +245,98 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
             ["cost"] = 1900,
             ["rank"] = 1,
         },
-        [6808] = {
+        [770] = {
             ["cost"] = 1900,
-            ["rank"] = 2,
+            ["rank"] = 1,
         },
         [16810] = {
             ["cost"] = 95,
+            ["requires"] = {16689, 1062,},
             ["rank"] = 2,
         },
         [8938] = {
             ["cost"] = 1900,
+            ["requires"] = {8939,},
             ["rank"] = 2,
         },
         [1062] = {
             ["cost"] = 1900,
+            ["requires"] = {1062,},
             ["rank"] = 2,
         },
-        [770] = {
+        [6808] = {
             ["cost"] = 1900,
-            ["rank"] = 1,
+            ["requires"] = {6809,},
+            ["rank"] = 2,
         },
     },
     [36] = {
         [8941] = {
             ["cost"] = 11000,
+            ["requires"] = {8939,},
             ["rank"] = 5,
         },
         [22842] = {
             ["cost"] = 11000,
+            ["requires"] = {5487,},
             ["rank"] = 1,
         },
         [9005] = {
             ["cost"] = 11000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [6793] = {
             ["cost"] = 11000,
+            ["requires"] = {5217,},
             ["rank"] = 2,
         },
         [9493] = {
             ["cost"] = 11000,
+            ["requires"] = {9492,},
             ["rank"] = 3,
         },
     },
     [38] = {
-        [8955] = {
+        [5196] = {
             ["cost"] = 12000,
-            ["rank"] = 2,
+            ["requires"] = {1062,},
+            ["rank"] = 4,
         },
         [8903] = {
             ["cost"] = 12000,
+            ["requires"] = {5189,},
             ["rank"] = 7,
         },
         [18657] = {
             ["cost"] = 12000,
+            ["requires"] = {2637,},
             ["rank"] = 2,
         },
         [6780] = {
             ["cost"] = 12000,
+            ["requires"] = {5179,},
             ["rank"] = 6,
         },
         [8992] = {
             ["cost"] = 12000,
+            ["requires"] = {5221,},
             ["rank"] = 3,
         },
         [16812] = {
             ["cost"] = 600,
+            ["requires"] = {16689, 1062,},
             ["rank"] = 4,
         },
         [5201] = {
             ["cost"] = 12000,
+            ["requires"] = {3029,},
             ["rank"] = 3,
         },
-        [5196] = {
+        [8955] = {
             ["cost"] = 12000,
-            ["rank"] = 4,
+            ["requires"] = {2908,},
+            ["rank"] = 2,
         },
     },
     [20] = {
@@ -292,6 +346,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [1082] = {
             ["cost"] = 2000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [20484] = {
@@ -300,41 +355,47 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [1079] = {
             ["cost"] = 2000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [5215] = {
             ["cost"] = 2000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [5188] = {
             ["cost"] = 2000,
+            ["requires"] = {5189,},
             ["rank"] = 4,
         },
         [6756] = {
             ["cost"] = 2000,
+            ["requires"] = {6756,},
             ["rank"] = 3,
         },
         [768] = {
             ["cost"] = 2000,
-            ["rank"] = nil,
         },
         [1735] = {
             ["cost"] = 2000,
+            ["requires"] = {1735,},
             ["rank"] = 2,
         },
     },
     [40] = {
         [9000] = {
             ["cost"] = 14000,
+            ["requires"] = {8998,},
             ["rank"] = 2,
         },
         [24975] = {
             ["cost"] = 700,
+            ["requires"] = {5570,},
             ["rank"] = 3,
         },
         [20719] = {
+            ["requires"] = {768,},
             ["cost"] = 14000,
-            ["rank"] = nil,
         },
         [8918] = {
             ["cost"] = 14000,
@@ -342,6 +403,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [8907] = {
             ["cost"] = 14000,
+            ["requires"] = {6756,},
             ["rank"] = 5,
         },
         [16914] = {
@@ -350,6 +412,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [6783] = {
             ["cost"] = 14000,
+            ["requires"] = {5215,},
             ["rank"] = 2,
         },
         [29166] = {
@@ -357,8 +420,8 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
             ["rank"] = 1,
         },
         [9634] = {
+            ["requires"] = {5487,},
             ["cost"] = 14000,
-            ["rank"] = nil,
         },
         [20742] = {
             ["cost"] = 14000,
@@ -370,24 +433,29 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [8910] = {
             ["cost"] = 14000,
+            ["requires"] = {2091,},
             ["rank"] = 7,
         },
         [8929] = {
             ["cost"] = 14000,
+            ["requires"] = {8927,},
             ["rank"] = 7,
         },
     },
     [42] = {
         [9750] = {
             ["cost"] = 16000,
+            ["requires"] = {8939,},
             ["rank"] = 6,
         },
         [9747] = {
             ["cost"] = 16000,
+            ["requires"] = {1735,},
             ["rank"] = 4,
         },
         [17391] = {
             ["cost"] = 800,
+            ["requires"] = {16857,},
             ["rank"] = 3,
         },
         [6787] = {
@@ -396,24 +464,29 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9745] = {
             ["cost"] = 16000,
+            ["requires"] = {6809,},
             ["rank"] = 5,
-        },
-        [8951] = {
-            ["cost"] = 16000,
-            ["rank"] = 4,
         },
         [9749] = {
             ["cost"] = 16000,
+            ["requires"] = {770,},
             ["rank"] = 3,
+        },
+        [8951] = {
+            ["cost"] = 16000,
+            ["requires"] = {2912,},
+            ["rank"] = 4,
         },
     },
     [22] = {
         [5221] = {
             ["cost"] = 3000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [5179] = {
             ["cost"] = 3000,
+            ["requires"] = {5179,},
             ["rank"] = 4,
         },
         [2908] = {
@@ -422,41 +495,49 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [2090] = {
             ["cost"] = 3000,
+            ["requires"] = {2091,},
             ["rank"] = 4,
         },
         [8926] = {
             ["cost"] = 3000,
+            ["requires"] = {8927,},
             ["rank"] = 4,
         },
     },
     [44] = {
         [9754] = {
             ["cost"] = 18000,
+            ["requires"] = {780,},
             ["rank"] = 4,
         },
         [9758] = {
             ["cost"] = 18000,
+            ["requires"] = {5189,},
             ["rank"] = 8,
-        },
-        [9756] = {
-            ["cost"] = 18000,
-            ["rank"] = 5,
-        },
-        [9752] = {
-            ["cost"] = 18000,
-            ["rank"] = 4,
-        },
-        [22812] = {
-            ["cost"] = 18000,
         },
         [1824] = {
             ["cost"] = 18000,
+            ["requires"] = {1822,},
             ["rank"] = 3,
+        },
+        [9752] = {
+            ["cost"] = 18000,
+            ["requires"] = {9492,},
+            ["rank"] = 4,
+        },
+        [9756] = {
+            ["cost"] = 18000,
+            ["requires"] = {1075,},
+            ["rank"] = 5,
+        },
+        [22812] = {
+            ["cost"] = 18000,
         },
     },
     [6] = {
         [5177] = {
             ["cost"] = 100,
+            ["requires"] = {5179,},
             ["rank"] = 2,
         },
         [467] = {
@@ -469,46 +550,55 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
             ["cost"] = 20000,
             ["rank"] = 2,
         },
+        [9829] = {
+            ["cost"] = 20000,
+            ["requires"] = {5221,},
+            ["rank"] = 4,
+        },
         [22895] = {
             ["cost"] = 20000,
             ["rank"] = 2,
         },
-        [9829] = {
-            ["cost"] = 20000,
-            ["rank"] = 4,
-        },
         [9821] = {
             ["cost"] = 20000,
+            ["requires"] = {1850,},
             ["rank"] = 2,
         },
         [9839] = {
             ["cost"] = 20000,
+            ["requires"] = {2091,},
             ["rank"] = 8,
         },
         [8905] = {
             ["cost"] = 20000,
+            ["requires"] = {5179,},
             ["rank"] = 7,
         },
         [9833] = {
             ["cost"] = 20000,
+            ["requires"] = {8927,},
             ["rank"] = 8,
         },
         [8983] = {
             ["cost"] = 20000,
+            ["requires"] = {5211,},
             ["rank"] = 3,
         },
     },
     [24] = {
         [5217] = {
             ["cost"] = 4000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [1822] = {
             ["cost"] = 4000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [8939] = {
             ["cost"] = 4000,
+            ["requires"] = {8939,},
             ["rank"] = 3,
         },
         [2782] = {
@@ -516,10 +606,12 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [780] = {
             ["cost"] = 4000,
+            ["requires"] = {780,},
             ["rank"] = 2,
         },
         [1075] = {
             ["cost"] = 4000,
+            ["requires"] = {1075,},
             ["rank"] = 3,
         },
     },
@@ -530,40 +622,49 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9845] = {
             ["cost"] = 22000,
+            ["requires"] = {5217,},
             ["rank"] = 3,
         },
         [9856] = {
             ["cost"] = 22000,
+            ["requires"] = {8939,},
             ["rank"] = 7,
         },
         [9852] = {
             ["cost"] = 22000,
+            ["requires"] = {1062,},
             ["rank"] = 5,
         },
         [16813] = {
             ["cost"] = 1100,
+            ["requires"] = {16689, 1062,},
             ["rank"] = 5,
         },
         [9849] = {
             ["cost"] = 22000,
+            ["requires"] = {3029,},
             ["rank"] = 4,
         },
     },
     [10] = {
-        [99] = {
+        [5232] = {
             ["cost"] = 300,
-            ["rank"] = 1,
+            ["requires"] = {6756,},
+            ["rank"] = 2,
         },
         [8924] = {
             ["cost"] = 300,
+            ["requires"] = {8927,},
             ["rank"] = 2,
+        },
+        [99] = {
+            ["cost"] = 300,
+            ["requires"] = {5487,},
+            ["rank"] = 1,
         },
         [1058] = {
             ["cost"] = 300,
-            ["rank"] = 2,
-        },
-        [5232] = {
-            ["cost"] = 300,
+            ["requires"] = {2091,},
             ["rank"] = 2,
         },
     },
@@ -574,6 +675,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9884] = {
             ["cost"] = 23000,
+            ["requires"] = {6756,},
             ["rank"] = 6,
         },
         [20747] = {
@@ -582,6 +684,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9875] = {
             ["cost"] = 23000,
+            ["requires"] = {2912,},
             ["rank"] = 5,
         },
         [9862] = {
@@ -590,6 +693,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9888] = {
             ["cost"] = 23000,
+            ["requires"] = {5189,},
             ["rank"] = 9,
         },
         [9866] = {
@@ -598,20 +702,24 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [24976] = {
             ["cost"] = 1150,
+            ["requires"] = {5570,},
             ["rank"] = 4,
         },
         [9880] = {
             ["cost"] = 23000,
+            ["requires"] = {6809,},
             ["rank"] = 6,
         },
     },
     [26] = {
         [5189] = {
             ["cost"] = 4500,
+            ["requires"] = {5189,},
             ["rank"] = 5,
         },
         [1850] = {
             ["cost"] = 4500,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
         [2893] = {
@@ -619,121 +727,149 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [6809] = {
             ["cost"] = 4500,
+            ["requires"] = {6809,},
             ["rank"] = 3,
         },
         [8949] = {
             ["cost"] = 4500,
+            ["requires"] = {2912,},
             ["rank"] = 2,
         },
     },
     [52] = {
         [9834] = {
             ["cost"] = 26000,
+            ["requires"] = {8927,},
             ["rank"] = 9,
         },
         [9894] = {
             ["cost"] = 26000,
+            ["requires"] = {9492,},
             ["rank"] = 5,
         },
         [9898] = {
             ["cost"] = 26000,
+            ["requires"] = {1735,},
             ["rank"] = 5,
         },
         [9892] = {
             ["cost"] = 26000,
+            ["requires"] = {8998,},
             ["rank"] = 3,
         },
         [9840] = {
             ["cost"] = 26000,
+            ["requires"] = {2091,},
             ["rank"] = 9,
         },
     },
     [54] = {
         [9857] = {
             ["cost"] = 28000,
+            ["requires"] = {8939,},
             ["rank"] = 8,
         },
         [9904] = {
             ["cost"] = 28000,
+            ["requires"] = {1822,},
             ["rank"] = 4,
         },
         [9908] = {
             ["cost"] = 28000,
+            ["requires"] = {780,},
             ["rank"] = 5,
         },
         [9910] = {
             ["cost"] = 28000,
+            ["requires"] = {1075,},
             ["rank"] = 6,
         },
         [9912] = {
             ["cost"] = 28000,
+            ["requires"] = {5179,},
             ["rank"] = 8,
         },
         [9901] = {
             ["cost"] = 28000,
+            ["requires"] = {2908,},
             ["rank"] = 3,
         },
         [9830] = {
             ["cost"] = 28000,
+            ["requires"] = {5221,},
             ["rank"] = 5,
         },
         [9907] = {
             ["cost"] = 28000,
+            ["requires"] = {770,},
             ["rank"] = 4,
         },
         [17392] = {
             ["cost"] = 1400,
+            ["requires"] = {16857,},
             ["rank"] = 4,
         },
     },
     [14] = {
         [782] = {
             ["cost"] = 900,
+            ["requires"] = {1075,},
             ["rank"] = 2,
+        },
+        [5187] = {
+            ["cost"] = 900,
+            ["requires"] = {5189,},
+            ["rank"] = 3,
         },
         [5178] = {
             ["cost"] = 900,
+            ["requires"] = {5179,},
             ["rank"] = 3,
         },
         [5211] = {
             ["cost"] = 900,
+            ["requires"] = {5487,},
             ["rank"] = 1,
-        },
-        [5187] = {
-            ["cost"] = 900,
-            ["rank"] = 3,
         },
     },
     [28] = {
         [3029] = {
             ["cost"] = 5000,
+            ["requires"] = {3029,},
             ["rank"] = 2,
         },
-        [9492] = {
+        [5209] = {
+            ["requires"] = {5487,},
             ["cost"] = 5000,
-            ["rank"] = 2,
         },
         [8998] = {
             ["cost"] = 5000,
+            ["requires"] = {768,},
             ["rank"] = 1,
         },
-        [5209] = {
+        [9492] = {
             ["cost"] = 5000,
+            ["requires"] = {9492,},
+            ["rank"] = 2,
         },
         [16811] = {
             ["cost"] = 250,
+            ["requires"] = {16689, 1062,},
             ["rank"] = 3,
         },
         [5195] = {
             ["cost"] = 5000,
+            ["requires"] = {1062,},
             ["rank"] = 3,
         },
         [8927] = {
             ["cost"] = 5000,
+            ["requires"] = {8927,},
             ["rank"] = 5,
         },
         [2091] = {
             ["cost"] = 5000,
+            ["requires"] = {2091,},
             ["rank"] = 5,
         },
     },
@@ -748,6 +884,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         },
         [9889] = {
             ["cost"] = 30000,
+            ["requires"] = {5189,},
             ["rank"] = 10,
         },
         [22896] = {
@@ -757,6 +894,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
     },
     [12] = {
         [5229] = {
+            ["requires"] = {5487,},
             ["cost"] = 800,
         },
         [8936] = {
