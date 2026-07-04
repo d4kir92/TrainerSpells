@@ -12,7 +12,6 @@ f:RegisterEvent("TRAINER_SHOW")
 f:RegisterEvent("TRAINER_UPDATE")
 f:RegisterEvent("MERCHANT_SHOW")
 f:RegisterEvent("MERCHANT_UPDATE")
-f:RegisterEvent("LEARNED_SPELL_IN_TAB")
 f:RegisterEvent("UNIT_PET")
 f:RegisterEvent("SPELLS_CHANGED")
 local scanTooltip = CreateFrame("GameTooltip", "TrainerSpellsScanTooltip", nil, "GameTooltipTemplate")
@@ -108,16 +107,16 @@ local function CaptureMerchantInner()
     for i = 1, numItems do
         local itemLink = GetMerchantItemLink(i)
         if itemLink then
-            local _, _, _, _, itemMinLevel = GetItemInfo(itemLink)
+            local itemName, _, _, _, itemMinLevel = GetItemInfo(itemLink)
             if itemMinLevel then
                 scanTooltip:ClearLines()
                 scanTooltip:SetMerchantItem(i)
                 local pet = DetectPetFromTooltip(scanTooltip)
                 if pet then
-                    local spellName, spellID = GetItemSpell(itemLink)
+                    local _, spellID = GetItemSpell(itemLink)
                     if spellID then
                         local _, _, price = GetMerchantItemInfo(i)
-                        local rankNum = spellName and spellName:match("Rank (%d+)")
+                        local rankNum = itemName and itemName:match("Rank (%d+)")
                         local bucket = EnsurePetPath(pet, itemMinLevel)
                         if bucket[spellID] == nil then
                             neu = neu + 1
@@ -145,37 +144,41 @@ local function CaptureMerchant()
     end
 end
 
-local function IsPetSpellID(spellID)
-    for _, levels in pairs(TrainerSpells_PetData) do
-        for _, spells in pairs(levels) do
-            if spells[spellID] then return true end
-        end
+local function GetKnownPetSpellRanks()
+    local known = {}
+    if not GetSpellBookItemName then return known end
+    local i = 1
+    while true do
+        local name = GetSpellBookItemName(i, "pet")
+        if not name then break end
+        local subtext = GetSpellSubtext and GetSpellSubtext(i, "pet")
+        local rankNum = (subtext and tonumber(subtext:match("(%d+)"))) or 1
+        known[name] = math.max(known[name] or 0, rankNum)
+        i = i + 1
     end
 
-    return false
-end
-
-local function OnLearnedSpell(spellID)
-    if not spellID or not IsPetSpellID(spellID) then return end
-    if TrainerSpells_Character.learnedPetSpells[spellID] then return end
-    TrainerSpells_Character.learnedPetSpells[spellID] = true
-    if TrainerSpells_Refresh then
-        TrainerSpells_Refresh()
-    end
+    return known
 end
 
 local function SyncKnownPetSpellsForActivePet()
-    if not IsSpellKnown or not UnitCreatureFamily then return end
+    if not UnitCreatureFamily or not GetSpellInfo then return end
     local family = UnitCreatureFamily("pet")
     if not family then return end
     local petData = TrainerSpells_PetData[family]
     if not petData then return end
+    local knownRanks = GetKnownPetSpellRanks()
     local changed = false
     for _, spells in pairs(petData) do
-        for spellID in pairs(spells) do
-            if not TrainerSpells_Character.learnedPetSpells[spellID] and IsSpellKnown(spellID, true) then
-                TrainerSpells_Character.learnedPetSpells[spellID] = true
-                changed = true
+        for spellID, data in pairs(spells) do
+            if not TrainerSpells_Character.learnedPetSpells[spellID] then
+                local name = GetSpellInfo(spellID)
+                local rank = type(data) == "table" and data.rank
+                local rankNum = (rank and tonumber(rank:match("%d+"))) or 1
+                local maxKnown = name and knownRanks[name]
+                if maxKnown and rankNum <= maxKnown then
+                    TrainerSpells_Character.learnedPetSpells[spellID] = true
+                    changed = true
+                end
             end
         end
     end
@@ -199,8 +202,6 @@ f:SetScript(
             TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
             TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
             TrainerSpells_PetData = TrainerSpells_PetData or {}
-        elseif event == "LEARNED_SPELL_IN_TAB" then
-            OnLearnedSpell(arg1)
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             if C_Timer then
                 if not captureScheduled then
