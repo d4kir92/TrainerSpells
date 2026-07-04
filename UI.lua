@@ -411,6 +411,15 @@ function TrainerSpells_Refresh()
 end
 
 frame:SetScript("OnShow", TrainerSpells_Refresh)
+frame:RegisterEvent("PLAYER_LEVEL_UP")
+frame:HookScript(
+    "OnEvent",
+    function(self, event)
+        if event == "PLAYER_LEVEL_UP" then
+            TrainerSpells_Refresh()
+        end
+    end
+)
 local function PositionFrame()
     frame:ClearAllPoints()
     if SpellBookFrame and SpellBookFrame:IsShown() then
