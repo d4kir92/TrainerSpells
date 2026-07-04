@@ -1,8 +1,8 @@
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
-TrainerSpells_Global = TrainerSpells_Global or {}
-TrainerSpells_Global.collapsedGroups = TrainerSpells_Global.collapsedGroups or {}
+TrainerSpells_Character = TrainerSpells_Character or {}
+TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("TRAINER_SHOW")
@@ -81,8 +81,8 @@ f:SetScript(
             TrainerSpells_Data = TrainerSpells_Data or {}
             TrainerSpells_Ignored = TrainerSpells_Ignored or {}
             TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
-            TrainerSpells_Global = TrainerSpells_Global or {}
-            TrainerSpells_Global.collapsedGroups = TrainerSpells_Global.collapsedGroups or {}
+            TrainerSpells_Character = TrainerSpells_Character or {}
+            TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             if C_Timer then
                 if not captureScheduled then

@@ -18,12 +18,12 @@ local RANK_COLOR = "|cffaaaaaa"
 local COLLAPSE_EXPANDED_ICON = "|cffffffff-|r "
 local COLLAPSE_COLLAPSED_ICON = "|cffffffff+|r "
 local function IsGroupCollapsed(groupKey)
-    return groupKey and TrainerSpells_Global and TrainerSpells_Global.collapsedGroups[groupKey] or false
+    return groupKey and TrainerSpells_Character and TrainerSpells_Character.collapsedGroups[groupKey] or false
 end
 
 local function ToggleGroup(groupKey)
-    if not groupKey or not TrainerSpells_Global then return end
-    TrainerSpells_Global.collapsedGroups[groupKey] = not TrainerSpells_Global.collapsedGroups[groupKey] or nil
+    if not groupKey or not TrainerSpells_Character then return end
+    TrainerSpells_Character.collapsedGroups[groupKey] = not TrainerSpells_Character.collapsedGroups[groupKey] or nil
 end
 
 local function GetLevelDiffColorCode(level)
