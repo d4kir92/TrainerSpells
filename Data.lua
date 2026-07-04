@@ -119,7 +119,8 @@ local function CaptureTrainerInner()
     local neu = 0
     local neuPet = 0
     for i = 1, numServices do
-        local _, rank, sType = GetTrainerServiceInfo(i)
+        local _, rankText, sType = GetTrainerServiceInfo(i)
+        local rank = rankText and tonumber(rankText:match("%d+"))
         if sType == "available" or sType == "unavailable" or sType == "used" then
             local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
@@ -372,7 +373,7 @@ local function CaptureMerchantInner()
                     local _, spellID = GetItemSpell(itemLink)
                     if spellID then
                         local _, _, price = GetMerchantItemInfo(i)
-                        local rankNum = itemName and itemName:match("Rank (%d+)")
+                        local rankNum = itemName and tonumber(itemName:match("%((%d+)%)"))
                         local bucket = EnsurePetPath(pet, itemMinLevel)
                         if bucket[spellID] == nil then
                             neu = neu + 1
@@ -380,7 +381,7 @@ local function CaptureMerchantInner()
 
                         bucket[spellID] = {
                             cost = price or 0,
-                            rank = rankNum and ("Rank " .. rankNum) or nil,
+                            rank = rankNum,
                         }
                     end
                 end
@@ -423,7 +424,7 @@ local function MarkKnownPetSpells(dataTable, knownRanks)
             if not TrainerSpells_Character.learnedPetSpells[spellID] then
                 local name = GetSpellInfo(spellID)
                 local rank = type(data) == "table" and data.rank
-                local rankNum = (rank and tonumber(rank:match("%d+"))) or 1
+                local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
                 local maxKnown = name and knownRanks[name]
                 if maxKnown and rankNum <= maxKnown then
                     TrainerSpells_Character.learnedPetSpells[spellID] = true

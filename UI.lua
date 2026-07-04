@@ -81,6 +81,12 @@ local function FormatCost(copper)
     return GetMoneyString(copper, true)
 end
 
+local function GetLocalizedRankText(spellID)
+    local subtext = GetSpellSubtext and spellID and GetSpellSubtext(spellID)
+
+    return (subtext and subtext ~= "") and subtext or nil
+end
+
 local function EntryMatchesSearch(entry, search)
     if not search or search == "" then return true end
     if entry.name and entry.name:lower():find(search, 1, true) then return true end
@@ -107,7 +113,8 @@ local function IgnoreMenu_Initialize(self, level)
     if not entry then return end
     local spellIgnored = TrainerSpells_IsSpellIgnored and TrainerSpells_IsSpellIgnored(entry.spellID)
     local nameIgnored = TrainerSpells_IsNameIgnored and TrainerSpells_IsNameIgnored(entry.name)
-    local rankText = (entry.rank and entry.rank ~= "") and (" " .. entry.rank) or ""
+    local rankSubtext = GetLocalizedRankText(entry.spellID)
+    local rankText = rankSubtext and (" " .. rankSubtext) or ""
     local info = UIDropDownMenu_CreateInfo()
     info.text = entry.name .. rankText
     info.isTitle = true
@@ -242,7 +249,8 @@ local function InitScrollRow(rowFrame, elementData)
     else
         local entry = elementData.entry
         icon:SetTexture(entry.icon)
-        local rankText = (entry.rank and entry.rank ~= "") and (" " .. RANK_COLOR .. "(" .. entry.rank .. ")|r") or ""
+        local rankSubtext = GetLocalizedRankText(entry.spellID)
+        local rankText = rankSubtext and (" " .. RANK_COLOR .. "(" .. rankSubtext .. ")|r") or ""
         local nameColor = elementData.dimName and DIM_NAME_COLOR or SPELL_NAME_COLOR
         nameFS:SetText(nameColor .. entry.name .. "|r" .. rankText)
         if elementData.showLevel then
@@ -356,12 +364,11 @@ local function BuildEntriesFromData(dataTable)
             local name, _, icon = GetSpellInfo(spellID)
             name = name or ("SpellID " .. spellID)
             icon = icon or "Interface\\Icons\\INV_Misc_QuestionMark"
-            local rankNum = (rank and tonumber(rank:match("%d+"))) or 1
+            local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
             local entry = {
                 level = lvl,
                 spellID = spellID,
                 cost = cost,
-                rank = rank,
                 name = name,
                 icon = icon,
                 rankNum = rankNum,
