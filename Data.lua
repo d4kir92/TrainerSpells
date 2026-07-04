@@ -27,20 +27,64 @@ local function GetSpellIDForService(i)
     return spellID
 end
 
+local function IsSaneSpellID(spellID)
+    return type(spellID) == "number" and spellID > 0 and spellID < 2000000
+end
+
+local function ResolveTalentSpellIDByName(name)
+    if not GetNumTalentTabs or not GetNumTalents or not GetTalentInfo or not GetTalentLink then return nil end
+    for tab = 1, GetNumTalentTabs() do
+        for i = 1, GetNumTalents(tab) do
+            local talentName = GetTalentInfo(tab, i)
+            if talentName == name then
+                local link = GetTalentLink(tab, i)
+                if link then
+                    scanTooltip:ClearLines()
+                    scanTooltip:SetHyperlink(link)
+                    local _, spellID = scanTooltip:GetSpell()
+                    if IsSaneSpellID(spellID) then
+                        return spellID
+                    end
+                end
+
+                return nil
+            end
+        end
+    end
+end
+
+local function ResolveRequirementSpellID(name)
+    local _, _, _, _, _, _, spellID = GetSpellInfo(name)
+    if IsSaneSpellID(spellID) then return spellID end
+    spellID = ResolveTalentSpellIDByName(name)
+    if IsSaneSpellID(spellID) then return spellID end
+    local baseName = name:match("^(.-)%s*%b()$")
+    if baseName then
+        _, _, _, _, _, _, spellID = GetSpellInfo(baseName)
+        if IsSaneSpellID(spellID) then return spellID end
+        spellID = ResolveTalentSpellIDByName(baseName)
+        if IsSaneSpellID(spellID) then return spellID end
+    end
+end
+
 local function ParseRequirementText(text)
     text = text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
-    local reqText = text:match("^Requires:%s*(.+)$") or text
-    local names = {}
+    local colonPos = text:find(":")
+    local reqText = colonPos and text:sub(colonPos + 1) or text
+    local spellIDs = {}
     for part in reqText:gmatch("[^,]+") do
         part = part:match("^%s*(.-)%s*$")
-        if part ~= "" and not part:match("^Level %d+$") then
-            table.insert(names, part)
+        if part ~= "" then
+            local spellID = ResolveRequirementSpellID(part)
+            if spellID then
+                table.insert(spellIDs, spellID)
+            end
         end
     end
 
-    if #names == 0 then return nil end
+    if #spellIDs == 0 then return nil end
 
-    return names
+    return spellIDs
 end
 
 local function EnsurePath(class, level)

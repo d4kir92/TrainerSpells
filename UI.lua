@@ -56,18 +56,18 @@ local function GetTalentNameSet()
     return names
 end
 
-local function IsSpellNameKnown(name)
-    if not name or not GetSpellInfo then return false end
-    local _, _, _, _, _, _, spellID = GetSpellInfo(name)
+local function IsReqSpellKnown(spellID)
+    if not IsSpellKnown or type(spellID) ~= "number" then return false end
+    local ok, known = pcall(IsSpellKnown, spellID)
 
-    return spellID and IsSpellKnown and IsSpellKnown(spellID) or false
+    return ok and known or false
 end
 
 local function RequiresUnknownTalent(entry, talentNames)
     if not entry.requires then return false end
-    for _, reqName in ipairs(entry.requires) do
-        local baseName = reqName:match("^(.-)%s*%(Rank %d+%)$") or reqName
-        if talentNames[baseName] and not IsSpellNameKnown(baseName) then
+    for _, reqSpellID in ipairs(entry.requires) do
+        local reqName = GetSpellInfo(reqSpellID)
+        if reqName and talentNames[reqName] and not IsReqSpellKnown(reqSpellID) then
             return true
         end
     end
