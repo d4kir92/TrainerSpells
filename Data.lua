@@ -95,9 +95,7 @@ local function DetectPetFromTooltip(tooltip)
         local petWord = text and text:match("Teaches%s+(%a+)")
         if petWord then
             for _, pet in ipairs(PET_NAMES) do
-                if petWord:lower() == pet:lower() then
-                    return pet
-                end
+                if petWord:lower() == pet:lower() then return pet end
             end
         end
     end
@@ -170,10 +168,8 @@ local function SyncKnownPetSpellsForActivePet()
     if not IsSpellKnown or not UnitCreatureFamily then return end
     local family = UnitCreatureFamily("pet")
     if not family then return end
-
     local petData = TrainerSpells_PetData[family]
     if not petData then return end
-
     local changed = false
     for _, spells in pairs(petData) do
         for spellID in pairs(spells) do

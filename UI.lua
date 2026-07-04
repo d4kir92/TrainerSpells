@@ -252,12 +252,23 @@ local scrollView = CreateScrollBoxListLinearView()
 scrollView:SetElementExtent(ROW_HEIGHT)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
-
 local PET_GROUPS = {
-    {label = "Imp", keys = {"Imp"}},
-    {label = "Voidwalker", keys = {"Voidwalker"}},
-    {label = "Succubus/Incubus", keys = {"Succubus", "Incubus"}},
-    {label = "Felhunter", keys = {"Felhunter"}},
+    {
+        label = "Imp",
+        keys = {"Imp"}
+    },
+    {
+        label = "Voidwalker",
+        keys = {"Voidwalker"}
+    },
+    {
+        label = "Succubus/Incubus",
+        keys = {"Succubus", "Incubus"}
+    },
+    {
+        label = "Felhunter",
+        keys = {"Felhunter"}
+    },
 }
 
 local function AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText)
@@ -504,7 +515,6 @@ function TrainerSpells_Refresh()
     local selectedClass = select(2, UnitClass("player"))
     local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]
     local items = {}
-
     if classData then
         local groups = ClassifyEntries(classData, searchText, selectedLevel)
         AppendGroupItems(items, groups, "")
@@ -535,6 +545,7 @@ frame:SetScript(
         TrainerSpells_Refresh()
     end
 )
+
 frame:RegisterEvent("PLAYER_LEVEL_UP")
 frame:RegisterEvent("SPELLS_CHANGED")
 frame:HookScript(
@@ -637,7 +648,7 @@ local function GetTabGlow(tabFrame)
 end
 
 local function HideNativeSkillTabGlows()
-    for i = 1, 6 do
+    for i = 1, 8 do
         local glow = GetTabGlow(_G["SpellBookSkillLineTab" .. i])
         if glow then
             glow:Hide()
@@ -671,7 +682,8 @@ if SpellBookFrame then
     ourTabGlow:SetBlendMode("ADD")
     ourTabGlow:Hide()
     local lastTab = _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
-    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -51)
+    print("LASTTAB", lastTab:GetName())
+    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -14)
     tab:Hide()
     tab:SetScript("OnClick", OpenFrame)
     tab:SetScript(
@@ -713,7 +725,7 @@ if SpellBookFrame then
         end
     end
 
-    for i = 1, 6 do
+    for i = 1, 8 do
         local t = _G["SpellBookSkillLineTab" .. i]
         if t then
             t:HookScript("OnClick", OnNativeTabClicked)
