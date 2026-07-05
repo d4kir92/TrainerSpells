@@ -39,13 +39,13 @@ for key, spellID in pairs(PROFESSION_SPELLS) do
     end
 end
 
---688, -- Imp
---697, -- Voidwalker
---712, -- Succubus
---101822, -- Incubus
---691, -- Felhunter
---30146 -- Felguard
-local PET_SUMMON_SPELL_IDS = {688, 697, 712, 101822, 691, 30146}
+local impId = 688
+local voidwalkerId = 697
+local succubusId = 712
+local incubusId = 101822
+local felhunterId = 691
+local felguardId = 30146
+local PET_SUMMON_SPELL_IDS = {impId, voidwalkerId, succubusId, incubusId, felhunterId, felguardId}
 local function CommonAffixLength(a, b, fromEnd)
     local maxLen = math.min(#a, #b)
     local len = 0
