@@ -403,8 +403,14 @@ local function MergeBuiltinData()
                             rank = data.rank,
                             faction = data.faction
                         }
-                    elseif data.faction and bucket[spellID].faction == nil then
-                        bucket[spellID].faction = data.faction
+                    else
+                        if data.cost then
+                            bucket[spellID].cost = data.cost
+                        end
+
+                        if data.faction and bucket[spellID].faction == nil then
+                            bucket[spellID].faction = data.faction
+                        end
                     end
                 end
             end
@@ -422,8 +428,14 @@ local function MergeBuiltinData()
                             rank = data.rank,
                             faction = data.faction
                         }
-                    elseif data.faction and bucket[spellID].faction == nil then
-                        bucket[spellID].faction = data.faction
+                    else
+                        if data.cost then
+                            bucket[spellID].cost = data.cost
+                        end
+
+                        if data.faction and bucket[spellID].faction == nil then
+                            bucket[spellID].faction = data.faction
+                        end
                     end
                 end
             end
@@ -440,8 +452,14 @@ local function MergeBuiltinData()
                         rank = data.rank,
                         faction = data.faction
                     }
-                elseif data.faction and bucket[spellID].faction == nil then
-                    bucket[spellID].faction = data.faction
+                else
+                    if data.cost then
+                        bucket[spellID].cost = data.cost
+                    end
+
+                    if data.faction and bucket[spellID].faction == nil then
+                        bucket[spellID].faction = data.faction
+                    end
                 end
             end
         end
