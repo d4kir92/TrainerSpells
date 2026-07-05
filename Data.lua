@@ -5,7 +5,7 @@ TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
 TrainerSpells_Character = TrainerSpells_Character or {}
 TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
-TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
+TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 local BEAST_TRAINING_SPELL_ID = 5149
@@ -492,7 +492,7 @@ local function DetectPetFromTooltip(tooltip)
 end
 
 local function CaptureMerchantInner()
-    if not GetMerchantNumItems or not GetItemSpell then return end
+    if not GetMerchantNumItems then return end
     local numItems = GetMerchantNumItems()
     local neu = 0
     for i = 1, numItems do
@@ -504,10 +504,10 @@ local function CaptureMerchantInner()
                 scanTooltip:SetMerchantItem(i)
                 local pet = DetectPetFromTooltip(scanTooltip)
                 if pet then
-                    local _, spellID = GetItemSpell(itemLink)
-                    if spellID then
+                    local _, spellID = scanTooltip:GetSpell()
+                    if IsSaneSpellID(spellID) then
                         local _, _, price = GetMerchantItemInfo(i)
-                        local rankNum = itemName and tonumber(itemName:match("%((%d+)%)"))
+                        local rankNum = itemName and tonumber(itemName:match("%(.-(%d+)%)"))
                         local bucket = EnsurePetPath(pet, itemMinLevel)
                         if bucket[spellID] == nil then
                             neu = neu + 1
@@ -535,35 +535,92 @@ local function CaptureMerchant()
     end
 end
 
-local function GetKnownPetSpellRanks()
-    local known = {}
-    if not GetSpellBookItemName then return known end
+function TrainerSpells:IsPetSpellKnown(spellID, pet)
+    if spellID == nil then return nil end
+    spellID = tonumber(spellID)
+    if pet and TrainerSpells_Character and TrainerSpells_Character.learnedSpellsPet and TrainerSpells_Character.learnedSpellsPet[pet] and TrainerSpells_Character.learnedSpellsPet[pet][spellID] ~= nil then return TrainerSpells_Character.learnedSpellsPet[pet][spellID] end
+    if TrainerSpells_Character and TrainerSpells_Character.learnedSpellsPet then
+        for i, data in pairs(TrainerSpells_Character.learnedSpellsPet) do
+            if data[spellID] ~= nil then return data[spellID] end
+        end
+    end
+
+    return nil
+end
+
+local function FindPetSpellIDByNameAndRank(pet, spellName, rankNum)
+    if not spellName then return nil end
+    local levels = TrainerSpells_PetData and TrainerSpells_PetData[pet]
+    if not levels then return nil end
+    for _, spells in pairs(levels) do
+        for spellID, data in pairs(spells) do
+            local name = GetSpellInfo(spellID)
+            local rank = GetSpellSubtext(spellID)
+            local dbRankNum = rank and tonumber(rank:match("%d+"))
+            if name == spellName then
+                if dbRankNum and rankNum then
+                    if dbRankNum == rankNum then return spellID end
+                else
+                    return spellID
+                end
+            end
+        end
+    end
+end
+
+GameTooltip:HookScript(
+    "OnTooltipSetItem",
+    function(self)
+        local pet = DetectPetFromTooltip(self)
+        local family = UnitCreatureFamily("pet")
+        if not pet then return end
+        local itemName, itemLink = self:GetItem()
+        local rankNum = itemName and tonumber(itemName:match("%(.-(%d+)%)"))
+        local spellName = itemLink and C_Item and C_Item.GetItemSpell(itemLink)
+        local spellID = FindPetSpellIDByNameAndRank(pet, spellName, rankNum)
+        if not spellID then return end
+        local isPetSpellKnown = TrainerSpells:IsPetSpellKnown(spellID, family)
+        if isPetSpellKnown == true then
+            if pet ~= family then
+                self:AddLine(TrainerSpells:Trans("LID_ALREADYKNOWN"), 0.9, 0.2, 0.2)
+            end
+        elseif isPetSpellKnown == false then
+            self:AddLine(TrainerSpells:Trans("LID_NOTLEARNEDYET"), 0.2, 0.9, 0.2)
+        else
+            self:AddLine(TrainerSpells:Trans("LID_NOTSCANNEDYET"), 0.9, 0.9, 0.2)
+        end
+
+        self:Show()
+    end
+)
+
+local function MarkKnownPetSpells(pet, dataTable)
+    if not UnitExists("pet") or UnitHealth("pet") <= 0 then return end
+    local petSpells = {}
     local i = 1
     while true do
-        local name = GetSpellBookItemName(i, "pet")
+        local name, rank = GetSpellBookItemName(i, BOOKTYPE_PET)
         if not name then break end
-        local subtext = GetSpellSubtext and GetSpellSubtext(i, "pet")
-        local rankNum = (subtext and tonumber(subtext:match("(%d+)"))) or 1
-        known[name] = math.max(known[name] or 0, rankNum)
+        local rankNum = rank and rank:match("%d+")
+        petSpells[name] = rankNum
         i = i + 1
     end
 
-    return known
-end
-
-local function MarkKnownPetSpells(dataTable, knownRanks)
+    TrainerSpells_Character.learnedSpellsPet[pet] = TrainerSpells_Character.learnedSpellsPet[pet] or {}
     local changed = false
     for _, spells in pairs(dataTable) do
         for spellID, data in pairs(spells) do
-            if not TrainerSpells_Character.learnedPetSpells[spellID] then
-                local name = GetSpellInfo(spellID)
-                local rank = type(data) == "table" and data.rank
-                local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
-                local maxKnown = name and knownRanks[name]
-                if maxKnown and rankNum <= maxKnown then
-                    TrainerSpells_Character.learnedPetSpells[spellID] = true
-                    changed = true
-                end
+            spellID = tonumber(spellID)
+            local info = C_Spell.GetSpellInfo(spellID)
+            local name = info.name
+            local rank = GetSpellSubtext(spellID)
+            local rankNum = rank and rank:match("%d+")
+            if petSpells[name] and (rankNum == nil or rankNum <= petSpells[name]) then
+                TrainerSpells_Character.learnedSpellsPet[pet][spellID] = true
+                changed = true
+            else
+                TrainerSpells_Character.learnedSpellsPet[pet][spellID] = false
+                changed = true
             end
         end
     end
@@ -576,8 +633,7 @@ local function SyncKnownPetSpellsForActivePet()
     local family = UnitCreatureFamily("pet")
     local petData = family and TrainerSpells_PetData[family]
     if not petData then return end
-    local knownRanks = GetKnownPetSpellRanks()
-    local changed = MarkKnownPetSpells(petData, knownRanks)
+    local changed = MarkKnownPetSpells(family, petData)
     if changed and TrainerSpells_Refresh then
         TrainerSpells_Refresh()
     end
@@ -595,7 +651,7 @@ f:SetScript(
             TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
             TrainerSpells_Character = TrainerSpells_Character or {}
             TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
-            TrainerSpells_Character.learnedPetSpells = TrainerSpells_Character.learnedPetSpells or {}
+            TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             MergeBuiltinData()
@@ -652,7 +708,7 @@ f:SetScript(
                 if not petSyncScheduled then
                     petSyncScheduled = true
                     C_Timer.After(
-                        0.1,
+                        1,
                         function()
                             petSyncScheduled = false
                             SyncKnownPetSpellsForActivePet()
