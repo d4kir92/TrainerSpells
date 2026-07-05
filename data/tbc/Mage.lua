@@ -193,6 +193,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 2000,
             rank = nil,
             faction = "Horde"
+        },
+        [32271] = {
+            cost = 1900,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [32272] = {
+            cost = 2000,
+            rank = nil,
+            faction = "Horde"
         }
     },
     [22] = {
@@ -391,6 +401,28 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             requires = {27087}
         },
     },
+    [35] = {
+        [49358] = {
+            cost = 2000,
+            rank = nil,
+            faction = "Horde"
+        },
+        [49359] = {
+            cost = 2000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [49360] = {
+            cost = 15000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [49361] = {
+            cost = 15000,
+            rank = nil,
+            faction = "Horde"
+        }
+    },
     [36] = {
         [8402] = {
             cost = 11050,
@@ -506,6 +538,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             faction = "Horde"
         },
         [11418] = {
+            cost = 15000,
+            rank = nil,
+            faction = "Horde"
+        },
+        [32266] = {
+            cost = 14250,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [32267] = {
             cost = 15000,
             rank = nil,
             faction = "Horde"
@@ -865,6 +907,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 7,
             requires = {33717}
         },
+        [33690] = {
+            cost = 20000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [35715] = {
+            cost = 20000,
+            rank = nil,
+            faction = "Horde"
+        }
     },
     [61] = {
         [27078] = {
@@ -948,6 +1000,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 8,
             requires = {27090}
         },
+        [33691] = {
+            cost = 150000,
+            rank = nil,
+            faction = "Alliance"
+        },
+        [35717] = {
+            cost = 150000,
+            rank = nil,
+            faction = "Horde"
+        }
     },
     [66] = {
         [27070] = {
