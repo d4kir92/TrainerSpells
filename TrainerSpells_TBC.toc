@@ -1,6 +1,6 @@
 ## Interface: 20505
-## Version: 0.1.1
-## Title: TrainerSpells |T136142:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
+## Version: 0.1.2
+## Title: TrainerSpells |T133741:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: An add-on that shows you what you can learn at a trainer.
 ## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Lehrer anzeigt.
 ## Notes-ruRU: An add-on that shows you what you can learn at a trainer.
@@ -12,7 +12,7 @@
 ## SavedVariablesPerCharacter: TrainerSpells_Character, TrainerSpells_Ignored, TrainerSpells_IgnoredNames
 ## X-Curse-Project-ID: 1596644
 ## X-Wago-ID: L6J9VWNv
-## IconTexture: 136142
+## IconTexture: 133741
 
 libs\D4Lib\D4Lib.xml
 
