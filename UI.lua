@@ -42,6 +42,10 @@ local PET_GROUPS = {
     },
 }
 
+local function DragonfligthUIEnabled()
+    return TrainerSpells:IsAddonLoaded("DragonflightUI")
+end
+
 local function IsGroupCollapsed(groupKey)
     return groupKey and TrainerSpells_Character and TrainerSpells_Character.collapsedGroups[groupKey] or false
 end
@@ -201,8 +205,6 @@ local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", frame, "WowScro
 scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -4)
 scrollBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -24, 4)
 local listBg = frame:CreateTexture(nil, "BACKGROUND")
-listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
-listBg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, -2)
 local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", frame, "MinimalScrollBar")
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
@@ -622,8 +624,13 @@ local function PositionFrame()
     frame:ClearAllPoints()
     if SpellBookFrame and SpellBookFrame:IsShown() then
         frame:SetScale(SpellBookFrame:GetScale())
-        frame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 14, -70)
-        frame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -36, 78)
+        if DragonfligthUIEnabled() then
+            frame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 4, -50)
+            frame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -4, 4)
+        else
+            frame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 14, -70)
+            frame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -36, 78)
+        end
     else
         frame:SetScale(1)
         frame:SetPoint("CENTER")
@@ -718,6 +725,24 @@ local function HideNativeSkillTabGlows()
 end
 
 local function OpenFrame()
+    if DragonfligthUIEnabled() then
+        listBg:SetPoint("CENTER", frame, "CENTER", 0, 0)
+        if DragonflightUISpellBookInsetBg then
+            local shortHeight = 30
+            listBg:ClearAllPoints()
+            listBg:SetPoint("TOPLEFT", DragonflightUISpellBookInsetBg, "TOPLEFT", 0, -shortHeight)
+            listBg:SetPoint("BOTTOMRIGHT", DragonflightUISpellBookInsetBg, "BOTTOMRIGHT", 0, 0)
+            listBg:SetTexture(DragonflightUISpellBookInsetBg:GetTexture())
+            local fullHeight = DragonflightUISpellBookInsetBg:GetHeight()
+            local cropTop = shortHeight / fullHeight
+            listBg:SetTexCoord(0, 1, cropTop, 1)
+            listBg:SetVertexColor(0, 0, 0)
+        end
+    else
+        listBg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, -2)
+        listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
+    end
+
     PositionFrame()
     frame:Show()
     HideNativeSpellButtons()
@@ -798,4 +823,16 @@ if SpellBookFrame then
             t:HookScript("OnClick", OnNativeTabClicked)
         end
     end
+
+    C_Timer.After(
+        4,
+        function()
+            for i = 1, 4 do
+                local t = _G["DragonflightUISpellBookFrameTabButton" .. i]
+                if t then
+                    t:HookScript("OnClick", OnNativeTabClicked)
+                end
+            end
+        end
+    )
 end
