@@ -211,11 +211,23 @@ local function CaptureTrainerInner()
     local numServices = GetNumTrainerServices()
     local neu = 0
     local neuPet = 0
+    local rankFound = false
     for i = 1, numServices do
         local _, rankText, sType = GetTrainerServiceInfo(i)
         local rank = rankText and tonumber(rankText:match("%d+"))
-        if sType == "available" or sType == "unavailable" or sType == "used" then
-            local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
+        if sType ~= "header" and rank ~= nil then
+            rankFound = true
+            break
+        end
+    end
+
+    -- return when job
+    if not rankFound then return end
+    for i = 1, numServices do
+        local _, rankText, sType = GetTrainerServiceInfo(i)
+        local rank = rankText and tonumber(rankText:match("%d+"))
+        local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
+        if (rank ~= nil or levelReq ~= nil) and (sType == "available" or sType == "unavailable" or sType == "used") then
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
             local spellID = GetSpellIDForService(i)
             local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
