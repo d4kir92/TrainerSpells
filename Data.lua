@@ -1,5 +1,5 @@
 local _, TrainerSpells = ...
-local debug_trainer = true
+local debug_trainer = false
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
