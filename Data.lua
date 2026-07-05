@@ -601,8 +601,8 @@ local function MarkKnownPetSpells(pet, dataTable)
     while true do
         local name, rank = GetSpellBookItemName(i, BOOKTYPE_PET)
         if not name then break end
-        local rankNum = rank and rank:match("%d+")
-        petSpells[name] = rankNum
+        local rankNum = rank and tonumber(rank:match("%d+"))
+        petSpells[name] = math.max(petSpells[name] or 0, rankNum or 1)
         i = i + 1
     end
 
@@ -612,14 +612,14 @@ local function MarkKnownPetSpells(pet, dataTable)
         for spellID, data in pairs(spells) do
             spellID = tonumber(spellID)
             local info = C_Spell.GetSpellInfo(spellID)
-            local name = info.name
-            local rank = GetSpellSubtext(spellID)
-            local rankNum = rank and rank:match("%d+")
-            if petSpells[name] and (rankNum == nil or rankNum <= petSpells[name]) then
-                TrainerSpells_Character.learnedSpellsPet[pet][spellID] = true
-                changed = true
-            else
+            local name = info and info.name
+            local rankNum = type(data) == "table" and tonumber(data.rank)
+            local maxKnown = name and petSpells[name]
+            if not maxKnown then
                 TrainerSpells_Character.learnedSpellsPet[pet][spellID] = false
+                changed = true
+            elseif rankNum then
+                TrainerSpells_Character.learnedSpellsPet[pet][spellID] = rankNum <= maxKnown
                 changed = true
             end
         end

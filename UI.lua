@@ -375,7 +375,10 @@ local function BuildEntriesFromData(dataTable)
                 local name, _, icon = GetSpellInfo(spellID)
                 name = name or ("SpellID " .. spellID)
                 icon = icon or "Interface\\Icons\\INV_Misc_QuestionMark"
+                local hasRealRank = (type(rank) == "number") or (type(rank) == "string" and rank:match("%d+") ~= nil)
                 local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
+                local isLearnedPetSpell = TrainerSpells:IsPetSpellKnown(spellID)
+                local directlyKnown = (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used"
                 local entry = {
                     level = lvl,
                     spellID = spellID,
@@ -383,12 +386,13 @@ local function BuildEntriesFromData(dataTable)
                     name = name,
                     icon = icon,
                     rankNum = rankNum,
+                    hasRealRank = hasRealRank,
+                    directlyKnown = directlyKnown,
                     requires = requires,
                 }
 
                 table.insert(allEntries, entry)
-                local isLearnedPetSpell = TrainerSpells:IsPetSpellKnown(spellID)
-                if (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used" then
+                if directlyKnown and hasRealRank then
                     knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
                 end
             end
@@ -408,7 +412,8 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
             table.insert(ignored, entry)
         else
             local maxKnown = knownMaxRank[entry.name] or 0
-            if entry.rankNum <= maxKnown then
+            local isKnown = entry.directlyKnown or (entry.hasRealRank and entry.rankNum <= maxKnown)
+            if isKnown then
                 table.insert(known, entry)
             else
                 table.insert(remaining, entry)
