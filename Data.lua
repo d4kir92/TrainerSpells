@@ -1040,31 +1040,3 @@ end
 function TrainerSpells_IsIgnored(spellID, name)
     return TrainerSpells_IsSpellIgnored(spellID) or TrainerSpells_IsNameIgnored(name)
 end
-
-SLASH_TRAINERSPELLSDEBUG1 = "/tsdebug"
-SlashCmdList["TRAINERSPELLSDEBUG"] = function()
-    local _, classToken = UnitClass("player")
-    print("TrainerSpells Debug - Klasse:", classToken)
-    for _, spells in pairs(TrainerSpells_Data[classToken] or {}) do
-        for id, _ in pairs(spells) do
-            local name = GetSpellInfo(id)
-            if name == "Rebirth" then
-                local ignored = TrainerSpells_Ignored[classToken] and TrainerSpells_Ignored[classToken][id]
-                print("gespeichert:", id, type(id), "ignoriert=", tostring(ignored))
-            end
-        end
-    end
-
-    local selectedId = ClassTrainerFrame and ClassTrainerFrame.selectedService
-    if selectedId then
-        local name, subText = GetTrainerServiceInfo(selectedId)
-        local tt = _G["TSDbgTT"] or CreateFrame("GameTooltip", "TSDbgTT", nil, "GameTooltipTemplate")
-        tt:SetOwner(WorldFrame, "ANCHOR_NONE")
-        tt:ClearLines()
-        tt:SetTrainerService(selectedId)
-        local _, liveId = tt:GetSpell()
-        print("ausgewaehlt:", selectedId, name, subText, "live spellID=", liveId, type(liveId))
-    else
-        print("kein Trainer-Eintrag ausgewaehlt (Lehrerfenster offen und Zeile anklicken).")
-    end
-end
