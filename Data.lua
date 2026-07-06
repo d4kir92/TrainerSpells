@@ -6,6 +6,10 @@ TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
 TrainerSpells_Character = TrainerSpells_Character or {}
 TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
 TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
+if TrainerSpells_Character.showIgnoredInTrainer == nil then
+    TrainerSpells_Character.showIgnoredInTrainer = false
+end
+
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 local BEAST_TRAINING_SPELL_ID = 5149
@@ -340,9 +344,18 @@ local function BuildCachedSpellIDLookup()
 end
 
 local function BuildVisibleTrainerIndexList()
+    local total = GetNumTrainerServices()
+    if TrainerSpells_Character.showIgnoredInTrainer then
+        local list = {}
+        for i = 1, total do
+            table.insert(list, i)
+        end
+
+        return list
+    end
+
     local cachedSpellIDs = BuildCachedSpellIDLookup()
     local list = {}
-    local total = GetNumTrainerServices()
     for i = 1, total do
         local name, subText, category = GetTrainerServiceInfo(i)
         local keep = true
@@ -511,6 +524,59 @@ local function EnsureTrainerUpdateOverrideInstalled()
     trainerUpdateOverrideInstalled = true
     ClassTrainerFrame_Update = TrainerSpells_ClassTrainerFrame_Update
     ClassTrainerFrame_Update()
+end
+
+local trainerFilterHookInstalled = false
+local function EnsureTrainerFilterHookInstalled()
+    if trainerFilterHookInstalled then return end
+    if not ClassTrainerFrame or not ClassTrainerFrame.FilterDropdown then return end
+    trainerFilterHookInstalled = true
+    local function IsNativeFilterSelected(filter)
+        return GetTrainerServiceTypeFilter(filter)
+    end
+
+    local function SetNativeFilterSelected(filter)
+        ClassTrainerFrame.filterPending = true
+        SetTrainerServiceTypeFilter(filter, not GetTrainerServiceTypeFilter(filter))
+    end
+
+    local function IsIgnoredFilterSelected()
+        return TrainerSpells_Character.showIgnoredInTrainer
+    end
+
+    local function SetIgnoredFilterSelected()
+        TrainerSpells_Character.showIgnoredInTrainer = not TrainerSpells_Character.showIgnoredInTrainer
+        if ClassTrainerFrame_Update then
+            ClassTrainerFrame_Update()
+        end
+    end
+
+    local applyingOwnMenu = false
+    local function ApplyOwnMenu()
+        applyingOwnMenu = true
+        ClassTrainerFrame.FilterDropdown:SetupMenu(
+            function(dropdown, rootDescription)
+                rootDescription:SetTag("MENU_TRAINER_FILTER")
+                rootDescription:CreateCheckbox(GREEN_FONT_COLOR:WrapTextInColorCode(AVAILABLE), IsNativeFilterSelected, SetNativeFilterSelected, "available")
+                rootDescription:CreateCheckbox(RED_FONT_COLOR:WrapTextInColorCode(UNAVAILABLE), IsNativeFilterSelected, SetNativeFilterSelected, "unavailable")
+                rootDescription:CreateCheckbox(GRAY_FONT_COLOR:WrapTextInColorCode(USED), IsNativeFilterSelected, SetNativeFilterSelected, "used")
+                rootDescription:CreateCheckbox(YELLOW_FONT_COLOR:WrapTextInColorCode(TrainerSpells:Trans("LID_IGNORED")), IsIgnoredFilterSelected, SetIgnoredFilterSelected)
+            end
+        )
+
+        applyingOwnMenu = false
+    end
+
+    hooksecurefunc(
+        ClassTrainerFrame.FilterDropdown,
+        "SetupMenu",
+        function()
+            if applyingOwnMenu then return end
+            ApplyOwnMenu()
+        end
+    )
+
+    ApplyOwnMenu()
 end
 
 local function ExpandAllTrainerHeaders()
@@ -844,11 +910,16 @@ f:SetScript(
             TrainerSpells_Character = TrainerSpells_Character or {}
             TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
             TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
+            if TrainerSpells_Character.showIgnoredInTrainer == nil then
+                TrainerSpells_Character.showIgnoredInTrainer = false
+            end
+
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             EnsureTrainerUpdateOverrideInstalled()
+            EnsureTrainerFilterHookInstalled()
             if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
                 local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
                 scanButton:SetSize(80, 22)
