@@ -321,6 +321,222 @@ local function CaptureTrainerRequirements()
     end
 end
 
+-- Baut aus den bereits gecachten TrainerSpells_Data ein schnelles Nachschlage-
+-- register "Name -> Rang-Nummer -> SpellID", damit wir beim Filtern nicht fuer
+-- jeden Trainer-Eintrag einen (langsamen, in einer engen Schleife unzuverlaessigen)
+-- Tooltip-Scan machen muessen. Rang 0 wird verwendet, wenn kein Rang bekannt ist.
+local function BuildCachedSpellIDLookup()
+    local _, classToken = UnitClass("player")
+    local lookup = {}
+    local classData = classToken and TrainerSpells_Data[classToken]
+    if not classData then return lookup end
+
+    for _, spells in pairs(classData) do
+        for id, data in pairs(spells) do
+            local name = GetSpellInfo(id)
+            if name then
+                lookup[name] = lookup[name] or {}
+                local rankNum = type(data) == "table" and tonumber(data.rank) or 0
+                lookup[name][rankNum or 0] = id
+            end
+        end
+    end
+
+    return lookup
+end
+
+-- Baut die Liste der ECHTEN Trainer-Indizes, die (unter Beruecksichtigung von
+-- TrainerSpells_Ignored/TrainerSpells_IgnoredNames) angezeigt werden sollen.
+-- Header werden nie herausgefiltert, nur echte ignorierte Skill-Eintraege.
+local function BuildVisibleTrainerIndexList()
+    local cachedSpellIDs = BuildCachedSpellIDLookup()
+    local list = {}
+    local total = GetNumTrainerServices()
+    for i = 1, total do
+        local name, subText, category = GetTrainerServiceInfo(i)
+        local keep = true
+        if category and category ~= "header" and name then
+            local rankNum = subText and tonumber(subText:match("%d+")) or 0
+            local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rankNum]
+            if not spellID then
+                -- Noch nie gescannter Spell: einmaliger Fallback auf den langsamen Tooltip-Weg.
+                spellID = GetSpellIDForService(i)
+            end
+
+            if TrainerSpells_IsIgnored(spellID, name) then
+                keep = false
+            end
+        end
+
+        if keep then
+            table.insert(list, i)
+        end
+    end
+
+    return list
+end
+
+-- 1:1-Nachbau von Blizzards eigenem ClassTrainerFrame_Update (siehe FrameXML),
+-- einziger Unterschied: skillIndex kommt aus der gefilterten visibleList statt
+-- direkt aus "i + skillOffset". Dadurch bleiben Farbe, Einrueckung, Reihenfolge
+-- und Auswahl exakt Blizzards eigene Logik, nur eben ohne ignorierte Eintraege.
+local function TrainerSpells_ClassTrainerFrame_Update()
+    SetPortraitTexture(ClassTrainerFramePortrait, "npc")
+    ClassTrainerNameText:SetText(UnitName("npc"))
+    ClassTrainerGreetingText:SetText(GetTrainerGreetingText())
+
+    local visibleList = BuildVisibleTrainerIndexList()
+    local numTrainerServices = #visibleList
+    local skillOffset = FauxScrollFrame_GetOffset(ClassTrainerListScrollFrame)
+
+    if numTrainerServices == 0 then
+        ClassTrainerCollapseAllButton:Disable()
+    else
+        ClassTrainerCollapseAllButton:Enable()
+    end
+
+    if not ClassTrainerFrame.selectedService then
+        ClassTrainer_HideSkillDetails()
+    end
+
+    if IsTradeskillTrainer() then
+        ClassTrainer_SetToTradeSkillTrainer()
+    else
+        ClassTrainer_SetToClassTrainer()
+    end
+
+    FauxScrollFrame_Update(ClassTrainerListScrollFrame, numTrainerServices, CLASS_TRAINER_SKILLS_DISPLAYED, CLASS_TRAINER_SKILL_HEIGHT, nil, nil, nil, ClassTrainerSkillHighlightFrame, 293, 316)
+
+    ClassTrainerMoneyFrame:Show()
+    ClassTrainerSkillHighlightFrame:Hide()
+
+    for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED, 1 do
+        local skillIndex = visibleList[i + skillOffset]
+        local skillButton = _G["ClassTrainerSkill" .. i]
+        local serviceName, serviceSubText, serviceType, isExpanded
+        local moneyCost
+
+        if skillIndex then
+            serviceName, serviceSubText, serviceType, isExpanded = GetTrainerServiceInfo(skillIndex)
+            if not serviceName then
+                serviceName = UNKNOWN
+            end
+
+            if ClassTrainerListScrollFrame:IsVisible() then
+                skillButton:SetWidth(293)
+            else
+                skillButton:SetWidth(323)
+            end
+
+            local skillSubText = _G["ClassTrainerSkill" .. i .. "SubText"]
+
+            if serviceType == "header" then
+                local skillText = _G["ClassTrainerSkill" .. i .. "Text"]
+                skillText:SetText(serviceName)
+                skillText:SetWidth(0)
+                skillButton:SetNormalFontObject("GameFontNormal")
+
+                skillSubText:Hide()
+                if isExpanded then
+                    skillButton:SetNormalTexture("Interface\\Buttons\\UI-MinusButton-Up")
+                else
+                    skillButton:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-Up")
+                end
+                _G["ClassTrainerSkill" .. i .. "Highlight"]:SetTexture("Interface\\Buttons\\UI-PlusButton-Hilight")
+            else
+                skillButton:ClearNormalTexture()
+                _G["ClassTrainerSkill" .. i .. "Highlight"]:SetTexture("")
+                local skillText = _G["ClassTrainerSkill" .. i .. "Text"]
+                skillText:SetText("  " .. serviceName)
+                if serviceSubText and serviceSubText ~= "" then
+                    skillSubText:SetText(format(PARENS_TEMPLATE, serviceSubText))
+                    skillSubText:SetPoint("LEFT", "ClassTrainerSkill" .. i .. "Text", "RIGHT", 10, 0)
+                    skillSubText:Show()
+                    skillText:SetWidth(0)
+                else
+                    skillSubText:Hide()
+                    skillText:SetWidth(SKILL_TEXT_WIDTH)
+                end
+
+                local _
+                moneyCost, _ = GetTrainerServiceCost(skillIndex)
+                if serviceType == "available" then
+                    skillButton:SetNormalFontObject("GameFontNormalLeftGreen")
+                    ClassTrainer_SetSubTextColor(skillButton, 0, 0.6, 0)
+                elseif serviceType == "used" then
+                    skillButton:SetNormalFontObject("GameFontDisable")
+                    ClassTrainer_SetSubTextColor(skillButton, 0.5, 0.5, 0.5)
+                else
+                    skillButton:SetNormalFontObject("GameFontNormalLeftRed")
+                    ClassTrainer_SetSubTextColor(skillButton, 0.6, 0, 0)
+                end
+            end
+
+            skillButton:SetID(skillIndex)
+            skillButton:Show()
+
+            if ClassTrainerFrame.selectedService and GetTrainerSelectionIndex() == skillIndex then
+                ClassTrainerSkillHighlightFrame:SetPoint("TOPLEFT", "ClassTrainerSkill" .. i, "TOPLEFT", 0, 0)
+                ClassTrainerSkillHighlightFrame:Show()
+                skillButton:LockHighlight()
+                ClassTrainer_SetSubTextColor(skillButton, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+                if moneyCost and moneyCost > 0 then
+                    ClassTrainerCostLabel:Show()
+                end
+            else
+                skillButton:UnlockHighlight()
+            end
+        else
+            skillButton:Hide()
+        end
+    end
+
+    local numHeaders = 0
+    local notExpanded = 0
+    local showDetails = nil
+    for i = 1, numTrainerServices, 1 do
+        local realIndex = visibleList[i]
+        local serviceName, serviceSubText, serviceType, isExpanded = GetTrainerServiceInfo(realIndex)
+        if serviceName and serviceType == "header" then
+            numHeaders = numHeaders + 1
+            if not isExpanded then
+                notExpanded = notExpanded + 1
+            end
+        end
+
+        if ClassTrainerFrame.selectedService and GetTrainerSelectionIndex() == realIndex then
+            showDetails = 1
+        end
+    end
+
+    if showDetails then
+        ClassTrainer_ShowSkillDetails()
+    else
+        ClassTrainer_HideSkillDetails()
+    end
+
+    if notExpanded ~= numHeaders then
+        ClassTrainerCollapseAllButton.collapsed = nil
+        ClassTrainerCollapseAllButton:SetNormalTexture("Interface\\Buttons\\UI-MinusButton-Up")
+    else
+        ClassTrainerCollapseAllButton.collapsed = 1
+        ClassTrainerCollapseAllButton:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-Up")
+    end
+end
+
+-- ClassTrainerFrame_Update wird komplett durch die eigene, gefilterte Fassung
+-- ersetzt (nicht nur gehookt), da Blizzards Original sonst zuerst ungefiltert
+-- rendern wuerde.
+local trainerUpdateOverrideInstalled = false
+local function EnsureTrainerUpdateOverrideInstalled()
+    if trainerUpdateOverrideInstalled then return end
+    if not ClassTrainerFrame_Update then return end
+    if not TrainerSpells_IsIgnored then return end
+    trainerUpdateOverrideInstalled = true
+    ClassTrainerFrame_Update = TrainerSpells_ClassTrainerFrame_Update
+    ClassTrainerFrame_Update()
+end
+
 local function ExpandAllTrainerHeaders()
     local i = 1
     while i <= GetNumTrainerServices() do
@@ -656,6 +872,7 @@ f:SetScript(
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
+            EnsureTrainerUpdateOverrideInstalled()
             if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
                 local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
                 scanButton:SetSize(80, 22)
@@ -726,6 +943,7 @@ TrainerSpells_Capture = CaptureTrainer
 TrainerSpells_CaptureMerchant = CaptureMerchant
 TrainerSpells_SyncPetSpells = SyncKnownPetSpellsForActivePet
 function TrainerSpells_ToggleIgnoreSpell(spellID)
+    spellID = tonumber(spellID)
     local _, classToken = UnitClass("player")
     if not classToken or not spellID then return end
     TrainerSpells_Ignored[classToken] = TrainerSpells_Ignored[classToken] or {}
@@ -750,6 +968,7 @@ function TrainerSpells_ToggleIgnoreName(name)
 end
 
 function TrainerSpells_IsSpellIgnored(spellID)
+    spellID = tonumber(spellID)
     local _, classToken = UnitClass("player")
     if not classToken or not spellID then return false end
 
@@ -765,4 +984,37 @@ end
 
 function TrainerSpells_IsIgnored(spellID, name)
     return TrainerSpells_IsSpellIgnored(spellID) or TrainerSpells_IsNameIgnored(name)
+end
+
+-- Temporaerer Debug-Befehl, um einer Ignorieren-Diskrepanz auf den Grund zu
+-- gehen: zeigt fuer "Rebirth" die gespeicherte(n) SpellID(s) samt Typ und
+-- Ignoriert-Status, sowie die live per Tooltip ermittelte SpellID des gerade
+-- im echten Trainerfenster ausgewaehlten Eintrags. Kann spaeter entfernt werden.
+SLASH_TRAINERSPELLSDEBUG1 = "/tsdebug"
+SlashCmdList["TRAINERSPELLSDEBUG"] = function()
+    local _, classToken = UnitClass("player")
+    print("TrainerSpells Debug - Klasse:", classToken)
+
+    for _, spells in pairs(TrainerSpells_Data[classToken] or {}) do
+        for id, _ in pairs(spells) do
+            local name = GetSpellInfo(id)
+            if name == "Rebirth" then
+                local ignored = TrainerSpells_Ignored[classToken] and TrainerSpells_Ignored[classToken][id]
+                print("gespeichert:", id, type(id), "ignoriert=", tostring(ignored))
+            end
+        end
+    end
+
+    local selectedId = ClassTrainerFrame and ClassTrainerFrame.selectedService
+    if selectedId then
+        local name, subText = GetTrainerServiceInfo(selectedId)
+        local tt = _G["TSDbgTT"] or CreateFrame("GameTooltip", "TSDbgTT", nil, "GameTooltipTemplate")
+        tt:SetOwner(WorldFrame, "ANCHOR_NONE")
+        tt:ClearLines()
+        tt:SetTrainerService(selectedId)
+        local _, liveId = tt:GetSpell()
+        print("ausgewaehlt:", selectedId, name, subText, "live spellID=", liveId, type(liveId))
+    else
+        print("kein Trainer-Eintrag ausgewaehlt (Lehrerfenster offen und Zeile anklicken).")
+    end
 end
