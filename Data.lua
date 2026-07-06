@@ -221,7 +221,6 @@ local function CaptureTrainerInner()
         end
     end
 
-    -- return when job
     if not rankFound then return end
     for i = 1, numServices do
         local _, rankText, sType = GetTrainerServiceInfo(i)
@@ -321,16 +320,11 @@ local function CaptureTrainerRequirements()
     end
 end
 
--- Baut aus den bereits gecachten TrainerSpells_Data ein schnelles Nachschlage-
--- register "Name -> Rang-Nummer -> SpellID", damit wir beim Filtern nicht fuer
--- jeden Trainer-Eintrag einen (langsamen, in einer engen Schleife unzuverlaessigen)
--- Tooltip-Scan machen muessen. Rang 0 wird verwendet, wenn kein Rang bekannt ist.
 local function BuildCachedSpellIDLookup()
     local _, classToken = UnitClass("player")
     local lookup = {}
     local classData = classToken and TrainerSpells_Data[classToken]
     if not classData then return lookup end
-
     for _, spells in pairs(classData) do
         for id, data in pairs(spells) do
             local name = GetSpellInfo(id)
@@ -345,9 +339,6 @@ local function BuildCachedSpellIDLookup()
     return lookup
 end
 
--- Baut die Liste der ECHTEN Trainer-Indizes, die (unter Beruecksichtigung von
--- TrainerSpells_Ignored/TrainerSpells_IgnoredNames) angezeigt werden sollen.
--- Header werden nie herausgefiltert, nur echte ignorierte Skill-Eintraege.
 local function BuildVisibleTrainerIndexList()
     local cachedSpellIDs = BuildCachedSpellIDLookup()
     local list = {}
@@ -359,7 +350,6 @@ local function BuildVisibleTrainerIndexList()
             local rankNum = subText and tonumber(subText:match("%d+")) or 0
             local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rankNum]
             if not spellID then
-                -- Noch nie gescannter Spell: einmaliger Fallback auf den langsamen Tooltip-Weg.
                 spellID = GetSpellIDForService(i)
             end
 
@@ -376,19 +366,13 @@ local function BuildVisibleTrainerIndexList()
     return list
 end
 
--- 1:1-Nachbau von Blizzards eigenem ClassTrainerFrame_Update (siehe FrameXML),
--- einziger Unterschied: skillIndex kommt aus der gefilterten visibleList statt
--- direkt aus "i + skillOffset". Dadurch bleiben Farbe, Einrueckung, Reihenfolge
--- und Auswahl exakt Blizzards eigene Logik, nur eben ohne ignorierte Eintraege.
 local function TrainerSpells_ClassTrainerFrame_Update()
     SetPortraitTexture(ClassTrainerFramePortrait, "npc")
     ClassTrainerNameText:SetText(UnitName("npc"))
     ClassTrainerGreetingText:SetText(GetTrainerGreetingText())
-
     local visibleList = BuildVisibleTrainerIndexList()
     local numTrainerServices = #visibleList
     local skillOffset = FauxScrollFrame_GetOffset(ClassTrainerListScrollFrame)
-
     if numTrainerServices == 0 then
         ClassTrainerCollapseAllButton:Disable()
     else
@@ -406,16 +390,13 @@ local function TrainerSpells_ClassTrainerFrame_Update()
     end
 
     FauxScrollFrame_Update(ClassTrainerListScrollFrame, numTrainerServices, CLASS_TRAINER_SKILLS_DISPLAYED, CLASS_TRAINER_SKILL_HEIGHT, nil, nil, nil, ClassTrainerSkillHighlightFrame, 293, 316)
-
     ClassTrainerMoneyFrame:Show()
     ClassTrainerSkillHighlightFrame:Hide()
-
-    for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED, 1 do
+    for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED do
         local skillIndex = visibleList[i + skillOffset]
         local skillButton = _G["ClassTrainerSkill" .. i]
         local serviceName, serviceSubText, serviceType, isExpanded
         local moneyCost
-
         if skillIndex then
             serviceName, serviceSubText, serviceType, isExpanded = GetTrainerServiceInfo(skillIndex)
             if not serviceName then
@@ -429,19 +410,18 @@ local function TrainerSpells_ClassTrainerFrame_Update()
             end
 
             local skillSubText = _G["ClassTrainerSkill" .. i .. "SubText"]
-
             if serviceType == "header" then
                 local skillText = _G["ClassTrainerSkill" .. i .. "Text"]
                 skillText:SetText(serviceName)
                 skillText:SetWidth(0)
                 skillButton:SetNormalFontObject("GameFontNormal")
-
                 skillSubText:Hide()
                 if isExpanded then
                     skillButton:SetNormalTexture("Interface\\Buttons\\UI-MinusButton-Up")
                 else
                     skillButton:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-Up")
                 end
+
                 _G["ClassTrainerSkill" .. i .. "Highlight"]:SetTexture("Interface\\Buttons\\UI-PlusButton-Hilight")
             else
                 skillButton:ClearNormalTexture()
@@ -474,7 +454,6 @@ local function TrainerSpells_ClassTrainerFrame_Update()
 
             skillButton:SetID(skillIndex)
             skillButton:Show()
-
             if ClassTrainerFrame.selectedService and GetTrainerSelectionIndex() == skillIndex then
                 ClassTrainerSkillHighlightFrame:SetPoint("TOPLEFT", "ClassTrainerSkill" .. i, "TOPLEFT", 0, 0)
                 ClassTrainerSkillHighlightFrame:Show()
@@ -494,7 +473,7 @@ local function TrainerSpells_ClassTrainerFrame_Update()
     local numHeaders = 0
     local notExpanded = 0
     local showDetails = nil
-    for i = 1, numTrainerServices, 1 do
+    for i = 1, numTrainerServices do
         local realIndex = visibleList[i]
         local serviceName, serviceSubText, serviceType, isExpanded = GetTrainerServiceInfo(realIndex)
         if serviceName and serviceType == "header" then
@@ -524,9 +503,6 @@ local function TrainerSpells_ClassTrainerFrame_Update()
     end
 end
 
--- ClassTrainerFrame_Update wird komplett durch die eigene, gefilterte Fassung
--- ersetzt (nicht nur gehookt), da Blizzards Original sonst zuerst ungefiltert
--- rendern wuerde.
 local trainerUpdateOverrideInstalled = false
 local function EnsureTrainerUpdateOverrideInstalled()
     if trainerUpdateOverrideInstalled then return end
@@ -962,6 +938,14 @@ function TrainerSpells_ToggleIgnoreName(name)
     local ignored = TrainerSpells_IgnoredNames[classToken]
     if ignored[name] then
         ignored[name] = nil
+        local ignoredSpells = TrainerSpells_Ignored[classToken]
+        if ignoredSpells then
+            for spellID in pairs(ignoredSpells) do
+                if GetSpellInfo(spellID) == name then
+                    ignoredSpells[spellID] = nil
+                end
+            end
+        end
     else
         ignored[name] = true
     end
@@ -986,15 +970,10 @@ function TrainerSpells_IsIgnored(spellID, name)
     return TrainerSpells_IsSpellIgnored(spellID) or TrainerSpells_IsNameIgnored(name)
 end
 
--- Temporaerer Debug-Befehl, um einer Ignorieren-Diskrepanz auf den Grund zu
--- gehen: zeigt fuer "Rebirth" die gespeicherte(n) SpellID(s) samt Typ und
--- Ignoriert-Status, sowie die live per Tooltip ermittelte SpellID des gerade
--- im echten Trainerfenster ausgewaehlten Eintrags. Kann spaeter entfernt werden.
 SLASH_TRAINERSPELLSDEBUG1 = "/tsdebug"
 SlashCmdList["TRAINERSPELLSDEBUG"] = function()
     local _, classToken = UnitClass("player")
     print("TrainerSpells Debug - Klasse:", classToken)
-
     for _, spells in pairs(TrainerSpells_Data[classToken] or {}) do
         for id, _ in pairs(spells) do
             local name = GetSpellInfo(id)
