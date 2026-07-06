@@ -321,61 +321,6 @@ local function CaptureTrainerRequirements()
     end
 end
 
--- Blendet im echten Blizzard-Trainerfenster (ClassTrainerFrame) Eintraege aus,
--- die ueber TrainerSpells_Ignored/TrainerSpells_IgnoredNames ignoriert wurden,
--- und rueckt die restlichen Buttons nach, damit keine Luecken entstehen.
-local firstTrainerButtonAnchor
-local function CaptureFirstTrainerButtonAnchor()
-    if firstTrainerButtonAnchor then return end
-    local button1 = _G["ClassTrainerSkill1"]
-    if not button1 then return end
-    local point, relativeTo, relativePoint, x, y = button1:GetPoint(1)
-    if point then
-        firstTrainerButtonAnchor = {point, relativeTo, relativePoint, x, y}
-    end
-end
-
-local function HideIgnoredTrainerButtons()
-    if not TrainerSpells_IsIgnored then return end
-    CaptureFirstTrainerButtonAnchor()
-    if not firstTrainerButtonAnchor then return end
-    local previousVisibleButton
-    local i = 1
-    while _G["ClassTrainerSkill" .. i] do
-        local button = _G["ClassTrainerSkill" .. i]
-        if button:IsShown() then
-            local id = button:GetID()
-            local isIgnored = false
-            if id and id > 0 then
-                local name, _, category = GetTrainerServiceInfo(id)
-                if category and category ~= "header" and name then
-                    local spellID = GetSpellIDForService(id)
-                    isIgnored = TrainerSpells_IsIgnored(spellID, name)
-                end
-            end
-
-            if isIgnored then
-                button:Hide()
-            else
-                button:ClearAllPoints()
-                if previousVisibleButton then
-                    button:SetPoint("TOPLEFT", previousVisibleButton, "BOTTOMLEFT", 0, 0)
-                else
-                    button:SetPoint(unpack(firstTrainerButtonAnchor))
-                end
-
-                previousVisibleButton = button
-            end
-        end
-
-        i = i + 1
-    end
-end
-
-if ClassTrainerFrame_Update then
-    hooksecurefunc("ClassTrainerFrame_Update", HideIgnoredTrainerButtons)
-end
-
 local function ExpandAllTrainerHeaders()
     local i = 1
     while i <= GetNumTrainerServices() do
