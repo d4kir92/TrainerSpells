@@ -772,7 +772,7 @@ if SpellBookFrame then
     ourTabGlow:SetTexture(130724)
     ourTabGlow:SetBlendMode("ADD")
     ourTabGlow:Hide()
-    local lastTab = _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
+    local lastTab = _G["SpellBookSkillLineTab5"] or _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
     tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -34)
     tab:Hide()
     tab:SetScript("OnClick", OpenFrame)
