@@ -12,6 +12,7 @@ end
 
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
+TrainerSpells:SetAddonOutput("TrainerSpells", 133741)
 local BEAST_TRAINING_SPELL_ID = 5149
 local PET_TRAINER_SKILL_LINE = ""
 local trainingSpellInfo = C_Spell.GetSpellInfo(BEAST_TRAINING_SPELL_ID)
@@ -201,13 +202,13 @@ end
 local function CaptureTrainerInner()
     local _, classToken = UnitClass("player")
     if not classToken then
-        print("|cffff5555TrainerSpells:|r UnitClass(\"player\") lieferte keinen Klassen-Token.")
+        TrainerSpells:MSG("UnitClass(\"player\") lieferte keinen Klassen-Token.")
 
         return
     end
 
     if not GetNumTrainerServices then
-        print("|cffff5555TrainerSpells:|r GetNumTrainerServices existiert nicht (API in dieser Client-Version anders).")
+        TrainerSpells:ERR("GetNumTrainerServices existiert nicht (API in dieser Client-Version anders).")
 
         return
     end
@@ -265,18 +266,18 @@ local function CaptureTrainerInner()
     end
 
     if neu > 0 then
-        print(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
+        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
     end
 
     if neuPet > 0 then
-        print(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken))
+        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken))
     end
 end
 
 local function CaptureTrainer()
     local ok, err = pcall(CaptureTrainerInner)
     if not ok then
-        print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+        TrainerSpells:ERR("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
     end
 end
 
@@ -306,7 +307,7 @@ local function OnTrainerServiceButtonClicked(self)
     local id = self:GetID()
     local ok, err = pcall(OnTrainerServiceSelectedInner, id)
     if not ok then
-        print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+        TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
     end
 end
 
@@ -608,7 +609,7 @@ local function ScanTrainerServicesStep(button, offset, maxOffset, targetCount, v
     if visitedCount >= targetCount or offset > maxOffset then
         FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, 0)
         ClassTrainerFrame_Update()
-        print(("|cff33ff99TrainerSpells:|r Scan abgeschlossen (%d/%d erfasst)."):format(visitedCount, targetCount))
+        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r Scan abgeschlossen (%d/%d erfasst)."):format(visitedCount, targetCount))
 
         return
     end
@@ -635,14 +636,14 @@ end
 
 local function ScanAllTrainerRequirements()
     if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine or not ClassTrainerListScrollFrame or not FauxScrollFrame_SetOffset or not ClassTrainerFrame_Update or not C_Timer then
-        print("|cffff5555TrainerSpells:|r Scan nicht möglich, benötigte API fehlt.")
+        TrainerSpells:MSG("|cffff5555TrainerSpells:|r Scan nicht möglich, benötigte API fehlt.")
 
         return
     end
 
     local button = _G["ClassTrainerSkill1"]
     if not button then
-        print("|cffff5555TrainerSpells:|r Scan nicht möglich, Trainer-Button nicht gefunden.")
+        TrainerSpells:MSG("|cffff5555TrainerSpells:|r Scan nicht möglich, Trainer-Button nicht gefunden.")
 
         return
     end
@@ -650,7 +651,7 @@ local function ScanAllTrainerRequirements()
     ExpandAllTrainerHeaders()
     local targetCount = CountRealTrainerServices()
     local maxOffset = GetNumTrainerServices() + 200
-    print(("|cff33ff99TrainerSpells:|r Scan gestartet (%d Einträge, das dauert einen Moment)..."):format(targetCount))
+    TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r Scan gestartet (%d Einträge, das dauert einen Moment)..."):format(targetCount))
     ScanTrainerServicesStep(button, 0, maxOffset, targetCount, {}, 0)
 end
 
@@ -782,14 +783,14 @@ local function CaptureMerchantInner()
     end
 
     if neu > 0 then
-        print(("|cff33ff99TrainerSpells:|r %d neue Pet-Fähigkeit(en) erfasst."):format(neu))
+        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Fähigkeit(en) erfasst."):format(neu))
     end
 end
 
 local function CaptureMerchant()
     local ok, err = pcall(CaptureMerchantInner)
     if not ok then
-        print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+        TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
     end
 end
 
@@ -916,6 +917,7 @@ f:SetScript(
 
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
+            TrainerSpells:SetVersion(133741, "0.1.9")
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             EnsureTrainerUpdateOverrideInstalled()
@@ -930,7 +932,7 @@ f:SetScript(
                     function()
                         local ok, err = pcall(ScanAllTrainerRequirements)
                         if not ok then
-                            print("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
+                            TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
                         end
                     end
                 )

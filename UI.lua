@@ -780,7 +780,7 @@ if SpellBookFrame then
         "OnEnter",
         function(sel)
             GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-            GameTooltip:SetText("TrainerSpells")
+            GameTooltip:SetText(TrainerSpells:Trans("LID_CLASSTRAINER"))
             GameTooltip:Show()
         end
     )

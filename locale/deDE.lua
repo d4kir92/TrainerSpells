@@ -19,3 +19,4 @@ TrainerSpells:AddTrans("deDE", "LID_STOPIGNOREINGALLRANKS", "Alle Ränge nicht m
 TrainerSpells:AddTrans("deDE", "LID_IGNOREALLRANKS", "Alle Ränge ignorieren")
 TrainerSpells:AddTrans("deDE", "LID_CANCEL", "Abbrechen")
 TrainerSpells:AddTrans("deDE", "LID_NOTSCANNEDYET", "NOCH NICHT GESCANNT, BEGLEITER WECHSELN")
+TrainerSpells:AddTrans("deDE", "LID_CLASSTRAINER", "Klassenausbilder")

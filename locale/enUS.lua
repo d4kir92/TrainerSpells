@@ -19,3 +19,4 @@ TrainerSpells:AddTrans("enUS", "LID_STOPIGNOREINGALLRANKS", "Stop ignoring all r
 TrainerSpells:AddTrans("enUS", "LID_IGNOREALLRANKS", "Ignore all ranks")
 TrainerSpells:AddTrans("enUS", "LID_CANCEL", "Cancel")
 TrainerSpells:AddTrans("enUS", "LID_NOTSCANNEDYET", "NOT SCANNED YET, CHANGE PET")
+TrainerSpells:AddTrans("enUS", "LID_CLASSTRAINER", "Classtrainer")
