@@ -1,5 +1,5 @@
 ## Interface: 11508
-## Version: 0.1.9
+## Version: 0.1.10
 ## Title: TrainerSpells |T133741:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: An add-on that shows you what you can learn at a trainer.
 ## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Lehrer anzeigt.

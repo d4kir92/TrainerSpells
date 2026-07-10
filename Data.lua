@@ -489,7 +489,7 @@ local function TrainerSpells_ClassTrainerFrame_Update()
     local showDetails = nil
     for i = 1, numTrainerServices do
         local realIndex = visibleList[i]
-        local serviceName, serviceSubText, serviceType, isExpanded = GetTrainerServiceInfo(realIndex)
+        local serviceName, _, serviceType, isExpanded = GetTrainerServiceInfo(realIndex)
         if serviceName and serviceType == "header" then
             numHeaders = numHeaders + 1
             if not isExpanded then
@@ -917,7 +917,7 @@ f:SetScript(
 
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
-            TrainerSpells:SetVersion(133741, "0.1.9")
+            TrainerSpells:SetVersion(133741, "0.1.10")
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             EnsureTrainerUpdateOverrideInstalled()

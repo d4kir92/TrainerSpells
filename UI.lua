@@ -414,16 +414,17 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
 
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
-        if not EntryMatchesSearch(entry, searchText) then
-        elseif TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name) then
-            table.insert(ignored, entry)
-        else
-            local maxKnown = knownMaxRank[entry.name] or 0
-            local isKnown = entry.directlyKnown or (entry.hasRealRank and entry.rankNum <= maxKnown)
-            if isKnown then
-                table.insert(known, entry)
+        if EntryMatchesSearch(entry, searchText) then
+            if TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name) then
+                table.insert(ignored, entry)
             else
-                table.insert(remaining, entry)
+                local maxKnown = knownMaxRank[entry.name] or 0
+                local isKnown = entry.directlyKnown or (entry.hasRealRank and entry.rankNum <= maxKnown)
+                if isKnown then
+                    table.insert(known, entry)
+                else
+                    table.insert(remaining, entry)
+                end
             end
         end
     end
