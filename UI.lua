@@ -5,9 +5,12 @@ frame:SetPoint("CENTER")
 frame:SetFrameStrata("HIGH")
 frame:SetFrameLevel(500)
 frame:Hide()
+local ROW_SPACING = 0.5
+local HEADER_EXTRA_GAP = 12
 local MIN_ROW_HEIGHT, MAX_ROW_HEIGHT = 10, 32
 local MAX_ICON_SIZE = 32
-local ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.rowHeight) or 22
+local HEADER_HEIGHT = 16
+local ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.rowHeight) or 16
 ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, ROW_HEIGHT))
 local AVAILABLE_COLOR = "|cff30d030"
 local SOON_COLOR = "|cff4db8ff"
@@ -270,8 +273,8 @@ local function InitScrollRow(rowFrame, elementData)
     if elementData.isHeader then
         icon:Hide()
         nameFS:ClearAllPoints()
-        nameFS:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
-        nameFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
+        nameFS:SetPoint("BOTTOMLEFT", rowFrame, "BOTTOMLEFT", 4, 5)
+        nameFS:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", -4, 5)
         nameFS:SetJustifyH("CENTER")
         local collapseIcon = elementData.groupKey and (elementData.collapsed and COLLAPSE_COLLAPSED_ICON or COLLAPSE_EXPANDED_ICON) or ""
         local prefix = elementData.prefixText and (PET_HEADER_COLOR .. "[" .. elementData.prefixText .. "] |r") or ""
@@ -344,7 +347,15 @@ local function InitScrollRow(rowFrame, elementData)
 end
 
 local scrollView = CreateScrollBoxListLinearView()
-scrollView:SetElementExtent(ROW_HEIGHT)
+scrollView:SetElementExtentCalculator(
+    function(index, elementData)
+        if elementData.isHeader then return index > 1 and (HEADER_HEIGHT + HEADER_EXTRA_GAP) or HEADER_HEIGHT end
+
+        return ROW_HEIGHT
+    end
+)
+
+scrollView:SetPadding(0, 0, 0, 0, ROW_SPACING)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
 rowHeightSlider:RegisterCallback(
@@ -357,7 +368,6 @@ rowHeightSlider:RegisterCallback(
             TrainerSpells_Character.rowHeight = ROW_HEIGHT
         end
 
-        scrollView:SetElementExtent(ROW_HEIGHT)
         if TrainerSpells_Refresh then
             TrainerSpells_Refresh()
         end
