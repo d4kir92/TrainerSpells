@@ -10,6 +10,8 @@ if TrainerSpells_Character.showIgnoredInTrainer == nil then
     TrainerSpells_Character.showIgnoredInTrainer = false
 end
 
+TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 22
+
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 TrainerSpells:SetAddonOutput("TrainerSpells", 133741)
@@ -914,6 +916,8 @@ f:SetScript(
             if TrainerSpells_Character.showIgnoredInTrainer == nil then
                 TrainerSpells_Character.showIgnoredInTrainer = false
             end
+
+            TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 22
 
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}

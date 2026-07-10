@@ -5,8 +5,10 @@ frame:SetPoint("CENTER")
 frame:SetFrameStrata("HIGH")
 frame:SetFrameLevel(500)
 frame:Hide()
-local ROW_HEIGHT = 22
-local ICON_SIZE = 20
+local MIN_ROW_HEIGHT, MAX_ROW_HEIGHT = 10, 32
+local MAX_ICON_SIZE = 32
+local ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.rowHeight) or 22
+ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, ROW_HEIGHT))
 local AVAILABLE_COLOR = "|cff30d030"
 local SOON_COLOR = "|cff4db8ff"
 local NOTYET_COLOR = "|cffff4444"
@@ -204,6 +206,29 @@ searchBox:SetScript(
     end
 )
 
+local rowHeightSlider = CreateFrame("Slider", "TrainerSpellsRowHeightSlider", frame, "MinimalSliderWithSteppersTemplate")
+rowHeightSlider:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", -8, -4)
+rowHeightSlider:SetPoint("TOPRIGHT", searchBox, "BOTTOMRIGHT", -24, -14)
+rowHeightSlider:SetScale(0.75)
+rowHeightSlider:SetHeight(10)
+rowHeightSlider:Init(
+    ROW_HEIGHT,
+    MIN_ROW_HEIGHT,
+    MAX_ROW_HEIGHT,
+    MAX_ROW_HEIGHT - MIN_ROW_HEIGHT,
+    {
+        [MinimalSliderWithSteppersMixin.Label.Right] = CreateMinimalSliderFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value) return WHITE_FONT_COLOR:WrapTextInColorCode(tostring(math.floor(value + 0.5))) end)
+    }
+)
+
+if rowHeightSlider.MinText then
+    rowHeightSlider.MinText:Hide()
+end
+
+if rowHeightSlider.MaxText then
+    rowHeightSlider.MaxText:Hide()
+end
+
 local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", frame, "WowScrollBoxList")
 scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -4)
 scrollBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -24, 4)
@@ -214,7 +239,6 @@ scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
 local function InitScrollRow(rowFrame, elementData)
     if not rowFrame.icon then
         local icon = rowFrame:CreateTexture(nil, "ARTWORK")
-        icon:SetSize(ICON_SIZE, ICON_SIZE)
         icon:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
         icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
         rowFrame.icon = icon
@@ -229,6 +253,8 @@ local function InitScrollRow(rowFrame, elementData)
     end
 
     local icon, nameFS, levelFS = rowFrame.icon, rowFrame.nameFS, rowFrame.levelFS
+    local iconSize = math.max(8, math.min(MAX_ICON_SIZE, ROW_HEIGHT - 4))
+    icon:SetSize(iconSize, iconSize)
     rowFrame:EnableMouse(false)
     rowFrame:SetScript("OnEnter", nil)
     rowFrame:SetScript("OnLeave", nil)
@@ -321,6 +347,23 @@ local scrollView = CreateScrollBoxListLinearView()
 scrollView:SetElementExtent(ROW_HEIGHT)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
+rowHeightSlider:RegisterCallback(
+    MinimalSliderWithSteppersMixin.Event.OnValueChanged,
+    function(_, value)
+        value = math.floor(value + 0.5)
+        if value == ROW_HEIGHT then return end
+        ROW_HEIGHT = value
+        if TrainerSpells_Character then
+            TrainerSpells_Character.rowHeight = ROW_HEIGHT
+        end
+
+        scrollView:SetElementExtent(ROW_HEIGHT)
+        if TrainerSpells_Refresh then
+            TrainerSpells_Refresh()
+        end
+    end
+)
+
 local function AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText)
     table.insert(
         items,
