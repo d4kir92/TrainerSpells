@@ -69,19 +69,22 @@ local function GetLevelDiffColorCode(level)
 end
 
 local function GetTalentNameSet()
-    local names = {}
+    local names, learned = {}, {}
     if GetNumTalentTabs and GetNumTalents and GetTalentInfo then
         for tab = 1, GetNumTalentTabs() do
             for i = 1, GetNumTalents(tab) do
-                local talentName = GetTalentInfo(tab, i)
+                local talentName, _, _, _, rank = GetTalentInfo(tab, i)
                 if talentName then
                     names[talentName] = true
+                    if (rank or 0) > 0 then
+                        learned[talentName] = true
+                    end
                 end
             end
         end
     end
 
-    return names
+    return names, learned
 end
 
 local function GetPlayerFaction()
@@ -95,11 +98,11 @@ local function IsReqSpellKnown(spellID)
     return ok and known or false
 end
 
-local function RequiresUnknownTalent(entry, talentNames)
+local function RequiresUnknownTalent(entry, talentNames, learnedTalents)
     if not entry.requires then return false end
     for _, reqSpellID in ipairs(entry.requires) do
         local reqName = GetSpellInfo(reqSpellID)
-        if reqName and talentNames[reqName] and not IsReqSpellKnown(reqSpellID) then return true end
+        if reqName and talentNames[reqName] and not learnedTalents[reqName] and not IsReqSpellKnown(reqSpellID) then return true end
     end
 
     return false
@@ -404,7 +407,11 @@ end
 
 local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck)
     local allEntries, knownMaxRank = BuildEntriesFromData(dataTable)
-    local talentNames = not skipTalentCheck and GetTalentNameSet() or nil
+    local talentNames, learnedTalents
+    if not skipTalentCheck then
+        talentNames, learnedTalents = GetTalentNameSet()
+    end
+
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
         if not EntryMatchesSearch(entry, searchText) then
@@ -423,7 +430,7 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
 
     local available, missingTalents, future = {}, {}, {}
     for _, entry in ipairs(remaining) do
-        local looksTalentGated = talentNames and (talentNames[entry.name] or RequiresUnknownTalent(entry, talentNames))
+        local looksTalentGated = talentNames and ((talentNames[entry.name] and not learnedTalents[entry.name]) or RequiresUnknownTalent(entry, talentNames, learnedTalents))
         if looksTalentGated then
             table.insert(missingTalents, entry)
         elseif entry.level > selectedLevel then
