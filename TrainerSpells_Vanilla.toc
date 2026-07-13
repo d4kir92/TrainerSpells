@@ -1,9 +1,9 @@
 ## Interface: 11508
-## Version: 0.1.11
+## Version: 0.1.12
 ## Title: TrainerSpells |T133741:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
-## Notes: An add-on that shows you what you can learn at a trainer.
-## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Lehrer anzeigt.
-## Notes-ruRU: An add-on that shows you what you can learn at a trainer.
+## Notes: An add-on that shows you what you can learn at a classtrainer.
+## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Klassenlehrer anzeigt.
+## Notes-ruRU: An add-on that shows you what you can learn at a classtrainer.
 ## Author: D4KiR |T132115:16:16:0:0|t
 ## Category: D4KiR |T132115:16:16:0:0|t
 ## X-Category: D4KiR |T132115:16:16:0:0|t

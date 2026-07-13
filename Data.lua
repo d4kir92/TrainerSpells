@@ -919,7 +919,7 @@ f:SetScript(
             TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 16
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
-            TrainerSpells:SetVersion(133741, "0.1.11")
+            TrainerSpells:SetVersion(133741, "0.1.12")
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             EnsureTrainerUpdateOverrideInstalled()
