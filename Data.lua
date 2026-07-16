@@ -1,5 +1,10 @@
 local _, TrainerSpells = ...
-local debug_trainer = false
+local debug_trainer = true
+local function DebugTrainer(fmt, ...)
+    if not debug_trainer then return end
+    TrainerSpells:MSG(("|cff3399ffTrainerSpells Debug:|r " .. fmt):format(...))
+end
+
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
@@ -13,6 +18,7 @@ end
 TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 16
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
+TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
 TrainerSpells:SetAddonOutput("TrainerSpells", 133741)
 local BEAST_TRAINING_SPELL_ID = 5149
 local PET_TRAINER_SKILL_LINE = ""
@@ -22,6 +28,8 @@ if trainingSpellInfo and trainingSpellInfo.name then
 end
 
 local PROFESSION_SKILL_LINES = {}
+local PROFESSION_NAME_TO_KEY = {}
+local PROFESSION_KEY_TO_NAME = {}
 local PROFESSION_SPELLS = {
     ["Alchemy"] = 3101,
     ["Blacksmithing"] = 9785,
@@ -42,7 +50,27 @@ for key, spellID in pairs(PROFESSION_SPELLS) do
     local spellInfo = C_Spell.GetSpellInfo(spellID)
     if spellInfo and spellInfo.name then
         PROFESSION_SKILL_LINES[spellInfo.name] = true
+        PROFESSION_NAME_TO_KEY[spellInfo.name] = key
+        PROFESSION_KEY_TO_NAME[key] = spellInfo.name
     end
+end
+
+function TrainerSpells:GetProfessionName(key)
+    return PROFESSION_KEY_TO_NAME[key]
+end
+
+function TrainerSpells:GetProfessionKey(name)
+    return PROFESSION_NAME_TO_KEY[name]
+end
+
+local function DetectTrainerProfession()
+    if not GetNumTrainerServices or not GetTrainerServiceSkillLine then return nil end
+    for i = 1, GetNumTrainerServices() do
+        local skillLine = GetTrainerServiceSkillLine(i)
+        if skillLine and PROFESSION_SKILL_LINES[skillLine] then return PROFESSION_NAME_TO_KEY[skillLine] or skillLine, skillLine end
+    end
+
+    return nil
 end
 
 local impId = 688
@@ -124,8 +152,24 @@ local function GetSpellIDForService(i)
     scanTooltip:ClearLines()
     scanTooltip:SetTrainerService(i)
     local _, spellID = scanTooltip:GetSpell()
+    if not spellID then
+        local name = GetTrainerServiceInfo(i)
+        if name then
+            local _, _, _, _, _, _, foundSpellID = GetSpellInfo(name)
+            if type(foundSpellID) == "number" and foundSpellID > 0 then
+                spellID = foundSpellID
+            end
+        end
+    end
 
     return spellID
+end
+
+local function GetSkillReqForService(i)
+    if not GetTrainerServiceSkillReq then return 0 end
+    local _, skillReq = GetTrainerServiceSkillReq(i)
+
+    return skillReq or 0
 end
 
 local function IsSaneSpellID(spellID)
@@ -200,8 +244,35 @@ local function EnsurePetTrainerPath(class, level)
     return TrainerSpells_PetTrainerData[class][level]
 end
 
+local function EnsureProfessionPath(profession, skillReq)
+    TrainerSpells_ProfessionData[profession] = TrainerSpells_ProfessionData[profession] or {}
+    TrainerSpells_ProfessionData[profession][skillReq] = TrainerSpells_ProfessionData[profession][skillReq] or {}
+
+    return TrainerSpells_ProfessionData[profession][skillReq]
+end
+
+local function ExpandAllTrainerHeaders()
+    if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine then return end
+    local i = 1
+    while i <= GetNumTrainerServices() do
+        local _, _, category, expanded = GetTrainerServiceInfo(i)
+        if category == "header" and not expanded then
+            ExpandTrainerSkillLine(i)
+        end
+
+        i = i + 1
+    end
+end
+
 local function CaptureTrainerInner()
     local _, classToken = UnitClass("player")
+    local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
+    local professionKey, professionSkillLine
+    if isTradeskill then
+        professionKey, professionSkillLine = DetectTrainerProfession()
+    end
+
+    DebugTrainer("CaptureTrainerInner: npcName=%s npcGUID=%s classToken=%s isTradeskill=%s professionKey=%s professionSkillLine=%s", tostring(UnitName("npc")), tostring(UnitGUID and UnitGUID("npc")), tostring(classToken), tostring(isTradeskill), tostring(professionKey), tostring(professionSkillLine))
     if not classToken then
         TrainerSpells:MSG("UnitClass(\"player\") lieferte keinen Klassen-Token.")
 
@@ -214,54 +285,85 @@ local function CaptureTrainerInner()
         return
     end
 
+    ExpandAllTrainerHeaders()
     local numServices = GetNumTrainerServices()
+    DebugTrainer("CaptureTrainerInner: numServices=%d", numServices)
     local neu = 0
     local neuPet = 0
+    local neuProf = 0
     local rankFound = false
+    local lastDebugSkillLine
     for i = 1, numServices do
-        local _, rankText, sType = GetTrainerServiceInfo(i)
-        local rank = rankText and tonumber(rankText:match("%d+"))
-        if sType ~= "header" and rank ~= nil then
+        local _, _, sType = GetTrainerServiceInfo(i)
+        if sType == "available" or sType == "unavailable" or sType == "used" then
             rankFound = true
             break
         end
     end
 
+    DebugTrainer("CaptureTrainerInner: rankFound=%s", tostring(rankFound))
     if not rankFound then return end
     for i = 1, numServices do
-        local _, rankText, sType = GetTrainerServiceInfo(i)
+        local name, rankText, sType = GetTrainerServiceInfo(i)
         local rank = rankText and tonumber(rankText:match("%d+"))
         local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
         if (rank ~= nil or levelReq ~= nil) and (sType == "available" or sType == "unavailable" or sType == "used") then
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
-            local spellID = GetSpellIDForService(i)
             local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
-            if spellID and not PROFESSION_SKILL_LINES[skillLine] then
-                local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
-                if isPetTraining then
-                    local oldBucket = TrainerSpells_Data[classToken] and TrainerSpells_Data[classToken][levelReq or 0]
-                    if oldBucket then
-                        oldBucket[spellID] = nil
-                    end
-                end
-
-                local bucket = isPetTraining and EnsurePetTrainerPath(classToken, levelReq or 0) or EnsurePath(classToken, levelReq or 0)
-                local existing = bucket[spellID]
+            if name and professionKey then
+                local spellID = GetSpellIDForService(i)
+                local icon = GetTrainerServiceIcon and GetTrainerServiceIcon(i)
+                local skillReq = GetSkillReqForService(i)
+                local bucket = EnsureProfessionPath(professionKey, skillReq)
+                local existing = bucket[name]
                 if existing == nil then
-                    if isPetTraining then
-                        neuPet = neuPet + 1
-                    else
-                        neu = neu + 1
-                    end
+                    neuProf = neuProf + 1
                 end
 
-                bucket[spellID] = {
+                bucket[name] = {
+                    spellID = spellID,
+                    icon = icon,
                     cost = cost,
                     rank = rank,
                     status = sType,
+                    levelReq = (levelReq and levelReq > 0) and levelReq or nil,
                     requires = existing and existing.requires,
                     faction = existing and existing.faction
                 }
+            else
+                local spellID = GetSpellIDForService(i)
+                if spellID then
+                    local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
+                    if skillLine ~= lastDebugSkillLine then
+                        lastDebugSkillLine = skillLine
+                        DebugTrainer("CaptureTrainerInner: skillLine=%s isPetTraining=%s classToken=%s", tostring(skillLine), tostring(isPetTraining), tostring(classToken))
+                    end
+
+                    if isPetTraining then
+                        local oldBucket = TrainerSpells_Data[classToken] and TrainerSpells_Data[classToken][levelReq or 0]
+                        if oldBucket then
+                            oldBucket[spellID] = nil
+                        end
+                    end
+
+                    local bucket = isPetTraining and EnsurePetTrainerPath(classToken, levelReq or 0) or EnsurePath(classToken, levelReq or 0)
+                    local existing = bucket[spellID]
+                    if existing == nil then
+                        if isPetTraining then
+                            neuPet = neuPet + 1
+                        else
+                            neu = neu + 1
+                        end
+                    end
+
+                    bucket[spellID] = {
+                        cost = cost,
+                        rank = rank,
+                        status = sType,
+                        requires = existing and existing.requires,
+                        faction = existing and existing.faction
+                    }
+                end
             end
         end
     end
@@ -272,6 +374,10 @@ local function CaptureTrainerInner()
 
     if neuPet > 0 then
         TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken))
+    end
+
+    if neuProf > 0 then
+        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Rezept(e) für %s erfasst."):format(neuProf, professionSkillLine or "Beruf"))
     end
 end
 
@@ -289,17 +395,38 @@ local function OnTrainerServiceSelectedInner(id)
     local text = fs and fs:GetText()
     local requires = text and ParseRequirementText(text)
     if not requires then return end
-    local spellID = GetSpellIDForService(id)
-    if not spellID then return end
-    local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(id) or 0
-    local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(id)
-    local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
-    local levels = isPetTraining and TrainerSpells_PetTrainerData[classToken] or TrainerSpells_Data[classToken]
-    local bucket = levels and levels[levelReq]
-    if bucket and bucket[spellID] then
-        bucket[spellID].requires = requires
+    local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
+    local professionKey
+    if isTradeskill then
+        professionKey = DetectTrainerProfession()
+    end
+
+    local bucket, key
+    if professionKey then
+        local name = GetTrainerServiceInfo(id)
+        local skillReq = GetSkillReqForService(id)
+        local profession = TrainerSpells_ProfessionData[professionKey]
+        bucket = profession and profession[skillReq]
+        key = name
+    else
+        local spellID = GetSpellIDForService(id)
+        if not spellID then return end
+        local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(id)
+        local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(id) or 0
+        local isPetTraining = skillLine == PET_TRAINER_SKILL_LINE
+        local levels = isPetTraining and TrainerSpells_PetTrainerData[classToken] or TrainerSpells_Data[classToken]
+        bucket = levels and levels[levelReq]
+        key = spellID
+    end
+
+    if bucket and key and bucket[key] then
+        bucket[key].requires = requires
         if TrainerSpells_Refresh then
             TrainerSpells_Refresh()
+        end
+
+        if TrainerSpells_ProfessionRefresh then
+            TrainerSpells_ProfessionRefresh()
         end
     end
 end
@@ -579,18 +706,6 @@ local function EnsureTrainerFilterHookInstalled()
     )
 
     ApplyOwnMenu()
-end
-
-local function ExpandAllTrainerHeaders()
-    local i = 1
-    while i <= GetNumTrainerServices() do
-        local _, _, category, expanded = GetTrainerServiceInfo(i)
-        if category == "header" and not expanded then
-            ExpandTrainerSkillLine(i)
-        end
-
-        i = i + 1
-    end
 end
 
 local function CountRealTrainerServices()
@@ -919,9 +1034,20 @@ f:SetScript(
             TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 16
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
+            TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
             TrainerSpells:SetVersion(133741, "0.1.12")
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
+            do
+                local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
+                local professionKey, professionSkillLine
+                if isTradeskill then
+                    professionKey, professionSkillLine = DetectTrainerProfession()
+                end
+
+                DebugTrainer("Event %s: npcName=%s npcGUID=%s isTradeskill=%s professionKey=%s professionSkillLine=%s", event, tostring(UnitName("npc")), tostring(UnitGUID and UnitGUID("npc")), tostring(isTradeskill), tostring(professionKey), tostring(professionSkillLine))
+            end
+
             EnsureTrainerUpdateOverrideInstalled()
             EnsureTrainerFilterHookInstalled()
             if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then

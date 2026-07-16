@@ -19,6 +19,7 @@ local TALENT_COLOR = "|cffff9933"
 local KNOWN_COLOR = "|cff888888"
 local IGNORED_COLOR = "|cff666666"
 local PET_HEADER_COLOR = "|cffcc66ff"
+local PROFESSION_HEADER_COLOR = "|cffffcc00"
 local SPELL_NAME_COLOR = "|cffffffff"
 local DIM_NAME_COLOR = "|cff999999"
 local RANK_COLOR = "|cffaaaaaa"
@@ -139,7 +140,7 @@ local function SortEntries(list)
         function(a, b)
             if a.level ~= b.level then return a.level < b.level end
 
-            return a.spellID < b.spellID
+            return a.key < b.key
         end
     )
 end
@@ -314,7 +315,12 @@ local function InitScrollRow(rowFrame, elementData)
         local nameColor = elementData.dimName and DIM_NAME_COLOR or SPELL_NAME_COLOR
         nameFS:SetText(nameColor .. entry.name .. "|r" .. rankText)
         if elementData.showLevel then
-            levelFS:SetText(GetLevelDiffColorCode(entry.level) .. "Level " .. entry.level .. "|r")
+            if elementData.levelLabel then
+                local levelPrefix = entry.levelReq and (TrainerSpells:Trans("LID_LVL") .. " " .. entry.levelReq .. " ") or ""
+                levelFS:SetText(RANK_COLOR .. levelPrefix .. elementData.levelLabel .. " " .. entry.level .. "|r")
+            else
+                levelFS:SetText(GetLevelDiffColorCode(entry.level) .. "Level " .. entry.level .. "|r")
+            end
         end
 
         rowFrame:EnableMouse(true)
@@ -322,7 +328,12 @@ local function InitScrollRow(rowFrame, elementData)
             "OnEnter",
             function(self)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-                GameTooltip:SetSpellByID(entry.spellID)
+                if entry.spellID then
+                    GameTooltip:SetSpellByID(entry.spellID)
+                else
+                    GameTooltip:SetText(entry.name)
+                end
+
                 if elementData.showCostTooltip then
                     local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
                     local costColor = canAfford and "|cffffffff" or "|cffff3333"
@@ -389,7 +400,7 @@ local function AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefix
     )
 end
 
-local function AddEntryItems(items, list, colorCode, showLevel, showCostTooltip, dimName)
+local function AddEntryItems(items, list, colorCode, showLevel, showCostTooltip, dimName, levelLabel)
     for _, entry in ipairs(list) do
         table.insert(
             items,
@@ -400,6 +411,7 @@ local function AddEntryItems(items, list, colorCode, showLevel, showCostTooltip,
                 showLevel = showLevel,
                 showCostTooltip = showCostTooltip,
                 dimName = dimName,
+                levelLabel = levelLabel,
             }
         )
     end
@@ -419,24 +431,33 @@ local function BuildEntriesFromData(dataTable)
     local knownMaxRank = {}
     local playerFaction = GetPlayerFaction()
     for lvl, spells in pairs(dataTable) do
-        for spellID, data in pairs(spells) do
-            local cost, rank, status, requires, faction
+        for key, data in pairs(spells) do
+            local cost, rank, status, requires, faction, spellID, icon, levelReq
             if type(data) == "table" then
                 cost, rank, status, requires, faction = data.cost, data.rank, data.status, data.requires, data.faction
+                spellID, icon, levelReq = data.spellID, data.icon, data.levelReq
             else
                 cost = data
             end
 
             if not faction or not playerFaction or faction == playerFaction then
-                local name, _, icon = GetSpellInfo(spellID)
-                name = name or ("SpellID " .. spellID)
+                local name
+                if type(key) == "number" then
+                    spellID = spellID or key
+                    name, _, icon = GetSpellInfo(key)
+                else
+                    name = key
+                end
+
+                name = name or ("SpellID " .. tostring(key))
                 icon = icon or "Interface\\Icons\\INV_Misc_QuestionMark"
                 local hasRealRank = (type(rank) == "number") or (type(rank) == "string" and rank:match("%d+") ~= nil)
                 local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
-                local isLearnedPetSpell = TrainerSpells:IsPetSpellKnown(spellID)
-                local directlyKnown = (IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used"
+                local isLearnedPetSpell = spellID and TrainerSpells:IsPetSpellKnown(spellID)
+                local directlyKnown = (spellID and IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used"
                 local entry = {
                     level = lvl,
+                    key = key,
                     spellID = spellID,
                     cost = cost,
                     name = name,
@@ -445,6 +466,7 @@ local function BuildEntriesFromData(dataTable)
                     hasRealRank = hasRealRank,
                     directlyKnown = directlyKnown,
                     requires = requires,
+                    levelReq = levelReq,
                 }
 
                 table.insert(allEntries, entry)
@@ -528,46 +550,48 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
     }
 end
 
-local function AppendGroupItems(items, groups, keyPrefix, labelPrefix)
+local function AppendGroupItems(items, groups, keyPrefix, labelPrefix, unitLabel)
+    local entryLevelLabel = unitLabel and unitLabel ~= TrainerSpells:Trans("LID_LVL") and unitLabel or nil
+    unitLabel = unitLabel or TrainerSpells:Trans("LID_LVL")
     if #groups.available > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_AVAILABLENOW"), AVAILABLE_COLOR, SumCost(groups.available), keyPrefix .. "available", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "available") then
-            AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, true, false)
+            AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, true, false, entryLevelLabel)
         end
     end
 
     if #groups.soon > 0 then
-        AddHeaderItem(items, ("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), TrainerSpells:Trans("LID_LVL"), groups.nextLevel), SOON_COLOR, SumCost(groups.soon), keyPrefix .. "soon", labelPrefix)
+        AddHeaderItem(items, ("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), unitLabel, groups.nextLevel), SOON_COLOR, SumCost(groups.soon), keyPrefix .. "soon", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "soon") then
-            AddEntryItems(items, groups.soon, SOON_COLOR, true, true, false)
+            AddEntryItems(items, groups.soon, SOON_COLOR, true, true, false, entryLevelLabel)
         end
     end
 
     if #groups.higher > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_NOTYETAVAILABLE"), NOTYET_COLOR, SumCost(groups.higher), keyPrefix .. "higher", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "higher") then
-            AddEntryItems(items, groups.higher, NOTYET_COLOR, true, true, false)
+            AddEntryItems(items, groups.higher, NOTYET_COLOR, true, true, false, entryLevelLabel)
         end
     end
 
     if #groups.missingTalents > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_MISSINGREQUIREDTALENTS"), TALENT_COLOR, SumCost(groups.missingTalents), keyPrefix .. "missingTalents", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "missingTalents") then
-            AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, true, false)
+            AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, true, false, entryLevelLabel)
         end
     end
 
     if #groups.ignored > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_IGNORED"), IGNORED_COLOR, nil, keyPrefix .. "ignored", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "ignored") then
-            AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, true, true)
+            AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, true, true, entryLevelLabel)
         end
     end
 
     if #groups.known > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_ALREADYKNOWN"), KNOWN_COLOR, SumCost(groups.known), keyPrefix .. "known", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "known") then
-            AddEntryItems(items, groups.known, KNOWN_COLOR, true, true, true)
+            AddEntryItems(items, groups.known, KNOWN_COLOR, true, true, true, entryLevelLabel)
         end
     end
 end
@@ -633,6 +657,139 @@ local function AppendPetTrainerAbilities(items, searchText, selectedLevel, class
         end
     end
 end
+
+local function GetCurrentProfessionSkill(professionName)
+    if not GetNumSkillLines or not GetSkillLineInfo or not professionName then return 0 end
+    for i = 1, GetNumSkillLines() do
+        local skillName, isHeader, _, skillRank = GetSkillLineInfo(i)
+        if not isHeader and skillName == professionName then return skillRank or 0 end
+    end
+
+    return 0
+end
+
+local professionFrame = CreateFrame("Frame", "TrainerSpellsProfessionFrame", UIParent, "BackdropTemplate")
+professionFrame:SetFrameStrata("HIGH")
+professionFrame:SetBackdrop(
+    {
+        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        edgeSize = 16,
+        insets = {
+            left = 4,
+            right = 4,
+            top = 4,
+            bottom = 4
+        }
+    }
+)
+
+professionFrame:SetBackdropColor(0, 0, 0, 0.85)
+professionFrame:Hide()
+local professionTitle = professionFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+professionTitle:SetPoint("TOP", professionFrame, "TOP", 0, -8)
+professionTitle:SetText(PROFESSION_HEADER_COLOR .. TrainerSpells:Trans("LID_PROFESSIONS") .. "|r")
+local professionScrollBox = CreateFrame("Frame", "TrainerSpellsProfessionScrollBox", professionFrame, "WowScrollBoxList")
+professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -26)
+professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 8)
+local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionScrollBar", professionFrame, "MinimalScrollBar")
+professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
+professionScrollBar:SetPoint("BOTTOMLEFT", professionScrollBox, "BOTTOMRIGHT", 4, 2)
+local professionScrollView = CreateScrollBoxListLinearView()
+professionScrollView:SetElementExtentCalculator(
+    function(index, elementData)
+        if elementData.isHeader then return index > 1 and (HEADER_HEIGHT + HEADER_EXTRA_GAP) or HEADER_HEIGHT end
+
+        return ROW_HEIGHT
+    end
+)
+
+professionScrollView:SetPadding(0, 0, 0, 0, ROW_SPACING)
+professionScrollView:SetElementInitializer("Frame", InitScrollRow)
+ScrollUtil.InitScrollBoxListWithScrollBar(professionScrollBox, professionScrollBar, professionScrollView)
+local function GetOpenProfession()
+    if not GetTradeSkillLine then return nil, nil end
+    local skillLineName = GetTradeSkillLine()
+    if not skillLineName or skillLineName == "" then return nil, nil end
+
+    return TrainerSpells:GetProfessionKey(skillLineName), skillLineName
+end
+
+function TrainerSpells_ProfessionRefresh()
+    local professionKey, skillLineName = GetOpenProfession()
+    local items = {}
+    local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
+    if data and next(data) then
+        local currentSkill = GetCurrentProfessionSkill(skillLineName)
+        local groups = ClassifyEntries(data, "", currentSkill, true)
+        AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"))
+    end
+
+    if #items == 0 then
+        AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa")
+    end
+
+    professionScrollBox:SetDataProvider(CreateDataProvider(items))
+end
+
+local function PositionProfessionFrame()
+    if not TradeSkillFrame then return end
+    professionFrame:SetScale(TradeSkillFrame:GetScale())
+    professionFrame:ClearAllPoints()
+    professionFrame:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", 4, 0)
+    professionFrame:SetSize(220, TradeSkillFrame:GetHeight())
+end
+
+local tradeSkillHooksInstalled = false
+local function EnsureTradeSkillHooksInstalled()
+    if tradeSkillHooksInstalled then return end
+    if not TradeSkillFrame then return end
+    tradeSkillHooksInstalled = true
+    TradeSkillFrame:HookScript(
+        "OnShow",
+        function()
+            PositionProfessionFrame()
+            professionFrame:Show()
+            TrainerSpells_ProfessionRefresh()
+        end
+    )
+
+    TradeSkillFrame:HookScript(
+        "OnHide",
+        function()
+            professionFrame:Hide()
+        end
+    )
+
+    hooksecurefunc(
+        TradeSkillFrame,
+        "SetScale",
+        function()
+            if professionFrame:IsShown() then
+                PositionProfessionFrame()
+            end
+        end
+    )
+
+    if TradeSkillFrame:IsShown() then
+        PositionProfessionFrame()
+        professionFrame:Show()
+        TrainerSpells_ProfessionRefresh()
+    end
+end
+
+local tradeSkillWatcher = CreateFrame("Frame")
+tradeSkillWatcher:RegisterEvent("TRADE_SKILL_SHOW")
+tradeSkillWatcher:RegisterEvent("TRADE_SKILL_UPDATE")
+tradeSkillWatcher:SetScript(
+    "OnEvent",
+    function(_, event)
+        EnsureTradeSkillHooksInstalled()
+        if event == "TRADE_SKILL_UPDATE" and professionFrame:IsShown() then
+            TrainerSpells_ProfessionRefresh()
+        end
+    end
+)
 
 function TrainerSpells_Refresh()
     local searchText = (TrainerSpells_SearchText or ""):lower()
