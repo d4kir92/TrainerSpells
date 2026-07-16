@@ -211,7 +211,7 @@ searchBox:SetScript(
 )
 
 local rowHeightSlider = CreateFrame("Slider", "TrainerSpellsRowHeightSlider", classFrame, "MinimalSliderWithSteppersTemplate")
-rowHeightSlider:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", -8, -4)
+rowHeightSlider:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", -8, -5)
 rowHeightSlider:SetPoint("TOPRIGHT", searchBox, "BOTTOMRIGHT", -24, -14)
 rowHeightSlider:SetScale(0.75)
 rowHeightSlider:SetHeight(10)
@@ -700,7 +700,7 @@ professionSearchBox:SetScript(
 local PROFESSION_ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.professionRowHeight) or 16
 PROFESSION_ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, PROFESSION_ROW_HEIGHT))
 local professionRowHeightSlider = CreateFrame("Slider", "TrainerSpellsProfessionRowHeightSlider", professionFrame, "MinimalSliderWithSteppersTemplate")
-professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT", -8, -4)
+professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT", -8, -9)
 professionRowHeightSlider:SetPoint("TOPRIGHT", professionSearchBox, "BOTTOMRIGHT", -24, -14)
 professionRowHeightSlider:SetScale(0.75)
 professionRowHeightSlider:SetHeight(10)
@@ -856,6 +856,25 @@ local function PositionTradeSkillTabs()
     professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
 end
 
+local NATIVE_TRADESKILL_WIDGETS = {"TradeSkillSubClassDropdown", "TradeSkillInvSlotDropdown", "TradeSkillRankFrame", "TradeSkillRankFrameBorder"}
+local function HideNativeTradeSkillWidgets()
+    for _, name in ipairs(NATIVE_TRADESKILL_WIDGETS) do
+        local widget = _G[name]
+        if widget then
+            widget:Hide()
+        end
+    end
+end
+
+local function ShowNativeTradeSkillWidgets()
+    for _, name in ipairs(NATIVE_TRADESKILL_WIDGETS) do
+        local widget = _G[name]
+        if widget then
+            widget:Show()
+        end
+    end
+end
+
 local function SetTradeSkillView(showOurs)
     if showOurs then
         if DragonfligthUIEnabled() then
@@ -880,11 +899,13 @@ local function SetTradeSkillView(showOurs)
         professionFrame:Show()
         professionTabGlow:Show()
         nativeTabGlow:Hide()
+        HideNativeTradeSkillWidgets()
         TrainerSpells_ProfessionRefresh()
     else
         professionFrame:Hide()
         professionTabGlow:Hide()
         nativeTabGlow:Show()
+        ShowNativeTradeSkillWidgets()
     end
 end
 
@@ -945,6 +966,7 @@ local function EnsureTradeSkillHooksInstalled()
             nativeTabGlow:Hide()
             nativeTab:Hide()
             professionTab:Hide()
+            ShowNativeTradeSkillWidgets()
         end
     )
 
@@ -976,6 +998,7 @@ tradeSkillWatcher:SetScript(
         EnsureTradeSkillHooksInstalled()
         if event == "TRADE_SKILL_UPDATE" and professionFrame:IsShown() then
             TrainerSpells_ProfessionRefresh()
+            HideNativeTradeSkillWidgets()
         end
     end
 )
