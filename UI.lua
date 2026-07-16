@@ -302,8 +302,6 @@ local function InitScrollRow(rowFrame, elementData)
                 function(self, button)
                     if button == "LeftButton" and elementData.groupKey then
                         ToggleGroup(elementData.groupKey)
-                        -- This row initializer is shared by the spellbook list and the
-                        -- profession panel, so refresh whichever one(s) exist.
                         if TrainerSpells_Refresh then
                             TrainerSpells_Refresh()
                         end
@@ -726,7 +724,7 @@ end
 
 local professionScrollBox = CreateFrame("Frame", "TrainerSpellsProfessionScrollBox", professionFrame, "WowScrollBoxList")
 professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -58)
-professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 11)
+professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
 local professionListBg = professionFrame:CreateTexture(nil, "BACKGROUND")
 local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionScrollBar", professionFrame, "MinimalScrollBar")
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
@@ -1250,3 +1248,19 @@ if SpellBookFrame then
         end
     )
 end
+
+local rowHeightSyncFrame = CreateFrame("Frame")
+rowHeightSyncFrame:RegisterEvent("ADDON_LOADED")
+rowHeightSyncFrame:SetScript(
+    "OnEvent",
+    function(self, event, addonName)
+        if addonName ~= "TrainerSpells" then return end
+        self:UnregisterEvent("ADDON_LOADED")
+        ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.rowHeight) or ROW_HEIGHT
+        ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, ROW_HEIGHT))
+        rowHeightSlider:SetValue(ROW_HEIGHT)
+        PROFESSION_ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.professionRowHeight) or PROFESSION_ROW_HEIGHT
+        PROFESSION_ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, PROFESSION_ROW_HEIGHT))
+        professionRowHeightSlider:SetValue(PROFESSION_ROW_HEIGHT)
+    end
+)
