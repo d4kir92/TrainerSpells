@@ -723,7 +723,7 @@ if professionRowHeightSlider.MaxText then
 end
 
 local professionScrollBox = CreateFrame("Frame", "TrainerSpellsProfessionScrollBox", professionFrame, "WowScrollBoxList")
-professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -58)
+professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
 professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
 local professionListBg = professionFrame:CreateTexture(nil, "BACKGROUND")
 local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionScrollBar", professionFrame, "MinimalScrollBar")
