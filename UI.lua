@@ -1,10 +1,10 @@
 local _, TrainerSpells = ...
-local frame = CreateFrame("Frame", "TrainerSpellsFrame", UIParent)
-frame:SetSize(420, 480)
-frame:SetPoint("CENTER")
-frame:SetFrameStrata("HIGH")
-frame:SetFrameLevel(500)
-frame:Hide()
+local classFrame = CreateFrame("Frame", "TrainerSpellsFrame", UIParent)
+classFrame:SetSize(420, 480)
+classFrame:SetPoint("CENTER")
+classFrame:SetFrameStrata("HIGH")
+classFrame:SetFrameLevel(500)
+classFrame:Hide()
 local ROW_SPACING = 0.5
 local HEADER_EXTRA_GAP = 12
 local MIN_ROW_HEIGHT, MAX_ROW_HEIGHT = 10, 32
@@ -19,7 +19,6 @@ local TALENT_COLOR = "|cffff9933"
 local KNOWN_COLOR = "|cff888888"
 local IGNORED_COLOR = "|cff666666"
 local PET_HEADER_COLOR = "|cffcc66ff"
-local PROFESSION_HEADER_COLOR = "|cffffcc00"
 local SPELL_NAME_COLOR = "|cffffffff"
 local DIM_NAME_COLOR = "|cff999999"
 local RANK_COLOR = "|cffaaaaaa"
@@ -130,6 +129,7 @@ local function EntryMatchesSearch(entry, search)
     if not search or search == "" then return true end
     if entry.name and entry.name:lower():find(search, 1, true) then return true end
     if entry.level and tostring(entry.level):find(search, 1, true) then return true end
+    if entry.levelReq and tostring(entry.levelReq):find(search, 1, true) then return true end
 
     return false
 end
@@ -193,9 +193,9 @@ local function ShowIgnoreMenu(anchor, entry)
     end
 end
 
-local searchBox = CreateFrame("EditBox", "TrainerSpellsSearchBox", frame, "SearchBoxTemplate")
-searchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", -60, -6)
-searchBox:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -10, -6)
+local searchBox = CreateFrame("EditBox", "TrainerSpellsSearchBox", classFrame, "SearchBoxTemplate")
+searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", -60, -6)
+searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -10, -6)
 searchBox:SetHeight(20)
 searchBox:SetAutoFocus(false)
 searchBox:SetScript(
@@ -210,7 +210,7 @@ searchBox:SetScript(
     end
 )
 
-local rowHeightSlider = CreateFrame("Slider", "TrainerSpellsRowHeightSlider", frame, "MinimalSliderWithSteppersTemplate")
+local rowHeightSlider = CreateFrame("Slider", "TrainerSpellsRowHeightSlider", classFrame, "MinimalSliderWithSteppersTemplate")
 rowHeightSlider:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", -8, -4)
 rowHeightSlider:SetPoint("TOPRIGHT", searchBox, "BOTTOMRIGHT", -24, -14)
 rowHeightSlider:SetScale(0.75)
@@ -233,11 +233,11 @@ if rowHeightSlider.MaxText then
     rowHeightSlider.MaxText:Hide()
 end
 
-local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", frame, "WowScrollBoxList")
-scrollBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -4)
-scrollBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -24, 4)
-local listBg = frame:CreateTexture(nil, "BACKGROUND")
-local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", frame, "MinimalScrollBar")
+local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", classFrame, "WowScrollBoxList")
+scrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, -4)
+scrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
+local listBg = classFrame:CreateTexture(nil, "BACKGROUND")
+local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", classFrame, "MinimalScrollBar")
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
 local function InitScrollRow(rowFrame, elementData)
@@ -257,7 +257,7 @@ local function InitScrollRow(rowFrame, elementData)
     end
 
     local icon, nameFS, levelFS = rowFrame.icon, rowFrame.nameFS, rowFrame.levelFS
-    local iconSize = math.max(8, math.min(MAX_ICON_SIZE, ROW_HEIGHT - 4))
+    local iconSize = math.max(8, math.min(MAX_ICON_SIZE, (rowFrame:GetHeight() or ROW_HEIGHT) - 4))
     icon:SetSize(iconSize, iconSize)
     rowFrame:EnableMouse(false)
     rowFrame:SetScript("OnEnter", nil)
@@ -302,7 +302,15 @@ local function InitScrollRow(rowFrame, elementData)
                 function(self, button)
                     if button == "LeftButton" and elementData.groupKey then
                         ToggleGroup(elementData.groupKey)
-                        TrainerSpells_Refresh()
+                        -- This row initializer is shared by the spellbook list and the
+                        -- profession panel, so refresh whichever one(s) exist.
+                        if TrainerSpells_Refresh then
+                            TrainerSpells_Refresh()
+                        end
+
+                        if TrainerSpells_ProfessionRefresh then
+                            TrainerSpells_ProfessionRefresh()
+                        end
                     end
                 end
             )
@@ -668,30 +676,58 @@ local function GetCurrentProfessionSkill(professionName)
     return 0
 end
 
-local professionFrame = CreateFrame("Frame", "TrainerSpellsProfessionFrame", UIParent, "BackdropTemplate")
+local professionFrame = CreateFrame("Frame", "TrainerSpellsProfessionFrame", UIParent)
+professionFrame:SetSize(420, 480)
 professionFrame:SetFrameStrata("HIGH")
-professionFrame:SetBackdrop(
+professionFrame:SetFrameLevel(500)
+professionFrame:EnableMouse(true)
+professionFrame:Hide()
+local professionSearchBox = CreateFrame("EditBox", "TrainerSpellsProfessionSearchBox", professionFrame, "SearchBoxTemplate")
+professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -24)
+professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -8, -24)
+professionSearchBox:SetHeight(20)
+professionSearchBox:SetAutoFocus(false)
+professionSearchBox:SetScript(
+    "OnTextChanged",
+    function(self)
+        if SearchBoxTemplate_OnTextChanged then
+            SearchBoxTemplate_OnTextChanged(self)
+        end
+
+        TrainerSpells_ProfessionSearchText = self:GetText() or ""
+        TrainerSpells_ProfessionRefresh()
+    end
+)
+
+local PROFESSION_ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.professionRowHeight) or 16
+PROFESSION_ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, PROFESSION_ROW_HEIGHT))
+local professionRowHeightSlider = CreateFrame("Slider", "TrainerSpellsProfessionRowHeightSlider", professionFrame, "MinimalSliderWithSteppersTemplate")
+professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT", -8, -4)
+professionRowHeightSlider:SetPoint("TOPRIGHT", professionSearchBox, "BOTTOMRIGHT", -24, -14)
+professionRowHeightSlider:SetScale(0.75)
+professionRowHeightSlider:SetHeight(10)
+professionRowHeightSlider:Init(
+    PROFESSION_ROW_HEIGHT,
+    MIN_ROW_HEIGHT,
+    MAX_ROW_HEIGHT,
+    MAX_ROW_HEIGHT - MIN_ROW_HEIGHT,
     {
-        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-        edgeSize = 16,
-        insets = {
-            left = 4,
-            right = 4,
-            top = 4,
-            bottom = 4
-        }
+        [MinimalSliderWithSteppersMixin.Label.Right] = CreateMinimalSliderFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value) return WHITE_FONT_COLOR:WrapTextInColorCode(tostring(math.floor(value + 0.5))) end)
     }
 )
 
-professionFrame:SetBackdropColor(0, 0, 0, 0.85)
-professionFrame:Hide()
-local professionTitle = professionFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-professionTitle:SetPoint("TOP", professionFrame, "TOP", 0, -8)
-professionTitle:SetText(PROFESSION_HEADER_COLOR .. TrainerSpells:Trans("LID_PROFESSIONS") .. "|r")
+if professionRowHeightSlider.MinText then
+    professionRowHeightSlider.MinText:Hide()
+end
+
+if professionRowHeightSlider.MaxText then
+    professionRowHeightSlider.MaxText:Hide()
+end
+
 local professionScrollBox = CreateFrame("Frame", "TrainerSpellsProfessionScrollBox", professionFrame, "WowScrollBoxList")
-professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -26)
-professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 8)
+professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -58)
+professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 11)
+local professionListBg = professionFrame:CreateTexture(nil, "BACKGROUND")
 local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionScrollBar", professionFrame, "MinimalScrollBar")
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
 professionScrollBar:SetPoint("BOTTOMLEFT", professionScrollBox, "BOTTOMRIGHT", 4, 2)
@@ -700,13 +736,27 @@ professionScrollView:SetElementExtentCalculator(
     function(index, elementData)
         if elementData.isHeader then return index > 1 and (HEADER_HEIGHT + HEADER_EXTRA_GAP) or HEADER_HEIGHT end
 
-        return ROW_HEIGHT
+        return PROFESSION_ROW_HEIGHT
     end
 )
 
 professionScrollView:SetPadding(0, 0, 0, 0, ROW_SPACING)
 professionScrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(professionScrollBox, professionScrollBar, professionScrollView)
+professionRowHeightSlider:RegisterCallback(
+    MinimalSliderWithSteppersMixin.Event.OnValueChanged,
+    function(_, value)
+        value = math.floor(value + 0.5)
+        if value == PROFESSION_ROW_HEIGHT then return end
+        PROFESSION_ROW_HEIGHT = value
+        if TrainerSpells_Character then
+            TrainerSpells_Character.professionRowHeight = PROFESSION_ROW_HEIGHT
+        end
+
+        TrainerSpells_ProfessionRefresh()
+    end
+)
+
 local function GetOpenProfession()
     if not GetTradeSkillLine then return nil, nil end
     local skillLineName = GetTradeSkillLine()
@@ -716,12 +766,13 @@ local function GetOpenProfession()
 end
 
 function TrainerSpells_ProfessionRefresh()
+    local searchText = (TrainerSpells_ProfessionSearchText or ""):lower()
     local professionKey, skillLineName = GetOpenProfession()
     local items = {}
     local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
     if data and next(data) then
         local currentSkill = GetCurrentProfessionSkill(skillLineName)
-        local groups = ClassifyEntries(data, "", currentSkill, true)
+        local groups = ClassifyEntries(data, searchText, currentSkill, true)
         AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"))
     end
 
@@ -733,13 +784,146 @@ function TrainerSpells_ProfessionRefresh()
 end
 
 local function PositionProfessionFrame()
-    if not TradeSkillFrame then return end
-    professionFrame:SetScale(TradeSkillFrame:GetScale())
     professionFrame:ClearAllPoints()
-    professionFrame:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", 4, 0)
-    professionFrame:SetSize(220, TradeSkillFrame:GetHeight())
+    if TradeSkillFrame and TradeSkillFrame:IsShown() then
+        professionFrame:SetScale(TradeSkillFrame:GetScale())
+        if DragonfligthUIEnabled() then
+            professionFrame:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 4, -50)
+            professionFrame:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -4, 4)
+        else
+            professionFrame:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 14, -70)
+            professionFrame:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -36, 70)
+        end
+    else
+        professionFrame:SetScale(1)
+        professionFrame:SetPoint("CENTER")
+    end
+
+    professionSearchBox:ClearAllPoints()
+    local titleText = TradeSkillFrame and _G["TradeSkillFrameTitleText"]
+    if titleText and professionFrame:GetTop() and titleText:GetBottom() then
+        local topOffset = titleText:GetBottom() - professionFrame:GetTop() - 4
+        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 66, topOffset)
+        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -4, topOffset)
+    else
+        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 10, -6)
+        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -30, -6)
+    end
 end
 
+if TradeSkillFrame then
+    hooksecurefunc(
+        TradeSkillFrame,
+        "SetScale",
+        function()
+            if classFrame:IsShown() then
+                PositionProfessionFrame()
+            end
+        end
+    )
+end
+
+local function CreateTradeSkillTab(name, icon)
+    local tab = CreateFrame("Button", name, UIParent)
+    tab:SetSize(32, 32)
+    tab:SetNormalTexture(icon)
+    tab:SetHighlightTexture(130718, "ADD")
+    tab:SetFrameStrata("HIGH")
+    tab:SetFrameLevel(500)
+    tab:Hide()
+    local border = tab:CreateTexture(name .. "Border", "BACKGROUND")
+    border:SetSize(64, 64)
+    border:SetPoint("TOPLEFT", tab, "TOPLEFT", -3, 11)
+    border:SetTexture(136831)
+    local glow = tab:CreateTexture(nil, "OVERLAY")
+    glow:SetSize(32, 32)
+    glow:SetPoint("TOPLEFT", tab, "TOPLEFT", 0, 0)
+    glow:SetTexture(130724)
+    glow:SetBlendMode("ADD")
+    glow:Hide()
+
+    return tab, glow
+end
+
+local nativeTab, nativeTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillNativeTab", "Interface\\Icons\\INV_Hammer_01")
+local professionTab, professionTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillProfessionTab", "Interface\\Icons\\INV_Misc_Book_09")
+local function PositionTradeSkillTabs()
+    if not TradeSkillFrame then return end
+    local scale = TradeSkillFrame:GetScale()
+    nativeTab:SetScale(scale)
+    professionTab:SetScale(scale)
+    nativeTab:ClearAllPoints()
+    nativeTab:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", -33, -60)
+    professionTab:ClearAllPoints()
+    professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+end
+
+local function SetTradeSkillView(showOurs)
+    if showOurs then
+        if DragonfligthUIEnabled() then
+            professionListBg:SetPoint("CENTER", professionFrame, "CENTER", 0, 0)
+            if DragonflightUISpellBookInsetBg then
+                local shortHeight = 30
+                professionListBg:ClearAllPoints()
+                professionListBg:SetPoint("TOPLEFT", DragonflightUISpellBookInsetBg, "TOPLEFT", 0, -shortHeight)
+                professionListBg:SetPoint("BOTTOMRIGHT", DragonflightUISpellBookInsetBg, "BOTTOMRIGHT", 0, 0)
+                professionListBg:SetTexture(DragonflightUISpellBookInsetBg:GetTexture())
+                local fullHeight = DragonflightUISpellBookInsetBg:GetHeight()
+                local cropTop = shortHeight / fullHeight
+                professionListBg:SetTexCoord(0, 1, cropTop, 1)
+                professionListBg:SetVertexColor(0, 0, 0)
+            end
+        else
+            professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -2)
+            professionListBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
+        end
+
+        PositionProfessionFrame()
+        professionFrame:Show()
+        professionTabGlow:Show()
+        nativeTabGlow:Hide()
+        TrainerSpells_ProfessionRefresh()
+    else
+        professionFrame:Hide()
+        professionTabGlow:Hide()
+        nativeTabGlow:Show()
+    end
+end
+
+nativeTab:SetScript(
+    "OnClick",
+    function()
+        SetTradeSkillView(false)
+    end
+)
+
+nativeTab:SetScript(
+    "OnEnter",
+    function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText((GetTradeSkillLine and GetTradeSkillLine()) or TrainerSpells:Trans("LID_PROFESSIONS"))
+        GameTooltip:Show()
+    end
+)
+
+nativeTab:SetScript("OnLeave", GameTooltip_Hide)
+professionTab:SetScript(
+    "OnClick",
+    function()
+        SetTradeSkillView(true)
+    end
+)
+
+professionTab:SetScript(
+    "OnEnter",
+    function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(TrainerSpells:Trans("LID_PROFESSIONS"))
+        GameTooltip:Show()
+    end
+)
+
+professionTab:SetScript("OnLeave", GameTooltip_Hide)
 local tradeSkillHooksInstalled = false
 local function EnsureTradeSkillHooksInstalled()
     if tradeSkillHooksInstalled then return end
@@ -748,9 +932,10 @@ local function EnsureTradeSkillHooksInstalled()
     TradeSkillFrame:HookScript(
         "OnShow",
         function()
-            PositionProfessionFrame()
-            professionFrame:Show()
-            TrainerSpells_ProfessionRefresh()
+            PositionTradeSkillTabs()
+            nativeTab:Show()
+            professionTab:Show()
+            SetTradeSkillView(false)
         end
     )
 
@@ -758,6 +943,10 @@ local function EnsureTradeSkillHooksInstalled()
         "OnHide",
         function()
             professionFrame:Hide()
+            professionTabGlow:Hide()
+            nativeTabGlow:Hide()
+            nativeTab:Hide()
+            professionTab:Hide()
         end
     )
 
@@ -765,6 +954,7 @@ local function EnsureTradeSkillHooksInstalled()
         TradeSkillFrame,
         "SetScale",
         function()
+            PositionTradeSkillTabs()
             if professionFrame:IsShown() then
                 PositionProfessionFrame()
             end
@@ -772,9 +962,10 @@ local function EnsureTradeSkillHooksInstalled()
     )
 
     if TradeSkillFrame:IsShown() then
-        PositionProfessionFrame()
-        professionFrame:Show()
-        TrainerSpells_ProfessionRefresh()
+        PositionTradeSkillTabs()
+        nativeTab:Show()
+        professionTab:Show()
+        SetTradeSkillView(false)
     end
 end
 
@@ -821,7 +1012,7 @@ function TrainerSpells_Refresh()
     scrollBox:SetDataProvider(CreateDataProvider(items))
 end
 
-frame:SetScript(
+classFrame:SetScript(
     "OnShow",
     function()
         if TrainerSpells_SyncPetSpells then
@@ -832,9 +1023,9 @@ frame:SetScript(
     end
 )
 
-frame:RegisterEvent("PLAYER_LEVEL_UP")
-frame:RegisterEvent("SPELLS_CHANGED")
-frame:HookScript(
+classFrame:RegisterEvent("PLAYER_LEVEL_UP")
+classFrame:RegisterEvent("SPELLS_CHANGED")
+classFrame:HookScript(
     "OnEvent",
     function(self, event)
         if event == "PLAYER_LEVEL_UP" or event == "SPELLS_CHANGED" then
@@ -844,30 +1035,30 @@ frame:HookScript(
 )
 
 local function PositionFrame()
-    frame:ClearAllPoints()
+    classFrame:ClearAllPoints()
     if SpellBookFrame and SpellBookFrame:IsShown() then
-        frame:SetScale(SpellBookFrame:GetScale())
+        classFrame:SetScale(SpellBookFrame:GetScale())
         if DragonfligthUIEnabled() then
-            frame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 4, -50)
-            frame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -4, 4)
+            classFrame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 4, -50)
+            classFrame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -4, 4)
         else
-            frame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 14, -70)
-            frame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -36, 78)
+            classFrame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 14, -70)
+            classFrame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -36, 70)
         end
     else
-        frame:SetScale(1)
-        frame:SetPoint("CENTER")
+        classFrame:SetScale(1)
+        classFrame:SetPoint("CENTER")
     end
 
     searchBox:ClearAllPoints()
     local titleText = SpellBookFrame and _G["SpellBookTitleText"]
-    if titleText and frame:GetTop() and titleText:GetBottom() then
-        local topOffset = titleText:GetBottom() - frame:GetTop() - 4
-        searchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 66, topOffset)
-        searchBox:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -4, topOffset)
+    if titleText and classFrame:GetTop() and titleText:GetBottom() then
+        local topOffset = titleText:GetBottom() - classFrame:GetTop() - 4
+        searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 66, topOffset)
+        searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, topOffset)
     else
-        searchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -6)
-        searchBox:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -30, -6)
+        searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 10, -6)
+        searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -30, -6)
     end
 end
 
@@ -876,7 +1067,7 @@ if SpellBookFrame then
         SpellBookFrame,
         "SetScale",
         function()
-            if frame:IsShown() then
+            if classFrame:IsShown() then
                 PositionFrame()
             end
         end
@@ -949,7 +1140,7 @@ end
 
 local function OpenFrame()
     if DragonfligthUIEnabled() then
-        listBg:SetPoint("CENTER", frame, "CENTER", 0, 0)
+        listBg:SetPoint("CENTER", classFrame, "CENTER", 0, 0)
         if DragonflightUISpellBookInsetBg then
             local shortHeight = 30
             listBg:ClearAllPoints()
@@ -962,12 +1153,12 @@ local function OpenFrame()
             listBg:SetVertexColor(0, 0, 0)
         end
     else
-        listBg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, -2)
+        listBg:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -2)
         listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
     end
 
     PositionFrame()
-    frame:Show()
+    classFrame:Show()
     HideNativeSpellButtons()
     HideNativeSkillTabGlows()
     if ourTabGlow then
@@ -1015,7 +1206,7 @@ if SpellBookFrame then
         "OnHide",
         function()
             tab:Hide()
-            frame:Hide()
+            classFrame:Hide()
             ShowNativeSpellButtons()
             if ourTabGlow then
                 ourTabGlow:Hide()
@@ -1024,8 +1215,8 @@ if SpellBookFrame then
     )
 
     local function OnNativeTabClicked()
-        if frame:IsShown() then
-            frame:Hide()
+        if classFrame:IsShown() then
+            classFrame:Hide()
             ShowNativeSpellButtons()
             if ourTabGlow then
                 ourTabGlow:Hide()
