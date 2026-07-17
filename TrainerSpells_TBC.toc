@@ -36,6 +36,19 @@ data\tbc\Warlock.lua
 data\tbc\Druid.lua
 data\tbc\HunterPet.lua
 data\tbc\WarlockPet.lua
+data\tbc\Leatherworking.lua
+data\tbc\Alchemy.lua
+data\tbc\Blacksmithing.lua
+data\tbc\Tailoring.lua
+data\tbc\Engineering.lua
+data\tbc\Enchanting.lua
+data\tbc\Jewelcrafting.lua
+data\tbc\Cooking.lua
+data\tbc\FirstAid.lua
+data\tbc\Herbalism.lua
+data\tbc\Mining.lua
+data\tbc\Skinning.lua
+data\tbc\Fishing.lua
 
 Data.lua
 UI.lua
