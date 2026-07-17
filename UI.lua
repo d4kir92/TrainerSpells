@@ -904,6 +904,9 @@ local function SetTradeSkillView(showOurs)
             professionListBg:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", 4, -2)
             professionListBg:SetColorTexture(0, 0, 0, 1)
             DragonflightUIProfessionRankFrame:Hide()
+        else
+            professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -2)
+            professionListBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
         end
 
         PositionProfessionFrame()
