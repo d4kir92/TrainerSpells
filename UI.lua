@@ -97,8 +97,8 @@ local function GetPlayerFaction()
 end
 
 local function IsReqSpellKnown(spellID)
-    if not IsSpellKnown or type(spellID) ~= "number" then return false end
-    local ok, known = pcall(IsSpellKnown, spellID)
+    if not IsPlayerSpell or type(spellID) ~= "number" then return false end
+    local ok, known = pcall(IsPlayerSpell, spellID)
 
     return ok and known or false
 end
@@ -460,7 +460,7 @@ local function BuildEntriesFromData(dataTable)
                 local hasRealRank = (type(rank) == "number") or (type(rank) == "string" and rank:match("%d+") ~= nil)
                 local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
                 local isLearnedPetSpell = spellID and TrainerSpells:IsPetSpellKnown(spellID)
-                local directlyKnown = (spellID and IsSpellKnown and IsSpellKnown(spellID)) or isLearnedPetSpell or status == "used"
+                local directlyKnown = (spellID and IsPlayerSpell and IsPlayerSpell(spellID)) or isLearnedPetSpell or status == "used"
                 local entry = {
                     level = lvl,
                     key = key,
