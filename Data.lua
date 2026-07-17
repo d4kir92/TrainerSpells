@@ -1,5 +1,5 @@
 local _, TrainerSpells = ...
-local debug_trainer = true
+local debug_trainer = false
 local function DebugTrainer(fmt, ...)
     if not debug_trainer then return end
     TrainerSpells:MSG(("|cff3399ffTrainerSpells Debug:|r " .. fmt):format(...))
@@ -368,16 +368,18 @@ local function CaptureTrainerInner()
         end
     end
 
-    if neu > 0 then
-        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
-    end
+    if debug_trainer then
+        if neu > 0 then
+            TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
+        end
 
-    if neuPet > 0 then
-        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken))
-    end
+        if neuPet > 0 then
+            TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken))
+        end
 
-    if neuProf > 0 then
-        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Rezept(e) für %s erfasst."):format(neuProf, professionSkillLine or "Beruf"))
+        if neuProf > 0 then
+            TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Rezept(e) für %s erfasst."):format(neuProf, professionSkillLine or "Beruf"))
+        end
     end
 end
 

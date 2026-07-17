@@ -37,6 +37,17 @@ data\classicera\Druid.lua
 data\classicera\HunterPet.lua
 data\classicera\WarlockPet.lua
 data\classicera\Leatherworking.lua
+data\classicera\Alchemy.lua
+data\classicera\Blacksmithing.lua
+data\classicera\Tailoring.lua
+data\classicera\Engineering.lua
+data\classicera\Enchanting.lua
+data\classicera\Cooking.lua
+data\classicera\FirstAid.lua
+data\classicera\Herbalism.lua
+data\classicera\Mining.lua
+data\classicera\Skinning.lua
+data\classicera\Fishing.lua
 
 Data.lua
 UI.lua
