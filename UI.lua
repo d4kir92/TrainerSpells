@@ -866,14 +866,16 @@ local function PositionTradeSkillTabs()
         nativeTab:SetPoint("TOPLEFT", DragonflightUIProfessionFrame, "TOPRIGHT", 0, -60)
         professionTab:ClearAllPoints()
         professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
-    elseif TradeSkillFrame then
-        local scale = TradeSkillFrame:GetScale()
-        nativeTab:SetScale(scale)
-        professionTab:SetScale(scale)
-        nativeTab:ClearAllPoints()
-        nativeTab:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", -33, -60)
-        professionTab:ClearAllPoints()
-        professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+    else
+        if TradeSkillFrame then
+            local scale = TradeSkillFrame:GetScale()
+            nativeTab:SetScale(scale)
+            professionTab:SetScale(scale)
+            nativeTab:ClearAllPoints()
+            nativeTab:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", -33, -60)
+            professionTab:ClearAllPoints()
+            professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+        end
     end
 end
 
@@ -903,10 +905,19 @@ local function SetTradeSkillView(showOurs)
             professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -32)
             professionListBg:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", 4, -2)
             professionListBg:SetColorTexture(0, 0, 0, 1)
-            DragonflightUIProfessionRankFrame:Hide()
+            if DragonflightUIProfessionRankFrame then
+                DragonflightUIProfessionRankFrame:Hide()
+            end
         else
             professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -2)
             professionListBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
+            if TradeSkillFrameAvailableFilterCheckButton then
+                TradeSkillFrameAvailableFilterCheckButton:Hide()
+            end
+
+            if TradeSearchInputBox then
+                TradeSearchInputBox:Hide()
+            end
         end
 
         PositionProfessionFrame()
