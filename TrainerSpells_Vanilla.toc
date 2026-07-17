@@ -36,6 +36,7 @@ data\classicera\Warlock.lua
 data\classicera\Druid.lua
 data\classicera\HunterPet.lua
 data\classicera\WarlockPet.lua
+data\classicera\Leatherworking.lua
 
 Data.lua
 UI.lua
