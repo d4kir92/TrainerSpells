@@ -786,8 +786,8 @@ local function PositionProfessionFrame()
     if TradeSkillFrame and TradeSkillFrame:IsShown() then
         professionFrame:SetScale(TradeSkillFrame:GetScale())
         if DragonfligthUIEnabled() then
-            professionFrame:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 4, -50)
-            professionFrame:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -4, 4)
+            professionFrame:SetPoint("TOPLEFT", DragonflightUIProfessionFrame, "TOPLEFT", -4, -24)
+            professionFrame:SetPoint("BOTTOMRIGHT", DragonflightUIProfessionFrame, "BOTTOMRIGHT", -4, 4)
         else
             professionFrame:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 14, -70)
             professionFrame:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -36, 70)
@@ -798,14 +798,25 @@ local function PositionProfessionFrame()
     end
 
     professionSearchBox:ClearAllPoints()
-    local titleText = TradeSkillFrame and _G["TradeSkillFrameTitleText"]
-    if titleText and professionFrame:GetTop() and titleText:GetBottom() then
-        local topOffset = titleText:GetBottom() - professionFrame:GetTop() - 4
-        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 66, topOffset)
-        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -4, topOffset)
+    professionScrollBox:ClearAllPoints()
+    if DragonfligthUIEnabled() then
+        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 80, 0)
+        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, 0)
+        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -64)
+        professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
     else
-        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 10, -6)
-        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -30, -6)
+        local titleText = TradeSkillFrame and _G["TradeSkillFrameTitleText"]
+        if titleText and professionFrame:GetTop() and titleText:GetBottom() then
+            local topOffset = titleText:GetBottom() - professionFrame:GetTop() - 4
+            professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 66, topOffset)
+            professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -4, topOffset)
+        else
+            professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 10, -6)
+            professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -30, -6)
+        end
+
+        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
+        professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
     end
 end
 
@@ -846,14 +857,23 @@ end
 local nativeTab, nativeTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillNativeTab", "Interface\\Icons\\INV_Hammer_01")
 local professionTab, professionTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillProfessionTab", "Interface\\Icons\\INV_Misc_Book_09")
 local function PositionTradeSkillTabs()
-    if not TradeSkillFrame then return end
-    local scale = TradeSkillFrame:GetScale()
-    nativeTab:SetScale(scale)
-    professionTab:SetScale(scale)
-    nativeTab:ClearAllPoints()
-    nativeTab:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", -33, -60)
-    professionTab:ClearAllPoints()
-    professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+    if DragonfligthUIEnabled() and DragonflightUIProfessionFrame then
+        local scale = DragonflightUIProfessionFrame:GetScale()
+        nativeTab:SetScale(scale)
+        professionTab:SetScale(scale)
+        nativeTab:ClearAllPoints()
+        nativeTab:SetPoint("TOPLEFT", DragonflightUIProfessionFrame, "TOPRIGHT", 0, -60)
+        professionTab:ClearAllPoints()
+        professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+    elseif TradeSkillFrame then
+        local scale = TradeSkillFrame:GetScale()
+        nativeTab:SetScale(scale)
+        professionTab:SetScale(scale)
+        nativeTab:ClearAllPoints()
+        nativeTab:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", -33, -60)
+        professionTab:ClearAllPoints()
+        professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+    end
 end
 
 local NATIVE_TRADESKILL_WIDGETS = {"TradeSkillSubClassDropdown", "TradeSkillInvSlotDropdown", "TradeSkillRankFrame", "TradeSkillRankFrameBorder"}
@@ -878,21 +898,11 @@ end
 local function SetTradeSkillView(showOurs)
     if showOurs then
         if DragonfligthUIEnabled() then
-            professionListBg:SetPoint("CENTER", professionFrame, "CENTER", 0, 0)
-            if DragonflightUISpellBookInsetBg then
-                local shortHeight = 30
-                professionListBg:ClearAllPoints()
-                professionListBg:SetPoint("TOPLEFT", DragonflightUISpellBookInsetBg, "TOPLEFT", 0, -shortHeight)
-                professionListBg:SetPoint("BOTTOMRIGHT", DragonflightUISpellBookInsetBg, "BOTTOMRIGHT", 0, 0)
-                professionListBg:SetTexture(DragonflightUISpellBookInsetBg:GetTexture())
-                local fullHeight = DragonflightUISpellBookInsetBg:GetHeight()
-                local cropTop = shortHeight / fullHeight
-                professionListBg:SetTexCoord(0, 1, cropTop, 1)
-                professionListBg:SetVertexColor(0, 0, 0)
-            end
-        else
-            professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -2)
-            professionListBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
+            professionListBg:ClearAllPoints()
+            professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -32)
+            professionListBg:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", 4, -2)
+            professionListBg:SetColorTexture(0, 0, 0, 1)
+            DragonflightUIProfessionRankFrame:Hide()
         end
 
         PositionProfessionFrame()
@@ -987,6 +997,23 @@ local function EnsureTradeSkillHooksInstalled()
         professionTab:Show()
         SetTradeSkillView(false)
     end
+
+    C_Timer.After(
+        4,
+        function()
+            for i = 1, 4 do
+                local t = _G["DragonflightUIProfessionFrameTabButton" .. i]
+                if t then
+                    t:HookScript(
+                        "OnClick",
+                        function()
+                            SetTradeSkillView(false)
+                        end
+                    )
+                end
+            end
+        end
+    )
 end
 
 local tradeSkillWatcher = CreateFrame("Frame")
