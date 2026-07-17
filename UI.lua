@@ -784,11 +784,12 @@ end
 local function PositionProfessionFrame()
     professionFrame:ClearAllPoints()
     if TradeSkillFrame and TradeSkillFrame:IsShown() then
-        professionFrame:SetScale(TradeSkillFrame:GetScale())
-        if DragonfligthUIEnabled() then
+        if DragonfligthUIEnabled() and DragonflightUIProfessionFrame then
+            professionFrame:SetScale(DragonflightUIProfessionFrame:GetScale())
             professionFrame:SetPoint("TOPLEFT", DragonflightUIProfessionFrame, "TOPLEFT", -4, -24)
             professionFrame:SetPoint("BOTTOMRIGHT", DragonflightUIProfessionFrame, "BOTTOMRIGHT", -4, 4)
         else
+            professionFrame:SetScale(TradeSkillFrame:GetScale())
             professionFrame:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 14, -70)
             professionFrame:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -36, 70)
         end
@@ -1011,6 +1012,18 @@ local function EnsureTradeSkillHooksInstalled()
                         end
                     )
                 end
+            end
+
+            if DragonflightUIProfessionFrame then
+                hooksecurefunc(
+                    DragonflightUIProfessionFrame,
+                    "SetScale",
+                    function()
+                        if professionFrame:IsShown() then
+                            PositionProfessionFrame()
+                        end
+                    end
+                )
             end
         end
     )
