@@ -1080,7 +1080,7 @@ f:SetScript(
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
-            TrainerSpells:SetVersion(133741, "0.1.12")
+            TrainerSpells:SetVersion(133741, "0.2.0")
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
             do
