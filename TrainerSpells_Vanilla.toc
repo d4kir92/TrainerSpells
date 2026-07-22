@@ -49,5 +49,13 @@ data\classicera\Mining.lua
 data\classicera\Skinning.lua
 data\classicera\Fishing.lua
 
+data\classicera\LeatherworkingRecipes.lua
+data\classicera\AlchemyRecipes.lua
+data\classicera\BlacksmithingRecipes.lua
+data\classicera\TailoringRecipes.lua
+data\classicera\EngineeringRecipes.lua
+data\classicera\EnchantingRecipes.lua
+data\classicera\CookingRecipes.lua
+
 Data.lua
 UI.lua

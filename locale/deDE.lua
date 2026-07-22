@@ -22,3 +22,5 @@ TrainerSpells:AddTrans("deDE", "LID_NOTSCANNEDYET", "NOCH NICHT GESCANNT, BEGLEI
 TrainerSpells:AddTrans("deDE", "LID_CLASSTRAINER", "Klassenausbilder")
 TrainerSpells:AddTrans("deDE", "LID_PROFESSIONS", "Berufe")
 TrainerSpells:AddTrans("deDE", "LID_SKILL", "Fertigkeit")
+TrainerSpells:AddTrans("deDE", "LID_RECIPES", "Rezepte")
+TrainerSpells:AddTrans("deDE", "LID_SOURCE", "Quelle")

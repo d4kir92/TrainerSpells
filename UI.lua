@@ -347,6 +347,10 @@ local function InitScrollRow(rowFrame, elementData)
                     GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
                 end
 
+                if entry.source then
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. entry.source, 0.9, 0.9, 0.9, true)
+                end
+
                 GameTooltip:Show()
             end
         )
@@ -439,9 +443,11 @@ local function BuildEntriesFromData(dataTable)
     for lvl, spells in pairs(dataTable) do
         for key, data in pairs(spells) do
             local cost, rank, status, requires, faction, spellID, icon, levelReq
+            local source
             if type(data) == "table" then
                 cost, rank, status, requires, faction = data.cost, data.rank, data.status, data.requires, data.faction
                 spellID, icon, levelReq = data.spellID, data.icon, data.levelReq
+                source = data.source
             else
                 cost = data
             end
@@ -473,6 +479,7 @@ local function BuildEntriesFromData(dataTable)
                     directlyKnown = directlyKnown,
                     requires = requires,
                     levelReq = levelReq,
+                    source = source,
                 }
 
                 table.insert(allEntries, entry)
@@ -556,48 +563,49 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
     }
 end
 
-local function AppendGroupItems(items, groups, keyPrefix, labelPrefix, unitLabel)
+local function AppendGroupItems(items, groups, keyPrefix, labelPrefix, unitLabel, showCost)
+    if showCost == nil then showCost = true end
     local entryLevelLabel = unitLabel and unitLabel ~= TrainerSpells:Trans("LID_LVL") and unitLabel or nil
     unitLabel = unitLabel or TrainerSpells:Trans("LID_LVL")
     if #groups.available > 0 then
-        AddHeaderItem(items, TrainerSpells:Trans("LID_AVAILABLENOW"), AVAILABLE_COLOR, SumCost(groups.available), keyPrefix .. "available", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_AVAILABLENOW"), AVAILABLE_COLOR, showCost and SumCost(groups.available) or nil, keyPrefix .. "available", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "available") then
-            AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, true, false, entryLevelLabel)
+            AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, showCost, false, entryLevelLabel)
         end
     end
 
     if #groups.soon > 0 then
-        AddHeaderItem(items, ("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), unitLabel, groups.nextLevel), SOON_COLOR, SumCost(groups.soon), keyPrefix .. "soon", labelPrefix)
+        AddHeaderItem(items, ("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), unitLabel, groups.nextLevel), SOON_COLOR, showCost and SumCost(groups.soon) or nil, keyPrefix .. "soon", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "soon") then
-            AddEntryItems(items, groups.soon, SOON_COLOR, true, true, false, entryLevelLabel)
+            AddEntryItems(items, groups.soon, SOON_COLOR, true, showCost, false, entryLevelLabel)
         end
     end
 
     if #groups.higher > 0 then
-        AddHeaderItem(items, TrainerSpells:Trans("LID_NOTYETAVAILABLE"), NOTYET_COLOR, SumCost(groups.higher), keyPrefix .. "higher", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_NOTYETAVAILABLE"), NOTYET_COLOR, showCost and SumCost(groups.higher) or nil, keyPrefix .. "higher", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "higher") then
-            AddEntryItems(items, groups.higher, NOTYET_COLOR, true, true, false, entryLevelLabel)
+            AddEntryItems(items, groups.higher, NOTYET_COLOR, true, showCost, false, entryLevelLabel)
         end
     end
 
     if #groups.missingTalents > 0 then
-        AddHeaderItem(items, TrainerSpells:Trans("LID_MISSINGREQUIREDTALENTS"), TALENT_COLOR, SumCost(groups.missingTalents), keyPrefix .. "missingTalents", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_MISSINGREQUIREDTALENTS"), TALENT_COLOR, showCost and SumCost(groups.missingTalents) or nil, keyPrefix .. "missingTalents", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "missingTalents") then
-            AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, true, false, entryLevelLabel)
+            AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, showCost, false, entryLevelLabel)
         end
     end
 
     if #groups.ignored > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_IGNORED"), IGNORED_COLOR, nil, keyPrefix .. "ignored", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "ignored") then
-            AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, true, true, entryLevelLabel)
+            AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, showCost, true, entryLevelLabel)
         end
     end
 
     if #groups.known > 0 then
-        AddHeaderItem(items, TrainerSpells:Trans("LID_ALREADYKNOWN"), KNOWN_COLOR, SumCost(groups.known), keyPrefix .. "known", labelPrefix)
+        AddHeaderItem(items, TrainerSpells:Trans("LID_ALREADYKNOWN"), KNOWN_COLOR, showCost and SumCost(groups.known) or nil, keyPrefix .. "known", labelPrefix)
         if not IsGroupCollapsed(keyPrefix .. "known") then
-            AddEntryItems(items, groups.known, KNOWN_COLOR, true, true, true, entryLevelLabel)
+            AddEntryItems(items, groups.known, KNOWN_COLOR, true, showCost, true, entryLevelLabel)
         end
     end
 end
@@ -763,19 +771,36 @@ local function GetOpenProfession()
     return TrainerSpells:GetProfessionKey(skillLineName), skillLineName
 end
 
+local PROFESSION_VIEW_SKILL = "skill"
+local PROFESSION_VIEW_RECIPES = "recipes"
+local professionViewMode = PROFESSION_VIEW_SKILL
+
 function TrainerSpells_ProfessionRefresh()
     local searchText = (TrainerSpells_ProfessionSearchText or ""):lower()
     local professionKey, skillLineName = GetOpenProfession()
     local items = {}
-    local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
-    if data and next(data) then
-        local currentSkill = GetCurrentProfessionSkill(skillLineName)
-        local groups = ClassifyEntries(data, searchText, currentSkill, true)
-        AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"))
-    end
+    if professionViewMode == PROFESSION_VIEW_RECIPES then
+        local data = professionKey and TrainerSpells_RecipeData and TrainerSpells_RecipeData[professionKey]
+        if data and next(data) then
+            local currentSkill = GetCurrentProfessionSkill(skillLineName)
+            local groups = ClassifyEntries(data, searchText, currentSkill, true)
+            AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_RECIPES"), false)
+        end
 
-    if #items == 0 then
-        AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa")
+        if #items == 0 then
+            AddHeaderItem(items, skillLineName and ("Keine Rezept-Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa")
+        end
+    else
+        local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
+        if data and next(data) then
+            local currentSkill = GetCurrentProfessionSkill(skillLineName)
+            local groups = ClassifyEntries(data, searchText, currentSkill, true)
+            AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"))
+        end
+
+        if #items == 0 then
+            AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa")
+        end
     end
 
     professionScrollBox:SetDataProvider(CreateDataProvider(items))
@@ -857,24 +882,31 @@ end
 
 local nativeTab, nativeTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillNativeTab", "Interface\\Icons\\INV_Hammer_01")
 local professionTab, professionTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillProfessionTab", "Interface\\Icons\\INV_Misc_Book_09")
+local recipeTab, recipeTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillRecipeTab", "Interface\\Icons\\INV_Scroll_03")
 local function PositionTradeSkillTabs()
     if DragonfligthUIEnabled() and DragonflightUIProfessionFrame then
         local scale = DragonflightUIProfessionFrame:GetScale()
         nativeTab:SetScale(scale)
         professionTab:SetScale(scale)
+        recipeTab:SetScale(scale)
         nativeTab:ClearAllPoints()
         nativeTab:SetPoint("TOPLEFT", DragonflightUIProfessionFrame, "TOPRIGHT", 0, -60)
         professionTab:ClearAllPoints()
         professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+        recipeTab:ClearAllPoints()
+        recipeTab:SetPoint("TOPLEFT", professionTab, "BOTTOMLEFT", 0, -36)
     else
         if TradeSkillFrame then
             local scale = TradeSkillFrame:GetScale()
             nativeTab:SetScale(scale)
             professionTab:SetScale(scale)
+            recipeTab:SetScale(scale)
             nativeTab:ClearAllPoints()
             nativeTab:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", -33, -60)
             professionTab:ClearAllPoints()
             professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
+            recipeTab:ClearAllPoints()
+            recipeTab:SetPoint("TOPLEFT", professionTab, "BOTTOMLEFT", 0, -36)
         end
     end
 end
@@ -898,8 +930,9 @@ local function ShowNativeTradeSkillWidgets()
     end
 end
 
-local function SetTradeSkillView(showOurs)
-    if showOurs then
+local function SetTradeSkillView(mode)
+    if mode == PROFESSION_VIEW_SKILL or mode == PROFESSION_VIEW_RECIPES then
+        professionViewMode = mode
         if DragonfligthUIEnabled() then
             professionListBg:ClearAllPoints()
             professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -32)
@@ -922,13 +955,21 @@ local function SetTradeSkillView(showOurs)
 
         PositionProfessionFrame()
         professionFrame:Show()
-        professionTabGlow:Show()
         nativeTabGlow:Hide()
+        if mode == PROFESSION_VIEW_RECIPES then
+            recipeTabGlow:Show()
+            professionTabGlow:Hide()
+        else
+            professionTabGlow:Show()
+            recipeTabGlow:Hide()
+        end
+
         HideNativeTradeSkillWidgets()
         TrainerSpells_ProfessionRefresh()
     else
         professionFrame:Hide()
         professionTabGlow:Hide()
+        recipeTabGlow:Hide()
         nativeTabGlow:Show()
         ShowNativeTradeSkillWidgets()
     end
@@ -937,7 +978,7 @@ end
 nativeTab:SetScript(
     "OnClick",
     function()
-        SetTradeSkillView(false)
+        SetTradeSkillView("native")
     end
 )
 
@@ -954,7 +995,7 @@ nativeTab:SetScript("OnLeave", GameTooltip_Hide)
 professionTab:SetScript(
     "OnClick",
     function()
-        SetTradeSkillView(true)
+        SetTradeSkillView(PROFESSION_VIEW_SKILL)
     end
 )
 
@@ -962,12 +1003,29 @@ professionTab:SetScript(
     "OnEnter",
     function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(TrainerSpells:Trans("LID_PROFESSIONS"))
+        GameTooltip:SetText(TrainerSpells:Trans("LID_SKILL"))
         GameTooltip:Show()
     end
 )
 
 professionTab:SetScript("OnLeave", GameTooltip_Hide)
+recipeTab:SetScript(
+    "OnClick",
+    function()
+        SetTradeSkillView(PROFESSION_VIEW_RECIPES)
+    end
+)
+
+recipeTab:SetScript(
+    "OnEnter",
+    function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(TrainerSpells:Trans("LID_RECIPES"))
+        GameTooltip:Show()
+    end
+)
+
+recipeTab:SetScript("OnLeave", GameTooltip_Hide)
 local tradeSkillHooksInstalled = false
 local function EnsureTradeSkillHooksInstalled()
     if tradeSkillHooksInstalled then return end
@@ -979,7 +1037,8 @@ local function EnsureTradeSkillHooksInstalled()
             PositionTradeSkillTabs()
             nativeTab:Show()
             professionTab:Show()
-            SetTradeSkillView(false)
+            recipeTab:Show()
+            SetTradeSkillView("native")
         end
     )
 
@@ -988,9 +1047,11 @@ local function EnsureTradeSkillHooksInstalled()
         function()
             professionFrame:Hide()
             professionTabGlow:Hide()
+            recipeTabGlow:Hide()
             nativeTabGlow:Hide()
             nativeTab:Hide()
             professionTab:Hide()
+            recipeTab:Hide()
             ShowNativeTradeSkillWidgets()
         end
     )
@@ -1010,7 +1071,8 @@ local function EnsureTradeSkillHooksInstalled()
         PositionTradeSkillTabs()
         nativeTab:Show()
         professionTab:Show()
-        SetTradeSkillView(false)
+        recipeTab:Show()
+        SetTradeSkillView("native")
     end
 
     C_Timer.After(
@@ -1022,7 +1084,7 @@ local function EnsureTradeSkillHooksInstalled()
                     t:HookScript(
                         "OnClick",
                         function()
-                            SetTradeSkillView(false)
+                            SetTradeSkillView("native")
                         end
                     )
                 end

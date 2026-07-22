@@ -19,6 +19,7 @@ TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 16
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
+TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
 TrainerSpells:SetAddonOutput("TrainerSpells", 133741)
 local BEAST_TRAINING_SPELL_ID = 5149
 local PET_TRAINER_SKILL_LINE = ""
@@ -249,6 +250,13 @@ local function EnsureProfessionPath(profession, skillReq)
     TrainerSpells_ProfessionData[profession][skillReq] = TrainerSpells_ProfessionData[profession][skillReq] or {}
 
     return TrainerSpells_ProfessionData[profession][skillReq]
+end
+
+local function EnsureRecipePath(profession, skillReq)
+    TrainerSpells_RecipeData[profession] = TrainerSpells_RecipeData[profession] or {}
+    TrainerSpells_RecipeData[profession][skillReq] = TrainerSpells_RecipeData[profession][skillReq] or {}
+
+    return TrainerSpells_RecipeData[profession][skillReq]
 end
 
 local function ExpandAllTrainerHeaders()
@@ -896,6 +904,49 @@ local function MergeBuiltinData()
             end
         end
     end
+
+    if TrainerSpellsBuiltin_ProfessionRecipe then
+        for profession, skillLevels in pairs(TrainerSpellsBuiltin_ProfessionRecipe) do
+            for skillReq, recipes in pairs(skillLevels) do
+                local bucket = EnsureRecipePath(profession, skillReq)
+                for spellID, data in pairs(recipes) do
+                    local spellInfo = C_Spell.GetSpellInfo(spellID)
+                    local name = spellInfo and spellInfo.name
+                    if name then
+                        if bucket[name] == nil then
+                            bucket[name] = {
+                                spellID = spellID,
+                                icon = data.icon,
+                                requires = data.requires,
+                                faction = data.faction,
+                                source = data.source
+                            }
+                        else
+                            if bucket[name].spellID == nil then
+                                bucket[name].spellID = spellID
+                            end
+
+                            if data.icon and bucket[name].icon == nil then
+                                bucket[name].icon = data.icon
+                            end
+
+                            if data.requires and bucket[name].requires == nil then
+                                bucket[name].requires = data.requires
+                            end
+
+                            if data.faction and bucket[name].faction == nil then
+                                bucket[name].faction = data.faction
+                            end
+
+                            if data.source and bucket[name].source == nil then
+                                bucket[name].source = data.source
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
 end
 
 local function DetectPetFromTooltip(tooltip)
@@ -1080,6 +1131,7 @@ f:SetScript(
             TrainerSpells_PetData = TrainerSpells_PetData or {}
             TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
             TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
+            TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
             TrainerSpells:SetVersion(133741, "0.2.0")
             MergeBuiltinData()
         elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
