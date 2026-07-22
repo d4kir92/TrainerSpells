@@ -340,7 +340,7 @@ local function InitScrollRow(rowFrame, elementData)
                     GameTooltip:SetText(entry.name)
                 end
 
-                if elementData.showCostTooltip then
+                if elementData.showCostTooltip and entry.cost ~= nil then
                     local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
                     local costColor = canAfford and "|cffffffff" or "|cffff3333"
                     GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
@@ -462,6 +462,11 @@ local function BuildEntriesFromData(dataTable)
                 end
 
                 name = name or ("SpellID " .. tostring(key))
+                if not icon and spellID then
+                    local _, _, resolvedIcon = GetSpellInfo(spellID)
+                    icon = resolvedIcon
+                end
+
                 icon = icon or "Interface\\Icons\\INV_Misc_QuestionMark"
                 local hasRealRank = (type(rank) == "number") or (type(rank) == "string" and rank:match("%d+") ~= nil)
                 local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
@@ -784,7 +789,7 @@ function TrainerSpells_ProfessionRefresh()
         if data and next(data) then
             local currentSkill = GetCurrentProfessionSkill(skillLineName)
             local groups = ClassifyEntries(data, searchText, currentSkill, true)
-            AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_RECIPES"), false)
+            AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_SKILL"))
         end
 
         if #items == 0 then

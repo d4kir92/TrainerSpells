@@ -2,100 +2,100 @@ TrainerSpellsBuiltin_ProfessionRecipe = TrainerSpellsBuiltin_ProfessionRecipe or
 TrainerSpellsBuiltin_ProfessionRecipe.Tailoring = TrainerSpellsBuiltin_ProfessionRecipe.Tailoring or {
     [245] = {
         [12086] = {
-            source = "Questbelohnung: The Undermarket",
+            source = "Quest reward: \"The Undermarket\"",
         },
     },
     [250] = {
         [18560] = {
-            source = "Verkauft von Qia (Winterquell, benötigt Ruf Timbermaw Hold)",
+            source = "Sold by Qia (Winterspring, Timbermaw Hold rep)",
         },
     },
     [260] = {
         [18405] = {
-            source = "Verkauft von Qia (Winterquell, benötigt Ruf Timbermaw Hold)",
+            source = "Sold by Qia (Winterspring, Timbermaw Hold rep)",
         },
     },
     [265] = {
         [18410] = {
-            source = "Fällt von Lingering Highborne (Azshara)",
+            source = "Dropped by Lingering Highborne (Azshara)",
         },
     },
     [275] = {
         [18416] = {
-            source = "Fällt von Unseen Servant (Östliche Pestländer)",
+            source = "Dropped by Unseen Servant (Eastern Plaguelands)",
         },
         [18418] = {
-            source = "Fällt von Thaurissan Firewalker (Brennende Steppe)",
+            source = "Dropped by Thaurissan Firewalker (Burning Steppes)",
         },
         [18419] = {
-            source = "Verkauft von Lorelae Wintersong (Mondhain, benötigt Ruf Timbermaw Hold)",
+            source = "Sold by Lorelae Wintersong (Moonglade, Timbermaw Hold rep)",
         },
         [18422] = {
-            source = "Fällt von Overmaster Pyron (seltener Gegner)",
+            source = "Dropped by Overmaster Pyron (rare mob)",
         },
         [27724] = {
-            source = "Verkauft von Mishta (Silithus, benötigt Ruf Cenarion Circle)",
+            source = "Sold by Mishta (Silithus, Cenarion Circle rep)",
         },
     },
     [285] = {
         [18436] = {
-            source = "Fällt von Cobalt Mageweaver (Winterquell)",
+            source = "Dropped by Cobalt Mageweaver (Winterspring)",
         },
     },
     [300] = {
         [18450] = {
-            source = "Fällt von Dark Caster (Östliche Pestländer)",
+            source = "Dropped by Dark Caster (Eastern Plaguelands)",
         },
         [18457] = {
-            source = "Fällt von Firebrand Pyromancer (Obere Schwarzfelsspitze)",
+            source = "Dropped by Firebrand Pyromancer (Upper Blackrock Spire)",
         },
         [18458] = {
-            source = "Fällt von Darkmaster Gandling (Scholomance)",
+            source = "Dropped by Darkmaster Gandling (Scholomance)",
         },
         [20848] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [22866] = {
-            source = "Gefunden in Knot Thimblejacks Truhe (Düsterbruch)",
+            source = "Found in Knot Thimblejack's Cache (Dire Maul chest)",
         },
         [22867] = {
-            source = "Gefunden in Knot Thimblejacks Truhe (Düsterbruch)",
+            source = "Found in Knot Thimblejack's Cache (Dire Maul chest)",
         },
         [22868] = {
-            source = "Gefunden in Knot Thimblejacks Truhe (Düsterbruch)",
+            source = "Found in Knot Thimblejack's Cache (Dire Maul chest)",
         },
         [22869] = {
-            source = "Gefunden in Knot Thimblejacks Truhe (Düsterbruch)",
+            source = "Found in Knot Thimblejack's Cache (Dire Maul chest)",
         },
         [22902] = {
-            source = "Verkauft von Shen'dralar Provisioner (Düsterbruch, benötigt Ruf Shen'dralar)",
+            source = "Sold by Shen'dralar Provisioner (Dire Maul, Shen'dralar rep)",
         },
         [23666] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [23667] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [24091] = {
-            source = "Verkauft von Rin'wosho the Trader (Schlingendorntal, benötigt Ruf Zandalar Tribe)",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, Zandalar Tribe rep)",
         },
         [27660] = {
-            source = "Fällt von Magister Kalendris (Düsterbruch)",
+            source = "Dropped by Magister Kalendris (Dire Maul)",
         },
         [27725] = {
-            source = "Verkauft von Mishta (Silithus, benötigt Ruf Cenarion Circle)",
+            source = "Sold by Mishta (Silithus, Cenarion Circle rep)",
         },
         [28210] = {
-            source = "Verkauft von Mishta (Silithus, benötigt Ruf Cenarion Circle)",
+            source = "Sold by Mishta (Silithus, Cenarion Circle rep)",
         },
         [28480] = {
-            source = "Verkauft von Mishta (Silithus, benötigt Ruf Cenarion Circle)",
+            source = "Sold by Mishta (Silithus, Cenarion Circle rep)",
         },
         [28481] = {
-            source = "Verkauft von Mishta (Silithus, benötigt Ruf Cenarion Circle)",
+            source = "Sold by Mishta (Silithus, Cenarion Circle rep)",
         },
         [28482] = {
-            source = "Verkauft von Mishta (Silithus, benötigt Ruf Cenarion Circle)",
+            source = "Sold by Mishta (Silithus, Cenarion Circle rep)",
         },
     },
 }

@@ -2,12 +2,12 @@ TrainerSpellsBuiltin_ProfessionRecipe = TrainerSpellsBuiltin_ProfessionRecipe or
 TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing or {
     [155] = {
         [3494] = {
-            source = "Verkauft von Jazzrik (Badlands), Muuran (Desolace), Jannos Ironwill (Arathi-Hochland)",
+            source = "Sold by Jazzrik (Badlands), Muuran (Desolace), Jannos Ironwill (Arathi Highlands)",
         },
     },
     [160] = {
         [3492] = {
-            source = "Verkauft von Kaita Deepforge (Sturmwind), Sumi (Orgrimmar), Jutak (Beutebucht)",
+            source = "Sold by Kaita Deepforge (Stormwind), Sumi (Orgrimmar), Jutak (Booty Bay)",
         },
         [9813] = {
             source = "Quest: Barbaric Battlements",
@@ -20,68 +20,68 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
     },
     [180] = {
         [3496] = {
-            source = "Verkauft von Zarena Cromwind (Beutebucht)",
+            source = "Sold by Zarena Cromwind (Booty Bay)",
         },
     },
     [185] = {
         [3498] = {
-            source = "Verkauft von Vharr, Jaquilina Dramet (Schlingendorntal)",
+            source = "Sold by Vharr, Jaquilina Dramet (Stranglethorn Vale)",
         },
     },
     [190] = {
         [439126] = {
-            source = "Verkauft von Krinkle Goodsteel (Tanaris)",
+            source = "Sold by Krinkle Goodsteel (Tanaris)",
         },
         [21913] = {
-            source = "Weihnachts-Feiertagsevent (Smokywood Pastures-Geschenk)",
+            source = "Feast of Winter Veil seasonal quest reward (Smokywood Pastures gift)",
         },
     },
     [215] = {
         [9937] = {
-            source = "Verkauft von Harggan (Hinterlands), Gharash (Sumpfland)",
+            source = "Sold by Harggan (Hinterlands), Gharash (Swamp of Sorrows)",
         },
     },
     [255] = {
         [10013] = {
-            source = "Verkauft von Magnus Frostwake (Scholomance, seelengebunden)",
+            source = "Sold by Magnus Frostwake (Scholomance, BoP)",
         },
     },
     [280] = {
         [16971] = {
-            source = "Verkauft von Magnus Frostwake (Scholomance, seelengebunden)",
+            source = "Sold by Magnus Frostwake (Scholomance, BoP)",
         },
     },
     [285] = {
         [15296] = {
-            source = "Fällt von Ribbly Screwspigot (Schwarzfelstiefen, ~10%); benötigt Spezialisierung Rüstungsschmied",
+            source = "Dropped by Ribbly Screwspigot (Blackrock Depths, ~10%); requires Armorsmith",
         },
     },
     [290] = {
         [23632] = {
-            source = "Benötigt Ruf Argent Dawn: Ehrenhaft",
+            source = "Argent Dawn - Honored",
         },
     },
     [300] = {
         [21161] = {
-            source = "Quest: A Binding Contract (Schwarzfelstiefen)",
+            source = "Quest: A Binding Contract (Blackrock Depths)",
         },
         [23629] = {
-            source = "Benötigt Ruf Timbermaw Hold: Ehrwürdig",
+            source = "Timbermaw Hold - Revered",
         },
         [23636] = {
-            source = "Benötigt Ruf Thorium Brotherhood: Ehrenhaft; benötigt Spezialisierung Rüstungsschmied",
+            source = "Thorium Brotherhood - Honored; requires Armorsmith",
         },
         [23638] = {
-            source = "Benötigt Ruf Thorium Brotherhood: Ehrwürdig; benötigt Spezialisierung Waffenschmied",
+            source = "Thorium Brotherhood - Revered; requires Weaponsmith",
         },
         [24136] = {
-            source = "Benötigt Ruf Zandalar Tribe: Ehrwürdig",
+            source = "Zandalar Tribe - Revered",
         },
         [24399] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood: Erhaben); benötigt Spezialisierung Rüstungsschmied",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood - Exalted); requires Armorsmith",
         },
         [27586] = {
-            source = "Benötigt Ruf Cenarion Circle: Ehrwürdig (Lt. General Andorov, Ahn'Qiraj-Ruinen, nach Rajaxx)",
+            source = "Cenarion Circle - Revered (Lt. General Andorov, Ruins of Ahn'Qiraj, post-Rajaxx)",
         },
     },
 }

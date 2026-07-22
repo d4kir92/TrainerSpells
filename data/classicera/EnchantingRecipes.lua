@@ -2,113 +2,113 @@ TrainerSpellsBuiltin_ProfessionRecipe = TrainerSpellsBuiltin_ProfessionRecipe or
 TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_ProfessionRecipe.Enchanting or {
     [175] = {
         [13653] = {
-            source = "Zufälliger Weltdrop (viele Gegner)",
+            source = "Random world drop (BoE, many mobs)",
         },
     },
     [215] = {
         [13841] = {
-            source = "Fällt von Venture Co. Strip Miner (Schlingendorntal)",
+            source = "Dropped by Venture Co. Strip Miner (Stranglethorn Vale)",
         },
     },
     [225] = {
         [13882] = {
-            source = "Fällt von Syndicate-/Wastewander-Schurken (Alterac-Gebirge, Tanaris)",
+            source = "Dropped by Syndicate/Wastewander rogues (Alterac Mountains, Tanaris)",
         },
     },
     [230] = {
         [13915] = {
-            source = "Zufälliger Weltdrop (sehr häufig, viele humanoide Gegner)",
+            source = "Random world drop (BoE, very common, many humanoid mobs)",
         },
     },
     [250] = {
         [13947] = {
-            source = "Zufälliger Weltdrop (viele Gegner)",
+            source = "Random world drop (BoE, many mobs)",
         },
     },
     [265] = {
         [13898] = {
-            source = "Fällt von Pyromancer Loregrain (Schwarzfelstiefen)",
+            source = "Dropped by Pyromancer Loregrain (Blackrock Depths)",
         },
         [15596] = {
-            source = "Fällt von Lord Roccor (Schwarzfelstiefen)",
+            source = "Dropped by Lord Roccor (Blackrock Depths)",
         },
         [20015] = {
-            source = "Verkauft von Lorelae Wintersong (Mondhain, benötigt Ruf Timbermaw Hold)",
+            source = "Sold by Lorelae Wintersong (Moonglade, Timbermaw Hold rep)",
         },
         [20017] = {
-            source = "Verkauft von Mythrin'dir (Darnassus) / Daniel Bartlett (Unterstadt)",
+            source = "Sold by Mythrin'dir (Darnassus) / Daniel Bartlett (Undercity)",
         },
     },
     [270] = {
         [20009] = {
-            source = "Zufälliger Weltdrop (viele Gegner)",
+            source = "Random world drop (BoE, many mobs)",
         },
         [20012] = {
-            source = "Fällt von Legashi Rogue (Azshara)",
+            source = "Dropped by Legashi Rogue (Azshara)",
         },
     },
     [280] = {
         [20016] = {
-            source = "Fällt von Scarlet Warder (selten, Östliche Pestländer)",
+            source = "Dropped by Scarlet Warder (rare, Eastern Plaguelands)",
         },
     },
     [285] = {
         [20010] = {
-            source = "Fällt von Deadwind Warlock (Deadwind Pass)",
+            source = "Dropped by Deadwind Warlock (Deadwind Pass)",
         },
         [20029] = {
-            source = "Fällt von Anguished Highborne (Winterquell)",
+            source = "Dropped by Anguished Highborne (Winterspring)",
         },
     },
     [290] = {
         [20028] = {
-            source = "Fällt von Scarlet Enchanter (selten, Östliche Pestländer)",
+            source = "Dropped by Scarlet Enchanter (rare, Eastern Plaguelands)",
         },
         [20051] = {
-            source = "Verkauft von Lorelae Wintersong (Mondhain, benötigt Ruf Timbermaw Hold)",
+            source = "Sold by Lorelae Wintersong (Moonglade, Timbermaw Hold rep)",
         },
         [23799] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
     },
     [295] = {
         [20013] = {
-            source = "Fällt von Spirestone Mystic (Schwarzfelsspitze)",
+            source = "Dropped by Spirestone Mystic (Blackrock Spire)",
         },
         [20030] = {
-            source = "Fällt von Blackhand Elite (Schwarzfelsspitze)",
+            source = "Dropped by Blackhand Elite (Blackrock Spire)",
         },
         [20033] = {
-            source = "Fällt von Untoten in Stratholme (Thuzadin Shadowcaster u.a.)",
+            source = "Dropped by Scourge in Stratholme (Thuzadin Shadowcaster, etc.)",
         },
     },
     [300] = {
         [20025] = {
-            source = "Weit verbreiteter, seltener Fund (Darkmaster Gandling, Onyxia, Nefarian, AQ/Naxxramas-Bosse u.a.)",
+            source = "Widespread rare BoE drop (Darkmaster Gandling, Onyxia, Nefarian, AQ/Naxx bosses, etc.)",
         },
         [20034] = {
-            source = "Fällt von Scarlet Spellbinder (Weltgegner, Westliche Pestländer)",
+            source = "Dropped by Scarlet Spellbinder (world mob, Western Plaguelands)",
         },
         [20035] = {
-            source = "Fällt von Scholomance Adept (Scholomance)",
+            source = "Dropped by Scholomance Adept (Scholomance)",
         },
         [20036] = {
-            source = "Fällt von Crimson Sorcerer (Stratholme)",
+            source = "Dropped by Crimson Sorcerer (Stratholme)",
         },
         [22749] = {
-            source = "Fällt von Bossen in Molten Core und den Smaragdgrünen Drachen (seelengebunden)",
+            source = "Drops from Molten Core bosses and the Emerald Dragons (BoE)",
         },
         [22750] = {
-            source = "Fällt von Bossen in Molten Core und den Smaragdgrünen Drachen (seelengebunden)",
+            source = "Drops from Molten Core bosses and the Emerald Dragons (BoE)",
         },
         [23803] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [23804] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [25082] = {
-            source = "Verkauft von Kania (Silithus, Cenarion Circle/AQ-Kriegseinsatz)",
+            source = "Sold by Kania (Silithus, Cenarion Circle/AQ war effort)",
         },
     },
 }

@@ -2,93 +2,93 @@ TrainerSpellsBuiltin_ProfessionRecipe = TrainerSpellsBuiltin_ProfessionRecipe or
 TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionRecipe.Cooking or {
     [1] = {
         [15936] = {
-            source = "Verkauft von Abigail Shiel, Tirisfal-Lichtungen",
+            source = "Sold by Abigail Shiel, Tirisfal Glades",
         },
     },
     [10] = {
         [6423] = {
-            source = "Quest: Rezept der Kaldorei (Teldrassil)",
+            source = "Quest: Recipe of the Kaldorei (Teldrassil)",
             faction = "Alliance",
         },
     },
     [50] = {
         [2553] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; auch Questbelohnung",
+            source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
         },
     },
     [60] = {
         [3382] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; auch Questbelohnung",
+            source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
         },
     },
     [85] = {
         [8239] = {
-            source = "Seltener Zufalls-Weltdrop von vielen niedrigstufigen Gegnern",
+            source = "Rare random world drop from many low-level mobs",
         },
     },
     [90] = {
         [3381] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; auch Questbelohnung",
+            source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
         },
     },
     [100] = {
         [2556] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; auch Questbelohnung",
+            source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
         },
         [2558] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; auch Questbelohnung",
+            source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
         },
     },
     [110] = {
         [2557] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; fällt auch von niedrigstufigen Humanoiden",
+            source = "Sold by Kendor Kabonka, Stormwind; also drops from low-level humanoids",
         },
         [3378] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; auch Questbelohnung",
+            source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
         },
     },
     [120] = {
         [3380] = {
-            source = "Verkauft von Kendor Kabonka, Sturmwind; auch Questbelohnung",
+            source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
         },
     },
     [125] = {
         [3402] = {
-            source = "Verkauft von Zargh (Nördliche Barrens) / Vendor-Tron 1000 (Desolace); auch Questbelohnung",
+            source = "Sold by Zargh (Northern Barrens) / Vendor-Tron 1000 (Desolace); also quest reward",
         },
     },
     [130] = {
         [3379] = {
-            source = "Verkauft von Kendor Kabonka (Sturmwind), Nerrist (Schlingendorntal), Keena (Arathi-Hochland)",
+            source = "Sold by Kendor Kabonka (Stormwind), Nerrist (Stranglethorn Vale), Keena (Arathi Highlands)",
         },
     },
     [175] = {
         [15857] = {
-            source = "Verkauft von mehreren Händlern, u.a. Hammon Karwn (Arathi-Hochland), Corporal Bluth (Schlingendorntal)",
+            source = "Sold by several vendors, incl. Hammon Karwn (Arathi Highlands), Corporal Bluth (Stranglethorn Vale)",
         },
     },
     [225] = {
         [18250] = {
-            source = "Verkauft von Gikkix, Tanaris",
+            source = "Sold by Gikkix, Tanaris",
         },
         [18252] = {
-            source = "Verkauft von Kelsey Yance, Beutebucht",
+            source = "Sold by Kelsey Yance, Booty Bay",
         },
         [19950] = {
-            source = "Verkauft von Händlern in Felwood und Winterquell",
+            source = "Sold by vendors in Felwood and Winterspring",
         },
         [20628] = {
-            source = "Verkauft von Jabbey, Tanaris",
+            source = "Sold by Jabbey, Tanaris",
         },
     },
     [250] = {
         [18255] = {
-            source = "Verkauft von Gikkix, Tanaris",
+            source = "Sold by Gikkix, Tanaris",
         },
     },
     [300] = {
         [25658] = {
-            source = "Questbelohnung des Ahn'Qiraj-Kriegseinsatzes (einmalig, nicht mehr erhältlich)",
+            source = "Quest reward from the Ahn'Qiraj War Effort (unique, no longer obtainable)",
         },
     },
 }

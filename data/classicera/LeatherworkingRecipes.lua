@@ -2,112 +2,112 @@ TrainerSpellsBuiltin_ProfessionRecipe = TrainerSpellsBuiltin_ProfessionRecipe or
 TrainerSpellsBuiltin_ProfessionRecipe.Leatherworking = TrainerSpellsBuiltin_ProfessionRecipe.Leatherworking or {
     [115] = {
         [7955] = {
-            source = "Questbelohnung: Deviate Eradication (Heulende Höhlen-Questreihe)",
+            source = "Quest reward: \"Deviate Eradication\" (Wailing Caverns chain)",
         },
     },
     [135] = {
         [9146] = {
-            source = "Verkauft von Harlown Darkweave (Mondhain)",
+            source = "Sold by Harlown Darkweave (Moonglade)",
         },
     },
     [200] = {
         [22711] = {
-            source = "Verkauft von Rikqiz (Schlingendorntal)",
+            source = "Sold by Rikqiz (Stranglethorn Vale)",
         },
     },
     [205] = {
         [10509] = {
-            source = "Verkauft von Pratt McGrubben / Jangdor Swiftstrider (Feralas); auch Weltdrop",
+            source = "Sold by Pratt McGrubben / Jangdor Swiftstrider (Feralas); also world drop",
         },
     },
     [220] = {
         [10525] = {
-            source = "Fällt von Wastewander Bandit (Tanaris)",
+            source = "Dropped by Wastewander Bandit (Tanaris)",
         },
     },
     [260] = {
         [19049] = {
-            source = "Verkauft von Leonard Porter (Westliche Pestländer) / Werg Thickblade (Tirisfal-Lichtungen)",
+            source = "Sold by Leonard Porter (Western Plaguelands) / Werg Thickblade (Tirisfal Glades)",
         },
     },
     [265] = {
         [19052] = {
-            source = "Fällt von Legashi Rogue (Azshara)",
+            source = "Dropped by Legashi Rogue (Azshara)",
         },
     },
     [275] = {
         [19068] = {
-            source = "Verkauft von Meilosh (Felwood, benötigt Ruf Timbermaw Hold); fällt auch beim Düsterbruch-Tribut-Lauf",
+            source = "Sold by Meilosh (Felwood, Timbermaw Hold rep); also drops in Dire Maul Tribute run",
         },
     },
     [280] = {
         [19071] = {
-            source = "Fällt von Jadefire Trickster (Felwood)",
+            source = "Dropped by Jadefire Trickster (Felwood)",
         },
     },
     [285] = {
         [19077] = {
-            source = "Verkauft von Blimo Gadgetspring (Azshara)",
+            source = "Sold by Blimo Gadgetspring (Azshara)",
         },
     },
     [290] = {
         [19082] = {
-            source = "Verkauft von Jase Farlane (Östliche Pestländer)",
+            source = "Sold by Jase Farlane (Eastern Plaguelands)",
         },
         [19084] = {
-            source = "Verkauft von Nergal (Un'Goro-Krater)",
+            source = "Sold by Nergal (Un'Goro Crater)",
         },
     },
     [295] = {
         [19088] = {
-            source = "Verkauft von Zannok Hidepiercer (Silithus)",
+            source = "Sold by Zannok Hidepiercer (Silithus)",
         },
         [19090] = {
-            source = "Fällt von Son of Arkkoroc (selten, Azshara)",
+            source = "Dropped by Son of Arkkoroc (rare, Azshara)",
         },
     },
     [300] = {
         [19054] = {
-            source = "Fällt von General Drakkisath (Obere Schwarzfelsspitze)",
+            source = "Dropped by General Drakkisath (Upper Blackrock Spire)",
         },
         [19097] = {
-            source = "Fällt von Schleimen im Un'Goro-Krater",
+            source = "Dropped by oozes in Un'Goro Crater",
         },
         [19104] = {
-            source = "Fällt von Winterfall Ursa (Winterquell)",
+            source = "Dropped by Winterfall Ursa (Winterspring)",
         },
         [19107] = {
-            source = "Fällt von Anvilrage Captain (Schwarzfelstiefen)",
+            source = "Dropped by Anvilrage Captain (Blackrock Depths)",
         },
         [20854] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [20855] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [22927] = {
-            source = "Gefunden in Knot Thimblejacks Truhe (Düsterbruch)",
+            source = "Found in Knot Thimblejack's Cache (Dire Maul chest)",
         },
         [23708] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [23709] = {
-            source = "Verkauft von Lokhtos Darkbargainer (Schwarzfelstiefen, benötigt Ruf Thorium Brotherhood)",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, Thorium Brotherhood rep)",
         },
         [24121] = {
-            source = "Verkauft von Rin'wosho the Trader (Schlingendorntal, benötigt Ruf Zandalar Tribe)",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, Zandalar Tribe rep)",
         },
         [24124] = {
-            source = "Verkauft von Rin'wosho the Trader (Schlingendorntal, benötigt Ruf Zandalar Tribe)",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, Zandalar Tribe rep)",
         },
         [24703] = {
-            source = "Verkauft von Aendel Windspear (Silithus, AQ-Kriegseinsatz)",
+            source = "Sold by Aendel Windspear (Silithus, AQ war effort)",
         },
         [24848] = {
-            source = "Verkauft von Aendel Windspear (Silithus, AQ-Kriegseinsatz)",
+            source = "Sold by Aendel Windspear (Silithus, AQ war effort)",
         },
         [26279] = {
-            source = "Fällt von The Windreaver (Silithus) / Princess Tempestria (Winterquell)",
+            source = "Dropped by The Windreaver (Silithus) / Princess Tempestria (Winterspring)",
         },
     },
 }
