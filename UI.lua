@@ -240,6 +240,29 @@ local listBg = classFrame:CreateTexture("TrainerSpellsFrameBackground", "BACKGRO
 local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", classFrame, "MinimalScrollBar")
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
+local pendingSpellTooltipExtra
+GameTooltip:HookScript(
+    "OnTooltipSetSpell",
+    function(tooltip)
+        local extra = pendingSpellTooltipExtra
+        if not extra then return end
+        local _, spellID = tooltip:GetSpell()
+        if spellID ~= extra.spellID then return end
+        if extra.showCost then
+            local canAfford = not extra.cost or extra.cost == 0 or (GetMoney() or 0) >= extra.cost
+            local costColor = canAfford and "|cffffffff" or "|cffff3333"
+            tooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(extra.cost) .. "|r", 1, 1, 1)
+            tooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
+        end
+
+        if extra.source then
+            tooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. extra.source, 0.9, 0.9, 0.9, true)
+        end
+
+        tooltip:Show()
+    end
+)
+
 local function InitScrollRow(rowFrame, elementData)
     if not rowFrame.icon then
         local icon = rowFrame:CreateTexture(nil, "ARTWORK")
@@ -334,28 +357,43 @@ local function InitScrollRow(rowFrame, elementData)
             "OnEnter",
             function(self)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                local showCost = elementData.showCostTooltip and entry.cost ~= nil
                 if entry.spellID then
+                    pendingSpellTooltipExtra = {
+                        spellID = entry.spellID,
+                        showCost = showCost,
+                        cost = entry.cost,
+                        source = entry.source,
+                    }
+
                     GameTooltip:SetSpellByID(entry.spellID)
                 else
+                    pendingSpellTooltipExtra = nil
                     GameTooltip:SetText(entry.name)
-                end
+                    if showCost then
+                        local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
+                        local costColor = canAfford and "|cffffffff" or "|cffff3333"
+                        GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
+                        GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
+                    end
 
-                if elementData.showCostTooltip and entry.cost ~= nil then
-                    local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
-                    local costColor = canAfford and "|cffffffff" or "|cffff3333"
-                    GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
-                    GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
-                end
-
-                if entry.source then
-                    GameTooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. entry.source, 0.9, 0.9, 0.9, true)
+                    if entry.source then
+                        GameTooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. entry.source, 0.9, 0.9, 0.9, true)
+                    end
                 end
 
                 GameTooltip:Show()
             end
         )
 
-        rowFrame:SetScript("OnLeave", GameTooltip_Hide)
+        rowFrame:SetScript(
+            "OnLeave",
+            function(self)
+                pendingSpellTooltipExtra = nil
+                GameTooltip_Hide(self)
+            end
+        )
+
         rowFrame:SetScript(
             "OnMouseUp",
             function(self, button)
@@ -569,7 +607,10 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
 end
 
 local function AppendGroupItems(items, groups, keyPrefix, labelPrefix, unitLabel, showCost)
-    if showCost == nil then showCost = true end
+    if showCost == nil then
+        showCost = true
+    end
+
     local entryLevelLabel = unitLabel and unitLabel ~= TrainerSpells:Trans("LID_LVL") and unitLabel or nil
     unitLabel = unitLabel or TrainerSpells:Trans("LID_LVL")
     if #groups.available > 0 then
@@ -779,7 +820,6 @@ end
 local PROFESSION_VIEW_SKILL = "skill"
 local PROFESSION_VIEW_RECIPES = "recipes"
 local professionViewMode = PROFESSION_VIEW_SKILL
-
 function TrainerSpells_ProfessionRefresh()
     local searchText = (TrainerSpells_ProfessionSearchText or ""):lower()
     local professionKey, skillLineName = GetOpenProfession()
