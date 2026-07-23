@@ -56,6 +56,12 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             source = "Sold by Magnus Frostwake (Scholomance, BoP)",
         },
     },
+    [275] = {
+        [16969] = {
+            icon = "Interface\\Icons\\inv_axe_12",
+            source = "Sold by Magnus Frostwake (Scholomance, BoP; only visible after completing the Eva Sarkhoff ghost-revealing quest chain)",
+        },
+    },
     [280] = {
         [16971] = {
             icon = "Interface\\Icons\\inv_weapon_halberd_11",
@@ -72,6 +78,22 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         [23632] = {
             icon = "Interface\\Icons\\inv_belt_11",
             source = "Argent Dawn - Honored",
+        },
+        [23628] = {
+            icon = "Interface\\Icons\\inv_belt_16",
+            source = "Sold by Meilosh (Felwood, requires Timbermaw Hold - Honored)",
+        },
+    },
+    [295] = {
+        [20874] = {
+            icon = "Interface\\Icons\\inv_bracer_07",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Friendly); requires Armorsmith",
+            requires = {9788},
+        },
+        [20872] = {
+            icon = "Interface\\Icons\\inv_belt_13",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Honored); requires Armorsmith",
+            requires = {9788},
         },
     },
     [300] = {
@@ -102,6 +124,99 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         [27586] = {
             icon = "Interface\\Icons\\inv_shield_22",
             source = "Cenarion Circle - Revered (Lt. General Andorov, Ruins of Ahn'Qiraj, post-Rajaxx)",
+        },
+        [20897] = {
+            icon = "Interface\\Icons\\inv_axe_12",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Honored); requires Weaponsmith + Master Axesmith",
+            requires = {9787, 17041},
+        },
+        [23639] = {
+            icon = "Interface\\Icons\\inv_spear_08",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered); requires Weaponsmith",
+            requires = {9787},
+        },
+        [23653] = {
+            icon = "Interface\\Icons\\inv_axe_12",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Exalted); requires Weaponsmith + Master Axesmith",
+            requires = {9787, 17041},
+        },
+        [23650] = {
+            icon = "Interface\\Icons\\inv_hammer_19",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Exalted); requires Weaponsmith + Master Hammersmith",
+            requires = {9787, 17040},
+        },
+        [20890] = {
+            icon = "Interface\\Icons\\inv_sword_48",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Honored); requires Weaponsmith + Master Swordsmith",
+            requires = {9787, 17039},
+        },
+        [23652] = {
+            icon = "Interface\\Icons\\inv_sword_39",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Exalted); requires Weaponsmith + Master Swordsmith",
+            requires = {9787, 17039},
+        },
+        [24138] = {
+            icon = "Interface\\Icons\\inv_gauntlets_31",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Friendly)",
+        },
+        [24141] = {
+            icon = "Interface\\Icons\\inv_shoulder_01",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Friendly)",
+        },
+        [24137] = {
+            icon = "Interface\\Icons\\inv_shoulder_15",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Honored)",
+        },
+        [24140] = {
+            icon = "Interface\\Icons\\inv_pants_plate_21",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Honored)",
+        },
+        [24139] = {
+            icon = "Interface\\Icons\\inv_chest_plate08",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Revered)",
+        },
+        [23633] = {
+            icon = "Interface\\Icons\\inv_gauntlets_29",
+            source = "Sold by Argent Dawn Quartermasters (Tirisfal Glades / Western Plaguelands / Eastern Plaguelands, requires Argent Dawn - Revered)",
+        },
+        [27585] = {
+            icon = "Interface\\Icons\\inv_belt_16",
+            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Friendly)",
+        },
+        [28463] = {
+            icon = "Interface\\Icons\\inv_belt_21",
+            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Friendly)",
+        },
+        [27588] = {
+            icon = "Interface\\Icons\\inv_belt_16",
+            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Honored)",
+        },
+        [28462] = {
+            icon = "Interface\\Icons\\inv_gauntlets_29",
+            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Honored)",
+        },
+        [28461] = {
+            icon = "Interface\\Icons\\inv_chest_plate07",
+            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Revered)",
+        },
+        [27590] = {
+            icon = "Interface\\Icons\\inv_chest_chain_17",
+            source = "Sold by Lieutenant General Andorov (Ruins of Ahn'Qiraj, after defeating Rajaxx in AQ20; requires Cenarion Circle - Exalted)",
+        },
+        [20876] = {
+            icon = "Interface\\Icons\\inv_pants_04",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered); requires Armorsmith",
+            requires = {9788},
+        },
+        [20873] = {
+            icon = "Interface\\Icons\\inv_shoulder_23",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered); requires Armorsmith",
+            requires = {9788},
+        },
+        [23637] = {
+            icon = "Interface\\Icons\\inv_gauntlets_22",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered); requires Armorsmith",
+            requires = {9788},
         },
     },
 }
