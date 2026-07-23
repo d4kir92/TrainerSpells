@@ -32,13 +32,101 @@ TrainerSpellsBuiltin_ProfessionRecipe.Tailoring = TrainerSpellsBuiltin_Professio
             source = "Sold by Elynna (Darnassus), Rann Flamespinner (Loch Modan), Ranik (Barrens, Ratchet), Sheri Zipstitch (Duskwood), Jennabink Powerseam (Wetlands)",
         },
     },
+    [135] = {
+        [3869] = {
+            icon = "Interface\\Icons\\inv_shirt_yellow_01",
+            source = "Sold by Danielle Zipstitch (Duskwood, Darkshire) (Alliance only; Horde must use the neutral auction house or Alliance help)",
+        },
+    },
+    [145] = {
+        [3854] = {
+            icon = "Interface\\Icons\\inv_gauntlets_17",
+            source = "Sold by Kireena (Desolace, Ghost Walker Post, Horde)",
+        },
+    },
+    [155] = {
+        [3870] = {
+            icon = "Interface\\Icons\\inv_shirt_black_01",
+            source = "Sold by Sheri Zipstitch (Duskwood), Xizk Goodstitch (Booty Bay, Stranglethorn Vale), Mallen Swain (Hillsbrad Foothills, Tarren Mill)",
+        },
+    },
+    [165] = {
+        [3857] = {
+            icon = "Interface\\Icons\\inv_helmet_31",
+            source = "Sold by Xizk Goodstitch (Booty Bay, Stranglethorn Vale)",
+        },
+    },
+    [175] = {
+        [8787] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_14",
+            source = "Sold by Brienna Starglow (Feralas), Jun'ha (Arathi Highlands, Hammerfall)",
+        },
+    },
+    [180] = {
+        [8790] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_16",
+            source = "Sold by Xizk Goodstitch (Booty Bay, Stranglethorn Vale)",
+        },
+    },
+    [200] = {
+        [3902] = {
+            icon = "Interface\\Icons\\inv_misc_cape_04",
+            source = "Sold by Micha Yance (Hillsbrad Foothills, Southshore), Ghok'kah (Dustwallow Marsh, Brackenwall Village)",
+        },
+        [12901] = {
+            icon = "Interface\\Icons\\inv_shirt_black_01",
+            source = "Sold by Narkk (Stranglethorn Vale, Booty Bay)",
+        },
+    },
+    [220] = {
+        [12171] = {
+            icon = "Interface\\Icons\\inv_shirt_orange_01",
+            source = "Sold by Elynna (Darnassus), Mahu (Thunder Bluff)",
+        },
+    },
+    [225] = {
+        [27726] = {
+            icon = "Interface\\Icons\\inv_misc_bag_enchantedmageweave",
+            source = "Sold by Tilli Thistlefuzz (Ironforge), Jessara Cordell (Stormwind), Kania (Silithus), Kithas (Orgrimmar), Nata Dawnstrider (Thunder Bluff), Thaddeus Webb (Undercity), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest)",
+        },
+    },
+    [230] = {
+        [12172] = {
+            icon = "Interface\\Icons\\inv_shirt_purple_01",
+            source = "Sold by Outfitter Eric (Ironforge), Borya (Orgrimmar)",
+        },
+    },
+    [235] = {
+        [12173] = {
+            icon = "Interface\\Icons\\inv_shirt_red_01",
+            source = "Sold by Outfitter Eric (Ironforge), Borya (Orgrimmar)",
+        },
+    },
+    [240] = {
+        [12183] = {
+            icon = "Interface\\Icons\\inv_shirt_08",
+            source = "Sold by Outfitter Eric (Ironforge), Millie Gregorian (Undercity)",
+        },
+    },
     [245] = {
         [12086] = {
             icon = "Interface\\Icons\\inv_helmet_27",
             source = "Quest reward: \"The Undermarket\"",
         },
+        [12184] = {
+            icon = "Interface\\Icons\\inv_pants_01",
+            source = "Sold by Outfitter Eric (Ironforge), Millie Gregorian (Undercity)",
+        },
     },
     [250] = {
+        [12185] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_04",
+            source = "Sold by Alexandra Bolero (Stormwind), Mahu (Thunder Bluff)",
+        },
+        [12186] = {
+            icon = "Interface\\Icons\\inv_shirt_black_01",
+            source = "Sold by Outfitter Eric (Ironforge), Millie Gregorian (Undercity)",
+        },
         [18560] = {
             icon = "Interface\\Icons\\inv_fabric_moonrag_01",
             source = "Sold by Qia (Winterspring, Everlook)",
