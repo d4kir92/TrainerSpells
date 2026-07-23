@@ -47,8 +47,8 @@ TrainerSpellsBuiltin_ProfessionRecipe.Engineering = TrainerSpellsBuiltin_Profess
         },
     },
     [180] = {
-        [3976] = {
-            icon = "Interface\\Icons\\trade_engineering",
+        [3979] = {
+            icon = "Interface\\Icons\\inv_misc_spyglass_02",
             source = "Sold by Mazk Snipeshot (Booty Bay), Super-Seller 680 (Desolace)",
         },
     },
@@ -72,6 +72,12 @@ TrainerSpellsBuiltin_ProfessionRecipe.Engineering = TrainerSpellsBuiltin_Profess
             source = "Sold by Knaz Blunderflame (Stranglethorn Vale), Yuka Screwspigot (Burning Steppes)",
         },
     },
+    [230] = {
+        [12617] = {
+            icon = "Interface\\Icons\\inv_helmet_49",
+            source = "Sold by Jubie Gadgetspring (Azshara)",
+        },
+    },
     [250] = {
         [12624] = {
             icon = "Interface\\Icons\\inv_misc_head_dragon_01",
@@ -83,12 +89,28 @@ TrainerSpellsBuiltin_ProfessionRecipe.Engineering = TrainerSpellsBuiltin_Profess
         },
     },
     [260] = {
+        [19790] = {
+            icon = "Interface\\Icons\\inv_misc_bomb_08",
+            source = "Sold by Gearcutter Cogspinner (Ironforge), Sovik (Orgrimmar)",
+        },
+        [19791] = {
+            icon = "Interface\\Icons\\inv_gizmo_04",
+            source = "Sold by Gearcutter Cogspinner (Ironforge), Sovik (Orgrimmar)",
+        },
+        [23071] = {
+            icon = "Interface\\Icons\\inv_staff_18",
+            source = "Sold by Mazk Snipeshot (Stranglethorn Vale, Booty Bay)",
+        },
         [23077] = {
             icon = "Interface\\Icons\\inv_misc_enggizmos_02",
             source = "Sold by Xizzer Fizzbolt (Winterspring/Everlook)",
         },
     },
     [275] = {
+        [19795] = {
+            icon = "Interface\\Icons\\inv_gizmo_pipe_04",
+            source = "Sold by Xizzer Fizzbolt (Winterspring/Everlook)",
+        },
         [19814] = {
             icon = "Interface\\Icons\\inv_crate_02",
             source = "Sold by Xizzer Fizzbolt (Winterspring/Everlook)",
