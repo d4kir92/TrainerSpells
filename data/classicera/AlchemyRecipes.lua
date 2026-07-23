@@ -1,15 +1,63 @@
 TrainerSpellsBuiltin_ProfessionRecipe = TrainerSpellsBuiltin_ProfessionRecipe or {}
 TrainerSpellsBuiltin_ProfessionRecipe.Alchemy = TrainerSpellsBuiltin_ProfessionRecipe.Alchemy or {
+    [60] = {
+        [6617] = {
+            icon = "Interface\\Icons\\inv_potion_24",
+            source = "Sold by vendors in Loch Modan, Westfall, Orgrimmar, The Barrens",
+        },
+    },
+    [100] = {
+        [7255] = {
+            icon = "Interface\\Icons\\inv_potion_09",
+            source = "Sold by Xandar Goodbeard (Loch Modan), Kzixx (Duskwood), Hula'mahi (The Barrens)",
+        },
+    },
+    [135] = {
+        [7256] = {
+            icon = "Interface\\Icons\\inv_potion_44",
+            source = "Sold by Harklan Moongrove (Ashenvale), Christoph Jeffcoat (Hillsbrad Foothills)",
+        },
+    },
     [150] = {
         [6625] = {
             icon = "Interface\\Icons\\inv_potion_04",
             source = "Sold by vendors in Darnassus, Ironforge, Orgrimmar, Desolace",
         },
     },
+    [165] = {
+        [3449] = {
+            icon = "Interface\\Icons\\inv_potion_23",
+            source = "Sold by Bliztik (Duskwood), Montarr (Thousand Needles)",
+        },
+        [7257] = {
+            icon = "Interface\\Icons\\inv_potion_16",
+            source = "Sold by Nandar Branson (Hillsbrad Foothills), Jeeda (Stonetalon Mountains)",
+        },
+    },
+    [175] = {
+        [6618] = {
+            icon = "Interface\\Icons\\inv_potion_21",
+            source = "Sold by Ulthir (Darnassus), Hagrus (Orgrimmar)",
+        },
+    },
     [190] = {
         [21924] = {
             icon = "Interface\\Icons\\inv_potion_03",
             source = "Rare drop from Frenzied Plaguehound (Eastern Plaguelands)",
+        },
+        [7258] = {
+            icon = "Interface\\Icons\\inv_potion_13",
+            source = "Sold by Drovnar Strongbrew (Arathi Highlands), Glyx Brewright (Stranglethorn Vale)",
+        },
+        [7259] = {
+            icon = "Interface\\Icons\\inv_potion_06",
+            source = "Sold by Glyx Brewright (Stranglethorn Vale), Alchemist Pestlezugg (Tanaris), Logannas (Feralas, Alliance) / Bronk (Feralas, Horde)",
+        },
+    },
+    [200] = {
+        [3454] = {
+            icon = "Interface\\Icons\\inv_potion_20",
+            source = "Sold by Bro'kin, Alterac Mountains",
         },
     },
     [225] = {
@@ -46,6 +94,12 @@ TrainerSpellsBuiltin_ProfessionRecipe.Alchemy = TrainerSpellsBuiltin_ProfessionR
             source = "Drops from Blackrock Slayer (Burning Steppes)",
         },
     },
+    [260] = {
+        [17553] = {
+            icon = "Interface\\Icons\\inv_potion_74",
+            source = "Sold by Ulthir (Darnassus), Algernon (Undercity)",
+        },
+    },
     [265] = {
         [17584] = {
             icon = "Interface\\Icons\\inv_potion_66",
@@ -70,6 +124,22 @@ TrainerSpellsBuiltin_ProfessionRecipe.Alchemy = TrainerSpellsBuiltin_ProfessionR
         [24370] = {
             icon = "Interface\\Icons\\inv_potion_83",
             source = "Sold by Rin'wosho the Trader, Stranglethorn Vale (requires Zandalar Tribe - Friendly)",
+        },
+        [17559] = {
+            icon = "Interface\\Icons\\spell_fire_volcano",
+            source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands) (requires The Argent Dawn - Honored)",
+        },
+        [17561] = {
+            icon = "Interface\\Icons\\spell_nature_acid_01",
+            source = "Sold by Meilosh, Felpaw Village (Felwood) (requires Timbermaw Hold - Friendly)",
+        },
+        [17560] = {
+            icon = "Interface\\Icons\\spell_nature_strengthofearthtotem02",
+            source = "Sold by Plugger Spazzring, Blackrock Depths (Grim Guzzler)",
+        },
+        [17562] = {
+            icon = "Interface\\Icons\\spell_nature_earthbind",
+            source = "Sold by Magnus Frostwake, outside Scholomance (requires Eva Sarkhoff questline)",
         },
     },
     [280] = {
