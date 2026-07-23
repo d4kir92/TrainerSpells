@@ -56,6 +56,7 @@ data\classicera\TailoringRecipes.lua
 data\classicera\EngineeringRecipes.lua
 data\classicera\EnchantingRecipes.lua
 data\classicera\CookingRecipes.lua
+data\classicera\FirstAidRecipes.lua
 
 Data.lua
 UI.lua

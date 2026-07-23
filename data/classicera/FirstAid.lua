@@ -28,16 +28,6 @@ TrainerSpellsBuiltin_Profession["First Aid"] = TrainerSpellsBuiltin_Profession["
             icon = "Interface\\Icons\\inv_misc_bandage_01"
         },
     },
-    [180] = {
-        [7929] = {
-            icon = "Interface\\Icons\\inv_misc_bandage_02"
-        },
-    },
-    [210] = {
-        [10840] = {
-            icon = "Interface\\Icons\\inv_misc_bandage_19"
-        },
-    },
     [240] = {
         [10841] = {
             icon = "Interface\\Icons\\inv_misc_bandage_20"
