@@ -16,6 +16,18 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             source = "Quest: Barbaric Battlements",
         },
     },
+    [165] = {
+        [3500] = {
+            icon = "Interface\\Icons\\inv_sword_23",
+            source = "Sold by Jazzrik (Badlands)",
+        },
+    },
+    [170] = {
+        [3503] = {
+            icon = "Interface\\Icons\\inv_mace_06",
+            source = "Sold by Muuran (Desolace)",
+        },
+    },
     [175] = {
         [9814] = {
             icon = "Interface\\Icons\\inv_helmet_25",
@@ -44,16 +56,100 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             source = "Feast of Winter Veil seasonal quest reward (Smokywood Pastures gift)",
         },
     },
+    [195] = {
+        [9815] = {
+            icon = "Interface\\Icons\\inv_gauntlets_17",
+            source = "Quest: Spiritist Agrosh",
+        },
+    },
+    [200] = {
+        [9816] = {
+            icon = "Interface\\Icons\\inv_bracer_11",
+            source = "Sold by Vharr (Stranglethorn Vale)",
+        },
+    },
+    [205] = {
+        [9817] = {
+            icon = "Interface\\Icons\\inv_chest_chain_12",
+            source = "Sold by Mage Quarter Quartermaster (Orgrimmar)",
+        },
+    },
+    [210] = {
+        [9836] = {
+            icon = "Interface\\Icons\\inv_belt_10",
+            source = "Sold by Khadgar (Scholomance)",
+        },
+    },
     [215] = {
         [9937] = {
             icon = "Interface\\Icons\\inv_bracer_07",
             source = "Sold by Harggan (Hinterlands), Gharash (Swamp of Sorrows)",
         },
     },
+    [220] = {
+        [9938] = {
+            icon = "Interface\\Icons\\inv_shoulder_21",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Friendly)",
+        },
+    },
+    [225] = {
+        [9939] = {
+            icon = "Interface\\Icons\\inv_gauntlets_24",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Honored)",
+        },
+    },
+    [230] = {
+        [9940] = {
+            icon = "Interface\\Icons\\inv_boots_chain_07",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered)",
+        },
+    },
+    [235] = {
+        [9941] = {
+            icon = "Interface\\Icons\\inv_bracer_15",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered)",
+        },
+    },
+    [240] = {
+        [9942] = {
+            icon = "Interface\\Icons\\inv_chest_plate_16",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Exalted)",
+        },
+    },
+    [245] = {
+        [9943] = {
+            icon = "Interface\\Icons\\inv_helmet_34",
+            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Honored)",
+        },
+    },
+    [250] = {
+        [9944] = {
+            icon = "Interface\\Icons\\inv_shoulder_24",
+            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Revered)",
+        },
+    },
     [255] = {
         [10013] = {
             icon = "Interface\\Icons\\inv_weapon_shortblade_14",
             source = "Sold by Magnus Frostwake (Scholomance, BoP)",
+        },
+    },
+    [260] = {
+        [10014] = {
+            icon = "Interface\\Icons\\inv_pants_plate_20",
+            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Exalted)",
+        },
+    },
+    [265] = {
+        [10016] = {
+            icon = "Interface\\Icons\\inv_helmet_28",
+            source = "Sold by Lieutenant General Andorov (Ruins of Ahn'Qiraj, after defeating Rajaxx in AQ20)",
+        },
+    },
+    [270] = {
+        [10018] = {
+            icon = "Interface\\Icons\\inv_sword_44",
+            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Honored)",
         },
     },
     [275] = {

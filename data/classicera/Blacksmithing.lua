@@ -64,6 +64,24 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
             cost = 200
         },
     },
+    [50] = {
+        [2677] = {
+            icon = "Interface\\Icons\\inv_axe_08",
+            cost = 250
+        },
+    },
+    [55] = {
+        [2678] = {
+            icon = "Interface\\Icons\\inv_chest_plate_05",
+            cost = 300
+        },
+    },
+    [60] = {
+        [3295] = {
+            icon = "Interface\\Icons\\inv_bracer_05",
+            cost = 300
+        },
+    },
     [65] = {
         [2665] = {
             icon = "Interface\\Icons\\inv_stone_sharpeningstone_02",
@@ -206,6 +224,12 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
             cost = 500
         },
     },
+    [140] = {
+        [3335] = {
+            icon = "Interface\\Icons\\inv_boots_plate_02",
+            cost = 1000
+        },
+    },
     [145] = {
         [2675] = {
             icon = "Interface\\Icons\\inv_chest_plate15",
@@ -232,6 +256,12 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
             cost = 5000
         },
     },
+    [160] = {
+        [3499] = {
+            icon = "Interface\\Icons\\inv_chest_plate_07",
+            cost = 2500
+        },
+    },
     [165] = {
         [3501] = {
             icon = "Interface\\Icons\\inv_bracer_06",
@@ -242,6 +272,12 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
         [3502] = {
             icon = "Interface\\Icons\\inv_helmet_03",
             cost = 1250
+        },
+    },
+    [175] = {
+        [3504] = {
+            icon = "Interface\\Icons\\inv_gauntlets_21",
+            cost = 1500
         },
     },
     [180] = {
@@ -258,6 +294,18 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
         [7223] = {
             icon = "Interface\\Icons\\inv_bracer_10",
             cost = 1000
+        },
+    },
+    [190] = {
+        [8366] = {
+            icon = "Interface\\Icons\\inv_helmet_leather_01",
+            cost = 1500
+        },
+    },
+    [195] = {
+        [7824] = {
+            icon = "Interface\\Icons\\inv_boots_plate_05",
+            cost = 2000
         },
     },
     [200] = {
@@ -312,6 +360,12 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
             cost = 5000
         },
     },
+    [220] = {
+        [9957] = {
+            icon = "Interface\\Icons\\inv_shoulder_29",
+            cost = 8000
+        },
+    },
     [225] = {
         [9954] = {
             icon = "Interface\\Icons\\inv_gauntlets_29",
@@ -341,6 +395,13 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
         [10003] = {
             icon = "Interface\\Icons\\inv_hammer_18",
             cost = 13500,
+            requires = {9787}
+        },
+    },
+    [240] = {
+        [10017] = {
+            icon = "Interface\\Icons\\inv_belt_21",
+            cost = 14000,
             requires = {9787}
         },
     },
@@ -375,11 +436,29 @@ TrainerSpellsBuiltin_Profession.Blacksmithing = TrainerSpellsBuiltin_Profession.
             cost = 10000
         },
     },
+    [255] = {
+        [23629] = {
+            icon = "Interface\\Icons\\inv_boots_chain_10",
+            cost = 15000
+        },
+    },
     [260] = {
         [10015] = {
             icon = "Interface\\Icons\\inv_sword_19",
             cost = 13500,
             requires = {9787}
+        },
+    },
+    [265] = {
+        [23635] = {
+            icon = "Interface\\Icons\\inv_gauntlets_32",
+            cost = 16000
+        },
+    },
+    [270] = {
+        [23634] = {
+            icon = "Interface\\Icons\\inv_chest_plate_17",
+            cost = 18000
         },
     },
     [275] = {
