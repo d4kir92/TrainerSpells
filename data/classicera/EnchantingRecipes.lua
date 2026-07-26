@@ -12,10 +12,26 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             source = "Sold by Vaean (Darnassus) / Tilli Thistlefuzz (Ironforge) / Jessara Cordell (Stormwind) / Kania (Silithus) / Kithas (Orgrimmar) / Nata Dawnstrider (Thunder Bluff) / Thaddeus Webb (Undercity) / Lilly & Leo Sarn (Silverpine Forest)",
         },
     },
+    [60] = {
+        [7766] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+    },
     [80] = {
         [7776] = {
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Horde only. Sold by Kithas (Orgrimmar) / Lilly (Silverpine Forest)",
+        },
+        [7782] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+    },
+    [90] = {
+        [7786] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
         },
     },
     [100] = {
@@ -29,6 +45,22 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Sold by Dalria (Ashenvale, Astranaar) / Kulwia (Stonetalon Mountains, Sun Rock Retreat)",
         },
+        [13380] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+    },
+    [115] = {
+        [13464] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+    },
+    [120] = {
+        [7859] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
     },
     [125] = {
         [7867] = {
@@ -36,10 +68,30 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             source = "Sold by Zixil (Hillsbrad Foothills, wanders between Southshore and Tarren Mill, sells to both factions) / Nata Dawnstrider (Thunder Bluff)",
         },
     },
+    [135] = {
+        [13522] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+    },
     [140] = {
         [13536] = {
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Sold by Dalria (Ashenvale) / Kulwia (Stonetalon Mountains)",
+        },
+    },
+    [145] = {
+        [13612] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Dark Iron dwarves (Wetlands, Arathi Highlands)",
+        },
+        [13617] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ancients (Ashenvale, Stonetalon Mountains)",
+        },
+        [13620] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Torn Fin murlocs (Hillsbrad Foothills)",
         },
     },
     [150] = {
@@ -59,11 +111,41 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Random world drop (BoE, many mobs)",
         },
+        [13655] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+    },
+    [190] = {
+        [13687] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+        [21931] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Found in Smokywood Pastures Special Gift and Ticking Present (Feast of Winter Veil)",
+        },
+    },
+    [195] = {
+        [13689] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop, also found in chests and lockboxes",
+        },
     },
     [200] = {
         [25126] = {
             icon = "Interface\\Icons\\inv_potion_103",
             source = "Sold by Vaean (Darnassus) / Tilli Thistlefuzz (Ironforge) / Jessara Cordell (Stormwind) / Kania (Silithus) / Kithas (Orgrimmar) / Nata Dawnstrider (Thunder Bluff) / Thaddeus Webb (Undercity) / Lilly (Silverpine Forest)",
+        },
+        [13698] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Witherbark trolls (Arathi Highlands)",
+        },
+    },
+    [210] = {
+        [13817] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
         },
     },
     [215] = {
@@ -72,10 +154,20 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             source = "Dropped by Venture Co. Strip Miner (Stranglethorn Vale)",
         },
     },
+    [220] = {
+        [13846] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+    },
     [225] = {
         [13882] = {
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Dropped by Syndicate/Wastewander rogues (Alterac Mountains, Tanaris)",
+        },
+        [13868] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Swampwalker, Tangled Horror and Mire Lord (Swamp of Sorrows)",
         },
     },
     [230] = {
@@ -89,6 +181,16 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Sold by Mythrin'dir (Darnassus) / Banalash (Swamp of Sorrows, Stonard)",
         },
+        [13933] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Vilebranch trolls (The Hinterlands), also found in chests and lockboxes",
+        },
+    },
+    [245] = {
+        [13945] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
     },
     [250] = {
         [13947] = {
@@ -98,6 +200,18 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
         [25127] = {
             icon = "Interface\\Icons\\inv_potion_99",
             source = "Sold by Kania (Silithus, Cenarion Circle)",
+        },
+    },
+    [255] = {
+        [20008] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Vilebranch Shadowcaster (The Hinterlands)",
+        },
+    },
+    [260] = {
+        [20020] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
         },
     },
     [265] = {
@@ -112,6 +226,10 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
         [20017] = {
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Sold by Mythrin'dir (Darnassus) / Daniel Bartlett (Undercity)",
+        },
+        [20014] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Atal'ai Witch Doctor (The Temple of Atal'Hakkar)",
         },
     },
     [270] = {
@@ -133,6 +251,10 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             icon = "Interface\\Icons\\inv_potion_104",
             source = "Sold by Kania (Silithus, Cenarion Circle)",
         },
+        [20024] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
     },
     [280] = {
         [20016] = {
@@ -141,10 +263,6 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
         },
     },
     [285] = {
-        [20010] = {
-            icon = "Interface\\Icons\\spell_holy_greaterheal",
-            source = "Dropped by Deadwind Warlock (Deadwind Pass)",
-        },
         [20015] = {
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Sold by Lorelae Wintersong (Moonglade)",
@@ -193,6 +311,14 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Dropped by Scourge in Stratholme (Thuzadin Shadowcaster, etc.)",
         },
+        [20010] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Deadwind Warlock (Deadwind Pass)",
+        },
+        [20023] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
     },
     [300] = {
         [20025] = {
@@ -239,13 +365,61 @@ TrainerSpellsBuiltin_ProfessionRecipe.Enchanting = TrainerSpellsBuiltin_Professi
             icon = "Interface\\Icons\\spell_holy_greaterheal",
             source = "Sold by Kania (Silithus, Cenarion Circle, requires Cenarion Circle - Honored)",
         },
-        [25137] = {
+        [25129] = {
             icon = "Interface\\Icons\\inv_potion_105",
             source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Honored)",
         },
-        [25138] = {
+        [25130] = {
             icon = "Interface\\Icons\\inv_potion_100",
             source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Friendly)",
+        },
+        [20011] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "World drop",
+        },
+        [20031] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Spirestone Warlord (Blackrock Spire)",
+        },
+        [20032] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Spectral Researcher (Scholomance)",
+        },
+        [25072] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Emperor Vek'nilash (Ahn'Qiraj) and the Emerald Dragons",
+        },
+        [25073] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ahn'Qiraj bosses (The Prophet Skeram, Viscidus, Ossirian the Unscarred, Moam)",
+        },
+        [25074] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ahn'Qiraj bosses (The Prophet Skeram, Viscidus, Ossirian the Unscarred, Moam)",
+        },
+        [25078] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ahn'Qiraj bosses (The Prophet Skeram, Viscidus, Ossirian the Unscarred, Moam)",
+        },
+        [25079] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ahn'Qiraj bosses (The Prophet Skeram, Viscidus, Ossirian the Unscarred, Moam)",
+        },
+        [25080] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ahn'Qiraj bosses (The Prophet Skeram, Viscidus, Ossirian the Unscarred, Moam)",
+        },
+        [25083] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ahn'Qiraj bosses (The Prophet Skeram, Viscidus, Ossirian the Unscarred, Moam)",
+        },
+        [25084] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Emperor Vek'lor (Ahn'Qiraj) and the Emerald Dragons",
+        },
+        [25086] = {
+            icon = "Interface\\Icons\\spell_holy_greaterheal",
+            source = "Dropped by Ahn'Qiraj bosses (The Prophet Skeram, Viscidus, Ossirian the Unscarred, Moam)",
         },
     },
 }

@@ -29,6 +29,10 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             icon = "Interface\\Icons\\inv_shoulder_09",
             source = "World drop (Westfall, Duskwood)",
         },
+        [3295] = {
+            icon = "Interface\\Icons\\inv_weapon_shortblade_05",
+            source = "World drop",
+        },
     },
     [130] = {
         [2673] = {
@@ -85,22 +89,18 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             icon = "Interface\\Icons\\inv_shoulder_23",
             source = "Quest: On Iron Pauldrons",
         },
+        [3504] = {
+            icon = "Interface\\Icons\\inv_shoulder_09",
+            source = "World drop",
+        },
     },
     [165] = {
-        [3500] = {
-            icon = "Interface\\Icons\\inv_sword_23",
-            source = "Sold by Jazzrik (Badlands)",
-        },
         [7222] = {
             icon = "Interface\\Icons\\inv_misc_orb_01",
             source = "World drop (Stranglethorn Vale, Duskwood)",
         },
     },
     [170] = {
-        [3503] = {
-            icon = "Interface\\Icons\\inv_mace_06",
-            source = "Sold by Muuran (Desolace)",
-        },
         [3495] = {
             icon = "Interface\\Icons\\inv_hammer_04",
             source = "World drop (Duskwood, Stranglethorn Vale)",
@@ -149,7 +149,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [190] = {
-        [439126] = {
+        [3503] = {
             icon = "Interface\\Icons\\inv_helmet_36",
             source = "Sold by Krinkle Goodsteel (Tanaris)",
         },
@@ -167,20 +167,12 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [195] = {
-        [9815] = {
-            icon = "Interface\\Icons\\inv_gauntlets_17",
-            source = "Quest: Spiritist Agrosh",
-        },
         [3511] = {
             icon = "Interface\\Icons\\inv_chest_chain_06",
             source = "World drop (Stranglethorn Vale, Badlands)",
         },
     },
     [200] = {
-        [9816] = {
-            icon = "Interface\\Icons\\inv_bracer_11",
-            source = "Sold by Vharr (Stranglethorn Vale)",
-        },
         [3497] = {
             icon = "Interface\\Icons\\inv_sword_05",
             source = "World drop (Stranglethorn Vale, Badlands)",
@@ -193,22 +185,18 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             icon = "Interface\\Icons\\inv_musket_01",
             source = "Created by Gnomish Engineers (Inlaid Mithril Cylinder Plans)",
         },
+        [3500] = {
+            icon = "Interface\\Icons\\inv_axe_17",
+            source = "World drop",
+        },
     },
     [205] = {
-        [9817] = {
-            icon = "Interface\\Icons\\inv_chest_chain_12",
-            source = "Sold by Mage Quarter Quartermaster (Orgrimmar)",
-        },
         [11643] = {
             icon = "Interface\\Icons\\inv_gauntlets_29",
             source = "Quest: The Origins of Smithing",
         },
     },
     [210] = {
-        [9836] = {
-            icon = "Interface\\Icons\\inv_belt_10",
-            source = "Sold by Khadgar (Scholomance)",
-        },
         [9933] = {
             icon = "Interface\\Icons\\inv_pants_03",
             source = "World drop (Stranglethorn Vale, Swamp of Sorrows)",
@@ -219,12 +207,12 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             icon = "Interface\\Icons\\inv_bracer_07",
             source = "Sold by Harggan (Hinterlands), Gharash (Swamp of Sorrows)",
         },
+        [9939] = {
+            icon = "Interface\\Icons\\inv_misc_armorkit_02",
+            source = "World drop, also found in chests and lockboxes",
+        },
     },
     [220] = {
-        [9938] = {
-            icon = "Interface\\Icons\\inv_shoulder_21",
-            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Friendly)",
-        },
         [9945] = {
             icon = "Interface\\Icons\\inv_pants_04",
             source = "Quest: Smelt On, Smelt Off",
@@ -239,10 +227,6 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [225] = {
-        [9939] = {
-            icon = "Interface\\Icons\\inv_gauntlets_24",
-            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Honored)",
-        },
         [9952] = {
             icon = "Interface\\Icons\\inv_shoulder_09",
             source = "Quest: The Art of the Imbue",
@@ -252,17 +236,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
             source = "World drop (Stranglethorn Vale)",
         },
     },
-    [230] = {
-        [9940] = {
-            icon = "Interface\\Icons\\inv_boots_chain_07",
-            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered)",
-        },
-    },
     [235] = {
-        [9941] = {
-            icon = "Interface\\Icons\\inv_bracer_15",
-            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Revered)",
-        },
         [9964] = {
             icon = "Interface\\Icons\\ability_rogue_sprint",
             source = "World drop (Stranglethorn Vale, Swamp of Sorrows)",
@@ -273,10 +247,6 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [240] = {
-        [9942] = {
-            icon = "Interface\\Icons\\inv_chest_plate_16",
-            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Exalted)",
-        },
         [9972] = {
             icon = "Interface\\Icons\\inv_chest_plate10",
             source = "Unknown source (no source data on Wowhead)",
@@ -287,10 +257,6 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [245] = {
-        [9943] = {
-            icon = "Interface\\Icons\\inv_helmet_34",
-            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Honored)",
-        },
         [9970] = {
             icon = "Interface\\Icons\\inv_helmet_10",
             source = "World drop (Stranglethorn Vale, Swamp of Sorrows)",
@@ -309,10 +275,6 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [250] = {
-        [9944] = {
-            icon = "Interface\\Icons\\inv_shoulder_24",
-            source = "Sold by Vargus (Silithus, Cenarion Hold, requires Cenarion Circle - Revered)",
-        },
         [16642] = {
             icon = "Interface\\Icons\\inv_chest_plate08",
             source = "World drop (Western Plaguelands, Tirisfal Glades)",
@@ -333,20 +295,12 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [260] = {
-        [10014] = {
-            icon = "Interface\\Icons\\inv_pants_plate_20",
-            source = "Sold by Lokhtos Darkbargainer (Blackrock Depths, requires Thorium Brotherhood - Exalted)",
-        },
         [16645] = {
             icon = "Interface\\Icons\\inv_belt_11",
             source = "World drop (Un'Goro Crater, The Hinterlands)",
         },
     },
     [265] = {
-        [10016] = {
-            icon = "Interface\\Icons\\inv_helmet_28",
-            source = "Sold by Lieutenant General Andorov (Ruins of Ahn'Qiraj, after defeating Rajaxx in AQ20)",
-        },
         [15292] = {
             icon = "Interface\\Icons\\inv_hammer_09",
             source = "Dropped by Grizzle (Blackrock Depths)",
@@ -361,10 +315,6 @@ TrainerSpellsBuiltin_ProfessionRecipe.Blacksmithing = TrainerSpellsBuiltin_Profe
         },
     },
     [270] = {
-        [10018] = {
-            icon = "Interface\\Icons\\inv_sword_44",
-            source = "Sold by Rin'wosho the Trader (Stranglethorn Vale, requires Zandalar Tribe - Honored)",
-        },
         [15293] = {
             icon = "Interface\\Icons\\inv_chest_chain_16",
             source = "Contained in Blacksmithing Plans (Blackrock Depths)",

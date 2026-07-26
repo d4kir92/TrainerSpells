@@ -1,7 +1,7 @@
 TrainerSpellsBuiltin_ProfessionRecipe = TrainerSpellsBuiltin_ProfessionRecipe or {}
 TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionRecipe.Cooking or {
     [1] = {
-        [15936] = {
+        [15935] = {
             icon = "Interface\\Icons\\inv_misc_food_46",
             source = "Sold by Abigail Shiel, Tirisfal Glades",
             faction = "Horde",
@@ -20,7 +20,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [10] = {
-        [6423] = {
+        [6412] = {
             icon = "Interface\\Icons\\inv_misc_food_68",
             source = "Quest: Recipe of the Kaldorei (Teldrassil)",
             faction = "Alliance",
@@ -58,7 +58,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [50] = {
-        [2553] = {
+        [2542] = {
             icon = "Interface\\Icons\\inv_misc_food_10",
             source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
             faction = "Alliance",
@@ -87,7 +87,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [60] = {
-        [3382] = {
+        [3371] = {
             icon = "Interface\\Icons\\inv_misc_food_49",
             source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
             faction = "Alliance",
@@ -112,7 +112,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [85] = {
-        [8239] = {
+        [8238] = {
             icon = "Interface\\Icons\\inv_misc_monsterhead_04",
             source = "Rare random world drop from many low-level mobs",
         },
@@ -122,7 +122,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [90] = {
-        [3381] = {
+        [3372] = {
             icon = "Interface\\Icons\\inv_misc_bowl_01",
             source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
             faction = "Alliance",
@@ -132,14 +132,18 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
             source = "Sold by Heldan Galesong (Darkshore) / Kriggon Talsone (Westfall)",
             faction = "Alliance",
         },
+        [6417] = {
+            icon = "Interface\\Icons\\inv_misc_bowl_01",
+            source = "Quest reward: \"Dig Rat Stew\"",
+        },
     },
     [100] = {
-        [2556] = {
+        [2547] = {
             icon = "Interface\\Icons\\inv_misc_bowl_01",
             source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
             faction = "Alliance",
         },
-        [2558] = {
+        [2549] = {
             icon = "Interface\\Icons\\inv_misc_food_16",
             source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
             faction = "Alliance",
@@ -155,11 +159,11 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [110] = {
-        [2557] = {
+        [2548] = {
             icon = "Interface\\Icons\\inv_misc_food_16",
             source = "Sold by Kendor Kabonka, Stormwind; also drops from low-level humanoids (Horde source)",
         },
-        [3378] = {
+        [3377] = {
             icon = "Interface\\Icons\\inv_misc_food_10",
             source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
             faction = "Alliance",
@@ -174,14 +178,14 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [120] = {
-        [3380] = {
+        [3373] = {
             icon = "Interface\\Icons\\inv_misc_bowl_01",
             source = "Sold by Kendor Kabonka, Stormwind; also quest reward",
             faction = "Alliance",
         },
     },
     [125] = {
-        [3402] = {
+        [3398] = {
             icon = "Interface\\Icons\\inv_misc_food_18",
             source = "Sold by Zargh (Northern Barrens) / Vendor-Tron 1000 (Desolace); also quest reward",
         },
@@ -191,7 +195,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [130] = {
-        [3379] = {
+        [3376] = {
             icon = "Interface\\Icons\\inv_egg_04",
             source = "Sold by Kendor Kabonka (Stormwind), Nerrist (Stranglethorn Vale), Keena (Arathi Highlands)",
         },
@@ -202,9 +206,13 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
             source = "Sold by Ogg'marr (Dustwallow Marsh)",
             faction = "Horde",
         },
+        [3399] = {
+            icon = "Interface\\Icons\\inv_misc_food_14",
+            source = "Quest reward: \"Costly Menace\"",
+        },
     },
     [175] = {
-        [15857] = {
+        [15855] = {
             icon = "Interface\\Icons\\inv_misc_food_50",
             source = "Sold by several vendors, incl. Hammon Karwn (Arathi Highlands), Corporal Bluth (Stranglethorn Vale)",
         },
@@ -244,6 +252,10 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
             icon = "Interface\\Icons\\inv_ammo_firetar",
             source = "Sold by Kelsey Yance, Booty Bay",
         },
+        [3400] = {
+            icon = "Interface\\Icons\\inv_misc_bowl_01",
+            source = "Quest reward: \"Soothing Turtle Bisque\"",
+        },
     },
     [200] = {
         [15906] = {
@@ -256,19 +268,19 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [225] = {
-        [18250] = {
+        [18238] = {
             icon = "Interface\\Icons\\inv_misc_fish_01",
             source = "Sold by Gikkix, Tanaris",
         },
-        [18252] = {
+        [18241] = {
             icon = "Interface\\Icons\\inv_misc_fish_06",
             source = "Sold by Kelsey Yance, Booty Bay",
         },
-        [19950] = {
+        [15933] = {
             icon = "Interface\\Icons\\inv_misc_food_06",
             source = "Sold by vendors in Felwood and Winterspring",
         },
-        [20628] = {
+        [20626] = {
             icon = "Interface\\Icons\\inv_drink_17",
             source = "Sold by Jabbey, Tanaris",
         },
@@ -296,7 +308,7 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
         },
     },
     [250] = {
-        [18255] = {
+        [18243] = {
             icon = "Interface\\Icons\\inv_drink_17",
             source = "Sold by Gikkix, Tanaris",
         },
@@ -318,9 +330,13 @@ TrainerSpellsBuiltin_ProfessionRecipe.Cooking = TrainerSpellsBuiltin_ProfessionR
             icon = "Interface\\Icons\\inv_misc_food_47",
             source = "Sold by Vivianna / Sheendra Tallgrass, Feralas",
         },
+        [22761] = {
+            icon = "Interface\\Icons\\inv_misc_food_63",
+            source = "Dropped by Pusillin (Dire Maul)",
+        },
     },
     [300] = {
-        [25658] = {
+        [25659] = {
             icon = "Interface\\Icons\\inv_misc_food_65",
             source = "Quest reward from the Ahn'Qiraj War Effort (unique, no longer obtainable)",
         },
