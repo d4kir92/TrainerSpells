@@ -50,6 +50,17 @@ data\tbc\Mining.lua
 data\tbc\Skinning.lua
 data\tbc\Fishing.lua
 
+data\ProfessionRecipes.lua
+
+data\classicera\LeatherworkingRecipes.lua
+data\classicera\AlchemyRecipes.lua
+data\classicera\BlacksmithingRecipes.lua
+data\classicera\TailoringRecipes.lua
+data\classicera\EngineeringRecipes.lua
+data\classicera\EnchantingRecipes.lua
+data\classicera\CookingRecipes.lua
+data\classicera\FirstAidRecipes.lua
+
 data\tbc\BlacksmithingRecipes.lua
 data\tbc\JewelcraftingRecipes.lua
 
