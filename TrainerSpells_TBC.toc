@@ -50,5 +50,8 @@ data\tbc\Mining.lua
 data\tbc\Skinning.lua
 data\tbc\Fishing.lua
 
+data\tbc\BlacksmithingRecipes.lua
+data\tbc\JewelcraftingRecipes.lua
+
 Data.lua
 UI.lua
