@@ -61,8 +61,14 @@ data\classicera\EnchantingRecipes.lua
 data\classicera\CookingRecipes.lua
 data\classicera\FirstAidRecipes.lua
 
+data\tbc\LeatherworkingRecipes.lua
+data\tbc\AlchemyRecipes.lua
 data\tbc\BlacksmithingRecipes.lua
+data\tbc\TailoringRecipes.lua
+data\tbc\EngineeringRecipes.lua
+data\tbc\EnchantingRecipes.lua
 data\tbc\JewelcraftingRecipes.lua
+data\tbc\CookingRecipes.lua
 
 Data.lua
 UI.lua
