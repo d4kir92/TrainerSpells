@@ -11,10 +11,7 @@ TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
 TrainerSpells_Character = TrainerSpells_Character or {}
 TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
 TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
-if TrainerSpells_Character.showIgnoredInTrainer == nil then
-    TrainerSpells_Character.showIgnoredInTrainer = false
-end
-
+if TrainerSpells_Character.showIgnoredInTrainer == nil then TrainerSpells_Character.showIgnoredInTrainer = false end
 TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 16
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
@@ -24,10 +21,7 @@ TrainerSpells:SetAddonOutput("TrainerSpells", 133741)
 local BEAST_TRAINING_SPELL_ID = 5149
 local PET_TRAINER_SKILL_LINE = ""
 local trainingSpellInfo = C_Spell.GetSpellInfo(BEAST_TRAINING_SPELL_ID)
-if trainingSpellInfo and trainingSpellInfo.name then
-    PET_TRAINER_SKILL_LINE = trainingSpellInfo.name
-end
-
+if trainingSpellInfo and trainingSpellInfo.name then PET_TRAINER_SKILL_LINE = trainingSpellInfo.name end
 local PROFESSION_SKILL_LINES = {}
 local PROFESSION_NAME_TO_KEY = {}
 local PROFESSION_KEY_TO_NAME = {}
@@ -70,7 +64,6 @@ local function DetectTrainerProfession()
         local skillLine = GetTrainerServiceSkillLine(i)
         if skillLine and PROFESSION_SKILL_LINES[skillLine] then return PROFESSION_NAME_TO_KEY[skillLine] or skillLine, skillLine end
     end
-
     return nil
 end
 
@@ -90,7 +83,6 @@ local function CommonAffixLength(a, b, fromEnd)
         if a:sub(posA, posA) ~= b:sub(posB, posB) then break end
         len = len + 1
     end
-
     return len
 end
 
@@ -99,7 +91,6 @@ local function GetMapLength(tbl)
     for _ in pairs(tbl) do
         count = count + 1
     end
-
     return count
 end
 
@@ -122,16 +113,13 @@ local function StripCommonAffixes(names)
         local suffixStart = math.max(prefixLen, #name - suffixLen)
         result[i] = name:sub(prefixLen + 1, suffixStart)
     end
-
     return result
 end
 
 local rawPetSummonNames = {}
 for _, spellID in ipairs(PET_SUMMON_SPELL_IDS) do
     local spellInfo = C_Spell.GetSpellInfo(spellID)
-    if spellInfo and spellInfo.name then
-        rawPetSummonNames[spellID] = spellInfo.name
-    end
+    if spellInfo and spellInfo.name then rawPetSummonNames[spellID] = spellInfo.name end
 end
 
 local PET_NAMES = StripCommonAffixes(rawPetSummonNames)
@@ -157,19 +145,15 @@ local function GetSpellIDForService(i)
         local name = GetTrainerServiceInfo(i)
         if name then
             local _, _, _, _, _, _, foundSpellID = GetSpellInfo(name)
-            if type(foundSpellID) == "number" and foundSpellID > 0 then
-                spellID = foundSpellID
-            end
+            if type(foundSpellID) == "number" and foundSpellID > 0 then spellID = foundSpellID end
         end
     end
-
     return spellID
 end
 
 local function GetSkillReqForService(i)
     if not GetTrainerServiceSkillReq then return 0 end
     local _, skillReq = GetTrainerServiceSkillReq(i)
-
     return skillReq or 0
 end
 
@@ -190,7 +174,6 @@ local function ResolveTalentSpellIDByName(name)
                     local _, spellID = scanTooltip:GetSpell()
                     if IsSaneSpellID(spellID) then return spellID end
                 end
-
                 return nil
             end
         end
@@ -220,42 +203,35 @@ local function ParseRequirementText(text)
         part = part:match("^%s*(.-)%s*$")
         if part ~= "" then
             local spellID = ResolveRequirementSpellID(part)
-            if spellID then
-                table.insert(spellIDs, spellID)
-            end
+            if spellID then table.insert(spellIDs, spellID) end
         end
     end
 
     if #spellIDs == 0 then return nil end
-
     return spellIDs
 end
 
 local function EnsurePath(class, level)
     TrainerSpells_Data[class] = TrainerSpells_Data[class] or {}
     TrainerSpells_Data[class][level] = TrainerSpells_Data[class][level] or {}
-
     return TrainerSpells_Data[class][level]
 end
 
 local function EnsurePetTrainerPath(class, level)
     TrainerSpells_PetTrainerData[class] = TrainerSpells_PetTrainerData[class] or {}
     TrainerSpells_PetTrainerData[class][level] = TrainerSpells_PetTrainerData[class][level] or {}
-
     return TrainerSpells_PetTrainerData[class][level]
 end
 
 local function EnsureProfessionPath(profession, skillReq)
     TrainerSpells_ProfessionData[profession] = TrainerSpells_ProfessionData[profession] or {}
     TrainerSpells_ProfessionData[profession][skillReq] = TrainerSpells_ProfessionData[profession][skillReq] or {}
-
     return TrainerSpells_ProfessionData[profession][skillReq]
 end
 
 local function EnsureRecipePath(profession, skillReq)
     TrainerSpells_RecipeData[profession] = TrainerSpells_RecipeData[profession] or {}
     TrainerSpells_RecipeData[profession][skillReq] = TrainerSpells_RecipeData[profession][skillReq] or {}
-
     return TrainerSpells_RecipeData[profession][skillReq]
 end
 
@@ -264,10 +240,7 @@ local function ExpandAllTrainerHeaders()
     local i = 1
     while i <= GetNumTrainerServices() do
         local _, _, category, expanded = GetTrainerServiceInfo(i)
-        if category == "header" and not expanded then
-            ExpandTrainerSkillLine(i)
-        end
-
+        if category == "header" and not expanded then ExpandTrainerSkillLine(i) end
         i = i + 1
     end
 end
@@ -276,20 +249,15 @@ local function CaptureTrainerInner()
     local _, classToken = UnitClass("player")
     local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
     local professionKey, professionSkillLine
-    if isTradeskill then
-        professionKey, professionSkillLine = DetectTrainerProfession()
-    end
-
+    if isTradeskill then professionKey, professionSkillLine = DetectTrainerProfession() end
     DebugTrainer("CaptureTrainerInner: npcName=%s npcGUID=%s classToken=%s isTradeskill=%s professionKey=%s professionSkillLine=%s", tostring(UnitName("npc")), tostring(UnitGUID and UnitGUID("npc")), tostring(classToken), tostring(isTradeskill), tostring(professionKey), tostring(professionSkillLine))
     if not classToken then
         TrainerSpells:MSG("UnitClass(\"player\") lieferte keinen Klassen-Token.")
-
         return
     end
 
     if not GetNumTrainerServices then
         TrainerSpells:ERR("GetNumTrainerServices existiert nicht (API in dieser Client-Version anders).")
-
         return
     end
 
@@ -324,10 +292,7 @@ local function CaptureTrainerInner()
                 local skillReq = GetSkillReqForService(i)
                 local bucket = EnsureProfessionPath(professionKey, skillReq)
                 local existing = bucket[name]
-                if existing == nil then
-                    neuProf = neuProf + 1
-                end
-
+                if existing == nil then neuProf = neuProf + 1 end
                 bucket[name] = {
                     spellID = spellID,
                     icon = icon,
@@ -349,9 +314,7 @@ local function CaptureTrainerInner()
 
                     if isPetTraining then
                         local oldBucket = TrainerSpells_Data[classToken] and TrainerSpells_Data[classToken][levelReq or 0]
-                        if oldBucket then
-                            oldBucket[spellID] = nil
-                        end
+                        if oldBucket then oldBucket[spellID] = nil end
                     end
 
                     local bucket = isPetTraining and EnsurePetTrainerPath(classToken, levelReq or 0) or EnsurePath(classToken, levelReq or 0)
@@ -377,25 +340,15 @@ local function CaptureTrainerInner()
     end
 
     if debug_trainer then
-        if neu > 0 then
-            TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken))
-        end
-
-        if neuPet > 0 then
-            TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken))
-        end
-
-        if neuProf > 0 then
-            TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Rezept(e) für %s erfasst."):format(neuProf, professionSkillLine or "Beruf"))
-        end
+        if neu > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken)) end
+        if neuPet > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken)) end
+        if neuProf > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Rezept(e) für %s erfasst."):format(neuProf, professionSkillLine or "Beruf")) end
     end
 end
 
 local function CaptureTrainer()
     local ok, err = pcall(CaptureTrainerInner)
-    if not ok then
-        TrainerSpells:ERR("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
-    end
+    if not ok then TrainerSpells:ERR("|cffff5555TrainerSpells Fehler:|r " .. tostring(err)) end
 end
 
 local function OnTrainerServiceSelectedInner(id)
@@ -407,10 +360,7 @@ local function OnTrainerServiceSelectedInner(id)
     if not requires then return end
     local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
     local professionKey
-    if isTradeskill then
-        professionKey = DetectTrainerProfession()
-    end
-
+    if isTradeskill then professionKey = DetectTrainerProfession() end
     local bucket, key
     if professionKey then
         local name = GetTrainerServiceInfo(id)
@@ -431,22 +381,15 @@ local function OnTrainerServiceSelectedInner(id)
 
     if bucket and key and bucket[key] then
         bucket[key].requires = requires
-        if TrainerSpells_Refresh then
-            TrainerSpells_Refresh()
-        end
-
-        if TrainerSpells_ProfessionRefresh then
-            TrainerSpells_ProfessionRefresh()
-        end
+        if TrainerSpells_Refresh then TrainerSpells_Refresh() end
+        if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
     end
 end
 
 local function OnTrainerServiceButtonClicked(self)
     local id = self:GetID()
     local ok, err = pcall(OnTrainerServiceSelectedInner, id)
-    if not ok then
-        TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
-    end
+    if not ok then TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err)) end
 end
 
 local hookedTrainerButtons = {}
@@ -478,7 +421,6 @@ local function BuildCachedSpellIDLookup()
             end
         end
     end
-
     return lookup
 end
 
@@ -489,7 +431,6 @@ local function BuildVisibleTrainerIndexList()
         for i = 1, total do
             table.insert(list, i)
         end
-
         return list
     end
 
@@ -501,20 +442,12 @@ local function BuildVisibleTrainerIndexList()
         if category and category ~= "header" and name then
             local rankNum = subText and tonumber(subText:match("%d+")) or 0
             local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rankNum]
-            if not spellID then
-                spellID = GetSpellIDForService(i)
-            end
-
-            if TrainerSpells_IsIgnored(spellID, name) then
-                keep = false
-            end
+            if not spellID then spellID = GetSpellIDForService(i) end
+            if TrainerSpells_IsIgnored(spellID, name) then keep = false end
         end
 
-        if keep then
-            table.insert(list, i)
-        end
+        if keep then table.insert(list, i) end
     end
-
     return list
 end
 
@@ -531,10 +464,7 @@ local function TrainerSpells_ClassTrainerFrame_Update()
         ClassTrainerCollapseAllButton:Enable()
     end
 
-    if not ClassTrainerFrame.selectedService then
-        ClassTrainer_HideSkillDetails()
-    end
-
+    if not ClassTrainerFrame.selectedService then ClassTrainer_HideSkillDetails() end
     if IsTradeskillTrainer() then
         ClassTrainer_SetToTradeSkillTrainer()
     else
@@ -551,10 +481,7 @@ local function TrainerSpells_ClassTrainerFrame_Update()
         local moneyCost
         if skillIndex then
             serviceName, serviceSubText, serviceType, isExpanded = GetTrainerServiceInfo(skillIndex)
-            if not serviceName then
-                serviceName = UNKNOWN
-            end
-
+            if not serviceName then serviceName = UNKNOWN end
             if ClassTrainerListScrollFrame:IsVisible() then
                 skillButton:SetWidth(293)
             else
@@ -611,9 +538,7 @@ local function TrainerSpells_ClassTrainerFrame_Update()
                 ClassTrainerSkillHighlightFrame:Show()
                 skillButton:LockHighlight()
                 ClassTrainer_SetSubTextColor(skillButton, HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
-                if moneyCost and moneyCost > 0 then
-                    ClassTrainerCostLabel:Show()
-                end
+                if moneyCost and moneyCost > 0 then ClassTrainerCostLabel:Show() end
             else
                 skillButton:UnlockHighlight()
             end
@@ -630,14 +555,10 @@ local function TrainerSpells_ClassTrainerFrame_Update()
         local serviceName, _, serviceType, isExpanded = GetTrainerServiceInfo(realIndex)
         if serviceName and serviceType == "header" then
             numHeaders = numHeaders + 1
-            if not isExpanded then
-                notExpanded = notExpanded + 1
-            end
+            if not isExpanded then notExpanded = notExpanded + 1 end
         end
 
-        if ClassTrainerFrame.selectedService and GetTrainerSelectionIndex() == realIndex then
-            showDetails = 1
-        end
+        if ClassTrainerFrame.selectedService and GetTrainerSelectionIndex() == realIndex then showDetails = 1 end
     end
 
     if showDetails then
@@ -685,35 +606,27 @@ local function EnsureTrainerFilterHookInstalled()
 
     local function SetIgnoredFilterSelected()
         TrainerSpells_Character.showIgnoredInTrainer = not TrainerSpells_Character.showIgnoredInTrainer
-        if ClassTrainerFrame_Update then
-            ClassTrainerFrame_Update()
-        end
+        if ClassTrainerFrame_Update then ClassTrainerFrame_Update() end
     end
 
     local applyingOwnMenu = false
     local function ApplyOwnMenu()
         applyingOwnMenu = true
-        ClassTrainerFrame.FilterDropdown:SetupMenu(
-            function(dropdown, rootDescription)
-                rootDescription:SetTag("MENU_TRAINER_FILTER")
-                rootDescription:CreateCheckbox(GREEN_FONT_COLOR:WrapTextInColorCode(AVAILABLE), IsNativeFilterSelected, SetNativeFilterSelected, "available")
-                rootDescription:CreateCheckbox(RED_FONT_COLOR:WrapTextInColorCode(UNAVAILABLE), IsNativeFilterSelected, SetNativeFilterSelected, "unavailable")
-                rootDescription:CreateCheckbox(YELLOW_FONT_COLOR:WrapTextInColorCode(TrainerSpells:Trans("LID_IGNORED")), IsIgnoredFilterSelected, SetIgnoredFilterSelected)
-                rootDescription:CreateCheckbox(GRAY_FONT_COLOR:WrapTextInColorCode(USED), IsNativeFilterSelected, SetNativeFilterSelected, "used")
-            end
-        )
+        ClassTrainerFrame.FilterDropdown:SetupMenu(function(dropdown, rootDescription)
+            rootDescription:SetTag("MENU_TRAINER_FILTER")
+            rootDescription:CreateCheckbox(GREEN_FONT_COLOR:WrapTextInColorCode(AVAILABLE), IsNativeFilterSelected, SetNativeFilterSelected, "available")
+            rootDescription:CreateCheckbox(RED_FONT_COLOR:WrapTextInColorCode(UNAVAILABLE), IsNativeFilterSelected, SetNativeFilterSelected, "unavailable")
+            rootDescription:CreateCheckbox(YELLOW_FONT_COLOR:WrapTextInColorCode(TrainerSpells:Trans("LID_IGNORED")), IsIgnoredFilterSelected, SetIgnoredFilterSelected)
+            rootDescription:CreateCheckbox(GRAY_FONT_COLOR:WrapTextInColorCode(USED), IsNativeFilterSelected, SetNativeFilterSelected, "used")
+        end)
 
         applyingOwnMenu = false
     end
 
-    hooksecurefunc(
-        ClassTrainerFrame.FilterDropdown,
-        "SetupMenu",
-        function()
-            if applyingOwnMenu then return end
-            ApplyOwnMenu()
-        end
-    )
+    hooksecurefunc(ClassTrainerFrame.FilterDropdown, "SetupMenu", function()
+        if applyingOwnMenu then return end
+        ApplyOwnMenu()
+    end)
 
     ApplyOwnMenu()
 end
@@ -723,11 +636,8 @@ local function CountRealTrainerServices()
     local real = 0
     for i = 1, total do
         local _, _, category = GetTrainerServiceInfo(i)
-        if category ~= "header" then
-            real = real + 1
-        end
+        if category ~= "header" then real = real + 1 end
     end
-
     return real
 end
 
@@ -736,7 +646,6 @@ local function ScanTrainerServicesStep(button, offset, maxOffset, targetCount, v
         FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, 0)
         ClassTrainerFrame_Update()
         TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r Scan abgeschlossen (%d/%d erfasst)."):format(visitedCount, targetCount))
-
         return
     end
 
@@ -752,25 +661,18 @@ local function ScanTrainerServicesStep(button, offset, maxOffset, targetCount, v
         end
     end
 
-    C_Timer.After(
-        0.05,
-        function()
-            ScanTrainerServicesStep(button, offset + 1, maxOffset, targetCount, visited, visitedCount)
-        end
-    )
+    C_Timer.After(0.05, function() ScanTrainerServicesStep(button, offset + 1, maxOffset, targetCount, visited, visitedCount) end)
 end
 
 local function ScanAllTrainerRequirements()
     if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine or not ClassTrainerListScrollFrame or not FauxScrollFrame_SetOffset or not ClassTrainerFrame_Update or not C_Timer then
         TrainerSpells:MSG("|cffff5555TrainerSpells:|r Scan nicht möglich, benötigte API fehlt.")
-
         return
     end
 
     local button = _G["ClassTrainerSkill1"]
     if not button then
         TrainerSpells:MSG("|cffff5555TrainerSpells:|r Scan nicht möglich, Trainer-Button nicht gefunden.")
-
         return
     end
 
@@ -784,7 +686,6 @@ end
 local function EnsurePetPath(pet, level)
     TrainerSpells_PetData[pet] = TrainerSpells_PetData[pet] or {}
     TrainerSpells_PetData[pet][level] = TrainerSpells_PetData[pet][level] or {}
-
     return TrainerSpells_PetData[pet][level]
 end
 
@@ -801,13 +702,8 @@ local function MergeBuiltinData()
                             faction = data.faction
                         }
                     else
-                        if data.cost then
-                            bucket[spellID].cost = data.cost
-                        end
-
-                        if data.faction and bucket[spellID].faction == nil then
-                            bucket[spellID].faction = data.faction
-                        end
+                        if data.cost then bucket[spellID].cost = data.cost end
+                        if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
                     end
                 end
             end
@@ -826,13 +722,8 @@ local function MergeBuiltinData()
                             faction = data.faction
                         }
                     else
-                        if data.cost then
-                            bucket[spellID].cost = data.cost
-                        end
-
-                        if data.faction and bucket[spellID].faction == nil then
-                            bucket[spellID].faction = data.faction
-                        end
+                        if data.cost then bucket[spellID].cost = data.cost end
+                        if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
                     end
                 end
             end
@@ -850,13 +741,8 @@ local function MergeBuiltinData()
                         faction = data.faction
                     }
                 else
-                    if data.cost then
-                        bucket[spellID].cost = data.cost
-                    end
-
-                    if data.faction and bucket[spellID].faction == nil then
-                        bucket[spellID].faction = data.faction
-                    end
+                    if data.cost then bucket[spellID].cost = data.cost end
+                    if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
                 end
             end
         end
@@ -879,25 +765,11 @@ local function MergeBuiltinData()
                                 faction = data.faction
                             }
                         else
-                            if data.cost then
-                                bucket[name].cost = data.cost
-                            end
-
-                            if bucket[name].spellID == nil then
-                                bucket[name].spellID = spellID
-                            end
-
-                            if data.icon and bucket[name].icon == nil then
-                                bucket[name].icon = data.icon
-                            end
-
-                            if data.requires and bucket[name].requires == nil then
-                                bucket[name].requires = data.requires
-                            end
-
-                            if data.faction and bucket[name].faction == nil then
-                                bucket[name].faction = data.faction
-                            end
+                            if data.cost then bucket[name].cost = data.cost end
+                            if bucket[name].spellID == nil then bucket[name].spellID = spellID end
+                            if data.icon and bucket[name].icon == nil then bucket[name].icon = data.icon end
+                            if data.requires and bucket[name].requires == nil then bucket[name].requires = data.requires end
+                            if data.faction and bucket[name].faction == nil then bucket[name].faction = data.faction end
                         end
                     end
                 end
@@ -922,25 +794,11 @@ local function MergeBuiltinData()
                                 source = data.source
                             }
                         else
-                            if bucket[name].spellID == nil then
-                                bucket[name].spellID = spellID
-                            end
-
-                            if data.icon and bucket[name].icon == nil then
-                                bucket[name].icon = data.icon
-                            end
-
-                            if data.requires and bucket[name].requires == nil then
-                                bucket[name].requires = data.requires
-                            end
-
-                            if data.faction and bucket[name].faction == nil then
-                                bucket[name].faction = data.faction
-                            end
-
-                            if data.source and bucket[name].source == nil then
-                                bucket[name].source = data.source
-                            end
+                            if bucket[name].spellID == nil then bucket[name].spellID = spellID end
+                            if data.icon and bucket[name].icon == nil then bucket[name].icon = data.icon end
+                            if data.requires and bucket[name].requires == nil then bucket[name].requires = data.requires end
+                            if data.faction and bucket[name].faction == nil then bucket[name].faction = data.faction end
+                            if data.source and bucket[name].source == nil then bucket[name].source = data.source end
                         end
                     end
                 end
@@ -980,10 +838,7 @@ local function CaptureMerchantInner()
                         local _, _, price = GetMerchantItemInfo(i)
                         local rankNum = itemName and tonumber(itemName:match("%(.-(%d+)%)"))
                         local bucket = EnsurePetPath(pet, itemMinLevel)
-                        if bucket[spellID] == nil then
-                            neu = neu + 1
-                        end
-
+                        if bucket[spellID] == nil then neu = neu + 1 end
                         bucket[spellID] = {
                             cost = price or 0,
                             rank = rankNum,
@@ -994,16 +849,12 @@ local function CaptureMerchantInner()
         end
     end
 
-    if neu > 0 then
-        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Fähigkeit(en) erfasst."):format(neu))
-    end
+    if neu > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Fähigkeit(en) erfasst."):format(neu)) end
 end
 
 local function CaptureMerchant()
     local ok, err = pcall(CaptureMerchantInner)
-    if not ok then
-        TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
-    end
+    if not ok then TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err)) end
 end
 
 function TrainerSpells:IsPetSpellKnown(spellID, pet)
@@ -1015,7 +866,6 @@ function TrainerSpells:IsPetSpellKnown(spellID, pet)
             if data[spellID] ~= nil then return data[spellID] end
         end
     end
-
     return nil
 end
 
@@ -1039,31 +889,26 @@ local function FindPetSpellIDByNameAndRank(pet, spellName, rankNum)
     end
 end
 
-GameTooltip:HookScript(
-    "OnTooltipSetItem",
-    function(self)
-        local pet = DetectPetFromTooltip(self)
-        local family = UnitCreatureFamily("pet")
-        if not pet then return end
-        local itemName, itemLink = self:GetItem()
-        local rankNum = itemName and tonumber(itemName:match("%(.-(%d+)%)"))
-        local spellName = itemLink and C_Item and C_Item.GetItemSpell(itemLink)
-        local spellID = FindPetSpellIDByNameAndRank(pet, spellName, rankNum)
-        if not spellID then return end
-        local isPetSpellKnown = TrainerSpells:IsPetSpellKnown(spellID, family)
-        if isPetSpellKnown == true then
-            if pet ~= family then
-                self:AddLine(TrainerSpells:Trans("LID_ALREADYKNOWN"), 0.9, 0.2, 0.2)
-            end
-        elseif isPetSpellKnown == false then
-            self:AddLine(TrainerSpells:Trans("LID_NOTLEARNEDYET"), 0.2, 0.9, 0.2)
-        else
-            self:AddLine(TrainerSpells:Trans("LID_NOTSCANNEDYET"), 0.9, 0.9, 0.2)
-        end
-
-        self:Show()
+GameTooltip:HookScript("OnTooltipSetItem", function(self)
+    local pet = DetectPetFromTooltip(self)
+    local family = UnitCreatureFamily("pet")
+    if not pet then return end
+    local itemName, itemLink = self:GetItem()
+    local rankNum = itemName and tonumber(itemName:match("%(.-(%d+)%)"))
+    local spellName = itemLink and C_Item and C_Item.GetItemSpell(itemLink)
+    local spellID = FindPetSpellIDByNameAndRank(pet, spellName, rankNum)
+    if not spellID then return end
+    local isPetSpellKnown = TrainerSpells:IsPetSpellKnown(spellID, family)
+    if isPetSpellKnown == true then
+        if pet ~= family then self:AddLine(TrainerSpells:Trans("LID_ALREADYKNOWN"), 0.9, 0.2, 0.2) end
+    elseif isPetSpellKnown == false then
+        self:AddLine(TrainerSpells:Trans("LID_NOTLEARNEDYET"), 0.2, 0.9, 0.2)
+    else
+        self:AddLine(TrainerSpells:Trans("LID_NOTSCANNEDYET"), 0.9, 0.9, 0.2)
     end
-)
+
+    self:Show()
+end)
 
 local function MarkKnownPetSpells(pet, dataTable)
     if not UnitExists("pet") or UnitHealth("pet") <= 0 then return end
@@ -1095,7 +940,6 @@ local function MarkKnownPetSpells(pet, dataTable)
             end
         end
     end
-
     return changed
 end
 
@@ -1105,113 +949,88 @@ local function SyncKnownPetSpellsForActivePet()
     local petData = family and TrainerSpells_PetData[family]
     if not petData then return end
     local changed = MarkKnownPetSpells(family, petData)
-    if changed and TrainerSpells_Refresh then
-        TrainerSpells_Refresh()
-    end
+    if changed and TrainerSpells_Refresh then TrainerSpells_Refresh() end
 end
 
 local captureScheduled = false
 local merchantCaptureScheduled = false
 local petSyncScheduled = false
-f:SetScript(
-    "OnEvent",
-    function(self, event, arg1)
-        if event == "ADDON_LOADED" and arg1 == "TrainerSpells" then
-            TrainerSpells_Data = TrainerSpells_Data or {}
-            TrainerSpells_Ignored = TrainerSpells_Ignored or {}
-            TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
-            TrainerSpells_Character = TrainerSpells_Character or {}
-            TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
-            TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
-            if TrainerSpells_Character.showIgnoredInTrainer == nil then
-                TrainerSpells_Character.showIgnoredInTrainer = false
-            end
+f:SetScript("OnEvent", function(self, event, arg1)
+    if event == "ADDON_LOADED" and arg1 == "TrainerSpells" then
+        TrainerSpells_Data = TrainerSpells_Data or {}
+        TrainerSpells_Ignored = TrainerSpells_Ignored or {}
+        TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
+        TrainerSpells_Character = TrainerSpells_Character or {}
+        TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
+        TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
+        if TrainerSpells_Character.showIgnoredInTrainer == nil then TrainerSpells_Character.showIgnoredInTrainer = false end
+        TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 16
+        TrainerSpells_PetData = TrainerSpells_PetData or {}
+        TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
+        TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
+        TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
+        TrainerSpells:SetVersion(133741, "0.3.4")
+        MergeBuiltinData()
+    elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
+        do
+            local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
+            local professionKey, professionSkillLine
+            if isTradeskill then professionKey, professionSkillLine = DetectTrainerProfession() end
+            DebugTrainer("Event %s: npcName=%s npcGUID=%s isTradeskill=%s professionKey=%s professionSkillLine=%s", event, tostring(UnitName("npc")), tostring(UnitGUID and UnitGUID("npc")), tostring(isTradeskill), tostring(professionKey), tostring(professionSkillLine))
+        end
 
-            TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 16
-            TrainerSpells_PetData = TrainerSpells_PetData or {}
-            TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
-            TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
-            TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
-            TrainerSpells:SetVersion(133741, "0.3.3")
-            MergeBuiltinData()
-        elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
-            do
-                local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
-                local professionKey, professionSkillLine
-                if isTradeskill then
-                    professionKey, professionSkillLine = DetectTrainerProfession()
-                end
+        EnsureTrainerUpdateOverrideInstalled()
+        EnsureTrainerFilterHookInstalled()
+        if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
+            local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
+            scanButton:SetSize(80, 22)
+            scanButton:SetText("Scannen")
+            scanButton:SetPoint("BOTTOMLEFT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
+            scanButton:SetScript("OnClick", function()
+                local ok, err = pcall(ScanAllTrainerRequirements)
+                if not ok then TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err)) end
+            end)
+        end
 
-                DebugTrainer("Event %s: npcName=%s npcGUID=%s isTradeskill=%s professionKey=%s professionSkillLine=%s", event, tostring(UnitName("npc")), tostring(UnitGUID and UnitGUID("npc")), tostring(isTradeskill), tostring(professionKey), tostring(professionSkillLine))
+        if C_Timer then
+            if not captureScheduled then
+                captureScheduled = true
+                C_Timer.After(0.1, function()
+                    captureScheduled = false
+                    CaptureTrainer()
+                    CaptureTrainerRequirements()
+                end)
             end
-
-            EnsureTrainerUpdateOverrideInstalled()
-            EnsureTrainerFilterHookInstalled()
-            if debug_trainer and ClassTrainerFrame and TrainerSpellsScanButton == nil then
-                local scanButton = CreateFrame("Button", "TrainerSpellsScanButton", ClassTrainerFrame, "UIPanelButtonTemplate")
-                scanButton:SetSize(80, 22)
-                scanButton:SetText("Scannen")
-                scanButton:SetPoint("BOTTOMLEFT", ClassTrainerFrame, "TOPRIGHT", 0, 0)
-                scanButton:SetScript(
-                    "OnClick",
-                    function()
-                        local ok, err = pcall(ScanAllTrainerRequirements)
-                        if not ok then
-                            TrainerSpells:MSG("|cffff5555TrainerSpells Fehler:|r " .. tostring(err))
-                        end
-                    end
-                )
+        else
+            CaptureTrainer()
+            CaptureTrainerRequirements()
+        end
+    elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
+        if C_Timer then
+            if not merchantCaptureScheduled then
+                merchantCaptureScheduled = true
+                C_Timer.After(0.1, function()
+                    merchantCaptureScheduled = false
+                    CaptureMerchant()
+                end)
             end
-
-            if C_Timer then
-                if not captureScheduled then
-                    captureScheduled = true
-                    C_Timer.After(
-                        0.1,
-                        function()
-                            captureScheduled = false
-                            CaptureTrainer()
-                            CaptureTrainerRequirements()
-                        end
-                    )
-                end
-            else
-                CaptureTrainer()
-                CaptureTrainerRequirements()
+        else
+            CaptureMerchant()
+        end
+    elseif event == "SPELLS_CHANGED" or (event == "UNIT_PET" and arg1 == "player") then
+        if C_Timer then
+            if not petSyncScheduled then
+                petSyncScheduled = true
+                C_Timer.After(1, function()
+                    petSyncScheduled = false
+                    SyncKnownPetSpellsForActivePet()
+                end)
             end
-        elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
-            if C_Timer then
-                if not merchantCaptureScheduled then
-                    merchantCaptureScheduled = true
-                    C_Timer.After(
-                        0.1,
-                        function()
-                            merchantCaptureScheduled = false
-                            CaptureMerchant()
-                        end
-                    )
-                end
-            else
-                CaptureMerchant()
-            end
-        elseif event == "SPELLS_CHANGED" or (event == "UNIT_PET" and arg1 == "player") then
-            if C_Timer then
-                if not petSyncScheduled then
-                    petSyncScheduled = true
-                    C_Timer.After(
-                        1,
-                        function()
-                            petSyncScheduled = false
-                            SyncKnownPetSpellsForActivePet()
-                        end
-                    )
-                end
-            else
-                SyncKnownPetSpellsForActivePet()
-            end
+        else
+            SyncKnownPetSpellsForActivePet()
         end
     end
-)
+end)
 
 TrainerSpells_Capture = CaptureTrainer
 TrainerSpells_CaptureMerchant = CaptureMerchant
@@ -1239,9 +1058,7 @@ function TrainerSpells_ToggleIgnoreName(name)
         local ignoredSpells = TrainerSpells_Ignored[classToken]
         if ignoredSpells then
             for spellID in pairs(ignoredSpells) do
-                if GetSpellInfo(spellID) == name then
-                    ignoredSpells[spellID] = nil
-                end
+                if GetSpellInfo(spellID) == name then ignoredSpells[spellID] = nil end
             end
         end
     else
@@ -1253,14 +1070,12 @@ function TrainerSpells_IsSpellIgnored(spellID)
     spellID = tonumber(spellID)
     local _, classToken = UnitClass("player")
     if not classToken or not spellID then return false end
-
     return TrainerSpells_Ignored[classToken] and TrainerSpells_Ignored[classToken][spellID] or false
 end
 
 function TrainerSpells_IsNameIgnored(name)
     local _, classToken = UnitClass("player")
     if not classToken or not name then return false end
-
     return TrainerSpells_IgnoredNames[classToken] and TrainerSpells_IgnoredNames[classToken][name] or false
 end
 

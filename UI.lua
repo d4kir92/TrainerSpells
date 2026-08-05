@@ -63,13 +63,9 @@ end
 local function GetLevelDiffColorCode(level)
     if GetQuestDifficultyColor then
         local r, g, b = GetQuestDifficultyColor(level)
-        if type(r) == "table" then
-            r, g, b = r.r, r.g, r.b
-        end
-
+        if type(r) == "table" then r, g, b = r.r, r.g, r.b end
         if r then return ("|cff%02x%02x%02x"):format(r * 255, g * 255, b * 255) end
     end
-
     return RANK_COLOR
 end
 
@@ -81,14 +77,11 @@ local function GetTalentNameSet()
                 local talentName, _, _, _, rank = GetTalentInfo(tab, i)
                 if talentName then
                     names[talentName] = true
-                    if (rank or 0) > 0 then
-                        learned[talentName] = true
-                    end
+                    if (rank or 0) > 0 then learned[talentName] = true end
                 end
             end
         end
     end
-
     return names, learned
 end
 
@@ -99,7 +92,6 @@ end
 local function IsReqSpellKnown(spellID)
     if not IsPlayerSpell or type(spellID) ~= "number" then return false end
     local ok, known = pcall(IsPlayerSpell, spellID)
-
     return ok and known or false
 end
 
@@ -109,19 +101,16 @@ local function RequiresUnknownTalent(entry, talentNames, learnedTalents)
         local reqName = GetSpellInfo(reqSpellID)
         if reqName and talentNames[reqName] and not learnedTalents[reqName] and not IsReqSpellKnown(reqSpellID) then return true end
     end
-
     return false
 end
 
 local function FormatCost(copper)
     if not copper or copper == 0 then return "kostenlos" end
-
     return GetMoneyString(copper, true)
 end
 
 local function GetLocalizedRankText(spellID)
     local subtext = GetSpellSubtext and spellID and GetSpellSubtext(spellID)
-
     return (subtext and subtext ~= "") and subtext or nil
 end
 
@@ -130,19 +119,14 @@ local function EntryMatchesSearch(entry, search)
     if entry.name and entry.name:lower():find(search, 1, true) then return true end
     if entry.level and tostring(entry.level):find(search, 1, true) then return true end
     if entry.levelReq and tostring(entry.levelReq):find(search, 1, true) then return true end
-
     return false
 end
 
 local function SortEntries(list)
-    table.sort(
-        list,
-        function(a, b)
-            if a.level ~= b.level then return a.level < b.level end
-
-            return a.key < b.key
-        end
-    )
+    table.sort(list, function(a, b)
+        if a.level ~= b.level then return a.level < b.level end
+        return a.key < b.key
+    end)
 end
 
 local ignoreMenuFrame = CreateFrame("Frame", "TrainerSpellsIgnoreMenu", UIParent, "UIDropDownMenuTemplate")
@@ -198,41 +182,23 @@ searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", -60, -6)
 searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -10, -6)
 searchBox:SetHeight(20)
 searchBox:SetAutoFocus(false)
-searchBox:SetScript(
-    "OnTextChanged",
-    function(self)
-        if SearchBoxTemplate_OnTextChanged then
-            SearchBoxTemplate_OnTextChanged(self)
-        end
-
-        TrainerSpells_SearchText = self:GetText() or ""
-        TrainerSpells_Refresh()
-    end
-)
+searchBox:SetScript("OnTextChanged", function(self)
+    if SearchBoxTemplate_OnTextChanged then SearchBoxTemplate_OnTextChanged(self) end
+    TrainerSpells_SearchText = self:GetText() or ""
+    TrainerSpells_Refresh()
+end)
 
 local rowHeightSlider = CreateFrame("Slider", "TrainerSpellsRowHeightSlider", classFrame, "MinimalSliderWithSteppersTemplate")
 rowHeightSlider:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", -8, -5)
 rowHeightSlider:SetPoint("TOPRIGHT", searchBox, "BOTTOMRIGHT", -24, -14)
 rowHeightSlider:SetScale(0.75)
 rowHeightSlider:SetHeight(10)
-rowHeightSlider:Init(
-    ROW_HEIGHT,
-    MIN_ROW_HEIGHT,
-    MAX_ROW_HEIGHT,
-    MAX_ROW_HEIGHT - MIN_ROW_HEIGHT,
-    {
-        [MinimalSliderWithSteppersMixin.Label.Right] = CreateMinimalSliderFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value) return WHITE_FONT_COLOR:WrapTextInColorCode(tostring(math.floor(value + 0.5))) end)
-    }
-)
+rowHeightSlider:Init(ROW_HEIGHT, MIN_ROW_HEIGHT, MAX_ROW_HEIGHT, MAX_ROW_HEIGHT - MIN_ROW_HEIGHT, {
+    [MinimalSliderWithSteppersMixin.Label.Right] = CreateMinimalSliderFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value) return WHITE_FONT_COLOR:WrapTextInColorCode(tostring(math.floor(value + 0.5))) end)
+})
 
-if rowHeightSlider.MinText then
-    rowHeightSlider.MinText:Hide()
-end
-
-if rowHeightSlider.MaxText then
-    rowHeightSlider.MaxText:Hide()
-end
-
+if rowHeightSlider.MinText then rowHeightSlider.MinText:Hide() end
+if rowHeightSlider.MaxText then rowHeightSlider.MaxText:Hide() end
 local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", classFrame, "WowScrollBoxList")
 scrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, -4)
 scrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
@@ -241,27 +207,21 @@ local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", classFrame
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
 local pendingSpellTooltipExtra
-GameTooltip:HookScript(
-    "OnTooltipSetSpell",
-    function(tooltip)
-        local extra = pendingSpellTooltipExtra
-        if not extra then return end
-        local _, spellID = tooltip:GetSpell()
-        if spellID ~= extra.spellID then return end
-        if extra.showCost then
-            local canAfford = not extra.cost or extra.cost == 0 or (GetMoney() or 0) >= extra.cost
-            local costColor = canAfford and "|cffffffff" or "|cffff3333"
-            tooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(extra.cost) .. "|r", 1, 1, 1)
-            tooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
-        end
-
-        if extra.source then
-            tooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. extra.source, 0.9, 0.9, 0.9, true)
-        end
-
-        tooltip:Show()
+GameTooltip:HookScript("OnTooltipSetSpell", function(tooltip)
+    local extra = pendingSpellTooltipExtra
+    if not extra then return end
+    local _, spellID = tooltip:GetSpell()
+    if spellID ~= extra.spellID then return end
+    if extra.showCost then
+        local canAfford = not extra.cost or extra.cost == 0 or (GetMoney() or 0) >= extra.cost
+        local costColor = canAfford and "|cffffffff" or "|cffff3333"
+        tooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(extra.cost) .. "|r", 1, 1, 1)
+        tooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
     end
-)
+
+    if extra.source then tooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. extra.source, 0.9, 0.9, 0.9, true) end
+    tooltip:Show()
+end)
 
 local function InitScrollRow(rowFrame, elementData)
     if not rowFrame.icon then
@@ -305,36 +265,25 @@ local function InitScrollRow(rowFrame, elementData)
         nameFS:SetText(collapseIcon .. prefix .. elementData.color .. elementData.text .. "|r")
         if elementData.totalCost or elementData.groupKey then
             rowFrame:EnableMouse(true)
-            rowFrame:SetScript(
-                "OnEnter",
-                function(sel)
-                    if not elementData.totalCost then return end
-                    GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-                    GameTooltip:AddLine(elementData.text)
-                    local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
-                    local costColor = canAfford and "|cffffffff" or "|cffff3333"
-                    GameTooltip:AddLine(TrainerSpells:Trans("LID_TOTALCOST") .. ": " .. costColor .. FormatCost(elementData.totalCost) .. "|r", 1, 1, 1)
-                    GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
-                    GameTooltip:Show()
-                end
-            )
+            rowFrame:SetScript("OnEnter", function(sel)
+                if not elementData.totalCost then return end
+                GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+                GameTooltip:AddLine(elementData.text)
+                local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
+                local costColor = canAfford and "|cffffffff" or "|cffff3333"
+                GameTooltip:AddLine(TrainerSpells:Trans("LID_TOTALCOST") .. ": " .. costColor .. FormatCost(elementData.totalCost) .. "|r", 1, 1, 1)
+                GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
+                GameTooltip:Show()
+            end)
 
             rowFrame:SetScript("OnLeave", GameTooltip_Hide)
-            rowFrame:SetScript(
-                "OnMouseUp",
-                function(self, button)
-                    if button == "LeftButton" and elementData.groupKey then
-                        ToggleGroup(elementData.groupKey)
-                        if TrainerSpells_Refresh then
-                            TrainerSpells_Refresh()
-                        end
-
-                        if TrainerSpells_ProfessionRefresh then
-                            TrainerSpells_ProfessionRefresh()
-                        end
-                    end
+            rowFrame:SetScript("OnMouseUp", function(self, button)
+                if button == "LeftButton" and elementData.groupKey then
+                    ToggleGroup(elementData.groupKey)
+                    if TrainerSpells_Refresh then TrainerSpells_Refresh() end
+                    if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
                 end
-            )
+            end)
         end
     else
         local entry = elementData.entry
@@ -353,115 +302,83 @@ local function InitScrollRow(rowFrame, elementData)
         end
 
         rowFrame:EnableMouse(true)
-        rowFrame:SetScript(
-            "OnEnter",
-            function(self)
-                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-                local showCost = elementData.showCostTooltip and entry.cost ~= nil
-                if entry.spellID then
-                    pendingSpellTooltipExtra = {
-                        spellID = entry.spellID,
-                        showCost = showCost,
-                        cost = entry.cost,
-                        source = entry.source,
-                    }
+        rowFrame:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            local showCost = elementData.showCostTooltip and entry.cost ~= nil
+            if entry.spellID then
+                pendingSpellTooltipExtra = {
+                    spellID = entry.spellID,
+                    showCost = showCost,
+                    cost = entry.cost,
+                    source = entry.source,
+                }
 
-                    GameTooltip:SetSpellByID(entry.spellID)
-                else
-                    pendingSpellTooltipExtra = nil
-                    GameTooltip:SetText(entry.name)
-                    if showCost then
-                        local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
-                        local costColor = canAfford and "|cffffffff" or "|cffff3333"
-                        GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
-                        GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
-                    end
-
-                    if entry.source then
-                        GameTooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. entry.source, 0.9, 0.9, 0.9, true)
-                    end
-                end
-
-                GameTooltip:Show()
-            end
-        )
-
-        rowFrame:SetScript(
-            "OnLeave",
-            function(self)
+                GameTooltip:SetSpellByID(entry.spellID)
+            else
                 pendingSpellTooltipExtra = nil
-                GameTooltip_Hide(self)
-            end
-        )
-
-        rowFrame:SetScript(
-            "OnMouseUp",
-            function(self, button)
-                if button == "RightButton" then
-                    ShowIgnoreMenu(self, entry)
+                GameTooltip:SetText(entry.name)
+                if showCost then
+                    local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
+                    local costColor = canAfford and "|cffffffff" or "|cffff3333"
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
                 end
+
+                if entry.source then GameTooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. entry.source, 0.9, 0.9, 0.9, true) end
             end
-        )
+
+            GameTooltip:Show()
+        end)
+
+        rowFrame:SetScript("OnLeave", function(self)
+            pendingSpellTooltipExtra = nil
+            GameTooltip_Hide(self)
+        end)
+
+        rowFrame:SetScript("OnMouseUp", function(self, button) if button == "RightButton" then ShowIgnoreMenu(self, entry) end end)
     end
 end
 
 local scrollView = CreateScrollBoxListLinearView()
-scrollView:SetElementExtentCalculator(
-    function(index, elementData)
-        if elementData.isHeader then return index > 1 and (HEADER_HEIGHT + HEADER_EXTRA_GAP) or HEADER_HEIGHT end
-
-        return ROW_HEIGHT
-    end
-)
+scrollView:SetElementExtentCalculator(function(index, elementData)
+    if elementData.isHeader then return index > 1 and (HEADER_HEIGHT + HEADER_EXTRA_GAP) or HEADER_HEIGHT end
+    return ROW_HEIGHT
+end)
 
 scrollView:SetPadding(0, 0, 0, 0, ROW_SPACING)
 scrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
-rowHeightSlider:RegisterCallback(
-    MinimalSliderWithSteppersMixin.Event.OnValueChanged,
-    function(_, value)
-        value = math.floor(value + 0.5)
-        if value == ROW_HEIGHT then return end
-        ROW_HEIGHT = value
-        if TrainerSpells_Character then
-            TrainerSpells_Character.rowHeight = ROW_HEIGHT
-        end
-
-        if TrainerSpells_Refresh then
-            TrainerSpells_Refresh()
-        end
-    end
-)
+rowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
+    value = math.floor(value + 0.5)
+    if value == ROW_HEIGHT then return end
+    ROW_HEIGHT = value
+    if TrainerSpells_Character then TrainerSpells_Character.rowHeight = ROW_HEIGHT end
+    if TrainerSpells_Refresh then TrainerSpells_Refresh() end
+end)
 
 local function AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText)
-    table.insert(
-        items,
-        {
-            isHeader = true,
-            text = text,
-            color = colorCode,
-            totalCost = totalCost,
-            groupKey = groupKey,
-            collapsed = IsGroupCollapsed(groupKey),
-            prefixText = prefixText
-        }
-    )
+    table.insert(items, {
+        isHeader = true,
+        text = text,
+        color = colorCode,
+        totalCost = totalCost,
+        groupKey = groupKey,
+        collapsed = IsGroupCollapsed(groupKey),
+        prefixText = prefixText
+    })
 end
 
 local function AddEntryItems(items, list, colorCode, showLevel, showCostTooltip, dimName, levelLabel)
     for _, entry in ipairs(list) do
-        table.insert(
-            items,
-            {
-                isHeader = false,
-                entry = entry,
-                color = colorCode,
-                showLevel = showLevel,
-                showCostTooltip = showCostTooltip,
-                dimName = dimName,
-                levelLabel = levelLabel,
-            }
-        )
+        table.insert(items, {
+            isHeader = false,
+            entry = entry,
+            color = colorCode,
+            showLevel = showLevel,
+            showCostTooltip = showCostTooltip,
+            dimName = dimName,
+            levelLabel = levelLabel,
+        })
     end
 end
 
@@ -470,7 +387,6 @@ local function SumCost(list)
     for _, entry in ipairs(list) do
         total = total + (entry.cost or 0)
     end
-
     return total
 end
 
@@ -526,23 +442,17 @@ local function BuildEntriesFromData(dataTable)
                 }
 
                 table.insert(allEntries, entry)
-                if directlyKnown and hasRealRank then
-                    knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum)
-                end
+                if directlyKnown and hasRealRank then knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum) end
             end
         end
     end
-
     return allEntries, knownMaxRank
 end
 
 local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck)
     local allEntries, knownMaxRank = BuildEntriesFromData(dataTable)
     local talentNames, learnedTalents
-    if not skipTalentCheck then
-        talentNames, learnedTalents = GetTalentNameSet()
-    end
-
+    if not skipTalentCheck then talentNames, learnedTalents = GetTalentNameSet() end
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
         if EntryMatchesSearch(entry, searchText) then
@@ -574,9 +484,7 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
 
     local nextLevel
     for _, entry in ipairs(future) do
-        if not nextLevel or entry.level < nextLevel then
-            nextLevel = entry.level
-        end
+        if not nextLevel or entry.level < nextLevel then nextLevel = entry.level end
     end
 
     local soon, higher = {}, {}
@@ -594,7 +502,6 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
     SortEntries(soon)
     SortEntries(higher)
     SortEntries(known)
-
     return {
         available = available,
         soon = soon,
@@ -607,52 +514,37 @@ local function ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentC
 end
 
 local function AppendGroupItems(items, groups, keyPrefix, labelPrefix, unitLabel, showCost)
-    if showCost == nil then
-        showCost = true
-    end
-
+    if showCost == nil then showCost = true end
     local entryLevelLabel = unitLabel and unitLabel ~= TrainerSpells:Trans("LID_LVL") and unitLabel or nil
     unitLabel = unitLabel or TrainerSpells:Trans("LID_LVL")
     if #groups.available > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_AVAILABLENOW"), AVAILABLE_COLOR, showCost and SumCost(groups.available) or nil, keyPrefix .. "available", labelPrefix)
-        if not IsGroupCollapsed(keyPrefix .. "available") then
-            AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, showCost, false, entryLevelLabel)
-        end
+        if not IsGroupCollapsed(keyPrefix .. "available") then AddEntryItems(items, groups.available, AVAILABLE_COLOR, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.soon > 0 then
         AddHeaderItem(items, ("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), unitLabel, groups.nextLevel), SOON_COLOR, showCost and SumCost(groups.soon) or nil, keyPrefix .. "soon", labelPrefix)
-        if not IsGroupCollapsed(keyPrefix .. "soon") then
-            AddEntryItems(items, groups.soon, SOON_COLOR, true, showCost, false, entryLevelLabel)
-        end
+        if not IsGroupCollapsed(keyPrefix .. "soon") then AddEntryItems(items, groups.soon, SOON_COLOR, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.higher > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_NOTYETAVAILABLE"), NOTYET_COLOR, showCost and SumCost(groups.higher) or nil, keyPrefix .. "higher", labelPrefix)
-        if not IsGroupCollapsed(keyPrefix .. "higher") then
-            AddEntryItems(items, groups.higher, NOTYET_COLOR, true, showCost, false, entryLevelLabel)
-        end
+        if not IsGroupCollapsed(keyPrefix .. "higher") then AddEntryItems(items, groups.higher, NOTYET_COLOR, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.missingTalents > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_MISSINGREQUIREDTALENTS"), TALENT_COLOR, showCost and SumCost(groups.missingTalents) or nil, keyPrefix .. "missingTalents", labelPrefix)
-        if not IsGroupCollapsed(keyPrefix .. "missingTalents") then
-            AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, showCost, false, entryLevelLabel)
-        end
+        if not IsGroupCollapsed(keyPrefix .. "missingTalents") then AddEntryItems(items, groups.missingTalents, TALENT_COLOR, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.ignored > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_IGNORED"), IGNORED_COLOR, nil, keyPrefix .. "ignored", labelPrefix)
-        if not IsGroupCollapsed(keyPrefix .. "ignored") then
-            AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, showCost, true, entryLevelLabel)
-        end
+        if not IsGroupCollapsed(keyPrefix .. "ignored") then AddEntryItems(items, groups.ignored, IGNORED_COLOR, true, showCost, true, entryLevelLabel) end
     end
 
     if #groups.known > 0 then
         AddHeaderItem(items, TrainerSpells:Trans("LID_ALREADYKNOWN"), KNOWN_COLOR, showCost and SumCost(groups.known) or nil, keyPrefix .. "known", labelPrefix)
-        if not IsGroupCollapsed(keyPrefix .. "known") then
-            AddEntryItems(items, groups.known, KNOWN_COLOR, true, showCost, true, entryLevelLabel)
-        end
+        if not IsGroupCollapsed(keyPrefix .. "known") then AddEntryItems(items, groups.known, KNOWN_COLOR, true, showCost, true, entryLevelLabel) end
     end
 end
 
@@ -669,7 +561,6 @@ local function MergePetData(keys)
             end
         end
     end
-
     return merged
 end
 
@@ -724,7 +615,6 @@ local function GetCurrentProfessionSkill(professionName)
         local skillName, isHeader, _, skillRank = GetSkillLineInfo(i)
         if not isHeader and skillName == professionName then return skillRank or 0 end
     end
-
     return 0
 end
 
@@ -739,17 +629,11 @@ professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -24)
 professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -8, -24)
 professionSearchBox:SetHeight(20)
 professionSearchBox:SetAutoFocus(false)
-professionSearchBox:SetScript(
-    "OnTextChanged",
-    function(self)
-        if SearchBoxTemplate_OnTextChanged then
-            SearchBoxTemplate_OnTextChanged(self)
-        end
-
-        TrainerSpells_ProfessionSearchText = self:GetText() or ""
-        TrainerSpells_ProfessionRefresh()
-    end
-)
+professionSearchBox:SetScript("OnTextChanged", function(self)
+    if SearchBoxTemplate_OnTextChanged then SearchBoxTemplate_OnTextChanged(self) end
+    TrainerSpells_ProfessionSearchText = self:GetText() or ""
+    TrainerSpells_ProfessionRefresh()
+end)
 
 local PROFESSION_ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.professionRowHeight) or 16
 PROFESSION_ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, PROFESSION_ROW_HEIGHT))
@@ -758,24 +642,12 @@ professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT",
 professionRowHeightSlider:SetPoint("TOPRIGHT", professionSearchBox, "BOTTOMRIGHT", -24, -14)
 professionRowHeightSlider:SetScale(0.75)
 professionRowHeightSlider:SetHeight(10)
-professionRowHeightSlider:Init(
-    PROFESSION_ROW_HEIGHT,
-    MIN_ROW_HEIGHT,
-    MAX_ROW_HEIGHT,
-    MAX_ROW_HEIGHT - MIN_ROW_HEIGHT,
-    {
-        [MinimalSliderWithSteppersMixin.Label.Right] = CreateMinimalSliderFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value) return WHITE_FONT_COLOR:WrapTextInColorCode(tostring(math.floor(value + 0.5))) end)
-    }
-)
+professionRowHeightSlider:Init(PROFESSION_ROW_HEIGHT, MIN_ROW_HEIGHT, MAX_ROW_HEIGHT, MAX_ROW_HEIGHT - MIN_ROW_HEIGHT, {
+    [MinimalSliderWithSteppersMixin.Label.Right] = CreateMinimalSliderFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value) return WHITE_FONT_COLOR:WrapTextInColorCode(tostring(math.floor(value + 0.5))) end)
+})
 
-if professionRowHeightSlider.MinText then
-    professionRowHeightSlider.MinText:Hide()
-end
-
-if professionRowHeightSlider.MaxText then
-    professionRowHeightSlider.MaxText:Hide()
-end
-
+if professionRowHeightSlider.MinText then professionRowHeightSlider.MinText:Hide() end
+if professionRowHeightSlider.MaxText then professionRowHeightSlider.MaxText:Hide() end
 local professionScrollBox = CreateFrame("Frame", "TrainerSpellsProfessionScrollBox", professionFrame, "WowScrollBoxList")
 professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
 professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
@@ -784,36 +656,26 @@ local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionSc
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
 professionScrollBar:SetPoint("BOTTOMLEFT", professionScrollBox, "BOTTOMRIGHT", 4, 2)
 local professionScrollView = CreateScrollBoxListLinearView()
-professionScrollView:SetElementExtentCalculator(
-    function(index, elementData)
-        if elementData.isHeader then return index > 1 and (HEADER_HEIGHT + HEADER_EXTRA_GAP) or HEADER_HEIGHT end
-
-        return PROFESSION_ROW_HEIGHT
-    end
-)
+professionScrollView:SetElementExtentCalculator(function(index, elementData)
+    if elementData.isHeader then return index > 1 and (HEADER_HEIGHT + HEADER_EXTRA_GAP) or HEADER_HEIGHT end
+    return PROFESSION_ROW_HEIGHT
+end)
 
 professionScrollView:SetPadding(0, 0, 0, 0, ROW_SPACING)
 professionScrollView:SetElementInitializer("Frame", InitScrollRow)
 ScrollUtil.InitScrollBoxListWithScrollBar(professionScrollBox, professionScrollBar, professionScrollView)
-professionRowHeightSlider:RegisterCallback(
-    MinimalSliderWithSteppersMixin.Event.OnValueChanged,
-    function(_, value)
-        value = math.floor(value + 0.5)
-        if value == PROFESSION_ROW_HEIGHT then return end
-        PROFESSION_ROW_HEIGHT = value
-        if TrainerSpells_Character then
-            TrainerSpells_Character.professionRowHeight = PROFESSION_ROW_HEIGHT
-        end
-
-        TrainerSpells_ProfessionRefresh()
-    end
-)
+professionRowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
+    value = math.floor(value + 0.5)
+    if value == PROFESSION_ROW_HEIGHT then return end
+    PROFESSION_ROW_HEIGHT = value
+    if TrainerSpells_Character then TrainerSpells_Character.professionRowHeight = PROFESSION_ROW_HEIGHT end
+    TrainerSpells_ProfessionRefresh()
+end)
 
 local function GetOpenProfession()
     if not GetTradeSkillLine then return nil, nil end
     local skillLineName = GetTradeSkillLine()
     if not skillLineName or skillLineName == "" then return nil, nil end
-
     return TrainerSpells:GetProfessionKey(skillLineName), skillLineName
 end
 
@@ -832,9 +694,7 @@ function TrainerSpells_ProfessionRefresh()
             AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_SKILL"))
         end
 
-        if #items == 0 then
-            AddHeaderItem(items, skillLineName and ("Keine Rezept-Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa")
-        end
+        if #items == 0 then AddHeaderItem(items, skillLineName and ("Keine Rezept-Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa") end
     else
         local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
         if data and next(data) then
@@ -843,9 +703,7 @@ function TrainerSpells_ProfessionRefresh()
             AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"))
         end
 
-        if #items == 0 then
-            AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa")
-        end
+        if #items == 0 then AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa") end
     end
 
     professionScrollBox:SetDataProvider(CreateDataProvider(items))
@@ -854,7 +712,7 @@ end
 local function PositionProfessionFrame()
     professionFrame:ClearAllPoints()
     if TradeSkillFrame and TradeSkillFrame:IsShown() then
-        if DragonfligthUIEnabled() and DragonflightUIProfessionFrame then
+        if DragonfligthUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
             professionFrame:SetScale(DragonflightUIProfessionFrame:GetScale())
             professionFrame:SetPoint("TOPLEFT", DragonflightUIProfessionFrame, "TOPLEFT", -4, -24)
             professionFrame:SetPoint("BOTTOMRIGHT", DragonflightUIProfessionFrame, "BOTTOMRIGHT", -4, 4)
@@ -870,7 +728,7 @@ local function PositionProfessionFrame()
 
     professionSearchBox:ClearAllPoints()
     professionScrollBox:ClearAllPoints()
-    if DragonfligthUIEnabled() then
+    if DragonfligthUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
         professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 80, 0)
         professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, 0)
         professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -64)
@@ -891,18 +749,7 @@ local function PositionProfessionFrame()
     end
 end
 
-if TradeSkillFrame then
-    hooksecurefunc(
-        TradeSkillFrame,
-        "SetScale",
-        function()
-            if classFrame:IsShown() then
-                PositionProfessionFrame()
-            end
-        end
-    )
-end
-
+if TradeSkillFrame then hooksecurefunc(TradeSkillFrame, "SetScale", function() if classFrame:IsShown() then PositionProfessionFrame() end end) end
 local function CreateTradeSkillTab(name, icon)
     local tab = CreateFrame("Button", name, UIParent)
     tab:SetSize(32, 32)
@@ -921,7 +768,6 @@ local function CreateTradeSkillTab(name, icon)
     glow:SetTexture(130724)
     glow:SetBlendMode("ADD")
     glow:Hide()
-
     return tab, glow
 end
 
@@ -929,7 +775,7 @@ local nativeTab, nativeTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillNat
 local professionTab, professionTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillProfessionTab", "Interface\\Icons\\INV_Misc_Book_09")
 local recipeTab, recipeTabGlow = CreateTradeSkillTab("TrainerSpellsTradeSkillRecipeTab", "Interface\\Icons\\INV_Scroll_03")
 local function PositionTradeSkillTabs()
-    if DragonfligthUIEnabled() and DragonflightUIProfessionFrame then
+    if DragonfligthUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
         local scale = DragonflightUIProfessionFrame:GetScale()
         nativeTab:SetScale(scale)
         professionTab:SetScale(scale)
@@ -960,42 +806,31 @@ local NATIVE_TRADESKILL_WIDGETS = {"TradeSkillSubClassDropdown", "TradeSkillInvS
 local function HideNativeTradeSkillWidgets()
     for _, name in ipairs(NATIVE_TRADESKILL_WIDGETS) do
         local widget = _G[name]
-        if widget then
-            widget:Hide()
-        end
+        if widget then widget:Hide() end
     end
 end
 
 local function ShowNativeTradeSkillWidgets()
     for _, name in ipairs(NATIVE_TRADESKILL_WIDGETS) do
         local widget = _G[name]
-        if widget then
-            widget:Show()
-        end
+        if widget then widget:Show() end
     end
 end
 
 local function SetTradeSkillView(mode)
     if mode == PROFESSION_VIEW_SKILL or mode == PROFESSION_VIEW_RECIPES then
         professionViewMode = mode
-        if DragonfligthUIEnabled() then
+        if DragonfligthUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
             professionListBg:ClearAllPoints()
             professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -32)
             professionListBg:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", 4, -2)
             professionListBg:SetColorTexture(0, 0, 0, 1)
-            if DragonflightUIProfessionRankFrame then
-                DragonflightUIProfessionRankFrame:Hide()
-            end
+            if DragonflightUIProfessionRankFrame then DragonflightUIProfessionRankFrame:Hide() end
         else
             professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -2)
             professionListBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
-            if TradeSkillFrameAvailableFilterCheckButton then
-                TradeSkillFrameAvailableFilterCheckButton:Hide()
-            end
-
-            if TradeSearchInputBox then
-                TradeSearchInputBox:Hide()
-            end
+            if TradeSkillFrameAvailableFilterCheckButton then TradeSkillFrameAvailableFilterCheckButton:Hide() end
+            if TradeSearchInputBox then TradeSearchInputBox:Hide() end
         end
 
         PositionProfessionFrame()
@@ -1020,55 +855,28 @@ local function SetTradeSkillView(mode)
     end
 end
 
-nativeTab:SetScript(
-    "OnClick",
-    function()
-        SetTradeSkillView("native")
-    end
-)
-
-nativeTab:SetScript(
-    "OnEnter",
-    function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText((GetTradeSkillLine and GetTradeSkillLine()) or TrainerSpells:Trans("LID_PROFESSIONS"))
-        GameTooltip:Show()
-    end
-)
+nativeTab:SetScript("OnClick", function() SetTradeSkillView("native") end)
+nativeTab:SetScript("OnEnter", function(self)
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    GameTooltip:SetText((GetTradeSkillLine and GetTradeSkillLine()) or TrainerSpells:Trans("LID_PROFESSIONS"))
+    GameTooltip:Show()
+end)
 
 nativeTab:SetScript("OnLeave", GameTooltip_Hide)
-professionTab:SetScript(
-    "OnClick",
-    function()
-        SetTradeSkillView(PROFESSION_VIEW_SKILL)
-    end
-)
-
-professionTab:SetScript(
-    "OnEnter",
-    function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(TrainerSpells:Trans("LID_SKILL"))
-        GameTooltip:Show()
-    end
-)
+professionTab:SetScript("OnClick", function() SetTradeSkillView(PROFESSION_VIEW_SKILL) end)
+professionTab:SetScript("OnEnter", function(self)
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    GameTooltip:SetText(TrainerSpells:Trans("LID_SKILL"))
+    GameTooltip:Show()
+end)
 
 professionTab:SetScript("OnLeave", GameTooltip_Hide)
-recipeTab:SetScript(
-    "OnClick",
-    function()
-        SetTradeSkillView(PROFESSION_VIEW_RECIPES)
-    end
-)
-
-recipeTab:SetScript(
-    "OnEnter",
-    function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(TrainerSpells:Trans("LID_RECIPES"))
-        GameTooltip:Show()
-    end
-)
+recipeTab:SetScript("OnClick", function() SetTradeSkillView(PROFESSION_VIEW_RECIPES) end)
+recipeTab:SetScript("OnEnter", function(self)
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    GameTooltip:SetText(TrainerSpells:Trans("LID_RECIPES"))
+    GameTooltip:Show()
+end)
 
 recipeTab:SetScript("OnLeave", GameTooltip_Hide)
 local tradeSkillHooksInstalled = false
@@ -1076,41 +884,29 @@ local function EnsureTradeSkillHooksInstalled()
     if tradeSkillHooksInstalled then return end
     if not TradeSkillFrame then return end
     tradeSkillHooksInstalled = true
-    TradeSkillFrame:HookScript(
-        "OnShow",
-        function()
-            PositionTradeSkillTabs()
-            nativeTab:Show()
-            professionTab:Show()
-            recipeTab:Show()
-            SetTradeSkillView("native")
-        end
-    )
+    TradeSkillFrame:HookScript("OnShow", function()
+        PositionTradeSkillTabs()
+        nativeTab:Show()
+        professionTab:Show()
+        recipeTab:Show()
+        SetTradeSkillView("native")
+    end)
 
-    TradeSkillFrame:HookScript(
-        "OnHide",
-        function()
-            professionFrame:Hide()
-            professionTabGlow:Hide()
-            recipeTabGlow:Hide()
-            nativeTabGlow:Hide()
-            nativeTab:Hide()
-            professionTab:Hide()
-            recipeTab:Hide()
-            ShowNativeTradeSkillWidgets()
-        end
-    )
+    TradeSkillFrame:HookScript("OnHide", function()
+        professionFrame:Hide()
+        professionTabGlow:Hide()
+        recipeTabGlow:Hide()
+        nativeTabGlow:Hide()
+        nativeTab:Hide()
+        professionTab:Hide()
+        recipeTab:Hide()
+        ShowNativeTradeSkillWidgets()
+    end)
 
-    hooksecurefunc(
-        TradeSkillFrame,
-        "SetScale",
-        function()
-            PositionTradeSkillTabs()
-            if professionFrame:IsShown() then
-                PositionProfessionFrame()
-            end
-        end
-    )
+    hooksecurefunc(TradeSkillFrame, "SetScale", function()
+        PositionTradeSkillTabs()
+        if professionFrame:IsShown() then PositionProfessionFrame() end
+    end)
 
     if TradeSkillFrame:IsShown() then
         PositionTradeSkillTabs()
@@ -1120,49 +916,26 @@ local function EnsureTradeSkillHooksInstalled()
         SetTradeSkillView("native")
     end
 
-    C_Timer.After(
-        4,
-        function()
-            for i = 1, 4 do
-                local t = _G["DragonflightUIProfessionFrameTabButton" .. i]
-                if t then
-                    t:HookScript(
-                        "OnClick",
-                        function()
-                            SetTradeSkillView("native")
-                        end
-                    )
-                end
-            end
-
-            if DragonflightUIProfessionFrame then
-                hooksecurefunc(
-                    DragonflightUIProfessionFrame,
-                    "SetScale",
-                    function()
-                        if professionFrame:IsShown() then
-                            PositionProfessionFrame()
-                        end
-                    end
-                )
-            end
+    C_Timer.After(4, function()
+        for i = 1, 4 do
+            local t = _G["DragonflightUIProfessionFrameTabButton" .. i]
+            if t then t:HookScript("OnClick", function() SetTradeSkillView("native") end) end
         end
-    )
+
+        if DragonflightUIProfessionFrame then hooksecurefunc(DragonflightUIProfessionFrame, "SetScale", function() if professionFrame:IsShown() then PositionProfessionFrame() end end) end
+    end)
 end
 
 local tradeSkillWatcher = CreateFrame("Frame")
 tradeSkillWatcher:RegisterEvent("TRADE_SKILL_SHOW")
 tradeSkillWatcher:RegisterEvent("TRADE_SKILL_UPDATE")
-tradeSkillWatcher:SetScript(
-    "OnEvent",
-    function(_, event)
-        EnsureTradeSkillHooksInstalled()
-        if event == "TRADE_SKILL_UPDATE" and professionFrame:IsShown() then
-            TrainerSpells_ProfessionRefresh()
-            HideNativeTradeSkillWidgets()
-        end
+tradeSkillWatcher:SetScript("OnEvent", function(_, event)
+    EnsureTradeSkillHooksInstalled()
+    if event == "TRADE_SKILL_UPDATE" and professionFrame:IsShown() then
+        TrainerSpells_ProfessionRefresh()
+        HideNativeTradeSkillWidgets()
     end
-)
+end)
 
 function TrainerSpells_Refresh()
     local searchText = (TrainerSpells_SearchText or ""):lower()
@@ -1175,14 +948,8 @@ function TrainerSpells_Refresh()
         AppendGroupItems(items, groups, "")
     end
 
-    if selectedClass == "WARLOCK" then
-        AppendPetAbilities(items, searchText, selectedLevel)
-    end
-
-    if selectedClass == "HUNTER" then
-        AppendPetTrainerAbilities(items, searchText, selectedLevel, selectedClass)
-    end
-
+    if selectedClass == "WARLOCK" then AppendPetAbilities(items, searchText, selectedLevel) end
+    if selectedClass == "HUNTER" then AppendPetTrainerAbilities(items, searchText, selectedLevel, selectedClass) end
     if #items == 0 then
         if not classData then
             AddHeaderItem(items, "Keine Daten für " .. tostring(selectedClass) .. " gesammelt. Lehrer besuchen!", "|cffff5555")
@@ -1194,33 +961,37 @@ function TrainerSpells_Refresh()
     scrollBox:SetDataProvider(CreateDataProvider(items))
 end
 
-classFrame:SetScript(
-    "OnShow",
-    function()
-        if TrainerSpells_SyncPetSpells then
-            TrainerSpells_SyncPetSpells()
-        end
-
-        TrainerSpells_Refresh()
-    end
-)
+classFrame:SetScript("OnShow", function()
+    if TrainerSpells_SyncPetSpells then TrainerSpells_SyncPetSpells() end
+    TrainerSpells_Refresh()
+end)
 
 classFrame:RegisterEvent("PLAYER_LEVEL_UP")
 classFrame:RegisterEvent("SPELLS_CHANGED")
-classFrame:HookScript(
-    "OnEvent",
-    function(self, event)
-        if event == "PLAYER_LEVEL_UP" or event == "SPELLS_CHANGED" then
-            TrainerSpells_Refresh()
-        end
-    end
-)
-
+classFrame:HookScript("OnEvent", function(self, event) if event == "PLAYER_LEVEL_UP" or event == "SPELLS_CHANGED" then TrainerSpells_Refresh() end end)
 local function PositionFrame()
     classFrame:ClearAllPoints()
+    if DragonfligthUIEnabled() and DragonflightUISpellBookBG and DragonflightUISpellBookBG:IsShown() then
+        listBg:SetPoint("CENTER", classFrame, "CENTER", 0, 0)
+        if DragonflightUISpellBookInsetBg then
+            local shortHeight = 30
+            listBg:ClearAllPoints()
+            listBg:SetPoint("TOPLEFT", DragonflightUISpellBookInsetBg, "TOPLEFT", 0, -shortHeight)
+            listBg:SetPoint("BOTTOMRIGHT", DragonflightUISpellBookInsetBg, "BOTTOMRIGHT", 0, 0)
+            listBg:SetTexture(DragonflightUISpellBookInsetBg:GetTexture())
+            local fullHeight = DragonflightUISpellBookInsetBg:GetHeight()
+            local cropTop = shortHeight / fullHeight
+            listBg:SetTexCoord(0, 1, cropTop, 1)
+            listBg:SetVertexColor(0, 0, 0)
+        end
+    else
+        listBg:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -2)
+        listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
+    end
+
     if SpellBookFrame and SpellBookFrame:IsShown() then
         classFrame:SetScale(SpellBookFrame:GetScale())
-        if DragonfligthUIEnabled() then
+        if DragonfligthUIEnabled() and DragonflightUISpellBookBG and DragonflightUISpellBookBG:IsShown() then
             classFrame:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 4, -50)
             classFrame:SetPoint("BOTTOMRIGHT", SpellBookFrame, "BOTTOMRIGHT", -4, 4)
         else
@@ -1244,18 +1015,7 @@ local function PositionFrame()
     end
 end
 
-if SpellBookFrame then
-    hooksecurefunc(
-        SpellBookFrame,
-        "SetScale",
-        function()
-            if classFrame:IsShown() then
-                PositionFrame()
-            end
-        end
-    )
-end
-
+if SpellBookFrame then hooksecurefunc(SpellBookFrame, "SetScale", function() if classFrame:IsShown() then PositionFrame() end end) end
 local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame", "SpellBookFrameShowAllSpellRanksCheckbox", "ShowAllSpellRanksCheckbox",}
 local spellButtonsHidden = false
 local hiddenPageRegions = {}
@@ -1264,9 +1024,7 @@ local function HideNativeSpellButtons()
     spellButtonsHidden = true
     for _, name in ipairs(NATIVE_EXTRA_WIDGETS) do
         local widget = _G[name]
-        if widget then
-            widget:Hide()
-        end
+        if widget then widget:Hide() end
     end
 
     wipe(hiddenPageRegions)
@@ -1288,9 +1046,7 @@ local function ShowNativeSpellButtons()
     spellButtonsHidden = false
     for _, name in ipairs(NATIVE_EXTRA_WIDGETS) do
         local widget = _G[name]
-        if widget then
-            widget:Show()
-        end
+        if widget then widget:Show() end
     end
 
     for _, region in ipairs(hiddenPageRegions) do
@@ -1298,9 +1054,7 @@ local function ShowNativeSpellButtons()
     end
 
     wipe(hiddenPageRegions)
-    if SpellBookFrame_Update then
-        SpellBookFrame_Update()
-    end
+    if SpellBookFrame_Update then SpellBookFrame_Update() end
 end
 
 local ourTabGlow
@@ -1314,38 +1068,16 @@ end
 local function HideNativeSkillTabGlows()
     for i = 1, 8 do
         local glow = GetTabGlow(_G["SpellBookSkillLineTab" .. i])
-        if glow then
-            glow:Hide()
-        end
+        if glow then glow:Hide() end
     end
 end
 
 local function OpenFrame()
-    if DragonfligthUIEnabled() then
-        listBg:SetPoint("CENTER", classFrame, "CENTER", 0, 0)
-        if DragonflightUISpellBookInsetBg then
-            local shortHeight = 30
-            listBg:ClearAllPoints()
-            listBg:SetPoint("TOPLEFT", DragonflightUISpellBookInsetBg, "TOPLEFT", 0, -shortHeight)
-            listBg:SetPoint("BOTTOMRIGHT", DragonflightUISpellBookInsetBg, "BOTTOMRIGHT", 0, 0)
-            listBg:SetTexture(DragonflightUISpellBookInsetBg:GetTexture())
-            local fullHeight = DragonflightUISpellBookInsetBg:GetHeight()
-            local cropTop = shortHeight / fullHeight
-            listBg:SetTexCoord(0, 1, cropTop, 1)
-            listBg:SetVertexColor(0, 0, 0)
-        end
-    else
-        listBg:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -2)
-        listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
-    end
-
     PositionFrame()
     classFrame:Show()
     HideNativeSpellButtons()
     HideNativeSkillTabGlows()
-    if ourTabGlow then
-        ourTabGlow:Show()
-    end
+    if ourTabGlow then ourTabGlow:Show() end
 end
 
 if SpellBookFrame then
@@ -1367,84 +1099,56 @@ if SpellBookFrame then
     tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -34)
     tab:Hide()
     tab:SetScript("OnClick", OpenFrame)
-    tab:SetScript(
-        "OnEnter",
-        function(sel)
-            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-            GameTooltip:SetText(TrainerSpells:Trans("LID_CLASSTRAINER"))
-            GameTooltip:Show()
-        end
-    )
+    tab:SetScript("OnEnter", function(sel)
+        GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+        GameTooltip:SetText(TrainerSpells:Trans("LID_CLASSTRAINER"))
+        GameTooltip:Show()
+    end)
 
     tab:SetScript("OnLeave", GameTooltip_Hide)
-    SpellBookFrame:HookScript(
-        "OnShow",
-        function()
-            tab:Show()
-        end
-    )
-
-    SpellBookFrame:HookScript(
-        "OnHide",
-        function()
-            tab:Hide()
-            classFrame:Hide()
-            ShowNativeSpellButtons()
-            if ourTabGlow then
-                ourTabGlow:Hide()
-            end
-        end
-    )
+    SpellBookFrame:HookScript("OnShow", function() tab:Show() end)
+    SpellBookFrame:HookScript("OnHide", function()
+        tab:Hide()
+        classFrame:Hide()
+        ShowNativeSpellButtons()
+        if ourTabGlow then ourTabGlow:Hide() end
+    end)
 
     local function OnNativeTabClicked()
         if classFrame:IsShown() then
             classFrame:Hide()
             ShowNativeSpellButtons()
-            if ourTabGlow then
-                ourTabGlow:Hide()
-            end
+            if ourTabGlow then ourTabGlow:Hide() end
         end
     end
 
     for i = 1, 8 do
         local t = _G["SpellBookSkillLineTab" .. i]
-        if t then
-            t:HookScript("OnClick", OnNativeTabClicked)
-        end
+        if t then t:HookScript("OnClick", OnNativeTabClicked) end
     end
 
     for i = 1, 3 do
         local t = _G["SpellBookFrameTabButton" .. i]
-        if t then
-            t:HookScript("OnClick", OnNativeTabClicked)
-        end
+        if t then t:HookScript("OnClick", OnNativeTabClicked) end
     end
 
-    C_Timer.After(
-        4,
-        function()
-            for i = 1, 4 do
-                local t = _G["DragonflightUISpellBookFrameTabButton" .. i]
-                if t then
-                    t:HookScript("OnClick", OnNativeTabClicked)
-                end
-            end
+    C_Timer.After(4, function()
+        for i = 1, 4 do
+            local t = _G["DragonflightUISpellBookFrameTabButton" .. i]
+            if t then t:HookScript("OnClick", OnNativeTabClicked) end
         end
-    )
+    end)
 end
 
 local rowHeightSyncFrame = CreateFrame("Frame")
 rowHeightSyncFrame:RegisterEvent("ADDON_LOADED")
-rowHeightSyncFrame:SetScript(
-    "OnEvent",
-    function(self, event, addonName)
-        if addonName ~= "TrainerSpells" then return end
-        self:UnregisterEvent("ADDON_LOADED")
-        ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.rowHeight) or ROW_HEIGHT
-        ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, ROW_HEIGHT))
-        rowHeightSlider:SetValue(ROW_HEIGHT)
-        PROFESSION_ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.professionRowHeight) or PROFESSION_ROW_HEIGHT
-        PROFESSION_ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, PROFESSION_ROW_HEIGHT))
-        professionRowHeightSlider:SetValue(PROFESSION_ROW_HEIGHT)
-    end
-)
+rowHeightSyncFrame:SetScript("OnEvent", function(self, event, addonName)
+    if addonName ~= "TrainerSpells" then return end
+    self:UnregisterEvent("ADDON_LOADED")
+    ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.rowHeight) or ROW_HEIGHT
+    ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, ROW_HEIGHT))
+    rowHeightSlider:SetValue(ROW_HEIGHT)
+    PROFESSION_ROW_HEIGHT = (TrainerSpells_Character and TrainerSpells_Character.professionRowHeight) or PROFESSION_ROW_HEIGHT
+    PROFESSION_ROW_HEIGHT = math.max(MIN_ROW_HEIGHT, math.min(MAX_ROW_HEIGHT, PROFESSION_ROW_HEIGHT))
+    professionRowHeightSlider:SetValue(PROFESSION_ROW_HEIGHT)
+end)
