@@ -969,7 +969,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
         TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
         TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
-        TrainerSpells:SetVersion(133741, "0.3.4")
+        TrainerSpells:SetVersion(133741, "0.3.5")
         MergeBuiltinData()
     elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
         do
