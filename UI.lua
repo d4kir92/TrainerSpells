@@ -138,8 +138,30 @@ local ignoreMenuEntry
 local function IgnoreMenu_Initialize(self, level)
     local entry = ignoreMenuEntry
     if not entry then return end
-    local spellIgnored = TrainerSpells_IsSpellIgnored and TrainerSpells_IsSpellIgnored(entry.spellID)
-    local nameIgnored = TrainerSpells_IsNameIgnored and TrainerSpells_IsNameIgnored(entry.name)
+    local isProfessionSpell = false
+    if entry.spellID and GetTradeSkillLine then
+        local skillLine = GetTradeSkillLine()
+        if skillLine then
+            local professionSkillLines = {
+                ["Alchemy"] = true,
+                ["Blacksmithing"] = true,
+                ["Cooking"] = true,
+                ["Enchanting"] = true,
+                ["Engineering"] = true,
+                ["First Aid"] = true,
+                ["Fishing"] = true,
+                ["Herbalism"] = true,
+                ["Leatherworking"] = true,
+                ["Mining"] = true,
+                ["Skinning"] = true,
+                ["Tailoring"] = true,
+                ["Jewelcrafting"] = true
+            }
+
+            if professionSkillLines[skillLine] then isProfessionSpell = true end
+        end
+    end
+
     local rankSubtext = GetLocalizedRankText(entry.spellID)
     local rankText = rankSubtext and (" " .. rankSubtext) or ""
     local info = UIDropDownMenu_CreateInfo()
@@ -147,24 +169,40 @@ local function IgnoreMenu_Initialize(self, level)
     info.isTitle = true
     info.notCheckable = true
     UIDropDownMenu_AddButton(info, level)
-    info = UIDropDownMenu_CreateInfo()
-    info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
-    info.notCheckable = true
-    info.func = function()
-        TrainerSpells_ToggleIgnoreSpell(entry.spellID)
-        TrainerSpells_Refresh()
+    if isProfessionSpell then
+        local spellIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID)
+        info = UIDropDownMenu_CreateInfo()
+        info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
+        info.notCheckable = true
+        info.func = function()
+            TrainerSpells_ToggleIgnoreProfessionSpell(entry.spellID)
+            TrainerSpells_ProfessionRefresh()
+        end
+
+        UIDropDownMenu_AddButton(info, level)
+    else
+        local spellIgnored = TrainerSpells_IsSpellIgnored and TrainerSpells_IsSpellIgnored(entry.spellID)
+        local nameIgnored = TrainerSpells_IsNameIgnored and TrainerSpells_IsNameIgnored(entry.name)
+        info = UIDropDownMenu_CreateInfo()
+        info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
+        info.notCheckable = true
+        info.func = function()
+            TrainerSpells_ToggleIgnoreSpell(entry.spellID)
+            TrainerSpells_Refresh()
+        end
+
+        UIDropDownMenu_AddButton(info, level)
+        info = UIDropDownMenu_CreateInfo()
+        info.text = nameIgnored and TrainerSpells:Trans("LID_STOPIGNOREINGALLRANKS") or TrainerSpells:Trans("LID_IGNOREALLRANKS")
+        info.notCheckable = true
+        info.func = function()
+            TrainerSpells_ToggleIgnoreName(entry.name)
+            TrainerSpells_Refresh()
+        end
+
+        UIDropDownMenu_AddButton(info, level)
     end
 
-    UIDropDownMenu_AddButton(info, level)
-    info = UIDropDownMenu_CreateInfo()
-    info.text = nameIgnored and TrainerSpells:Trans("LID_STOPIGNOREINGALLRANKS") or TrainerSpells:Trans("LID_IGNOREALLRANKS")
-    info.notCheckable = true
-    info.func = function()
-        TrainerSpells_ToggleIgnoreName(entry.name)
-        TrainerSpells_Refresh()
-    end
-
-    UIDropDownMenu_AddButton(info, level)
     info = UIDropDownMenu_CreateInfo()
     info.text = TrainerSpells:Trans("LID_CANCEL")
     info.notCheckable = true

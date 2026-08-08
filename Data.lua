@@ -8,6 +8,7 @@ end
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
+TrainerSpells_IgnoredProfessions = TrainerSpells_IgnoredProfessions or {}
 TrainerSpells_Character = TrainerSpells_Character or {}
 TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroups or {}
 TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
@@ -971,6 +972,10 @@ f:SetScript("OnEvent", function(self, event, arg1)
         TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
         TrainerSpells:SetVersion(133741, "0.3.5")
         MergeBuiltinData()
+        TrainerSpells_IgnoredProfessions = TrainerSpells_IgnoredProfessions or {}
+        _G.TrainerSpells_ToggleIgnoreProfessionSpell = TrainerSpells_ToggleIgnoreProfessionSpell
+        _G.TrainerSpells_IsProfessionSpellIgnored = TrainerSpells_IsProfessionSpellIgnored
+        TrainerSpells_IgnoredProfessions = TrainerSpells_IgnoredProfessions or {}
     elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
         do
             local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
@@ -1081,4 +1086,32 @@ end
 
 function TrainerSpells_IsIgnored(spellID, name)
     return TrainerSpells_IsSpellIgnored(spellID) or TrainerSpells_IsNameIgnored(name)
+end
+
+function TrainerSpells_IsProfessionSpellIgnored(spellID)
+    spellID = tonumber(spellID)
+    local _, classToken = UnitClass("player")
+    if not classToken or not spellID then return false end
+    local professionKey, _ = DetectTrainerProfession()
+    if not professionKey then return false end
+    TrainerSpells_IgnoredProfessions[professionKey] = TrainerSpells_IgnoredProfessions[professionKey] or {}
+    local ignored = TrainerSpells_IgnoredProfessions[professionKey]
+    return ignored[spellID] or false
+end
+
+function TrainerSpells_ToggleIgnoreProfessionSpell(spellID)
+    spellID = tonumber(spellID)
+    local _, classToken = UnitClass("player")
+    if not classToken or not spellID then return end
+    local professionKey, _ = DetectTrainerProfession()
+    if not professionKey then return end
+    TrainerSpells_IgnoredProfessions[professionKey] = TrainerSpells_IgnoredProfessions[professionKey] or {}
+    local ignored = TrainerSpells_IgnoredProfessions[professionKey]
+    if ignored[spellID] then
+        ignored[spellID] = nil
+    else
+        ignored[spellID] = true
+    end
+
+    if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
 end
