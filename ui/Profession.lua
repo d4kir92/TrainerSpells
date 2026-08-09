@@ -74,6 +74,10 @@ end
 local PROFESSION_VIEW_SKILL = "skill"
 local PROFESSION_VIEW_RECIPES = "recipes"
 local professionViewMode = PROFESSION_VIEW_SKILL
+function TrainerSpells:IsProfessionRecipeViewActive()
+    return professionViewMode == PROFESSION_VIEW_RECIPES
+end
+
 function TrainerSpells_ProfessionRefresh()
     local searchText = (TrainerSpells_ProfessionSearchText or ""):lower()
     local professionKey, skillLineName = GetOpenProfession()

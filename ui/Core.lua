@@ -168,7 +168,13 @@ local function IgnoreMenu_Initialize(self, level)
     if isProfessionSpell then
         local spellIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID, professionKey)
         info = UIDropDownMenu_CreateInfo()
-        info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
+        local isRecipeView = TrainerSpells.IsProfessionRecipeViewActive and TrainerSpells:IsProfessionRecipeViewActive()
+        if isRecipeView then
+            info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRECIPE") or TrainerSpells:Trans("LID_IGNORINGTHISRECIPE")
+        else
+            info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISSKILL") or TrainerSpells:Trans("LID_IGNORINGTHISSKILL")
+        end
+
         info.notCheckable = true
         info.func = function()
             TrainerSpells_ToggleIgnoreProfessionSpell(entry.spellID, professionKey)
