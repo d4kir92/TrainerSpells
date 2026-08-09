@@ -69,5 +69,18 @@ data\classicera\EnchantingRecipes.lua
 data\classicera\CookingRecipes.lua
 data\classicera\FirstAidRecipes.lua
 
-Data.lua
-UI.lua
+core\Init.lua
+core\PetNames.lua
+core\BuiltinMerge.lua
+core\TrainerCapture.lua
+core\PetMerchantCapture.lua
+core\TrainerListUI.lua
+core\Ignore.lua
+core\Events.lua
+
+ui\Core.lua
+ui\ClassData.lua
+ui\ClassList.lua
+ui\Profession.lua
+ui\Spellbook.lua
+ui\RowHeightSync.lua

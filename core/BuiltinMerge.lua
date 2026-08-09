@@ -1,0 +1,118 @@
+local _, TrainerSpells = ...
+function TrainerSpells:MergeBuiltinData()
+    if TrainerSpellsBuiltin then
+        for class, levels in pairs(TrainerSpellsBuiltin) do
+            for level, spells in pairs(levels) do
+                local bucket = TrainerSpells:EnsurePath(class, level)
+                for spellID, data in pairs(spells) do
+                    if bucket[spellID] == nil then
+                        bucket[spellID] = {
+                            cost = data.cost or 0,
+                            rank = data.rank,
+                            faction = data.faction
+                        }
+                    else
+                        if data.cost then bucket[spellID].cost = data.cost end
+                        if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
+                    end
+                end
+            end
+        end
+    end
+
+    if TrainerSpellsBuiltin_WarlockPet then
+        for pet, levels in pairs(TrainerSpellsBuiltin_WarlockPet) do
+            for level, spells in pairs(levels) do
+                local bucket = TrainerSpells:EnsurePetPath(pet, level)
+                for spellID, data in pairs(spells) do
+                    if bucket[spellID] == nil then
+                        bucket[spellID] = {
+                            cost = data.cost or 0,
+                            rank = data.rank,
+                            faction = data.faction
+                        }
+                    else
+                        if data.cost then bucket[spellID].cost = data.cost end
+                        if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
+                    end
+                end
+            end
+        end
+    end
+
+    if TrainerSpellsBuiltin_HunterPet then
+        for level, spells in pairs(TrainerSpellsBuiltin_HunterPet) do
+            local bucket = TrainerSpells:EnsurePetTrainerPath("HUNTER", level)
+            for spellID, data in pairs(spells) do
+                if bucket[spellID] == nil then
+                    bucket[spellID] = {
+                        cost = data.cost or 0,
+                        rank = data.rank,
+                        faction = data.faction
+                    }
+                else
+                    if data.cost then bucket[spellID].cost = data.cost end
+                    if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
+                end
+            end
+        end
+    end
+
+    if TrainerSpellsBuiltin_Profession then
+        for profession, skillLevels in pairs(TrainerSpellsBuiltin_Profession) do
+            for skillReq, recipes in pairs(skillLevels) do
+                local bucket = TrainerSpells:EnsureProfessionPath(profession, skillReq)
+                for spellID, data in pairs(recipes) do
+                    local spellInfo = C_Spell.GetSpellInfo(spellID)
+                    local name = spellInfo and spellInfo.name
+                    if name then
+                        if bucket[name] == nil then
+                            bucket[name] = {
+                                cost = data.cost or 0,
+                                spellID = spellID,
+                                icon = data.icon,
+                                requires = data.requires,
+                                faction = data.faction
+                            }
+                        else
+                            if data.cost then bucket[name].cost = data.cost end
+                            if bucket[name].spellID == nil then bucket[name].spellID = spellID end
+                            if data.icon and bucket[name].icon == nil then bucket[name].icon = data.icon end
+                            if data.requires and bucket[name].requires == nil then bucket[name].requires = data.requires end
+                            if data.faction and bucket[name].faction == nil then bucket[name].faction = data.faction end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    if TrainerSpellsBuiltin_ProfessionRecipe then
+        for profession, skillLevels in pairs(TrainerSpellsBuiltin_ProfessionRecipe) do
+            for skillReq, recipes in pairs(skillLevels) do
+                local bucket = TrainerSpells:EnsureRecipePath(profession, skillReq)
+                for spellID, data in pairs(recipes) do
+                    local spellInfo = C_Spell.GetSpellInfo(spellID)
+                    local name = spellInfo and spellInfo.name
+                    if name then
+                        if bucket[name] == nil then
+                            bucket[name] = {
+                                spellID = spellID,
+                                icon = data.icon,
+                                requires = data.requires,
+                                faction = data.faction,
+                                source = data.source
+                            }
+                        else
+                            if bucket[name].spellID == nil then bucket[name].spellID = spellID end
+                            if data.icon and bucket[name].icon == nil then bucket[name].icon = data.icon end
+                            if data.requires and bucket[name].requires == nil then bucket[name].requires = data.requires end
+                            if data.faction and bucket[name].faction == nil then bucket[name].faction = data.faction end
+                            if data.source and bucket[name].source == nil then bucket[name].source = data.source end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
