@@ -58,7 +58,23 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [13908] = {
             cost = 86,
-            rank = 1
+            rank = 1,
+            race = {"Dwarf", "Human"}
+        },
+        [10797] = {
+            cost = 14,
+            rank = 1,
+            race = "NightElf"
+        },
+        [2652] = {
+            cost = 14,
+            rank = 1,
+            race = "Scourge"
+        },
+        [9035] = {
+            cost = 14,
+            rank = 1,
+            race = "Troll"
         },
     },
     [12] = {
@@ -119,7 +135,13 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19236] = {
             cost = 95,
-            rank = 2
+            rank = 2,
+            race = {"Dwarf", "Human"}
+        },
+        [19296] = {
+            cost = 95,
+            rank = 2,
+            race = "NightElf"
         },
     },
     [20] = {
@@ -137,7 +159,8 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [6346] = {
             cost = 760,
-            rank = nil
+            rank = nil,
+            race = "Dwarf"
         },
         [7128] = {
             cost = 2850,
@@ -153,11 +176,37 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [13896] = {
             cost = 95,
-            rank = 1
+            rank = 1,
+            race = "Human"
         },
         [14914] = {
             cost = 2850,
             rank = 1
+        },
+        [2651] = {
+            cost = 143,
+            rank = 1,
+            race = "NightElf"
+        },
+        [19261] = {
+            cost = 143,
+            rank = 2,
+            race = "Scourge"
+        },
+        [2944] = {
+            cost = 143,
+            rank = 1,
+            race = "Scourge"
+        },
+        [19281] = {
+            cost = 143,
+            rank = 2,
+            race = "Troll"
+        },
+        [18137] = {
+            cost = 143,
+            rank = 1,
+            race = "Troll"
         },
     },
     [22] = {
@@ -216,7 +265,13 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19238] = {
             cost = 285,
-            rank = 3
+            rank = 3,
+            race = {"Dwarf", "Human"}
+        },
+        [19299] = {
+            cost = 285,
+            rank = 3,
+            race = "NightElf"
         },
     },
     [28] = {
@@ -241,6 +296,16 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 380,
             rank = 2,
             requires = {15407}
+        },
+        [19276] = {
+            cost = 380,
+            rank = 2,
+            race = "Scourge"
+        },
+        [19308] = {
+            cost = 380,
+            rank = 2,
+            race = "Troll"
         },
     },
     [30] = {
@@ -279,7 +344,18 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19271] = {
             cost = 475,
-            rank = 2
+            rank = 2,
+            race = "Human"
+        },
+        [19262] = {
+            cost = 475,
+            rank = 3,
+            race = "Scourge"
+        },
+        [19282] = {
+            cost = 475,
+            rank = 3,
+            race = "Troll"
         },
     },
     [32] = {
@@ -323,7 +399,13 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19240] = {
             cost = 570,
-            rank = 4
+            rank = 4,
+            race = {"Dwarf", "Human"}
+        },
+        [19302] = {
+            cost = 570,
+            rank = 4,
+            race = "NightElf"
         },
     },
     [36] = {
@@ -356,6 +438,16 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 665,
             rank = 3,
             requires = {15407}
+        },
+        [19277] = {
+            cost = 665,
+            rank = 3,
+            race = "Scourge"
+        },
+        [19309] = {
+            cost = 665,
+            rank = 3,
+            race = "Troll"
         },
     },
     [38] = {
@@ -409,7 +501,18 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19273] = {
             cost = 855,
-            rank = 3
+            rank = 3,
+            race = "Human"
+        },
+        [19264] = {
+            cost = 855,
+            rank = 4,
+            race = "Scourge"
+        },
+        [19283] = {
+            cost = 855,
+            rank = 4,
+            race = "Troll"
         },
     },
     [42] = {
@@ -435,7 +538,13 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19241] = {
             cost = 1045,
-            rank = 5
+            rank = 5,
+            race = {"Dwarf", "Human"}
+        },
+        [19303] = {
+            cost = 1045,
+            rank = 5,
+            race = "NightElf"
         },
     },
     [44] = {
@@ -464,6 +573,16 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 1140,
             rank = 4,
             requires = {15237}
+        },
+        [19278] = {
+            cost = 1140,
+            rank = 4,
+            race = "Scourge"
+        },
+        [19310] = {
+            cost = 1140,
+            rank = 4,
+            race = "Troll"
         },
     },
     [46] = {
@@ -539,11 +658,28 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19242] = {
             cost = 1425,
-            rank = 6
+            rank = 6,
+            race = {"Dwarf", "Human"}
+        },
+        [19304] = {
+            cost = 1425,
+            rank = 6,
+            race = "NightElf"
         },
         [19274] = {
             cost = 1425,
-            rank = 4
+            rank = 4,
+            race = "Human"
+        },
+        [19265] = {
+            cost = 1425,
+            rank = 5,
+            race = "Scourge"
+        },
+        [19284] = {
+            cost = 1425,
+            rank = 5,
+            race = "Troll"
         },
         [27870] = {
             cost = 1140,
@@ -573,6 +709,16 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 1805,
             rank = 5,
             requires = {15237}
+        },
+        [19279] = {
+            cost = 1805,
+            rank = 5,
+            race = "Scourge"
+        },
+        [19311] = {
+            cost = 1805,
+            rank = 5,
+            race = "Troll"
         },
     },
     [54] = {
@@ -640,7 +786,13 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19243] = {
             cost = 2090,
-            rank = 7
+            rank = 7,
+            race = {"Dwarf", "Human"}
+        },
+        [19305] = {
+            cost = 2090,
+            rank = 7,
+            race = "NightElf"
         },
         [20770] = {
             cost = 41800,
@@ -683,7 +835,28 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [19275] = {
             cost = 2185,
-            rank = 5
+            rank = 5,
+            race = "Human"
+        },
+        [19266] = {
+            cost = 2185,
+            rank = 6,
+            race = "Scourge"
+        },
+        [19280] = {
+            cost = 2185,
+            rank = 6,
+            race = "Scourge"
+        },
+        [19285] = {
+            cost = 2185,
+            rank = 6,
+            race = "Troll"
+        },
+        [19312] = {
+            cost = 2185,
+            rank = 6,
+            race = "Troll"
         },
         [21564] = {
             cost = 43700,

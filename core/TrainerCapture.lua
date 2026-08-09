@@ -106,7 +106,8 @@ local function CaptureTrainerInner()
                     status = sType,
                     levelReq = (levelReq and levelReq > 0) and levelReq or nil,
                     requires = existing and existing.requires,
-                    faction = existing and existing.faction
+                    faction = existing and existing.faction,
+                    race = existing and existing.race
                 }
             else
                 local spellID = TrainerSpells:GetSpellIDForService(i)
@@ -137,7 +138,8 @@ local function CaptureTrainerInner()
                         rank = rank,
                         status = sType,
                         requires = existing and existing.requires,
-                        faction = existing and existing.faction
+                        faction = existing and existing.faction,
+                        race = existing and existing.race
                     }
                 end
             end

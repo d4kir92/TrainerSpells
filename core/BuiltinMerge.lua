@@ -9,11 +9,13 @@ function TrainerSpells:MergeBuiltinData()
                         bucket[spellID] = {
                             cost = data.cost or 0,
                             rank = data.rank,
-                            faction = data.faction
+                            faction = data.faction,
+                            race = data.race
                         }
                     else
                         if data.cost then bucket[spellID].cost = data.cost end
                         if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
+                        if data.race and bucket[spellID].race == nil then bucket[spellID].race = data.race end
                     end
                 end
             end

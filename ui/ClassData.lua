@@ -37,19 +37,32 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
     local allEntries = {}
     local knownMaxRank = {}
     local playerFaction = TrainerSpells:GetPlayerFaction()
+    local playerRace = TrainerSpells:GetPlayerRace()
     for lvl, spells in pairs(dataTable) do
         for key, data in pairs(spells) do
-            local cost, rank, status, requires, faction, spellID, icon, levelReq
+            local cost, rank, status, requires, faction, race, spellID, icon, levelReq
             local source
             if type(data) == "table" then
-                cost, rank, status, requires, faction = data.cost, data.rank, data.status, data.requires, data.faction
+                cost, rank, status, requires, faction, race = data.cost, data.rank, data.status, data.requires, data.faction, data.race
                 spellID, icon, levelReq = data.spellID, data.icon, data.levelReq
                 source = data.source
             else
                 cost = data
             end
 
-            if not faction or not playerFaction or faction == playerFaction then
+            local raceMatches = true
+            if race and playerRace then
+                if type(race) == "table" then
+                    raceMatches = false
+                    for _, r in ipairs(race) do
+                        if r == playerRace then raceMatches = true break end
+                    end
+                else
+                    raceMatches = race == playerRace
+                end
+            end
+
+            if (not faction or not playerFaction or faction == playerFaction) and raceMatches then
                 local name
                 if type(key) == "number" then
                     spellID = spellID or key

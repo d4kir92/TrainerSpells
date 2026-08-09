@@ -97,6 +97,12 @@ function TrainerSpells:GetPlayerFaction()
     return UnitFactionGroup and UnitFactionGroup("player")
 end
 
+function TrainerSpells:GetPlayerRace()
+    if not UnitRace then return nil end
+    local _, englishRace = UnitRace("player")
+    return englishRace
+end
+
 local function IsReqSpellKnown(spellID)
     if not IsPlayerSpell or type(spellID) ~= "number" then return false end
     local ok, known = pcall(IsPlayerSpell, spellID)
