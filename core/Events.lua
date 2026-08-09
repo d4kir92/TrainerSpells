@@ -29,7 +29,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         TrainerSpells_IgnoredProfessions = TrainerSpells_IgnoredProfessions or {}
         _G.TrainerSpells_ToggleIgnoreProfessionSpell = TrainerSpells_ToggleIgnoreProfessionSpell
         _G.TrainerSpells_IsProfessionSpellIgnored = TrainerSpells_IsProfessionSpellIgnored
-        TrainerSpells_IgnoredProfessions = TrainerSpells_IgnoredProfessions or {}
+        TrainerSpells:MigrateLegacyProfessionIgnores()
     elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
         do
             local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()

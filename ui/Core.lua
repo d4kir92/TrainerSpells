@@ -143,26 +143,12 @@ local function IgnoreMenu_Initialize(self, level)
     local entry = ignoreMenuEntry
     if not entry then return end
     local isProfessionSpell = false
+    local professionKey
     if entry.spellID and GetTradeSkillLine then
         local skillLine = GetTradeSkillLine()
         if skillLine then
-            local professionSkillLines = {
-                ["Alchemy"] = true,
-                ["Blacksmithing"] = true,
-                ["Cooking"] = true,
-                ["Enchanting"] = true,
-                ["Engineering"] = true,
-                ["First Aid"] = true,
-                ["Fishing"] = true,
-                ["Herbalism"] = true,
-                ["Leatherworking"] = true,
-                ["Mining"] = true,
-                ["Skinning"] = true,
-                ["Tailoring"] = true,
-                ["Jewelcrafting"] = true
-            }
-
-            if professionSkillLines[skillLine] then isProfessionSpell = true end
+            professionKey = TrainerSpells:GetProfessionKey(skillLine)
+            if professionKey then isProfessionSpell = true end
         end
     end
 
@@ -174,12 +160,12 @@ local function IgnoreMenu_Initialize(self, level)
     info.notCheckable = true
     UIDropDownMenu_AddButton(info, level)
     if isProfessionSpell then
-        local spellIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID)
+        local spellIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID, professionKey)
         info = UIDropDownMenu_CreateInfo()
         info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
         info.notCheckable = true
         info.func = function()
-            TrainerSpells_ToggleIgnoreProfessionSpell(entry.spellID)
+            TrainerSpells_ToggleIgnoreProfessionSpell(entry.spellID, professionKey)
             TrainerSpells_ProfessionRefresh()
         end
 

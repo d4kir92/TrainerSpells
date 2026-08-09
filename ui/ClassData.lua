@@ -92,14 +92,15 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
     return allEntries, knownMaxRank
 end
 
-function TrainerSpells:ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck)
+function TrainerSpells:ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck, professionKey)
     local allEntries, knownMaxRank = TrainerSpells:BuildEntriesFromData(dataTable)
     local talentNames, learnedTalents
     if not skipTalentCheck then talentNames, learnedTalents = TrainerSpells:GetTalentNameSet() end
     local ignored, known, remaining = {}, {}, {}
     for _, entry in ipairs(allEntries) do
         if TrainerSpells:EntryMatchesSearch(entry, searchText) then
-            if TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name) then
+            local isProfessionIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID, professionKey)
+            if (TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name)) or isProfessionIgnored then
                 table.insert(ignored, entry)
             else
                 local maxKnown = knownMaxRank[entry.name] or 0

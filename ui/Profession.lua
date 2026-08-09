@@ -82,7 +82,7 @@ function TrainerSpells_ProfessionRefresh()
         local data = professionKey and TrainerSpells_RecipeData and TrainerSpells_RecipeData[professionKey]
         if data and next(data) then
             local currentSkill = GetCurrentProfessionSkill(skillLineName)
-            local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true)
+            local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true, professionKey)
             TrainerSpells:AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_SKILL"))
         end
 
@@ -91,7 +91,7 @@ function TrainerSpells_ProfessionRefresh()
         local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
         if data and next(data) then
             local currentSkill = GetCurrentProfessionSkill(skillLineName)
-            local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true)
+            local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true, professionKey)
             TrainerSpells:AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"))
         end
 
