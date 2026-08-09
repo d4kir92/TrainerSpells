@@ -98,7 +98,7 @@ function TrainerSpells_ProfessionRefresh()
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa") end
     end
 
-    professionScrollBox:SetDataProvider(CreateDataProvider(items))
+    professionScrollBox:SetDataProvider(CreateDataProvider(items), ScrollBoxConstants.RetainScrollPosition)
 end
 
 local function PositionProfessionFrame()

@@ -71,7 +71,7 @@ function TrainerSpells_Refresh()
         end
     end
 
-    scrollBox:SetDataProvider(CreateDataProvider(items))
+    scrollBox:SetDataProvider(CreateDataProvider(items), ScrollBoxConstants.RetainScrollPosition)
 end
 
 classFrame:SetScript("OnShow", function()
