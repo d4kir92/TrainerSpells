@@ -55,7 +55,10 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
                 if type(race) == "table" then
                     raceMatches = false
                     for _, r in ipairs(race) do
-                        if r == playerRace then raceMatches = true break end
+                        if r == playerRace then
+                            raceMatches = true
+                            break
+                        end
                     end
                 else
                     raceMatches = race == playerRace

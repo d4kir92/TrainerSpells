@@ -74,7 +74,6 @@ end
 
 TrainerSpells.ScanTooltip = CreateFrame("GameTooltip", "TrainerSpellsScanTooltip", nil, "GameTooltipTemplate")
 TrainerSpells.ScanTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
-
 function TrainerSpells:IsSaneSpellID(spellID)
     return type(spellID) == "number" and spellID > 0 and spellID < 2000000
 end

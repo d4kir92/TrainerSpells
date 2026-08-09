@@ -32,7 +32,6 @@ TrainerSpells.ClassListBackground = listBg
 local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", classFrame, "MinimalScrollBar")
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
-
 local scrollView = CreateScrollBoxListLinearView()
 scrollView:SetElementExtentCalculator(function(index, elementData)
     if elementData.isHeader then return index > 1 and (TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap) or TrainerSpells.HeaderHeight end

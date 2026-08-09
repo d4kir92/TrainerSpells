@@ -145,7 +145,7 @@ end
 
 local ignoreMenuFrame = CreateFrame("Frame", "TrainerSpellsIgnoreMenu", UIParent, "UIDropDownMenuTemplate")
 local ignoreMenuEntry
-local function IgnoreMenu_Initialize(self, level)
+local function IgnoreMenu_Initialize(sel, level)
     local entry = ignoreMenuEntry
     if not entry then return end
     local isProfessionSpell = false
@@ -293,7 +293,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
             end)
 
             rowFrame:SetScript("OnLeave", GameTooltip_Hide)
-            rowFrame:SetScript("OnMouseUp", function(self, button)
+            rowFrame:SetScript("OnMouseUp", function(sel, button)
                 if button == "LeftButton" and elementData.groupKey then
                     ToggleGroup(elementData.groupKey)
                     if TrainerSpells_Refresh then TrainerSpells_Refresh() end
@@ -318,8 +318,8 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         end
 
         rowFrame:EnableMouse(true)
-        rowFrame:SetScript("OnEnter", function(self)
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        rowFrame:SetScript("OnEnter", function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
             local showCost = elementData.showCostTooltip and entry.cost ~= nil
             if entry.spellID then
                 pendingSpellTooltipExtra = {
@@ -346,11 +346,11 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
             GameTooltip:Show()
         end)
 
-        rowFrame:SetScript("OnLeave", function(self)
+        rowFrame:SetScript("OnLeave", function(sel)
             pendingSpellTooltipExtra = nil
-            GameTooltip_Hide(self)
+            GameTooltip_Hide(sel)
         end)
 
-        rowFrame:SetScript("OnMouseUp", function(self, button) if button == "RightButton" then TrainerSpells:ShowIgnoreMenu(self, entry) end end)
+        rowFrame:SetScript("OnMouseUp", function(sel, button) if button == "RightButton" then TrainerSpells:ShowIgnoreMenu(sel, entry) end end)
     end
 end

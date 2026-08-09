@@ -83,7 +83,7 @@ function TrainerSpells:MigrateLegacyProfessionIgnores()
     local ignoredSpells = TrainerSpells_Ignored[classToken]
     local ignoredNames = TrainerSpells_IgnoredNames[classToken]
     if not ignoredSpells and not ignoredNames then return end
-    for _, dataStore in ipairs({ TrainerSpells_ProfessionData, TrainerSpells_RecipeData }) do
+    for _, dataStore in ipairs({TrainerSpells_ProfessionData, TrainerSpells_RecipeData}) do
         for professionKey, byLevel in pairs(dataStore or {}) do
             for _, spells in pairs(byLevel) do
                 for key, data in pairs(spells) do
