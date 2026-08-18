@@ -28,6 +28,7 @@ local PROFESSION_NAME_TO_KEY = {}
 local PROFESSION_KEY_TO_NAME = {}
 local PROFESSION_SPELLS = {
     ["Alchemy"] = 3101,
+    ["Archaeology"] = 78670,
     ["Blacksmithing"] = 9785,
     ["Cooking"] = 18260,
     ["Enchanting"] = 7413,
