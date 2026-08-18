@@ -833,7 +833,7 @@ TrainerSpellsBuiltin_Profession.Enchanting = TrainerSpellsBuiltin_Profession.Enc
             icon = "Interface\\Icons\\inv_misc_note_01",
             cost = 22857
         },
-        [10.5.0] = {
+        [104430] = {
             icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
             cost = 22857
         },
@@ -907,11 +907,11 @@ TrainerSpellsBuiltin_Profession.Enchanting = TrainerSpellsBuiltin_Profession.Enc
             icon = "Interface\\Icons\\inv_misc_note_01",
             cost = 22857
         },
-        [10.5.0] = {
+        [104420] = {
             icon = "Interface\\Icons\\inv_misc_note_01",
             cost = 22857
         },
-        [10.5.0] = {
+        [104440] = {
             icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
             cost = 22857
         },
