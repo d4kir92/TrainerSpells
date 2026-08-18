@@ -113,7 +113,7 @@ local function OpenFrame()
     if ourTabGlow then ourTabGlow:Show() end
 end
 
-if SpellBookFrame then
+if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     local tab = CreateFrame("Button", "TrainerSpellsSpellbookTab", SpellBookFrame)
     tab:SetSize(32, 32)
     tab:SetNormalTexture("Interface\\Icons\\INV_Misc_Book_09")

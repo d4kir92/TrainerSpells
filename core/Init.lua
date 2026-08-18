@@ -5,6 +5,13 @@ function TrainerSpells:DebugTrainer(fmt, ...)
     TrainerSpells:MSG(("|cff3399ffTrainerSpells Debug:|r " .. fmt):format(...))
 end
 
+local _, _, _, tocVersion = GetBuildInfo()
+local INTERFACE_VERSION = tonumber(tocVersion) or 0
+local FIRST_VERSION_WITHOUT_CLASS_TRAINERS = 50000
+function TrainerSpells:HasClassTrainers()
+    return INTERFACE_VERSION < FIRST_VERSION_WITHOUT_CLASS_TRAINERS
+end
+
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}
