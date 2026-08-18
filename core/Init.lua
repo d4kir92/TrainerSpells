@@ -35,6 +35,7 @@ local PROFESSION_SPELLS = {
     ["First Aid"] = 7924,
     ["Fishing"] = 7620,
     ["Herbalism"] = 13614,
+    ["Inscription"] = 45357,
     ["Leatherworking"] = 10662,
     ["Mining"] = 2575,
     ["Skinning"] = 10768,

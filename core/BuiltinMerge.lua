@@ -1,4 +1,13 @@
 local _, TrainerSpells = ...
+local function IsTrainerTaught(profession, name)
+    local levels = TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[profession]
+    if not levels then return false end
+    for _, entries in pairs(levels) do
+        if entries[name] then return true end
+    end
+    return false
+end
+
 function TrainerSpells:MergeBuiltinData()
     if TrainerSpellsBuiltin then
         for class, levels in pairs(TrainerSpellsBuiltin) do
@@ -96,7 +105,7 @@ function TrainerSpells:MergeBuiltinData()
                 for spellID, data in pairs(recipes) do
                     local spellInfo = C_Spell.GetSpellInfo(spellID)
                     local name = spellInfo and spellInfo.name
-                    if name then
+                    if name and not IsTrainerTaught(profession, name) then
                         if bucket[name] == nil then
                             bucket[name] = {
                                 spellID = spellID,
