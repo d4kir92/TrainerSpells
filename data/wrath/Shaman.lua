@@ -477,6 +477,10 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
             cost = 12000,
             rank = 2
         },
+        [8737] = {
+            cost = 11400,
+            rank = nil
+        },
         [10447] = {
             cost = 12000,
             rank = 4,
@@ -766,9 +770,18 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
             rank = 6,
             requires = {8050}
         },
+        [32593] = {
+            cost = 1700,
+            rank = 2,
+            requires = {974}
+        },
         [51992] = {
             cost = 34000,
             rank = 4
+        },
+        [57720] = {
+            cost = 3400,
+            rank = 2
         },
     },
     [61] = {
@@ -927,7 +940,8 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
     [70] = {
         [2825] = {
             cost = 88000,
-            rank = nil
+            rank = nil,
+            faction = "Horde"
         },
         [25396] = {
             cost = 88000,
@@ -960,11 +974,29 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
         },
         [32182] = {
             cost = 88000,
-            rank = nil
+            rank = nil,
+            faction = "Alliance"
+        },
+        [32594] = {
+            cost = 2500,
+            rank = 3,
+            requires = {974}
         },
         [51993] = {
             cost = 71000,
             rank = 5
+        },
+        [57721] = {
+            cost = 5200,
+            rank = 3
+        },
+        [59156] = {
+            cost = 88000,
+            rank = 2
+        },
+        [61299] = {
+            cost = 9000,
+            rank = 2
         },
     },
     [71] = {
@@ -1061,6 +1093,11 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
             rank = 10,
             requires = {324}
         },
+        [49283] = {
+            cost = 9000,
+            rank = 4,
+            requires = {974}
+        },
         [51505] = {
             cost = 180000,
             rank = 1
@@ -1095,6 +1132,14 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
         [58746] = {
             cost = 180000,
             rank = 5
+        },
+        [59158] = {
+            cost = 180000,
+            rank = 3
+        },
+        [61300] = {
+            cost = 9000,
+            rank = 3
         },
         [61649] = {
             cost = 180000,
@@ -1191,6 +1236,11 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
             rank = 11,
             requires = {324}
         },
+        [49284] = {
+            cost = 9000,
+            rank = 5,
+            requires = {974}
+        },
         [51514] = {
             cost = 180000,
             rank = nil
@@ -1202,6 +1252,10 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
         [55459] = {
             cost = 180000,
             rank = 7
+        },
+        [57722] = {
+            cost = 10000,
+            rank = 4
         },
         [58643] = {
             cost = 180000,
@@ -1250,9 +1304,17 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
             cost = 180000,
             rank = 8
         },
+        [59159] = {
+            cost = 180000,
+            rank = 4
+        },
         [60043] = {
             cost = 180000,
             rank = 2
+        },
+        [61301] = {
+            cost = 9000,
+            rank = 4
         },
         [61657] = {
             cost = 180000,

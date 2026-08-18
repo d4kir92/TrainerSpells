@@ -1,6 +1,10 @@
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
     [1] = {
+        [3127] = {
+            cost = 95,
+            rank = nil
+        },
         [6673] = {
             cost = 10,
             rank = 1
@@ -100,6 +104,10 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         },
     },
     [20] = {
+        [674] = {
+            cost = 3800,
+            rank = nil
+        },
         [845] = {
             cost = 4000,
             rank = 1
@@ -127,6 +135,10 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
             cost = 6000,
             rank = 3,
             requires = {6673}
+        },
+        [7405] = {
+            cost = 5700,
+            rank = 2
         },
     },
     [24] = {
@@ -190,6 +202,10 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         },
     },
     [32] = {
+        [1671] = {
+            cost = 13300,
+            rank = 2
+        },
         [11549] = {
             cost = 14000,
             rank = 4,
@@ -212,6 +228,10 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
     [34] = {
         [7379] = {
             cost = 16000,
+            rank = 3
+        },
+        [8380] = {
+            cost = 15200,
             rank = 3
         },
         [11554] = {
@@ -241,6 +261,10 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         },
     },
     [40] = {
+        [750] = {
+            cost = 20900,
+            rank = nil
+        },
         [11565] = {
             cost = 22000,
             rank = 6,
@@ -307,6 +331,11 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
             cost = 40000,
             rank = 4
         },
+        [21551] = {
+            cost = 2000,
+            rank = 2,
+            requires = {12294}
+        },
         [23923] = {
             cost = 2000,
             rank = 2,
@@ -329,6 +358,10 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         },
     },
     [52] = {
+        [1672] = {
+            cost = 51300,
+            rank = 3
+        },
         [11551] = {
             cost = 54000,
             rank = 6,
@@ -347,6 +380,11 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         [11605] = {
             cost = 56000,
             rank = 4
+        },
+        [21552] = {
+            cost = 2800,
+            rank = 3,
+            requires = {12294}
         },
         [23924] = {
             cost = 2800,
@@ -382,6 +420,11 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
             cost = 62000,
             rank = 5
         },
+        [21553] = {
+            cost = 3100,
+            rank = 4,
+            requires = {12294}
+        },
         [23925] = {
             cost = 3100,
             rank = 4,
@@ -400,6 +443,11 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
             cost = 65000,
             rank = 7,
             requires = {6673}
+        },
+        [30016] = {
+            cost = 3100,
+            rank = 2,
+            requires = {20243}
         },
     },
     [61] = {
@@ -433,6 +481,11 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         },
     },
     [66] = {
+        [25248] = {
+            cost = 3250,
+            rank = 5,
+            requires = {12294}
+        },
         [25258] = {
             cost = 3250,
             rank = 5,
@@ -445,6 +498,10 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         },
     },
     [67] = {
+        [25225] = {
+            cost = 61750,
+            rank = 6
+        },
         [25264] = {
             cost = 65000,
             rank = 7,
@@ -490,10 +547,20 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
             cost = 65000,
             rank = 7
         },
+        [30022] = {
+            cost = 3250,
+            rank = 3,
+            requires = {20243}
+        },
         [30324] = {
             cost = 100000,
             rank = 11,
             requires = {78}
+        },
+        [30330] = {
+            cost = 3250,
+            rank = 6,
+            requires = {12294}
         },
         [30356] = {
             cost = 3250,
@@ -549,10 +616,20 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         },
     },
     [75] = {
+        [47485] = {
+            cost = 13000,
+            rank = 7,
+            requires = {12294}
+        },
         [47487] = {
             cost = 260000,
             rank = 7,
             requires = {23922}
+        },
+        [47497] = {
+            cost = 5000,
+            rank = 4,
+            requires = {20243}
         },
         [55694] = {
             cost = 100000,
@@ -608,10 +685,20 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
             cost = 260000,
             rank = 9
         },
+        [47486] = {
+            cost = 13000,
+            rank = 8,
+            requires = {12294}
+        },
         [47488] = {
             cost = 260000,
             rank = 8,
             requires = {23922}
+        },
+        [47498] = {
+            cost = 5000,
+            rank = 5,
+            requires = {20243}
         },
         [57755] = {
             cost = 100000,

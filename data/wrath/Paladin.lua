@@ -5,6 +5,10 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 10,
             rank = 1
         },
+        [3127] = {
+            cost = 95,
+            rank = nil
+        },
     },
     [4] = {
         [19740] = {
@@ -114,7 +118,8 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         },
         [13819] = {
             cost = 10000,
-            rank = nil
+            rank = nil,
+            faction = "Alliance"
         },
         [19750] = {
             cost = 4000,
@@ -130,7 +135,8 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         },
         [34769] = {
             cost = 10000,
-            rank = nil
+            rank = nil,
+            faction = "Horde"
         },
     },
     [22] = {
@@ -295,6 +301,10 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         },
     },
     [40] = {
+        [750] = {
+            cost = 19000,
+            rank = nil
+        },
         [1032] = {
             cost = 20000,
             rank = 5,
@@ -316,11 +326,13 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         },
         [23214] = {
             cost = 20000,
-            rank = nil
+            rank = nil,
+            faction = "Alliance"
         },
         [34767] = {
             cost = 20000,
-            rank = nil
+            rank = nil,
+            faction = "Horde"
         },
     },
     [42] = {
@@ -380,6 +392,11 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 26000,
             rank = 4
         },
+        [20929] = {
+            cost = 1300,
+            rank = 2,
+            requires = {20473}
+        },
     },
     [50] = {
         [2812] = {
@@ -404,6 +421,11 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 28000,
             rank = 4,
             requires = {26573}
+        },
+        [20927] = {
+            cost = 1400,
+            rank = 2,
+            requires = {20925}
         },
     },
     [52] = {
@@ -459,6 +481,11 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 42000,
             rank = 3
         },
+        [20930] = {
+            cost = 2100,
+            rank = 3,
+            requires = {20473}
+        },
     },
     [58] = {
         [19943] = {
@@ -492,6 +519,11 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 46000,
             rank = 5,
             requires = {26573}
+        },
+        [20928] = {
+            cost = 2300,
+            rank = 3,
+            requires = {20925}
         },
         [24239] = {
             cost = 46000,
@@ -530,6 +562,11 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 46000,
             rank = 2
         },
+        [32699] = {
+            cost = 2300,
+            rank = 2,
+            requires = {31935}
+        },
     },
     [62] = {
         [27135] = {
@@ -549,9 +586,15 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         },
     },
     [64] = {
+        [27174] = {
+            cost = 3350,
+            rank = 4,
+            requires = {20473}
+        },
         [31801] = {
             cost = 67000,
-            rank = nil
+            rank = nil,
+            faction = "Alliance"
         },
         [348704] = {
             cost = 67000,
@@ -633,9 +676,24 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             rank = 6,
             requires = {26573}
         },
+        [27179] = {
+            cost = 2300,
+            rank = 4,
+            requires = {20925}
+        },
         [31884] = {
             cost = 130000,
             rank = nil
+        },
+        [32700] = {
+            cost = 2300,
+            rank = 3,
+            requires = {31935}
+        },
+        [33072] = {
+            cost = 6500,
+            rank = 5,
+            requires = {20473}
         },
     },
     [71] = {
@@ -703,6 +761,21 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 200000,
             rank = 7,
             requires = {26573}
+        },
+        [48824] = {
+            cost = 10000,
+            rank = 6,
+            requires = {20473}
+        },
+        [48826] = {
+            cost = 10000,
+            rank = 4,
+            requires = {31935}
+        },
+        [48951] = {
+            cost = 10000,
+            rank = 5,
+            requires = {20925}
         },
         [53600] = {
             cost = 200000,
@@ -791,6 +864,21 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
             cost = 200000,
             rank = 8,
             requires = {26573}
+        },
+        [48825] = {
+            cost = 10000,
+            rank = 7,
+            requires = {20473}
+        },
+        [48827] = {
+            cost = 10000,
+            rank = 5,
+            requires = {31935}
+        },
+        [48952] = {
+            cost = 10000,
+            rank = 6,
+            requires = {20925}
         },
         [53601] = {
             cost = 100000,

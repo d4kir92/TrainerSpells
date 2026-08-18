@@ -206,6 +206,10 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 6000,
             rank = 2
         },
+        [19238] = {
+            cost = 300,
+            rank = 2
+        },
     },
     [28] = {
         [6063] = {
@@ -224,6 +228,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 400,
             rank = 2,
             requires = {15237}
+        },
+        [17311] = {
+            cost = 400,
+            rank = 2,
+            requires = {15407}
         },
         [19276] = {
             cost = 400,
@@ -300,6 +309,10 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 12000,
             rank = 3
         },
+        [19240] = {
+            cost = 600,
+            rank = 3
+        },
     },
     [36] = {
         [988] = {
@@ -322,6 +335,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 700,
             rank = 3,
             requires = {15237}
+        },
+        [17312] = {
+            cost = 700,
+            rank = 3,
+            requires = {15407}
         },
         [19277] = {
             cost = 700,
@@ -391,6 +409,10 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 22000,
             rank = 5
         },
+        [19241] = {
+            cost = 1100,
+            rank = 4
+        },
     },
     [44] = {
         [10909] = {
@@ -404,6 +426,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [10927] = {
             cost = 24000,
             rank = 7
+        },
+        [17313] = {
+            cost = 1200,
+            rank = 4,
+            requires = {15407}
         },
         [19278] = {
             cost = 1200,
@@ -478,6 +505,15 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             rank = 3,
             requires = {14752}
         },
+        [19242] = {
+            cost = 1500,
+            rank = 5
+        },
+        [27870] = {
+            cost = 1200,
+            rank = 2,
+            requires = {724}
+        },
     },
     [52] = {
         [10946] = {
@@ -487,6 +523,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [10964] = {
             cost = 38000,
             rank = 3
+        },
+        [17314] = {
+            cost = 1900,
+            rank = 5,
+            requires = {15407}
         },
         [19279] = {
             cost = 1900,
@@ -534,6 +575,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 42000,
             rank = 1
         },
+        [34863] = {
+            cost = 2100,
+            rank = 2,
+            requires = {34861}
+        },
     },
     [58] = {
         [10894] = {
@@ -547,6 +593,10 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [10965] = {
             cost = 44000,
             rank = 4
+        },
+        [19243] = {
+            cost = 2200,
+            rank = 6
         },
         [20770] = {
             cost = 44000,
@@ -577,6 +627,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [15261] = {
             cost = 46000,
             rank = 8
+        },
+        [18807] = {
+            cost = 2300,
+            rank = 6,
+            requires = {15407}
         },
         [19280] = {
             cost = 2300,
@@ -612,6 +667,21 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 2300,
             rank = 4,
             requires = {14752}
+        },
+        [27871] = {
+            cost = 1500,
+            rank = 3,
+            requires = {724}
+        },
+        [34864] = {
+            cost = 2300,
+            rank = 3,
+            requires = {34861}
+        },
+        [34916] = {
+            cost = 2300,
+            rank = 2,
+            requires = {34914}
         },
     },
     [61] = {
@@ -660,11 +730,20 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 80000,
             rank = 9
         },
+        [34865] = {
+            cost = 2300,
+            rank = 4,
+            requires = {34861}
+        },
     },
     [66] = {
         [25384] = {
             cost = 65000,
             rank = 9
+        },
+        [25437] = {
+            cost = 2200,
+            rank = 7
         },
         [34433] = {
             cost = 89000,
@@ -690,6 +769,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 3250,
             rank = 7,
             requires = {15237}
+        },
+        [25387] = {
+            cost = 6500,
+            rank = 7,
+            requires = {15407}
         },
         [25433] = {
             cost = 110000,
@@ -749,6 +833,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 100000,
             rank = 3
         },
+        [28275] = {
+            cost = 1500,
+            rank = 4,
+            requires = {724}
+        },
         [32375] = {
             cost = 110000,
             rank = nil
@@ -762,8 +851,22 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             rank = 2,
             requires = {14752}
         },
+        [34866] = {
+            cost = 2300,
+            rank = 5,
+            requires = {34861}
+        },
+        [34917] = {
+            cost = 2300,
+            rank = 3,
+            requires = {34914}
+        },
         [39374] = {
             cost = 100000,
+            rank = 2
+        },
+        [53005] = {
+            cost = 5000,
             rank = 2
         },
     },
@@ -792,6 +895,10 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             cost = 180000,
             rank = 10
         },
+        [48172] = {
+            cost = 3250,
+            rank = 8
+        },
         [48299] = {
             cost = 180000,
             rank = 8
@@ -810,6 +917,11 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [48126] = {
             cost = 180000,
             rank = 12
+        },
+        [48155] = {
+            cost = 9000,
+            rank = 8,
+            requires = {15407}
         },
     },
     [75] = {
@@ -830,12 +942,31 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             rank = 8,
             requires = {15237}
         },
+        [48086] = {
+            cost = 9000,
+            rank = 5,
+            requires = {724}
+        },
+        [48088] = {
+            cost = 9000,
+            rank = 6,
+            requires = {34861}
+        },
         [48124] = {
             cost = 180000,
             rank = 11
         },
         [48157] = {
             cost = 180000,
+            rank = 3
+        },
+        [48159] = {
+            cost = 9000,
+            rank = 4,
+            requires = {34914}
+        },
+        [53006] = {
+            cost = 9000,
             rank = 3
         },
     },
@@ -924,13 +1055,33 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
             rank = 9,
             requires = {15237}
         },
+        [48087] = {
+            cost = 9000,
+            rank = 6,
+            requires = {724}
+        },
+        [48089] = {
+            cost = 9000,
+            rank = 7,
+            requires = {34861}
+        },
         [48125] = {
             cost = 180000,
             rank = 12
         },
+        [48156] = {
+            cost = 9000,
+            rank = 9,
+            requires = {15407}
+        },
         [48158] = {
             cost = 180000,
             rank = 4
+        },
+        [48160] = {
+            cost = 9000,
+            rank = 5,
+            requires = {34914}
         },
         [48161] = {
             cost = 180000,
@@ -938,6 +1089,14 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         },
         [48162] = {
             cost = 180000,
+            rank = 4
+        },
+        [48173] = {
+            cost = 9000,
+            rank = 9
+        },
+        [53007] = {
+            cost = 9000,
             rank = 4
         },
         [53023] = {

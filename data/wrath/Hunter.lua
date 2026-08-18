@@ -5,6 +5,10 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             cost = 10,
             rank = nil
         },
+        [3127] = {
+            cost = 190,
+            rank = nil
+        },
     },
     [4] = {
         [1978] = {
@@ -126,6 +130,10 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         },
     },
     [20] = {
+        [674] = {
+            cost = 2090,
+            rank = nil
+        },
         [781] = {
             cost = 2200,
             rank = nil
@@ -215,6 +223,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 3,
             requires = {14318}
         },
+        [20900] = {
+            cost = 400,
+            rank = 2,
+            requires = {19434}
+        },
     },
     [30] = {
         [5384] = {
@@ -287,8 +300,18 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 3,
             requires = {13795}
         },
+        [20901] = {
+            cost = 700,
+            rank = 3,
+            requires = {19434}
+        },
     },
     [38] = {
+        [14267] = {
+            cost = 15200,
+            rank = nil,
+            requires = {2974}
+        },
         [14320] = {
             cost = 16000,
             rank = 4,
@@ -299,6 +322,10 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         [1510] = {
             cost = 18000,
             rank = 1
+        },
+        [8737] = {
+            cost = 17100,
+            rank = nil
         },
         [13159] = {
             cost = 18000,
@@ -335,6 +362,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 3,
             requires = {2643}
         },
+        [20909] = {
+            cost = 1200,
+            rank = 2,
+            requires = {19306}
+        },
     },
     [44] = {
         [13542] = {
@@ -355,6 +387,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         [14316] = {
             cost = 26000,
             rank = 2
+        },
+        [20902] = {
+            cost = 1300,
+            rank = 4,
+            requires = {19434}
         },
     },
     [46] = {
@@ -399,6 +436,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             cost = 36000,
             rank = nil
         },
+        [24132] = {
+            cost = 1800,
+            rank = 2,
+            requires = {19386}
+        },
         [56641] = {
             cost = 36000,
             rank = 1
@@ -415,6 +457,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 7,
             requires = {14282}
         },
+        [20903] = {
+            cost = 2000,
+            rank = 5,
+            requires = {19434}
+        },
     },
     [54] = {
         [14290] = {
@@ -425,6 +472,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         [14317] = {
             cost = 42000,
             rank = 3
+        },
+        [20910] = {
+            cost = 2100,
+            rank = 3,
+            requires = {19306}
         },
     },
     [56] = {
@@ -440,6 +492,12 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         },
         [20190] = {
             cost = 46000,
+            rank = 2
+        },
+    },
+    [57] = {
+        [63668] = {
+            cost = 1800,
             rank = 2
         },
     },
@@ -475,6 +533,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 7,
             requires = {3111}
         },
+        [14268] = {
+            cost = 47500,
+            rank = nil,
+            requires = {2974}
+        },
         [14287] = {
             cost = 50000,
             rank = 8,
@@ -492,6 +555,16 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         [19801] = {
             cost = 50000,
             rank = nil
+        },
+        [20904] = {
+            cost = 2500,
+            rank = 6,
+            requires = {19434}
+        },
+        [24133] = {
+            cost = 2500,
+            rank = 3,
+            requires = {19386}
         },
         [25294] = {
             cost = 50000,
@@ -527,6 +600,10 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 9,
             requires = {2973}
         },
+        [63669] = {
+            cost = 7000,
+            rank = 3
+        },
     },
     [65] = {
         [27023] = {
@@ -536,6 +613,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         },
     },
     [66] = {
+        [27067] = {
+            cost = 2500,
+            rank = 4,
+            requires = {19306}
+        },
         [34026] = {
             cost = 120000,
             rank = nil
@@ -583,8 +665,22 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 9,
             requires = {14282}
         },
+        [63670] = {
+            cost = 10000,
+            rank = 4
+        },
     },
     [70] = {
+        [27065] = {
+            cost = 2700,
+            rank = 7,
+            requires = {19434}
+        },
+        [27068] = {
+            cost = 2700,
+            rank = 4,
+            requires = {19386}
+        },
         [34477] = {
             cost = 190000,
             rank = nil
@@ -593,6 +689,10 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             cost = 190000,
             rank = 5,
             requires = {1495}
+        },
+        [60051] = {
+            cost = 400,
+            rank = 2
         },
     },
     [71] = {
@@ -615,6 +715,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         },
     },
     [72] = {
+        [48998] = {
+            cost = 10000,
+            rank = 5,
+            requires = {19306}
+        },
         [49055] = {
             cost = 300000,
             rank = 7,
@@ -654,13 +759,31 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         },
     },
     [75] = {
+        [49011] = {
+            cost = 100000,
+            rank = 5,
+            requires = {19386}
+        },
+        [49049] = {
+            cost = 10000,
+            rank = 8,
+            requires = {19434}
+        },
         [53271] = {
             cost = 10000,
             rank = nil
         },
+        [60052] = {
+            cost = 400,
+            rank = 3
+        },
         [61005] = {
             cost = 300000,
             rank = 2
+        },
+        [63671] = {
+            cost = 10000,
+            rank = 5
         },
     },
     [76] = {
@@ -694,6 +817,11 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         },
     },
     [78] = {
+        [48999] = {
+            cost = 15000,
+            rank = 6,
+            requires = {19306}
+        },
         [49056] = {
             cost = 300000,
             rank = 8,
@@ -718,10 +846,20 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
             rank = 10,
             requires = {3111}
         },
+        [49012] = {
+            cost = 100000,
+            rank = 6,
+            requires = {19386}
+        },
         [49048] = {
             cost = 300000,
             rank = 8,
             requires = {2643}
+        },
+        [49050] = {
+            cost = 10000,
+            rank = 9,
+            requires = {19434}
         },
         [53339] = {
             cost = 300000,
@@ -731,6 +869,10 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         [58434] = {
             cost = 300000,
             rank = 6
+        },
+        [60053] = {
+            cost = 100000,
+            rank = 4
         },
         [60192] = {
             cost = 100000,
@@ -747,6 +889,10 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         [62757] = {
             cost = 300000,
             rank = nil
+        },
+        [63672] = {
+            cost = 10000,
+            rank = 6
         },
     },
 }

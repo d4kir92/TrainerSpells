@@ -9,6 +9,10 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             cost = 1800,
             rank = nil
         },
+        [3127] = {
+            cost = 760,
+            rank = nil
+        },
     },
     [4] = {
         [53] = {
@@ -43,6 +47,10 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         },
     },
     [10] = {
+        [674] = {
+            cost = 285,
+            rank = nil
+        },
         [2983] = {
             cost = 300,
             rank = 1
@@ -94,12 +102,22 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         },
     },
     [18] = {
+        [1777] = {
+            cost = 2755,
+            rank = 2,
+            requires = {1777}
+        },
         [8676] = {
             cost = 2900,
             rank = 1
         },
     },
     [20] = {
+        [1785] = {
+            cost = 2850,
+            rank = 2,
+            requires = {1784}
+        },
         [1943] = {
             cost = 3000,
             rank = 1
@@ -206,6 +224,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             rank = 5,
             requires = {2098}
         },
+        [8629] = {
+            cost = 11400,
+            rank = 3,
+            requires = {1777}
+        },
     },
     [34] = {
         [2094] = {
@@ -249,6 +272,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         },
     },
     [40] = {
+        [1786] = {
+            cost = 19000,
+            rank = 3,
+            requires = {1784}
+        },
         [1860] = {
             cost = 20000,
             rank = nil
@@ -304,6 +332,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             rank = 7,
             requires = {1752}
         },
+        [17347] = {
+            cost = 384,
+            rank = 2,
+            requires = {16511}
+        },
     },
     [48] = {
         [11297] = {
@@ -330,6 +363,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [26669] = {
             cost = 35000,
             rank = 2
+        },
+        [34411] = {
+            cost = 5500,
+            rank = 2,
+            requires = {1329}
         },
     },
     [52] = {
@@ -379,6 +417,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             rank = 3,
             requires = {2983}
         },
+        [17348] = {
+            cost = 650,
+            rank = 3,
+            requires = {16511}
+        },
     },
     [60] = {
         [11275] = {
@@ -405,6 +448,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             cost = 65000,
             rank = 9,
             requires = {2098}
+        },
+        [34412] = {
+            cost = 6500,
+            rank = 3,
+            requires = {1329}
         },
     },
     [61] = {
@@ -485,10 +533,20 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             rank = 10,
             requires = {1752}
         },
+        [26864] = {
+            cost = 2700,
+            rank = 4,
+            requires = {16511}
+        },
         [26884] = {
             cost = 140000,
             rank = 8,
             requires = {8631}
+        },
+        [34413] = {
+            cost = 7500,
+            rank = 4,
+            requires = {1329}
         },
         [48673] = {
             cost = 100000,
@@ -538,6 +596,11 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         },
     },
     [75] = {
+        [48663] = {
+            cost = 15000,
+            rank = 5,
+            requires = {1329}
+        },
         [48675] = {
             cost = 300000,
             rank = 9,
@@ -593,6 +656,16 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
             cost = 300000,
             rank = 12,
             requires = {53}
+        },
+        [48660] = {
+            cost = 15000,
+            rank = 5,
+            requires = {16511}
+        },
+        [48666] = {
+            cost = 15000,
+            rank = 6,
+            requires = {1329}
         },
         [48676] = {
             cost = 300000,

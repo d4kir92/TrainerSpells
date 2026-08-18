@@ -198,7 +198,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [32272] = {
             cost = 2000,
             rank = nil,
-            requires = {33717},
             faction = "Horde"
         },
     },
@@ -252,6 +251,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 2,
             requires = {33944}
         },
+        [12505] = {
+            cost = 200,
+            rank = 2,
+            requires = {11366}
+        },
     },
     [26] = {
         [120] = {
@@ -304,7 +308,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [3566] = {
             cost = 8000,
             rank = nil,
-            requires = {33717},
             faction = "Horde"
         },
         [6127] = {
@@ -340,6 +343,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 8000,
             rank = 2,
             requires = {27128}
+        },
+        [12522] = {
+            cost = 400,
+            rank = 3,
+            requires = {11366}
         },
         [45438] = {
             cost = 8000,
@@ -408,7 +416,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [49361] = {
             cost = 15000,
             rank = nil,
-            requires = {27070},
             faction = "Horde"
         },
     },
@@ -416,7 +423,7 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [8402] = {
             cost = 13000,
             rank = 7,
-            requires = {143}
+            requires = {27070}
         },
         [8427] = {
             cost = 13000,
@@ -432,6 +439,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 13000,
             rank = 3,
             requires = {27131}
+        },
+        [12523] = {
+            cost = 650,
+            rank = 4,
+            requires = {11366}
+        },
+        [13018] = {
+            cost = 650,
+            rank = 2,
+            requires = {11113}
         },
     },
     [38] = {
@@ -559,6 +576,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 3,
             requires = {33946}
         },
+        [12524] = {
+            cost = 900,
+            rank = 5,
+            requires = {11366}
+        },
     },
     [44] = {
         [10179] = {
@@ -576,6 +598,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 4,
             requires = {27131}
         },
+        [13019] = {
+            cost = 1150,
+            rank = 3,
+            requires = {11113}
+        },
     },
     [46] = {
         [10197] = {
@@ -592,6 +619,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 26000,
             rank = 5,
             requires = {27074}
+        },
+        [13031] = {
+            cost = 1300,
+            rank = 2,
+            requires = {11426}
         },
         [22782] = {
             cost = 28000,
@@ -624,6 +656,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 28000,
             rank = 5,
             requires = {27086}
+        },
+        [12525] = {
+            cost = 1400,
+            rank = 6,
+            requires = {11366}
         },
     },
     [50] = {
@@ -660,7 +697,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [11420] = {
             cost = 32000,
             rank = nil,
-            requires = {33717},
             faction = "Horde"
         },
     },
@@ -690,6 +726,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 6,
             requires = {27074}
         },
+        [13020] = {
+            cost = 1750,
+            rank = 4,
+            requires = {11113}
+        },
+        [13032] = {
+            cost = 1750,
+            rank = 3,
+            requires = {11426}
+        },
     },
     [54] = {
         [10150] = {
@@ -716,6 +762,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 36000,
             rank = 4,
             requires = {27088}
+        },
+        [12526] = {
+            cost = 1800,
+            rank = 7,
+            requires = {11366}
         },
     },
     [56] = {
@@ -744,6 +795,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 1,
             requires = {27126}
         },
+        [33041] = {
+            cost = 1900,
+            rank = 2,
+            requires = {31661}
+        },
     },
     [58] = {
         [10054] = {
@@ -760,6 +816,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 40000,
             rank = 7,
             requires = {27074}
+        },
+        [13033] = {
+            cost = 2000,
+            rank = 4,
+            requires = {11426}
         },
         [22783] = {
             cost = 40000,
@@ -808,6 +869,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 4,
             requires = {12826}
         },
+        [13021] = {
+            cost = 2100,
+            rank = 5,
+            requires = {11113}
+        },
+        [18809] = {
+            cost = 2100,
+            rank = 8,
+            requires = {11366}
+        },
         [25304] = {
             cost = 42000,
             rank = 11,
@@ -841,7 +912,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [35715] = {
             cost = 20000,
             rank = nil,
-            requires = {27079},
             faction = "Horde"
         },
     },
@@ -886,9 +956,19 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 7,
             requires = {27086}
         },
+        [27134] = {
+            cost = 2500,
+            rank = 5,
+            requires = {11426}
+        },
         [30451] = {
             cost = 63000,
             rank = 1
+        },
+        [33042] = {
+            cost = 2200,
+            rank = 3,
+            requires = {31661}
         },
     },
     [65] = {
@@ -902,6 +982,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 6,
             requires = {27087}
         },
+        [27133] = {
+            cost = 10500,
+            rank = 6,
+            requires = {11113}
+        },
         [33691] = {
             cost = 150000,
             rank = nil,
@@ -910,7 +995,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [35717] = {
             cost = 150000,
             rank = nil,
-            requires = {27070},
             faction = "Horde"
         },
         [37420] = {
@@ -924,6 +1008,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 78000,
             rank = 13,
             requires = {27070}
+        },
+        [27132] = {
+            cost = 10500,
+            rank = 9,
+            requires = {11366}
         },
         [30455] = {
             cost = 78000,
@@ -1035,10 +1124,30 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 6,
             requires = {32796}
         },
+        [33043] = {
+            cost = 2500,
+            rank = 4,
+            requires = {31661}
+        },
+        [33405] = {
+            cost = 10500,
+            rank = 6,
+            requires = {11426}
+        },
         [33717] = {
             cost = 150000,
             rank = 8,
             requires = {33717}
+        },
+        [33933] = {
+            cost = 12500,
+            rank = 7,
+            requires = {11113}
+        },
+        [33938] = {
+            cost = 10500,
+            rank = 10,
+            requires = {11366}
         },
         [38692] = {
             cost = 150000,
@@ -1059,6 +1168,14 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 120000,
             rank = 1,
             requires = {27090, 33717}
+        },
+        [44780] = {
+            cost = 10000,
+            rank = 2
+        },
+        [55359] = {
+            cost = 5000,
+            rank = 2
         },
     },
     [71] = {
@@ -1101,6 +1218,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             cost = 150000,
             rank = 10,
             requires = {27074}
+        },
+        [42890] = {
+            cost = 7500,
+            rank = 11,
+            requires = {11366}
         },
         [43019] = {
             cost = 150000,
@@ -1145,9 +1267,24 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 6,
             requires = {27088}
         },
+        [42944] = {
+            cost = 7500,
+            rank = 8,
+            requires = {11113}
+        },
+        [42949] = {
+            cost = 7500,
+            rank = 5,
+            requires = {31661}
+        },
         [42955] = {
             cost = 150000,
             rank = 1
+        },
+        [43038] = {
+            cost = 7500,
+            rank = 7,
+            requires = {11426}
         },
         [44614] = {
             cost = 150000,
@@ -1171,6 +1308,11 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         },
     },
     [77] = {
+        [42891] = {
+            cost = 7500,
+            rank = 12,
+            requires = {11366}
+        },
         [42985] = {
             cost = 150000,
             rank = 6,
@@ -1269,6 +1411,16 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 9,
             requires = {27085}
         },
+        [42945] = {
+            cost = 7500,
+            rank = 9,
+            requires = {11113}
+        },
+        [42950] = {
+            cost = 7500,
+            rank = 6,
+            requires = {31661}
+        },
         [42956] = {
             cost = 150000,
             rank = 2
@@ -1283,6 +1435,15 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
             rank = 3,
             requires = {27126}
         },
+        [43039] = {
+            cost = 7500,
+            rank = 8,
+            requires = {11426}
+        },
+        [44781] = {
+            cost = 15000,
+            rank = 3
+        },
         [47610] = {
             cost = 150000,
             rank = 2
@@ -1290,6 +1451,10 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [55342] = {
             cost = 150000,
             rank = nil
+        },
+        [55360] = {
+            cost = 7500,
+            rank = 3
         },
         [58659] = {
             cost = 150000,
