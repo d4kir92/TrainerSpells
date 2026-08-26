@@ -10,6 +10,12 @@ TrainerSpells.RowSpacing = 0.5
 TrainerSpells.HeaderExtraGap = 12
 TrainerSpells.MinRowHeight, TrainerSpells.MaxRowHeight = 10, 32
 local MAX_ICON_SIZE = 32
+local COLLAPSE_BUTTON_SIZE = 16
+local COLLAPSED_UP = "Interface\\Buttons\\UI-PlusButton-Up"
+local COLLAPSED_DOWN = "Interface\\Buttons\\UI-PlusButton-Down"
+local EXPANDED_UP = "Interface\\Buttons\\UI-MinusButton-Up"
+local EXPANDED_DOWN = "Interface\\Buttons\\UI-MinusButton-Down"
+local COLLAPSE_HIGHLIGHT = "Interface\\Buttons\\UI-PlusButton-Hilight"
 TrainerSpells.HeaderHeight = 16
 TrainerSpells.RowHeight = (TrainerSpells_Character and TrainerSpells_Character.rowHeight) or 16
 TrainerSpells.RowHeight = math.max(TrainerSpells.MinRowHeight, math.min(TrainerSpells.MaxRowHeight, TrainerSpells.RowHeight))
@@ -24,8 +30,6 @@ TrainerSpells.UIColors = {
     SPELL_NAME = "|cffffffff",
     DIM_NAME = "|cff999999",
     RANK = "|cffaaaaaa",
-    COLLAPSE_EXPANDED = "|cffffffff-|r ",
-    COLLAPSE_COLLAPSED = "|cffffffff+|r ",
 }
 
 TrainerSpells.PetGroups = {
@@ -66,6 +70,33 @@ end
 local function ToggleGroup(groupKey)
     if not groupKey or not TrainerSpells_Character then return end
     TrainerSpells_Character.collapsedGroups[groupKey] = not TrainerSpells_Character.collapsedGroups[groupKey] or nil
+    if TrainerSpells_Refresh then TrainerSpells_Refresh() end
+    if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
+end
+
+local function UpdateCollapseButton(rowFrame, elementData, anchor)
+    local button = rowFrame.collapseButton
+    if not elementData.groupKey then
+        if button then button:Hide() end
+
+        return nil
+    end
+
+    if not button then
+        button = CreateFrame("Button", nil, rowFrame)
+        button:SetSize(COLLAPSE_BUTTON_SIZE, COLLAPSE_BUTTON_SIZE)
+        button:SetHighlightTexture(COLLAPSE_HIGHLIGHT, "ADD")
+        rowFrame.collapseButton = button
+    end
+
+    button:ClearAllPoints()
+    button:SetPoint("RIGHT", anchor, "LEFT", -2, 0)
+    button:SetNormalTexture(elementData.collapsed and COLLAPSED_UP or EXPANDED_UP)
+    button:SetPushedTexture(elementData.collapsed and COLLAPSED_DOWN or EXPANDED_DOWN)
+    button:SetScript("OnClick", function() ToggleGroup(elementData.groupKey) end)
+    button:Show()
+
+    return button
 end
 
 local function GetLevelDiffColorCode(level)
@@ -262,6 +293,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
     rowFrame:SetScript("OnEnter", nil)
     rowFrame:SetScript("OnLeave", nil)
     rowFrame:SetScript("OnMouseUp", nil)
+    if rowFrame.collapseButton then rowFrame.collapseButton:Hide() end
     icon:Show()
     icon:SetTexture(nil)
     nameFS:ClearAllPoints()
@@ -272,13 +304,14 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
     levelFS:SetText("")
     if elementData.isHeader then
         icon:Hide()
+        local textInset = elementData.groupKey and (COLLAPSE_BUTTON_SIZE + 6) or 4
         nameFS:ClearAllPoints()
-        nameFS:SetPoint("BOTTOMLEFT", rowFrame, "BOTTOMLEFT", 4, 5)
-        nameFS:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", -4, 5)
+        nameFS:SetPoint("BOTTOMLEFT", rowFrame, "BOTTOMLEFT", textInset, 5)
+        nameFS:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", -textInset, 5)
         nameFS:SetJustifyH("CENTER")
-        local collapseIcon = elementData.groupKey and (elementData.collapsed and Colors.COLLAPSE_COLLAPSED or Colors.COLLAPSE_EXPANDED) or ""
+        UpdateCollapseButton(rowFrame, elementData, nameFS)
         local prefix = elementData.prefixText and (Colors.PET_HEADER .. "[" .. elementData.prefixText .. "] |r") or ""
-        nameFS:SetText(collapseIcon .. prefix .. elementData.color .. elementData.text .. "|r")
+        nameFS:SetText(prefix .. elementData.color .. elementData.text .. "|r")
         if elementData.totalCost or elementData.groupKey then
             rowFrame:EnableMouse(true)
             rowFrame:SetScript("OnEnter", function(sel)
@@ -293,13 +326,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
             end)
 
             rowFrame:SetScript("OnLeave", GameTooltip_Hide)
-            rowFrame:SetScript("OnMouseUp", function(sel, button)
-                if button == "LeftButton" and elementData.groupKey then
-                    ToggleGroup(elementData.groupKey)
-                    if TrainerSpells_Refresh then TrainerSpells_Refresh() end
-                    if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
-                end
-            end)
+            rowFrame:SetScript("OnMouseUp", function(sel, button) if button == "LeftButton" and elementData.groupKey then ToggleGroup(elementData.groupKey) end end)
         end
     else
         local entry = elementData.entry
