@@ -172,3 +172,107 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         end
     end)
 end
+
+local playerSpellsTab
+local playerSpellsTabGlow
+local playerSpellsContentHidden = false
+local function GetPlayerSpellsBook()
+    return PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
+end
+
+local function PositionPlayerSpellsFrame()
+    local book = GetPlayerSpellsBook()
+    if not book then return end
+    local content = book.PagedSpellsFrame or book
+    classFrame:ClearAllPoints()
+    classFrame:SetScale(book:GetScale())
+    classFrame:SetPoint("TOPLEFT", content, "TOPLEFT", 40, -10)
+    classFrame:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT", -40, 20)
+    listBg:ClearAllPoints()
+    listBg:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 0, 0)
+    listBg:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", 0, 0)
+    listBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
+    listBg:SetVertexColor(1, 1, 1)
+    searchBox:ClearAllPoints()
+    searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 60, 34)
+    searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -10, 34)
+end
+
+local function HidePlayerSpellsContent()
+    local book = GetPlayerSpellsBook()
+    if playerSpellsContentHidden or not book then return end
+    playerSpellsContentHidden = true
+    if book.PagedSpellsFrame then book.PagedSpellsFrame:Hide() end
+    if book.SearchBox then book.SearchBox:Hide() end
+end
+
+local function ShowPlayerSpellsContent()
+    local book = GetPlayerSpellsBook()
+    if not playerSpellsContentHidden then return end
+    playerSpellsContentHidden = false
+    if not book then return end
+    if book.PagedSpellsFrame then book.PagedSpellsFrame:Show() end
+    if book.SearchBox then book.SearchBox:Show() end
+end
+
+local function ClosePlayerSpellsPanel()
+    classFrame:Hide()
+    ShowPlayerSpellsContent()
+    if playerSpellsTabGlow then playerSpellsTabGlow:Hide() end
+end
+
+local function OpenPlayerSpellsPanel()
+    if not GetPlayerSpellsBook() then return end
+    PositionPlayerSpellsFrame()
+    HidePlayerSpellsContent()
+    classFrame:Show()
+    if playerSpellsTabGlow then playerSpellsTabGlow:Show() end
+end
+
+local function InstallPlayerSpellsIntegration()
+    local book = GetPlayerSpellsBook()
+    if playerSpellsTab or not book then return end
+    local tab = CreateFrame("Button", "TrainerSpellsPlayerSpellsTab", book)
+    playerSpellsTab = tab
+    tab:SetSize(32, 32)
+    tab:SetNormalTexture(133741)
+    tab:SetHighlightTexture(130718, "ADD")
+    playerSpellsTabGlow = tab:CreateTexture(nil, "OVERLAY")
+    playerSpellsTabGlow:SetSize(32, 32)
+    playerSpellsTabGlow:SetPoint("TOPLEFT", tab, "TOPLEFT", 0, 0)
+    playerSpellsTabGlow:SetTexture(130724)
+    playerSpellsTabGlow:SetBlendMode("ADD")
+    playerSpellsTabGlow:Hide()
+    tab:SetPoint("LEFT", book.CategoryTabSystem or book, "RIGHT", 10, 0)
+    tab:SetScript("OnClick", function()
+        if classFrame:IsShown() then
+            ClosePlayerSpellsPanel()
+        else
+            OpenPlayerSpellsPanel()
+        end
+    end)
+    tab:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(TrainerSpells:Trans("LID_CLASSTRAINER"))
+        GameTooltip:Show()
+    end)
+
+    tab:SetScript("OnLeave", GameTooltip_Hide)
+    book:HookScript("OnHide", ClosePlayerSpellsPanel)
+    if book.CategoryTabSystem then hooksecurefunc(book.CategoryTabSystem, "SetTab", ClosePlayerSpellsPanel) end
+    PlayerSpellsFrame:HookScript("OnHide", ClosePlayerSpellsPanel)
+end
+
+if not SpellBookFrame and TrainerSpells:HasClassTrainers() then
+    if C_AddOns and C_AddOns.IsAddOnLoaded and C_AddOns.IsAddOnLoaded("Blizzard_PlayerSpells") then
+        InstallPlayerSpellsIntegration()
+    else
+        local playerSpellsLoader = CreateFrame("Frame")
+        playerSpellsLoader:RegisterEvent("ADDON_LOADED")
+        playerSpellsLoader:SetScript("OnEvent", function(self, _, addonName)
+            if addonName ~= "Blizzard_PlayerSpells" then return end
+            self:UnregisterEvent("ADDON_LOADED")
+            InstallPlayerSpellsIntegration()
+        end)
+    end
+end
