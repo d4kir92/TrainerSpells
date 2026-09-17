@@ -53,6 +53,11 @@ jobs:
         with:
           args: -g wrath -w 0
 
+      - name: Package and release for Titan Reforged Classic
+        uses: BigWigsMods/packager@master
+        with:
+          args: -g titan -w 0
+
       - name: Package and release for Burning Crusade Classic
         uses: BigWigsMods/packager@master
         with:

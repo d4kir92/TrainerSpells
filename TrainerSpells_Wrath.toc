@@ -1,4 +1,4 @@
-## Interface: 30403
+## Interface: 38002, 30403
 ## Version: 0.5.3
 ## Title: TrainerSpells |T133741:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: An add-on that shows you what you can learn at a classtrainer.
