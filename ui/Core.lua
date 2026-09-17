@@ -143,7 +143,7 @@ end
 function TrainerSpells:RequiresUnknownTalent(entry, talentNames, learnedTalents)
     if not entry.requires then return false end
     for _, reqSpellID in ipairs(entry.requires) do
-        local reqName = GetSpellInfo(reqSpellID)
+        local reqName = TrainerSpells:GetSpellInfo(reqSpellID)
         if reqName and talentNames[reqName] and not learnedTalents[reqName] and not IsReqSpellKnown(reqSpellID) then return true end
     end
     return false
@@ -253,10 +253,10 @@ function TrainerSpells:ShowIgnoreMenu(anchor, entry)
 end
 
 local pendingSpellTooltipExtra
-GameTooltip:HookScript("OnTooltipSetSpell", function(tooltip)
+local function OnTooltipSetSpell(tooltip)
     local extra = pendingSpellTooltipExtra
     if not extra then return end
-    local _, spellID = tooltip:GetSpell()
+    local spellID = TrainerSpells:GetTooltipSpellID(tooltip)
     if spellID ~= extra.spellID then return end
     if extra.showCost then
         local canAfford = not extra.cost or extra.cost == 0 or (GetMoney() or 0) >= extra.cost
@@ -267,7 +267,9 @@ GameTooltip:HookScript("OnTooltipSetSpell", function(tooltip)
 
     if extra.source then tooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. extra.source, 0.9, 0.9, 0.9, true) end
     tooltip:Show()
-end)
+end
+
+if GameTooltip:HasScript("OnTooltipSetSpell") then GameTooltip:HookScript("OnTooltipSetSpell", OnTooltipSetSpell) end
 
 function TrainerSpells:InitScrollRow(rowFrame, elementData)
     local Colors = TrainerSpells.UIColors

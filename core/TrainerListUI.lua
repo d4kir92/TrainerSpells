@@ -6,7 +6,7 @@ local function BuildCachedSpellIDLookup()
     if not classData then return lookup end
     for _, spells in pairs(classData) do
         for id, data in pairs(spells) do
-            local name = GetSpellInfo(id)
+            local name = TrainerSpells:GetSpellInfo(id)
             if name then
                 lookup[name] = lookup[name] or {}
                 local rankNum = type(data) == "table" and tonumber(data.rank) or 0
@@ -172,7 +172,7 @@ end
 local trainerUpdateOverrideInstalled = false
 function TrainerSpells:EnsureTrainerUpdateOverrideInstalled()
     if trainerUpdateOverrideInstalled then return end
-    if not ClassTrainerFrame_Update then return end
+    if not ClassTrainerFrame_Update or not ClassTrainerListScrollFrame then return end
     if not TrainerSpells_IsIgnored then return end
     trainerUpdateOverrideInstalled = true
     ClassTrainerFrame_Update = TrainerSpells_ClassTrainerFrame_Update
@@ -181,7 +181,7 @@ end
 
 local trainerFilterHookInstalled = false
 function TrainerSpells:EnsureTrainerFilterHookInstalled()
-    if trainerFilterHookInstalled then return end
+    if trainerFilterHookInstalled or not trainerUpdateOverrideInstalled then return end
     if not ClassTrainerFrame or not ClassTrainerFrame.FilterDropdown then return end
     trainerFilterHookInstalled = true
     local function IsNativeFilterSelected(filter)

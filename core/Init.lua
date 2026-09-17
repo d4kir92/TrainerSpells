@@ -87,15 +87,57 @@ function TrainerSpells:IsSaneSpellID(spellID)
     return type(spellID) == "number" and spellID > 0 and spellID < 2000000
 end
 
+function TrainerSpells:GetSpellInfo(spell)
+    if GetSpellInfo then return GetSpellInfo(spell) end
+    if spell == nil or not C_Spell or not C_Spell.GetSpellInfo then return nil end
+    local info = C_Spell.GetSpellInfo(spell)
+    if not info then return nil end
+    local subText = C_Spell.GetSpellSubtext and C_Spell.GetSpellSubtext(info.spellID)
+    return info.name, subText, info.iconID, info.castTime, info.minRange, info.maxRange, info.spellID
+end
+
+function TrainerSpells:GetTooltipSpellID(tooltip)
+    if tooltip.GetSpell then
+        local _, spellID = tooltip:GetSpell()
+        return spellID
+    end
+
+    if TooltipUtil and TooltipUtil.GetDisplayedSpell then
+        local _, spellID = TooltipUtil.GetDisplayedSpell(tooltip)
+        return spellID
+    end
+end
+
+local SERVICE_TYPES = {
+    available = true,
+    unavailable = true,
+    used = true
+}
+
+function TrainerSpells:GetTrainerServiceInfo(i)
+    local name, second, third, fourth, fifth, category = GetTrainerServiceInfo(i)
+    if SERVICE_TYPES[second] then return name, fifth, second, fourth or 0, third, category end
+    local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
+    local icon = GetTrainerServiceIcon and GetTrainerServiceIcon(i)
+    return name, second, third, levelReq, icon, nil
+end
+
 function TrainerSpells:GetSpellIDForService(i)
     local scanTooltip = TrainerSpells.ScanTooltip
-    scanTooltip:ClearLines()
-    scanTooltip:SetTrainerService(i)
-    local _, spellID = scanTooltip:GetSpell()
+    local spellID
+    if scanTooltip.GetSpell then
+        scanTooltip:ClearLines()
+        scanTooltip:SetTrainerService(i)
+        spellID = TrainerSpells:GetTooltipSpellID(scanTooltip)
+    elseif C_TooltipInfo and C_TooltipInfo.GetTrainerService then
+        local tooltipData = C_TooltipInfo.GetTrainerService(i)
+        if tooltipData and tooltipData.type == Enum.TooltipDataType.Spell then spellID = tooltipData.id end
+    end
+
     if not spellID then
         local name = GetTrainerServiceInfo(i)
         if name then
-            local _, _, _, _, _, _, foundSpellID = GetSpellInfo(name)
+            local _, _, _, _, _, _, foundSpellID = TrainerSpells:GetSpellInfo(name)
             if type(foundSpellID) == "number" and foundSpellID > 0 then spellID = foundSpellID end
         end
     end

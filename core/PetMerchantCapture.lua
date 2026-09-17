@@ -12,23 +12,34 @@ local function DetectPetFromTooltip(tooltip)
     end
 end
 
+local GetItemInfoCompat = GetItemInfo or (C_Item and C_Item.GetItemInfo)
+local function GetMerchantItemPrice(i)
+    if GetMerchantItemInfo then
+        local _, _, price = GetMerchantItemInfo(i)
+        return price
+    end
+
+    local info = C_MerchantFrame and C_MerchantFrame.GetItemInfo and C_MerchantFrame.GetItemInfo(i)
+    return info and info.price
+end
+
 local function CaptureMerchantInner()
-    if not GetMerchantNumItems then return end
+    if not GetMerchantNumItems or not GetItemInfoCompat then return end
     local numItems = GetMerchantNumItems()
     local neu = 0
     local scanTooltip = TrainerSpells.ScanTooltip
     for i = 1, numItems do
         local itemLink = GetMerchantItemLink(i)
         if itemLink then
-            local itemName, _, _, _, itemMinLevel = GetItemInfo(itemLink)
+            local itemName, _, _, _, itemMinLevel = GetItemInfoCompat(itemLink)
             if itemMinLevel then
                 scanTooltip:ClearLines()
                 scanTooltip:SetMerchantItem(i)
                 local pet = DetectPetFromTooltip(scanTooltip)
                 if pet then
-                    local _, spellID = scanTooltip:GetSpell()
+                    local spellID = TrainerSpells:GetTooltipSpellID(scanTooltip)
                     if TrainerSpells:IsSaneSpellID(spellID) then
-                        local _, _, price = GetMerchantItemInfo(i)
+                        local price = GetMerchantItemPrice(i)
                         local rankNum = itemName and tonumber(itemName:match("%(.-(%d+)%)"))
                         local bucket = TrainerSpells:EnsurePetPath(pet, itemMinLevel)
                         if bucket[spellID] == nil then neu = neu + 1 end
@@ -68,8 +79,8 @@ local function FindPetSpellIDByNameAndRank(pet, spellName, rankNum)
     if not levels then return nil end
     for _, spells in pairs(levels) do
         for spellID, data in pairs(spells) do
-            local name = GetSpellInfo(spellID)
-            local rank = GetSpellSubtext(spellID)
+            local name = TrainerSpells:GetSpellInfo(spellID)
+            local rank = (GetSpellSubtext or C_Spell.GetSpellSubtext)(spellID)
             local dbRankNum = rank and tonumber(rank:match("%d+"))
             if name == spellName then
                 if dbRankNum and rankNum then
@@ -82,7 +93,7 @@ local function FindPetSpellIDByNameAndRank(pet, spellName, rankNum)
     end
 end
 
-GameTooltip:HookScript("OnTooltipSetItem", function(self)
+local function OnTooltipSetItem(self)
     local pet = DetectPetFromTooltip(self)
     local family = UnitCreatureFamily("pet")
     if not pet then return end
@@ -101,7 +112,9 @@ GameTooltip:HookScript("OnTooltipSetItem", function(self)
     end
 
     self:Show()
-end)
+end
+
+if GameTooltip:HasScript("OnTooltipSetItem") then GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem) end
 
 local function MarkKnownPetSpells(pet, dataTable)
     if not UnitExists("pet") or UnitHealth("pet") <= 0 then return end

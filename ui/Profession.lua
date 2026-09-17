@@ -349,8 +349,9 @@ local function EnsureTradeSkillHooksInstalled()
 end
 
 local tradeSkillWatcher = CreateFrame("Frame")
-tradeSkillWatcher:RegisterEvent("TRADE_SKILL_SHOW")
-tradeSkillWatcher:RegisterEvent("TRADE_SKILL_UPDATE")
+for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE"}) do
+    if not C_EventUtils or not C_EventUtils.IsEventValid or C_EventUtils.IsEventValid(event) then tradeSkillWatcher:RegisterEvent(event) end
+end
 tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     EnsureTradeSkillHooksInstalled()
     if event == "TRADE_SKILL_UPDATE" and professionFrame:IsShown() then

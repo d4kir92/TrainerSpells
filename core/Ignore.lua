@@ -22,7 +22,7 @@ function TrainerSpells_ToggleIgnoreName(name)
         local ignoredSpells = TrainerSpells_Ignored[classToken]
         if ignoredSpells then
             for spellID in pairs(ignoredSpells) do
-                if GetSpellInfo(spellID) == name then ignoredSpells[spellID] = nil end
+                if TrainerSpells:GetSpellInfo(spellID) == name then ignoredSpells[spellID] = nil end
             end
         end
     else
@@ -89,7 +89,7 @@ function TrainerSpells:MigrateLegacyProfessionIgnores()
                 for key, data in pairs(spells) do
                     local spellID = (type(key) == "number" and key) or (type(data) == "table" and data.spellID)
                     if spellID then
-                        local name = GetSpellInfo(spellID)
+                        local name = TrainerSpells:GetSpellInfo(spellID)
                         local nameIgnored = ignoredNames and name and ignoredNames[name]
                         if (ignoredSpells and ignoredSpells[spellID]) or nameIgnored then
                             TrainerSpells_IgnoredProfessions[professionKey] = TrainerSpells_IgnoredProfessions[professionKey] or {}

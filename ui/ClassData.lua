@@ -69,14 +69,14 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
                 local name
                 if type(key) == "number" then
                     spellID = spellID or key
-                    name, _, icon = GetSpellInfo(key)
+                    name, _, icon = TrainerSpells:GetSpellInfo(key)
                 else
                     name = key
                 end
 
                 name = name or ("SpellID " .. tostring(key))
                 if not icon and spellID then
-                    local _, _, resolvedIcon = GetSpellInfo(spellID)
+                    local _, _, resolvedIcon = TrainerSpells:GetSpellInfo(spellID)
                     icon = resolvedIcon
                 end
 

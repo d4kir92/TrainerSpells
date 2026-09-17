@@ -10,7 +10,7 @@ local function ResolveTalentSpellIDByName(name)
                     local scanTooltip = TrainerSpells.ScanTooltip
                     scanTooltip:ClearLines()
                     scanTooltip:SetHyperlink(link)
-                    local _, spellID = scanTooltip:GetSpell()
+                    local spellID = TrainerSpells:GetTooltipSpellID(scanTooltip)
                     if TrainerSpells:IsSaneSpellID(spellID) then return spellID end
                 end
                 return nil
@@ -20,13 +20,13 @@ local function ResolveTalentSpellIDByName(name)
 end
 
 local function ResolveRequirementSpellID(name)
-    local _, _, _, _, _, _, spellID = GetSpellInfo(name)
+    local _, _, _, _, _, _, spellID = TrainerSpells:GetSpellInfo(name)
     if TrainerSpells:IsSaneSpellID(spellID) then return spellID end
     spellID = ResolveTalentSpellIDByName(name)
     if TrainerSpells:IsSaneSpellID(spellID) then return spellID end
     local baseName = name:match("^(.-)%s*%b()$")
     if baseName then
-        _, _, _, _, _, _, spellID = GetSpellInfo(baseName)
+        _, _, _, _, _, _, spellID = TrainerSpells:GetSpellInfo(baseName)
         if TrainerSpells:IsSaneSpellID(spellID) then return spellID end
         spellID = ResolveTalentSpellIDByName(baseName)
         if TrainerSpells:IsSaneSpellID(spellID) then return spellID end
@@ -48,6 +48,26 @@ local function ParseRequirementText(text)
 
     if #spellIDs == 0 then return nil end
     return spellIDs
+end
+
+local function ReadRequirementsFromAPI(i)
+    if not GetTrainerServiceNumAbilityReq or not GetTrainerServiceAbilityReq then return nil end
+    local spellIDs = {}
+    for r = 1, GetTrainerServiceNumAbilityReq(i) or 0 do
+        local ability = GetTrainerServiceAbilityReq(i, r)
+        local spellID = ability and ResolveRequirementSpellID(ability)
+        if spellID then table.insert(spellIDs, spellID) end
+    end
+
+    if #spellIDs == 0 then return nil end
+    return spellIDs
+end
+
+local function AddSeen(seen, value)
+    if not value then return seen end
+    seen = seen or {}
+    seen[value] = true
+    return seen
 end
 
 local function CaptureTrainerInner()
@@ -74,8 +94,12 @@ local function CaptureTrainerInner()
     local neuProf = 0
     local rankFound = false
     local lastDebugSkillLine
+    local readRequirementsFromAPI = _G["ClassTrainerSkill1"] == nil
+    local isPetTrainer = C_Trainer and C_Trainer.GetTrainerType and Enum.TrainerType and Enum.TrainerType.Pet ~= nil and C_Trainer.GetTrainerType() == Enum.TrainerType.Pet
+    local playerFaction = TrainerSpells:GetPlayerFaction()
+    local playerRace = TrainerSpells:GetPlayerRace()
     for i = 1, numServices do
-        local _, _, sType = GetTrainerServiceInfo(i)
+        local _, _, sType = TrainerSpells:GetTrainerServiceInfo(i)
         if sType == "available" or sType == "unavailable" or sType == "used" then
             rankFound = true
             break
@@ -85,19 +109,19 @@ local function CaptureTrainerInner()
     TrainerSpells:DebugTrainer("CaptureTrainerInner: rankFound=%s", tostring(rankFound))
     if not rankFound then return end
     for i = 1, numServices do
-        local name, rankText, sType = GetTrainerServiceInfo(i)
+        local name, rankText, sType, levelReq, icon = TrainerSpells:GetTrainerServiceInfo(i)
         local rank = rankText and tonumber(rankText:match("%d+"))
-        local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
         if (rank ~= nil or levelReq ~= nil) and (sType == "available" or sType == "unavailable" or sType == "used") then
             local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
             local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
             if name and professionKey then
                 local spellID = TrainerSpells:GetSpellIDForService(i)
-                local icon = GetTrainerServiceIcon and GetTrainerServiceIcon(i)
                 local skillReq = TrainerSpells:GetSkillReqForService(i)
                 local bucket = TrainerSpells:EnsureProfessionPath(professionKey, skillReq)
                 local existing = bucket[name]
                 if existing == nil then neuProf = neuProf + 1 end
+                local requires = existing and existing.requires
+                if readRequirementsFromAPI then requires = ReadRequirementsFromAPI(i) or requires end
                 bucket[name] = {
                     spellID = spellID,
                     icon = icon,
@@ -105,14 +129,16 @@ local function CaptureTrainerInner()
                     rank = rank,
                     status = sType,
                     levelReq = (levelReq and levelReq > 0) and levelReq or nil,
-                    requires = existing and existing.requires,
+                    requires = requires,
                     faction = existing and existing.faction,
-                    race = existing and existing.race
+                    race = existing and existing.race,
+                    seenFactions = AddSeen(existing and existing.seenFactions, playerFaction),
+                    seenRaces = AddSeen(existing and existing.seenRaces, playerRace)
                 }
             else
                 local spellID = TrainerSpells:GetSpellIDForService(i)
                 if spellID then
-                    local isPetTraining = TrainerSpells:IsPetTrainerSkillLine(skillLine)
+                    local isPetTraining = isPetTrainer or TrainerSpells:IsPetTrainerSkillLine(skillLine)
                     if skillLine ~= lastDebugSkillLine then
                         lastDebugSkillLine = skillLine
                         TrainerSpells:DebugTrainer("CaptureTrainerInner: skillLine=%s isPetTraining=%s classToken=%s", tostring(skillLine), tostring(isPetTraining), tostring(classToken))
@@ -133,13 +159,17 @@ local function CaptureTrainerInner()
                         end
                     end
 
+                    local requires = existing and existing.requires
+                    if readRequirementsFromAPI then requires = ReadRequirementsFromAPI(i) or requires end
                     bucket[spellID] = {
                         cost = cost,
                         rank = rank,
                         status = sType,
-                        requires = existing and existing.requires,
+                        requires = requires,
                         faction = existing and existing.faction,
-                        race = existing and existing.race
+                        race = existing and existing.race,
+                        seenFactions = AddSeen(existing and existing.seenFactions, playerFaction),
+                        seenRaces = AddSeen(existing and existing.seenRaces, playerRace)
                     }
                 end
             end
