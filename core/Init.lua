@@ -116,7 +116,12 @@ local SERVICE_TYPES = {
 
 function TrainerSpells:GetTrainerServiceInfo(i)
     local name, second, third, fourth, fifth, category = GetTrainerServiceInfo(i)
-    if SERVICE_TYPES[second] then return name, fifth, second, fourth or 0, third, category end
+    if SERVICE_TYPES[second] then
+        local levelReq = fourth or 0
+        if levelReq == 0 and GetTrainerServiceLevelReq then levelReq = GetTrainerServiceLevelReq(i) or 0 end
+        return name, fifth, second, levelReq, third, category
+    end
+
     local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(i) or 0
     local icon = GetTrainerServiceIcon and GetTrainerServiceIcon(i)
     return name, second, third, levelReq, icon, nil

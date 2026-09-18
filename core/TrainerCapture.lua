@@ -124,6 +124,7 @@ local function CaptureTrainerInner()
                 if readRequirementsFromAPI then requires = ReadRequirementsFromAPI(i) or requires end
                 bucket[name] = {
                     spellID = spellID,
+                    skillStep = skillLine and true or nil,
                     icon = icon,
                     cost = cost,
                     rank = rank,

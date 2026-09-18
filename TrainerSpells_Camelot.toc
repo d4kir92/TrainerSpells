@@ -45,6 +45,11 @@ locale\ruRU.lua
 locale\zhCN.lua
 locale\zhTW.lua
 
+data\forever\Druid.lua
+data\forever\Cooking.lua
+data\forever\Leatherworking.lua
+data\forever\Skinning.lua
+
 core\Init.lua
 core\PetNames.lua
 core\BuiltinMerge.lua
