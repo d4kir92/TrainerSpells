@@ -112,7 +112,9 @@ local function CaptureTrainerInner()
         local name, rankText, sType, levelReq, icon = TrainerSpells:GetTrainerServiceInfo(i)
         local rank = rankText and tonumber(rankText:match("%d+"))
         if (rank ~= nil or levelReq ~= nil) and (sType == "available" or sType == "unavailable" or sType == "used") then
-            local cost = GetTrainerServiceCost and GetTrainerServiceCost(i) or 0
+            local cost, isProfessionService = 0
+            if GetTrainerServiceCost then cost, isProfessionService = GetTrainerServiceCost(i) end
+            cost = cost or 0
             local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
             if name and professionKey then
                 local spellID = TrainerSpells:GetSpellIDForService(i)
@@ -124,7 +126,7 @@ local function CaptureTrainerInner()
                 if readRequirementsFromAPI then requires = ReadRequirementsFromAPI(i) or requires end
                 bucket[name] = {
                     spellID = spellID,
-                    skillStep = skillLine and true or nil,
+                    rankRow = (isProfessionService == true) or (GetTrainerServiceStepIndex and GetTrainerServiceStepIndex() == i) or (existing and existing.rankRow) or nil,
                     icon = icon,
                     cost = cost,
                     rank = rank,
@@ -139,6 +141,7 @@ local function CaptureTrainerInner()
             else
                 local spellID = TrainerSpells:GetSpellIDForService(i)
                 if spellID then
+                    if not levelReq or levelReq == 0 then levelReq = TrainerSpells:GetSpellLevelLearned(spellID) or levelReq end
                     local isPetTraining = isPetTrainer or TrainerSpells:IsPetTrainerSkillLine(skillLine)
                     if skillLine ~= lastDebugSkillLine then
                         lastDebugSkillLine = skillLine

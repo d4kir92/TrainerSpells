@@ -149,6 +149,19 @@ function TrainerSpells:GetSpellIDForService(i)
     return spellID
 end
 
+function TrainerSpells:GetSpellLevelLearned(spellID)
+    if not spellID then return nil end
+    if C_Spell and C_Spell.GetSpellLevelLearned then
+        local level = C_Spell.GetSpellLevelLearned(spellID)
+        if level and level > 0 then return level end
+    end
+
+    if GetSpellLevelLearned then
+        local level = GetSpellLevelLearned(spellID)
+        if level and level > 0 then return level end
+    end
+end
+
 function TrainerSpells:GetSkillReqForService(i)
     if not GetTrainerServiceSkillReq then return 0 end
     local _, skillReq = GetTrainerServiceSkillReq(i)

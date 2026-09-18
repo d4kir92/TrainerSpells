@@ -1,11 +1,5 @@
 TrainerSpellsBuiltin_Profession = TrainerSpellsBuiltin_Profession or {}
 TrainerSpellsBuiltin_Profession.Cooking = TrainerSpellsBuiltin_Profession.Cooking or {
-    [0] = {
-        [2550] = {
-            icon = 133971,
-            cost = 100
-        },
-    },
     [10] = {
         [2539] = {
             icon = 134021,
