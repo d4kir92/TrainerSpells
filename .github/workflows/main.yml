@@ -38,6 +38,11 @@ jobs:
       #- name: Package and release (ONE-ZIP)
       #  uses: BigWigsMods/packager@master
 
+      - name: Package and release for Forever
+        uses: BigWigsMods/packager@master
+        with:
+          args: -g forever -w 0
+
       - name: Package and release for Mists Classic
         uses: BigWigsMods/packager@master
         with:
