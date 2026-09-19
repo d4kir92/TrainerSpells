@@ -45,6 +45,7 @@ locale\ruRU.lua
 locale\zhCN.lua
 locale\zhTW.lua
 
+data\forever\Shaman.lua
 data\forever\Druid.lua
 data\forever\Alchemy.lua
 data\forever\Blacksmithing.lua
