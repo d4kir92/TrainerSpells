@@ -56,6 +56,7 @@ data\classicera\Warlock.lua
 data\classicera\Druid.lua
 data\classicera\HunterPet.lua
 data\classicera\WarlockPet.lua
+data\forever\WeaponSkills.lua
 data\classicera\Leatherworking.lua
 data\classicera\Alchemy.lua
 data\classicera\Blacksmithing.lua
@@ -93,5 +94,6 @@ ui\Core.lua
 ui\ClassData.lua
 ui\ClassList.lua
 ui\Profession.lua
+ui\WeaponSkills.lua
 ui\Spellbook.lua
 ui\RowHeightSync.lua

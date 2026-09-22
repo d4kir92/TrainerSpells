@@ -78,7 +78,6 @@ local function UpdateCollapseButton(rowFrame, elementData, anchor)
     local button = rowFrame.collapseButton
     if not elementData.groupKey then
         if button then button:Hide() end
-
         return nil
     end
 
@@ -95,7 +94,6 @@ local function UpdateCollapseButton(rowFrame, elementData, anchor)
     button:SetPushedTexture(elementData.collapsed and COLLAPSED_DOWN or EXPANDED_DOWN)
     button:SetScript("OnClick", function() ToggleGroup(elementData.groupKey) end)
     button:Show()
-
     return button
 end
 
@@ -162,7 +160,7 @@ end
 local function GetLocalizedRankText(spellID, rankNum, hasRealRank)
     local subtext = GetSpellSubtext and spellID and GetSpellSubtext(spellID)
     if subtext and subtext ~= "" then return subtext end
-    if hasRealRank and rankNum then return ((_G.RANK or "Rank") .. " " .. rankNum) end
+    if hasRealRank and rankNum then return (_G.RANK or "Rank") .. " " .. rankNum end
     return nil
 end
 
@@ -277,8 +275,7 @@ local function OnTooltipSetSpell(tooltip)
 end
 
 if GameTooltip:HasScript("OnTooltipSetSpell") then GameTooltip:HookScript("OnTooltipSetSpell", OnTooltipSetSpell) end
-
-function TrainerSpells:InitScrollRow(rowFrame, elementData)
+function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
     local Colors = TrainerSpells.UIColors
     if not rowFrame.icon then
         local categoryBackground = CreateFrame("Frame", nil, rowFrame, "BackdropTemplate")
@@ -288,8 +285,14 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
             bgFile = "Interface\\Buttons\\WHITE8X8",
             edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
             edgeSize = 8,
-            insets = {left = 2, right = 2, top = 2, bottom = 2}
+            insets = {
+                left = 2,
+                right = 2,
+                top = 2,
+                bottom = 2
+            }
         })
+
         categoryBackground:SetBackdropColor(0, 0, 0, 0.5)
         categoryBackground:SetBackdropBorderColor(0, 0, 0, 0.5)
         categoryBackground:EnableMouse(false)
@@ -320,8 +323,9 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
     local icon, nameFS, levelFS = rowFrame.icon, rowFrame.nameFS, rowFrame.levelFS
     local countFS, costFS = rowFrame.countFS, rowFrame.costFS
     local iconSize = math.max(8, math.min(MAX_ICON_SIZE, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
-    SetFontSize(nameFS, 16)
-    SetFontSize(levelFS, 16)
+    local fontSize = math.max(10, math.min(16, rowHeight or TrainerSpells.RowHeight))
+    SetFontSize(nameFS, fontSize)
+    SetFontSize(levelFS, fontSize)
     icon:SetSize(iconSize, iconSize)
     icon:ClearAllPoints()
     icon:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
@@ -356,7 +360,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         rowFrame.categoryBackground:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", 0, categoryInset)
         rowFrame.categoryBackground:Show()
         icon:Hide()
-        SetFontSize(nameFS, 18)
+        SetFontSize(nameFS, fontSize)
         local textInset = elementData.groupKey and (COLLAPSE_BUTTON_SIZE + 6) or 4
         nameFS:ClearAllPoints()
         nameFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOPLEFT", textInset, 0)
@@ -370,7 +374,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
             local singular = elementData.countKind == "skill" and (_G.SKILL or "Skill") or (_G.SPELL or "Spell")
             local plural = elementData.countKind == "skill" and (_G.SKILLS or "Skills") or (_G.SPELLS or "Spells")
             local countLabel = elementData.spellCount == 1 and singular or plural
-            SetFontSize(countFS, 18)
+            SetFontSize(countFS, fontSize)
             countFS:ClearAllPoints()
             countFS:SetPoint("TOP", rowFrame.categoryBackground, "TOP", 0, 0)
             countFS:SetPoint("BOTTOM", rowFrame.categoryBackground, "BOTTOM", 0, 0)
@@ -383,7 +387,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         if elementData.totalCost ~= nil then
             local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
             local costColor = canAfford and "|cffffffff" or "|cffff3333"
-            SetFontSize(costFS, 18)
+            SetFontSize(costFS, fontSize)
             costFS:ClearAllPoints()
             costFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOP", 60, 0)
             costFS:SetPoint("BOTTOMRIGHT", rowFrame.categoryBackground, "BOTTOMRIGHT", -4, 0)
@@ -414,6 +418,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
             icon:ClearAllPoints()
             icon:SetPoint("LEFT", rowFrame, "LEFT", 4 + (elementData.rowDepth * 16), 0)
         end
+
         icon:SetTexture(entry.icon)
         nameFS:SetText(elementData.color .. entry.name .. "|r")
         nameFS:ClearAllPoints()
@@ -427,6 +432,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         else
             levelFS:SetText(levelText)
         end
+
         rowFrame.locationButtons = rowFrame.locationButtons or {}
         local locationSize = math.max(12, math.min(24, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
         for index, location in ipairs(entry.locations) do
@@ -449,6 +455,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
                 GameTooltip:SetText(locationName)
                 GameTooltip:Show()
             end)
+
             button:SetScript("OnLeave", GameTooltip_Hide)
             button:Show()
         end
@@ -459,6 +466,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
             GameTooltip:SetSpellByID(entry.spellID)
             GameTooltip:Show()
         end)
+
         rowFrame:SetScript("OnLeave", GameTooltip_Hide)
     else
         local entry = elementData.entry

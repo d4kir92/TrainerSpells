@@ -57,6 +57,7 @@ data\wrath\Warlock.lua
 data\wrath\Druid.lua
 data\wrath\HunterPet.lua
 data\wrath\WarlockPet.lua
+data\forever\WeaponSkills.lua
 data\wrath\Leatherworking.lua
 data\wrath\Alchemy.lua
 data\wrath\Blacksmithing.lua
@@ -117,5 +118,6 @@ ui\Core.lua
 ui\ClassData.lua
 ui\ClassList.lua
 ui\Profession.lua
+ui\WeaponSkills.lua
 ui\Spellbook.lua
 ui\RowHeightSync.lua

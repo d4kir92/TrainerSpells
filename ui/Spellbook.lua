@@ -46,6 +46,19 @@ local function PositionFrame()
         searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 10, -6)
         searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -30, -6)
     end
+
+    local showWeaponControls = TrainerSpells.ClassView == "weapons" and TrainerSpells.WeaponControls
+    if TrainerSpells.WeaponControls then
+        TrainerSpells.WeaponControls:ClearAllPoints()
+        TrainerSpells.WeaponControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
+        TrainerSpells.WeaponControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
+        TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false)
+    end
+    if TrainerSpells.ClassScrollBox then
+        TrainerSpells.ClassScrollBox:ClearAllPoints()
+        TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, showWeaponControls and -36 or -4)
+        TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
+    end
 end
 
 if SpellBookFrame then hooksecurefunc(SpellBookFrame, "SetScale", function() if classFrame:IsShown() then PositionFrame() end end) end
@@ -90,7 +103,8 @@ local function ShowNativeSpellButtons()
     if SpellBookFrame_Update then SpellBookFrame_Update() end
 end
 
-local ourTabGlow
+local classicModeTabs = {}
+local classicModeTabGlows = {}
 local function GetTabGlow(tabFrame)
     if not tabFrame then return nil end
     for _, region in ipairs({tabFrame:GetRegions()}) do
@@ -105,53 +119,85 @@ local function HideNativeSkillTabGlows()
     end
 end
 
-local function OpenFrame()
+local function HideClassicModeTabGlows()
+    for _, glow in pairs(classicModeTabGlows) do
+        glow:Hide()
+    end
+end
+
+local function OpenFrame(view)
+    TrainerSpells:SetClassView(view)
     PositionFrame()
     classFrame:Show()
     HideNativeSpellButtons()
     HideNativeSkillTabGlows()
-    if ourTabGlow then ourTabGlow:Show() end
+    HideClassicModeTabGlows()
+    if classicModeTabGlows[view] then classicModeTabGlows[view]:Show() end
 end
 
 if SpellBookFrame and TrainerSpells:HasClassTrainers() then
-    local tab = CreateFrame("Button", "TrainerSpellsSpellbookTab", SpellBookFrame)
-    tab:SetSize(32, 32)
-    tab:SetNormalTexture("Interface\\Icons\\INV_Misc_Book_09")
-    tab:SetHighlightTexture(130718, "ADD")
-    local border = tab:CreateTexture("TrainerSpellsSpellbookTabBorder", "BACKGROUND")
-    border:SetSize(64, 64)
-    border:SetPoint("TOPLEFT", tab, "TOPLEFT", -3, 11)
-    border:SetTexture(136831)
-    ourTabGlow = tab:CreateTexture(nil, "OVERLAY")
-    ourTabGlow:SetSize(32, 32)
-    ourTabGlow:SetPoint("TOPLEFT", tab, "TOPLEFT", 0, 0)
-    ourTabGlow:SetTexture(130724)
-    ourTabGlow:SetBlendMode("ADD")
-    ourTabGlow:Hide()
     local lastTab = _G["SpellBookSkillLineTab5"] or _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
-    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -34)
-    tab:Hide()
-    tab:SetScript("OnClick", OpenFrame)
-    tab:SetScript("OnEnter", function(sel)
-        GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-        GameTooltip:SetText(TrainerSpells:Trans("LID_CLASSTRAINER"))
-        GameTooltip:Show()
-    end)
-
-    tab:SetScript("OnLeave", GameTooltip_Hide)
-    SpellBookFrame:HookScript("OnShow", function() tab:Show() end)
-    SpellBookFrame:HookScript("OnHide", function()
+    local function CreateClassicModeTab(name, view, icon, tooltip, previousTab)
+        local tab = CreateFrame("Button", name, SpellBookFrame)
+        tab:SetSize(32, 32)
+        tab:SetNormalTexture(icon)
+        tab:SetHighlightTexture(130718, "ADD")
+        local border = tab:CreateTexture(name .. "Border", "BACKGROUND")
+        border:SetSize(64, 64)
+        border:SetPoint("TOPLEFT", tab, "TOPLEFT", -3, 11)
+        border:SetTexture(136831)
+        local glow = tab:CreateTexture(nil, "OVERLAY")
+        glow:SetSize(32, 32)
+        glow:SetPoint("TOPLEFT", tab, "TOPLEFT", 0, 0)
+        glow:SetTexture(130724)
+        glow:SetBlendMode("ADD")
+        glow:Hide()
+        if previousTab then
+            tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -2)
+        else
+            tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, 0)
+        end
         tab:Hide()
+        tab:SetScript("OnClick", function() OpenFrame(view) end)
+        tab:SetScript("OnEnter", function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+            GameTooltip:SetText(tooltip)
+            GameTooltip:Show()
+        end)
+        tab:SetScript("OnLeave", GameTooltip_Hide)
+        classicModeTabs[view] = tab
+        classicModeTabGlows[view] = glow
+        return tab
+    end
+
+    local className, classToken = UnitClass("player")
+    local previousTab = CreateClassicModeTab("TrainerSpellsSpellbookTab", "class", "Interface\\Icons\\INV_Misc_Book_09", className or TrainerSpells:Trans("LID_CLASSTRAINER"))
+    if TrainerSpells:HasPetClassData(classToken) then
+        previousTab = CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab)
+    end
+    if TrainerSpells.BuildWeaponSkillItems then
+        CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab)
+    end
+
+    SpellBookFrame:HookScript("OnShow", function()
+        for _, tab in pairs(classicModeTabs) do
+            tab:Show()
+        end
+    end)
+    SpellBookFrame:HookScript("OnHide", function()
+        for _, tab in pairs(classicModeTabs) do
+            tab:Hide()
+        end
         classFrame:Hide()
         ShowNativeSpellButtons()
-        if ourTabGlow then ourTabGlow:Hide() end
+        HideClassicModeTabGlows()
     end)
 
     local function OnNativeTabClicked()
         if classFrame:IsShown() then
             classFrame:Hide()
             ShowNativeSpellButtons()
-            if ourTabGlow then ourTabGlow:Hide() end
+            HideClassicModeTabGlows()
         end
     end
 
@@ -261,6 +307,9 @@ local function OpenPlayerSpellsPanel()
 end
 
 function TrainerSpells:UpdateClassViewTabs()
+    for view, glow in pairs(classicModeTabGlows) do
+        glow:SetShown(classFrame:IsShown() and TrainerSpells.ClassView == view)
+    end
     for view, tab in pairs(playerSpellsModeTabs) do
         tab:SetTabSelected(TrainerSpells.ClassView == view)
     end

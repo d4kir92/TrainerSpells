@@ -220,3 +220,13 @@ TrainerSpellsWeaponSkills = {
         },
     },
 }
+
+local _, _, _, weaponSkillsInterface = GetBuildInfo()
+weaponSkillsInterface = tonumber(weaponSkillsInterface) or 0
+if weaponSkillsInterface ~= 16001 then
+    if weaponSkillsInterface < 30000 then TrainerSpellsWeaponSkills.skills[196].classes.ROGUE = nil end
+    if weaponSkillsInterface < 20000 then
+        TrainerSpellsWeaponSkills.skills[197].classes.SHAMAN = nil
+        TrainerSpellsWeaponSkills.skills[199].classes.SHAMAN = nil
+    end
+end

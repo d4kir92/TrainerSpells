@@ -41,7 +41,7 @@ scrollView:SetElementExtentCalculator(function(index, elementData)
 end)
 
 scrollView:SetPadding(0, 0, 0, 0, TrainerSpells.RowSpacing)
-scrollView:SetElementInitializer("Frame", function(rowFrame, elementData) TrainerSpells:InitScrollRow(rowFrame, elementData) end)
+scrollView:SetElementInitializer("Frame", function(rowFrame, elementData) TrainerSpells:InitScrollRow(rowFrame, elementData, TrainerSpells.RowHeight) end)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
 rowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
     value = math.floor(value + 0.5)
@@ -87,14 +87,17 @@ end
 function TrainerSpells:HasPetClassData(classToken)
     if classToken == "HUNTER" then
         local data = TrainerSpells_PetTrainerData and TrainerSpells_PetTrainerData[classToken]
-        return data and next(data) ~= nil
+        if data and next(data) ~= nil then return true end
+        return TrainerSpellsBuiltin_HunterPet and next(TrainerSpellsBuiltin_HunterPet) ~= nil
     end
 
-    if classToken == "WARLOCK" and TrainerSpells_PetData then
+    if classToken == "WARLOCK" then
         for _, petGroup in ipairs(TrainerSpells.PetGroups) do
             for _, key in ipairs(petGroup.keys) do
-                local data = TrainerSpells_PetData[key]
+                local data = TrainerSpells_PetData and TrainerSpells_PetData[key]
                 if data and next(data) then return true end
+                local builtinData = TrainerSpellsBuiltin_WarlockPet and TrainerSpellsBuiltin_WarlockPet[key]
+                if builtinData and next(builtinData) then return true end
             end
         end
     end

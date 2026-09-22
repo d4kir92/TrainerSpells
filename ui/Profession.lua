@@ -54,7 +54,7 @@ professionScrollView:SetElementExtentCalculator(function(index, elementData)
 end)
 
 professionScrollView:SetPadding(0, 0, 0, 0, TrainerSpells.RowSpacing)
-professionScrollView:SetElementInitializer("Frame", function(rowFrame, elementData) TrainerSpells:InitScrollRow(rowFrame, elementData) end)
+professionScrollView:SetElementInitializer("Frame", function(rowFrame, elementData) TrainerSpells:InitScrollRow(rowFrame, elementData, TrainerSpells.ProfessionRowHeight) end)
 ScrollUtil.InitScrollBoxListWithScrollBar(professionScrollBox, professionScrollBar, professionScrollView)
 professionRowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
     value = math.floor(value + 0.5)

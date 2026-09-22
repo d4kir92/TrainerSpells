@@ -178,9 +178,16 @@ local controls = CreateFrame("Frame", "TrainerSpellsWeaponControls", classFrame)
 TrainerSpells.WeaponControls = controls
 controls:SetHeight(28)
 controls:Hide()
-local dropdown = CreateFrame("DropdownButton", "TrainerSpellsWeaponGroupingDropdown", controls, "WowStyle1DropdownTemplate")
+local modernDropdown = MenuUtil and MenuUtil.CreateRootMenuDescription
+local dropdown
+if modernDropdown then
+    dropdown = CreateFrame("DropdownButton", "TrainerSpellsWeaponGroupingDropdown", controls, "WowStyle1DropdownTemplate")
+else
+    dropdown = CreateFrame("Frame", "TrainerSpellsWeaponGroupingDropdown", controls, "UIDropDownMenuTemplate")
+    UIDropDownMenu_SetWidth(dropdown, 140)
+end
 dropdown:SetPoint("LEFT")
-dropdown:SetSize(170, 26)
+if modernDropdown then dropdown:SetSize(170, 26) end
 local hideLearned = CreateFrame("CheckButton", "TrainerSpellsHideLearnedWeaponSkills", controls, "UICheckButtonTemplate")
 hideLearned:SetPoint("LEFT", dropdown, "RIGHT", 10, 0)
 hideLearned:SetSize(24, 24)
@@ -198,19 +205,42 @@ local function GroupingLabel(mode)
 end
 
 local function UpdateDropdownText()
-    dropdown:SetText(GroupingLabel(TrainerSpells_Character.weaponGrouping))
+    local text = GroupingLabel(TrainerSpells_Character.weaponGrouping)
+    if modernDropdown then
+        dropdown:SetText(text)
+    else
+        UIDropDownMenu_SetText(dropdown, text)
+    end
 end
 
-dropdown:SetupMenu(function(_, rootDescription)
-    for _, mode in ipairs({"weapon", "location"}) do
-        rootDescription:CreateRadio(GroupingLabel(mode), function()
-            return TrainerSpells_Character.weaponGrouping == mode
-        end, function()
-            TrainerSpells_Character.weaponGrouping = mode
-            UpdateDropdownText()
-            TrainerSpells_Refresh()
-        end)
-    end
-end)
+if modernDropdown then
+    dropdown:SetupMenu(function(_, rootDescription)
+        for _, mode in ipairs({"weapon", "location"}) do
+            local selectedMode = mode
+            rootDescription:CreateRadio(GroupingLabel(selectedMode), function()
+                return TrainerSpells_Character.weaponGrouping == selectedMode
+            end, function()
+                TrainerSpells_Character.weaponGrouping = selectedMode
+                UpdateDropdownText()
+                TrainerSpells_Refresh()
+            end)
+        end
+    end)
+else
+    UIDropDownMenu_Initialize(dropdown, function()
+        for _, mode in ipairs({"weapon", "location"}) do
+            local selectedMode = mode
+            local info = UIDropDownMenu_CreateInfo()
+            info.text = GroupingLabel(selectedMode)
+            info.checked = TrainerSpells_Character.weaponGrouping == selectedMode
+            info.func = function()
+                TrainerSpells_Character.weaponGrouping = selectedMode
+                UpdateDropdownText()
+                TrainerSpells_Refresh()
+            end
+            UIDropDownMenu_AddButton(info)
+        end
+    end)
+end
 
 UpdateDropdownText()
