@@ -384,6 +384,12 @@ local professionsModeTabContainer
 local professionsModeTabs = {}
 local professionsModeActive = false
 local professionsFrameUsesSideTabs = false
+local professionsClosePending = false
+local professionsRestorePending = false
+local function IsProfessionsCombatLocked()
+    return InCombatLockdown and InCombatLockdown()
+end
+
 local function PositionProfessionsFrameModeTabs()
     if not ProfessionsFrame then return end
     local trainerTab = professionsModeTabs[PROFESSION_VIEW_SKILL]
@@ -415,6 +421,11 @@ local function SetProfessionsModeTabSelected(tab, selected)
 end
 
 local function CloseProfessionsFrameView()
+    if IsProfessionsCombatLocked() then
+        if professionsModeActive or professionFrame:IsShown() then professionsClosePending = true end
+        return
+    end
+    professionsClosePending = false
     professionsModeActive = false
     professionFrame:Hide()
     for _, tab in pairs(professionsModeTabs) do SetProfessionsModeTabSelected(tab, false) end
@@ -422,6 +433,11 @@ end
 
 local function RestoreProfessionsFramePage()
     if not professionsModeActive then return end
+    if IsProfessionsCombatLocked() then
+        professionsRestorePending = true
+        return
+    end
+    professionsRestorePending = false
     if professionsFrameUsesSideTabs then
         if ProfessionsFrame.BookPage then ProfessionsFrame.BookPage:Hide() end
         if ProfessionsFrame.CraftingPage then ProfessionsFrame.CraftingPage:Show() end
@@ -431,7 +447,18 @@ local function RestoreProfessionsFramePage()
     end
 end
 
+local professionsCombatWatcher = CreateFrame("Frame")
+professionsCombatWatcher:RegisterEvent("PLAYER_REGEN_ENABLED")
+professionsCombatWatcher:SetScript("OnEvent", function()
+    if professionsRestorePending then RestoreProfessionsFramePage() end
+    if professionsClosePending then CloseProfessionsFrameView() end
+end)
+
 local function SetProfessionsFrameView(mode)
+    if IsProfessionsCombatLocked() then
+        if UIErrorsFrame and ERR_NOT_IN_COMBAT then UIErrorsFrame:AddMessage(ERR_NOT_IN_COMBAT, 1, 0.1, 0.1) end
+        return
+    end
     professionViewMode = mode
     professionsModeActive = true
     if ProfessionsFrame.Pages then
