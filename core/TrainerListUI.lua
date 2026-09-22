@@ -1,4 +1,47 @@
 local _, TrainerSpells = ...
+local TRAINER_STATUS_FILTERS = {"available", "unavailable", "used"}
+
+local function GetTrainerStatusSelections()
+    local selections = TrainerSpells_Character.trainerStatusFilters
+    if type(selections) ~= "table" then
+        selections = {}
+        for _, filter in ipairs(TRAINER_STATUS_FILTERS) do
+            selections[filter] = not GetTrainerServiceTypeFilter or GetTrainerServiceTypeFilter(filter)
+        end
+
+        TrainerSpells_Character.trainerStatusFilters = selections
+    end
+    return selections
+end
+
+local function HasSelectedTrainerStatus()
+    local selections = GetTrainerStatusSelections()
+    for _, filter in ipairs(TRAINER_STATUS_FILTERS) do
+        if selections[filter] then return true end
+    end
+    return false
+end
+
+local function ApplyNativeTrainerStatusFilters()
+    if not GetTrainerServiceTypeFilter or not SetTrainerServiceTypeFilter then return end
+    local selections = GetTrainerStatusSelections()
+    local showAllForIgnoredOnly = TrainerSpells_Character.showIgnoredInTrainer and not HasSelectedTrainerStatus()
+    for _, filter in ipairs(TRAINER_STATUS_FILTERS) do
+        local selected = showAllForIgnoredOnly or selections[filter]
+        if GetTrainerServiceTypeFilter(filter) ~= selected then SetTrainerServiceTypeFilter(filter, selected) end
+    end
+end
+
+local function ServiceMatchesTrainerFilters(serviceType, isIgnored)
+    if serviceType == "header" then return true end
+    local selections = GetTrainerStatusSelections()
+    local hasSelectedStatus = HasSelectedTrainerStatus()
+    if isIgnored then
+        return TrainerSpells_Character.showIgnoredInTrainer and (not hasSelectedStatus or selections[serviceType])
+    end
+    return hasSelectedStatus and selections[serviceType] or false
+end
+
 local function BuildCachedSpellIDLookup()
     local _, classToken = UnitClass("player")
     local lookup = {}
@@ -19,24 +62,16 @@ end
 
 local function BuildVisibleTrainerIndexList()
     local total = GetNumTrainerServices()
-    if TrainerSpells_Character.showIgnoredInTrainer then
-        local list = {}
-        for i = 1, total do
-            table.insert(list, i)
-        end
-        return list
-    end
-
     local cachedSpellIDs = BuildCachedSpellIDLookup()
     local list = {}
     for i = 1, total do
-        local name, subText, category = GetTrainerServiceInfo(i)
-        local keep = true
-        if category and category ~= "header" and name then
+        local name, subText, serviceType = GetTrainerServiceInfo(i)
+        local keep = serviceType == "header"
+        if serviceType and serviceType ~= "header" and name then
             local rankNum = subText and tonumber(subText:match("%d+")) or 0
             local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rankNum]
             if not spellID then spellID = TrainerSpells:GetSpellIDForService(i) end
-            if TrainerSpells_IsIgnored(spellID, name) then keep = false end
+            keep = ServiceMatchesTrainerFilters(serviceType, TrainerSpells_IsIgnored(spellID, name))
         end
 
         if keep then table.insert(list, i) end
@@ -183,7 +218,6 @@ local function IsTrainerServiceIgnored(index, cachedSpellIDs, professionKey)
 end
 
 local function ApplyModernTrainerFilter(retainScrollPosition)
-    if TrainerSpells_Character.showIgnoredInTrainer then return end
     if not ClassTrainerFrame or not ClassTrainerFrame.ScrollBox or not CreateTreeDataProvider then return end
     local cachedSpellIDs = BuildCachedSpellIDLookup()
     local professionKey = IsTradeskillTrainer and IsTradeskillTrainer() and TrainerSpells:DetectTrainerProfession()
@@ -193,8 +227,9 @@ local function ApplyModernTrainerFilter(retainScrollPosition)
     local dataProvider = CreateTreeDataProvider()
     local categoryNodes = {}
     for index = 1, GetNumTrainerServices() do
-        if index ~= tradeSkillStepIndex and not IsTrainerServiceIgnored(index, cachedSpellIDs, professionKey) then
-            local _, _, _, _, _, category = GetTrainerServiceInfo(index)
+        local _, _, serviceType, _, _, category = TrainerSpells:GetTrainerServiceInfo(index)
+        local isIgnored = IsTrainerServiceIgnored(index, cachedSpellIDs, professionKey)
+        if index ~= tradeSkillStepIndex and ServiceMatchesTrainerFilters(serviceType, isIgnored) then
             local elementData = {
                 skillIndex = index,
                 playerMoney = playerMoney,
@@ -215,7 +250,10 @@ local function ApplyModernTrainerFilter(retainScrollPosition)
     end
     ClassTrainerFrame.ScrollBox:SetDataProvider(dataProvider, retainScrollPosition, false)
     local selectedService = ClassTrainerFrame.selectedService
-    if selectedService and selectedService ~= tradeSkillStepIndex and IsTrainerServiceIgnored(selectedService, cachedSpellIDs, professionKey) then
+    if selectedService and selectedService ~= tradeSkillStepIndex then
+        local _, _, serviceType = TrainerSpells:GetTrainerServiceInfo(selectedService)
+        local isIgnored = IsTrainerServiceIgnored(selectedService, cachedSpellIDs, professionKey)
+        if ServiceMatchesTrainerFilters(serviceType, isIgnored) then return end
         ClassTrainer_SetSelection(nil)
         ClassTrainerFrame_SetTrainButtonEnabled(false)
     end
@@ -243,12 +281,15 @@ function TrainerSpells:EnsureTrainerFilterHookInstalled()
     if not ClassTrainerFrame or not ClassTrainerFrame.FilterDropdown then return end
     trainerFilterHookInstalled = true
     local function IsNativeFilterSelected(filter)
-        return GetTrainerServiceTypeFilter(filter)
+        return GetTrainerStatusSelections()[filter]
     end
 
     local function SetNativeFilterSelected(filter)
         ClassTrainerFrame.filterPending = true
-        SetTrainerServiceTypeFilter(filter, not GetTrainerServiceTypeFilter(filter))
+        local selections = GetTrainerStatusSelections()
+        selections[filter] = not selections[filter]
+        ApplyNativeTrainerStatusFilters()
+        if ClassTrainerFrame_Update then ClassTrainerFrame_Update() end
     end
 
     local function IsIgnoredFilterSelected()
@@ -257,6 +298,7 @@ function TrainerSpells:EnsureTrainerFilterHookInstalled()
 
     local function SetIgnoredFilterSelected()
         TrainerSpells_Character.showIgnoredInTrainer = not TrainerSpells_Character.showIgnoredInTrainer
+        ApplyNativeTrainerStatusFilters()
         if ClassTrainerFrame_Update then ClassTrainerFrame_Update() end
     end
 
@@ -280,6 +322,7 @@ function TrainerSpells:EnsureTrainerFilterHookInstalled()
     end)
 
     ApplyOwnMenu()
+    ApplyNativeTrainerStatusFilters()
 end
 
 local function CountRealTrainerServices()
