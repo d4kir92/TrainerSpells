@@ -127,9 +127,9 @@ end
 local function PositionProfessionFrame()
     professionFrame:ClearAllPoints()
     if ProfessionsFrame and ProfessionsFrame:IsShown() then
-        professionFrame:SetScale(ProfessionsFrame:GetScale())
-        professionFrame:SetPoint("TOPLEFT", ProfessionsFrame, "TOPLEFT", 5, -72)
-        professionFrame:SetPoint("BOTTOMRIGHT", ProfessionsFrame, "BOTTOMRIGHT", -5, 5)
+        professionFrame:SetScale(1)
+        professionFrame:SetPoint("TOPLEFT", ProfessionsFrame, "TOPLEFT", 3, -21)
+        professionFrame:SetPoint("BOTTOMRIGHT", ProfessionsFrame, "BOTTOMRIGHT", -3, 3)
     elseif TradeSkillFrame and TradeSkillFrame:IsShown() then
         if TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
             professionFrame:SetScale(DragonflightUIProfessionFrame:GetScale())
@@ -152,8 +152,11 @@ local function PositionProfessionFrame()
     professionSearchBox:ClearAllPoints()
     professionScrollBox:ClearAllPoints()
     if ProfessionsFrame and ProfessionsFrame:IsShown() then
-        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 10, -6)
+        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, -6)
         professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -6)
+        professionRowHeightSlider:ClearAllPoints()
+        professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT", 0, -9)
+        professionRowHeightSlider:SetPoint("TOPRIGHT", professionSearchBox, "BOTTOMRIGHT", -24, -14)
         professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -54)
         professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
     elseif TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
@@ -379,6 +382,7 @@ end
 local professionsFrameHooksInstalled = false
 local professionsModeTabContainer
 local professionsModeTabs = {}
+local professionsModeActive = false
 local professionsFrameUsesSideTabs = false
 local function PositionProfessionsFrameModeTabs()
     if not ProfessionsFrame then return end
@@ -411,15 +415,39 @@ local function SetProfessionsModeTabSelected(tab, selected)
 end
 
 local function CloseProfessionsFrameView()
+    professionsModeActive = false
     professionFrame:Hide()
     for _, tab in pairs(professionsModeTabs) do SetProfessionsModeTabSelected(tab, false) end
 end
 
+local function RestoreProfessionsFramePage()
+    if not professionsModeActive then return end
+    if professionsFrameUsesSideTabs then
+        if ProfessionsFrame.BookPage then ProfessionsFrame.BookPage:Hide() end
+        if ProfessionsFrame.CraftingPage then ProfessionsFrame.CraftingPage:Show() end
+    elseif ProfessionsFrame.GetTab and ProfessionsFrame.GetElementsForTab then
+        local tabID = ProfessionsFrame:GetTab()
+        for _, page in ipairs(tabID and ProfessionsFrame:GetElementsForTab(tabID) or {}) do page:Show() end
+    end
+end
+
 local function SetProfessionsFrameView(mode)
     professionViewMode = mode
-    professionListBg:ClearAllPoints()
-    professionListBg:SetAllPoints(professionFrame)
-    professionListBg:SetColorTexture(0, 0, 0, 1)
+    professionsModeActive = true
+    if ProfessionsFrame.Pages then
+        for _, page in ipairs(ProfessionsFrame.Pages) do page:Hide() end
+    else
+        if ProfessionsFrame.BookPage then ProfessionsFrame.BookPage:Hide() end
+        if ProfessionsFrame.CraftingPage then ProfessionsFrame.CraftingPage:Hide() end
+    end
+    if professionsFrameUsesSideTabs then
+        professionListBg:Hide()
+    else
+        professionListBg:ClearAllPoints()
+        professionListBg:SetAllPoints(professionFrame)
+        professionListBg:SetColorTexture(0, 0, 0, 1)
+        professionListBg:Show()
+    end
     PositionProfessionFrame()
     professionFrame:Show()
     for tabMode, tab in pairs(professionsModeTabs) do SetProfessionsModeTabSelected(tab, tabMode == mode) end
@@ -466,6 +494,9 @@ local function InstallProfessionsFrameIntegration()
     professionsFrameUsesSideTabs = ProfessionsFrame.ProfessionsOverviewTab and ProfessionsFrame.rightProfessionTabs and true or false
     if not professionsFrameUsesSideTabs and not ProfessionsFrame.TabSystem then return end
     professionsFrameHooksInstalled = true
+    professionFrame:SetParent(ProfessionsFrame)
+    professionFrame:SetFrameStrata(ProfessionsFrame:GetFrameStrata())
+    professionFrame:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 300)
     if professionsFrameUsesSideTabs then
         CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTrainerTab", PROFESSION_VIEW_SKILL, TrainerSpells:Trans("LID_TRAINERSPELLS"), 133741)
         CreateProfessionsFrameSideTab("TrainerSpellsProfessionsRecipeTab", PROFESSION_VIEW_RECIPES, TrainerSpells:Trans("LID_RECIPES"), "Interface\\Icons\\INV_Scroll_03")
@@ -482,12 +513,16 @@ local function InstallProfessionsFrameIntegration()
     end
     PositionProfessionsFrameModeTabs()
     ProfessionsFrame:HookScript("OnShow", function()
+        RestoreProfessionsFramePage()
         PositionProfessionsFrameModeTabs()
         for _, tab in pairs(professionsModeTabs) do tab:Show() end
         CloseProfessionsFrameView()
         C_Timer.After(0, PositionProfessionsFrameModeTabs)
     end)
-    ProfessionsFrame:HookScript("OnHide", CloseProfessionsFrameView)
+    ProfessionsFrame:HookScript("OnHide", function()
+        RestoreProfessionsFramePage()
+        CloseProfessionsFrameView()
+    end)
     hooksecurefunc(ProfessionsFrame, "SetScale", function() if professionFrame:IsShown() then PositionProfessionFrame() end end)
 end
 
