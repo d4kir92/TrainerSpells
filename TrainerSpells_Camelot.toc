@@ -50,10 +50,12 @@ data\forever\Druid.lua
 data\forever\Mage.lua
 data\forever\Hunter.lua
 data\forever\HunterPet.lua
+data\forever\WarlockPet.lua
 data\forever\Warrior.lua
 data\forever\Paladin.lua
 data\forever\Rogue.lua
 data\forever\Priest.lua
+data\forever\Warlock.lua
 data\forever\WeaponSkills.lua
 data\forever\Alchemy.lua
 data\forever\Blacksmithing.lua
