@@ -281,9 +281,18 @@ if GameTooltip:HasScript("OnTooltipSetSpell") then GameTooltip:HookScript("OnToo
 function TrainerSpells:InitScrollRow(rowFrame, elementData)
     local Colors = TrainerSpells.UIColors
     if not rowFrame.icon then
-        local categoryBackground = rowFrame:CreateTexture(nil, "BACKGROUND")
+        local categoryBackground = CreateFrame("Frame", nil, rowFrame, "BackdropTemplate")
         categoryBackground:SetAllPoints()
-        categoryBackground:SetColorTexture(0, 0, 0, 1)
+        categoryBackground:SetFrameLevel(math.max(0, rowFrame:GetFrameLevel() - 1))
+        categoryBackground:SetBackdrop({
+            bgFile = "Interface\\Buttons\\WHITE8X8",
+            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+            edgeSize = 8,
+            insets = {left = 2, right = 2, top = 2, bottom = 2}
+        })
+        categoryBackground:SetBackdropColor(0, 0, 0, 0.5)
+        categoryBackground:SetBackdropBorderColor(0, 0, 0, 0.5)
+        categoryBackground:EnableMouse(false)
         categoryBackground:Hide()
         rowFrame.categoryBackground = categoryBackground
         local icon = rowFrame:CreateTexture(nil, "ARTWORK")
