@@ -68,6 +68,15 @@ data\forever\Leatherworking.lua
 data\forever\Mining.lua
 data\forever\Skinning.lua
 data\forever\Tailoring.lua
+data\ProfessionRecipes.lua
+data\forever\AlchemyRecipes.lua
+data\forever\BlacksmithingRecipes.lua
+data\forever\CookingRecipes.lua
+data\forever\EnchantingRecipes.lua
+data\forever\EngineeringRecipes.lua
+data\forever\FirstAidRecipes.lua
+data\forever\LeatherworkingRecipes.lua
+data\forever\TailoringRecipes.lua
 
 core\Init.lua
 core\PetNames.lua
