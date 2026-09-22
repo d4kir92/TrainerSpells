@@ -436,7 +436,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         rowFrame.locationButtons = rowFrame.locationButtons or {}
         local locationSize = math.max(12, math.min(24, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
         for index, location in ipairs(entry.locations) do
-            local locationName = location.name
+            local locationInfo = location
             local button = rowFrame.locationButtons[index]
             if not button then
                 button = CreateFrame("Button", nil, rowFrame)
@@ -452,11 +452,19 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
             button:SetScript("OnEnter", function(sel)
                 GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-                GameTooltip:SetText(locationName)
+                GameTooltip:SetText(locationInfo.npcName or locationInfo.name)
+                GameTooltip:AddLine(locationInfo.name, 1, 1, 1)
+                if locationInfo.x and locationInfo.y then
+                    GameTooltip:AddLine(("%s: %.1f, %.1f"):format(TrainerSpells:Trans("LID_COORDINATES"), locationInfo.x, locationInfo.y), 1, 0.82, 0)
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_LEFTCLICK_SETWAYPOINT"), 0.2, 1, 0.2)
+                end
                 GameTooltip:Show()
             end)
 
             button:SetScript("OnLeave", GameTooltip_Hide)
+            button:SetScript("OnClick", function()
+                TrainerSpells:SetWeaponTrainerWaypoint(locationInfo)
+            end)
             button:Show()
         end
 

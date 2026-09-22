@@ -5,6 +5,7 @@ if not weaponData then return end
 local classFrame = TrainerSpells.ClassFrame
 local hideLearned
 local orderBySpellID = {}
+local localeAliases = {enGB = "enUS", esMX = "esES"}
 for index, spellID in ipairs(weaponData.order) do
     orderBySpellID[spellID] = index
 end
@@ -21,21 +22,56 @@ end
 
 local function BuildLocations(skill, faction)
     local locations = {}
-    local zoneIDs = skill.locations and skill.locations[faction]
-    for _, zoneID in ipairs(zoneIDs or {}) do
-        local zone = weaponData.zones[zoneID]
+    local trainerIDs = skill.trainers and skill.trainers[faction]
+    local locale = localeAliases[GetLocale()] or GetLocale()
+    for _, trainerID in ipairs(trainerIDs or {}) do
+        local trainer = weaponData.trainers and weaponData.trainers[trainerID]
+        local zone = trainer and weaponData.zones[trainer.zoneID]
         if zone then
             table.insert(locations, {
-                id = zoneID,
+                id = trainer.zoneID,
                 icon = zone.icon,
-                name = C_Map.GetAreaInfo(zoneID) or tostring(zoneID),
+                name = C_Map.GetAreaInfo(trainer.zoneID) or tostring(trainer.zoneID),
                 uiMapID = zone.uiMapID,
+                npcID = trainerID,
+                npcName = trainer.names[locale] or trainer.names.enUS,
+                x = trainer.x,
+                y = trainer.y,
             })
         end
     end
 
     table.sort(locations, function(a, b) return a.name < b.name end)
     return locations
+end
+
+function TrainerSpells:SetWeaponTrainerWaypoint(location)
+    if not location or not location.uiMapID or not location.x or not location.y then return false end
+    if C_Map and C_Map.SetUserWaypoint and UiMapPoint and UiMapPoint.CreateFromCoordinates then
+        local point = UiMapPoint.CreateFromCoordinates(location.uiMapID, location.x / 100, location.y / 100)
+        C_Map.SetUserWaypoint(point)
+        if C_SuperTrack and C_SuperTrack.SetSuperTrackedUserWaypoint then C_SuperTrack.SetSuperTrackedUserWaypoint(true) end
+        if OpenWorldMap then
+            OpenWorldMap(location.uiMapID)
+        elseif WorldMapFrame then
+            if WorldMapFrame.SetMapID then WorldMapFrame:SetMapID(location.uiMapID) end
+            if ShowUIPanel then ShowUIPanel(WorldMapFrame) else WorldMapFrame:Show() end
+        end
+        return true
+    end
+
+    if TomTom and TomTom.AddWaypoint then
+        TomTom:AddWaypoint(location.uiMapID, location.x / 100, location.y / 100, {
+            title = location.npcName,
+            persistent = false,
+            minimap = true,
+            world = true,
+            crazy = true,
+        })
+        return true
+    end
+
+    return false
 end
 
 local function EntryMatchesSearch(entry, searchText)
