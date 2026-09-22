@@ -61,6 +61,7 @@ data\forever\Alchemy.lua
 data\forever\Blacksmithing.lua
 data\forever\Cooking.lua
 data\forever\Enchanting.lua
+data\forever\Engineering.lua
 data\forever\FirstAid.lua
 data\forever\Herbalism.lua
 data\forever\Leatherworking.lua
