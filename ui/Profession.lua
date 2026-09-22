@@ -48,8 +48,8 @@ local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionSc
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
 professionScrollBar:SetPoint("BOTTOMLEFT", professionScrollBox, "BOTTOMRIGHT", 4, 2)
 local professionScrollView = CreateScrollBoxListLinearView()
-professionScrollView:SetElementExtentCalculator(function(index, elementData)
-    if elementData.isHeader then return index > 1 and (TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap) or TrainerSpells.HeaderHeight end
+professionScrollView:SetElementExtentCalculator(function(_, elementData)
+    if elementData.isHeader then return TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap end
     return TrainerSpells.ProfessionRowHeight
 end)
 

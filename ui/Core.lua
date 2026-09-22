@@ -284,7 +284,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         categoryBackground:SetBackdrop({
             bgFile = "Interface\\Buttons\\WHITE8X8",
             edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-            edgeSize = 8,
+            edgeSize = 12,
             insets = {
                 left = 2,
                 right = 2,
@@ -470,6 +470,10 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         rowFrame:SetScript("OnLeave", GameTooltip_Hide)
     else
         local entry = elementData.entry
+        if elementData.rowDepth and elementData.rowDepth > 0 then
+            icon:ClearAllPoints()
+            icon:SetPoint("LEFT", rowFrame, "LEFT", 4 + (elementData.rowDepth * 16), 0)
+        end
         icon:SetTexture(entry.icon)
         local rankSubtext = GetLocalizedRankText(entry.spellID, entry.rankNum, entry.hasRealRank)
         local rankText = rankSubtext and (" " .. Colors.RANK .. "(" .. rankSubtext .. ")|r") or ""

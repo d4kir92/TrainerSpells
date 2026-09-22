@@ -35,8 +35,8 @@ local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", classFrame
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
 local scrollView = CreateScrollBoxListLinearView()
-scrollView:SetElementExtentCalculator(function(index, elementData)
-    if elementData.isHeader then return index > 1 and (TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap) or TrainerSpells.HeaderHeight end
+scrollView:SetElementExtentCalculator(function(_, elementData)
+    if elementData.isHeader then return TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap end
     return TrainerSpells.RowHeight
 end)
 
