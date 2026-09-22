@@ -65,7 +65,7 @@ end
 
 local function AppendWeaponCategory(items, entries, text, color, groupKey)
     if #entries == 0 then return end
-    TrainerSpells:AddHeaderItem(items, ("%s (%d)"):format(text, #entries), color, nil, groupKey)
+    TrainerSpells:AddHeaderItem(items, text, color, nil, groupKey, nil, #entries)
     if TrainerSpells:IsGroupCollapsed(groupKey) then return end
     for _, entry in ipairs(entries) do
         table.insert(items, {

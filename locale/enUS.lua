@@ -1,7 +1,7 @@
 -- enUS English
 local _, TrainerSpells = ...
 TrainerSpells:AddTrans("enUS", "LID_GENERAL", "General")
-TrainerSpells:AddTrans("enUS", "LID_TOTALCOST", "Total cost")
+TrainerSpells:AddTrans("enUS", "LID_TOTALCOST", "Total Cost")
 TrainerSpells:AddTrans("enUS", "LID_COSTS", "Costs")
 TrainerSpells:AddTrans("enUS", "LID_OWNGOLD", "Own gold")
 TrainerSpells:AddTrans("enUS", "LID_AVAILABLENOW", "Available Now")

@@ -1,5 +1,5 @@
 local _, TrainerSpells = ...
-function TrainerSpells:AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText)
+function TrainerSpells:AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText, spellCount)
     table.insert(items, {
         isHeader = true,
         text = text,
@@ -7,7 +7,8 @@ function TrainerSpells:AddHeaderItem(items, text, colorCode, totalCost, groupKey
         totalCost = totalCost,
         groupKey = groupKey,
         collapsed = TrainerSpells:IsGroupCollapsed(groupKey),
-        prefixText = prefixText
+        prefixText = prefixText,
+        spellCount = spellCount
     })
 end
 
@@ -31,10 +32,6 @@ function TrainerSpells:SumCost(list)
         total = total + (entry.cost or 0)
     end
     return total
-end
-
-local function CategoryName(text, count)
-    return ("%s (%d)"):format(text, count)
 end
 
 local function CountGroupEntries(groups)
@@ -184,32 +181,32 @@ function TrainerSpells:AppendGroupItems(items, groups, keyPrefix, labelPrefix, u
     local entryLevelLabel = unitLabel and unitLabel ~= TrainerSpells:Trans("LID_LVL") and unitLabel or nil
     unitLabel = unitLabel or TrainerSpells:Trans("LID_LVL")
     if #groups.available > 0 then
-        TrainerSpells:AddHeaderItem(items, CategoryName(TrainerSpells:Trans("LID_AVAILABLENOW"), #groups.available), Colors.AVAILABLE, showCost and TrainerSpells:SumCost(groups.available) or nil, keyPrefix .. "available", labelPrefix)
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_AVAILABLENOW"), Colors.AVAILABLE, showCost and TrainerSpells:SumCost(groups.available) or nil, keyPrefix .. "available", labelPrefix, #groups.available)
         if not TrainerSpells:IsGroupCollapsed(keyPrefix .. "available") then TrainerSpells:AddEntryItems(items, groups.available, Colors.AVAILABLE, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.soon > 0 then
-        TrainerSpells:AddHeaderItem(items, CategoryName(("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), unitLabel, groups.nextLevel), #groups.soon), Colors.SOON, showCost and TrainerSpells:SumCost(groups.soon) or nil, keyPrefix .. "soon", labelPrefix)
+        TrainerSpells:AddHeaderItem(items, ("%s (%s %d)"):format(TrainerSpells:Trans("LID_COMINGSOON"), unitLabel, groups.nextLevel), Colors.SOON, showCost and TrainerSpells:SumCost(groups.soon) or nil, keyPrefix .. "soon", labelPrefix, #groups.soon)
         if not TrainerSpells:IsGroupCollapsed(keyPrefix .. "soon") then TrainerSpells:AddEntryItems(items, groups.soon, Colors.SOON, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.higher > 0 then
-        TrainerSpells:AddHeaderItem(items, CategoryName(TrainerSpells:Trans("LID_NOTYETAVAILABLE"), #groups.higher), Colors.NOTYET, showCost and TrainerSpells:SumCost(groups.higher) or nil, keyPrefix .. "higher", labelPrefix)
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NOTYETAVAILABLE"), Colors.NOTYET, showCost and TrainerSpells:SumCost(groups.higher) or nil, keyPrefix .. "higher", labelPrefix, #groups.higher)
         if not TrainerSpells:IsGroupCollapsed(keyPrefix .. "higher") then TrainerSpells:AddEntryItems(items, groups.higher, Colors.NOTYET, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.missingTalents > 0 then
-        TrainerSpells:AddHeaderItem(items, CategoryName(TrainerSpells:Trans("LID_MISSINGREQUIREDTALENTS"), #groups.missingTalents), Colors.TALENT, showCost and TrainerSpells:SumCost(groups.missingTalents) or nil, keyPrefix .. "missingTalents", labelPrefix)
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_MISSINGREQUIREDTALENTS"), Colors.TALENT, showCost and TrainerSpells:SumCost(groups.missingTalents) or nil, keyPrefix .. "missingTalents", labelPrefix, #groups.missingTalents)
         if not TrainerSpells:IsGroupCollapsed(keyPrefix .. "missingTalents") then TrainerSpells:AddEntryItems(items, groups.missingTalents, Colors.TALENT, true, showCost, false, entryLevelLabel) end
     end
 
     if #groups.ignored > 0 then
-        TrainerSpells:AddHeaderItem(items, CategoryName(TrainerSpells:Trans("LID_IGNORED"), #groups.ignored), Colors.IGNORED, nil, keyPrefix .. "ignored", labelPrefix)
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_IGNORED"), Colors.IGNORED, nil, keyPrefix .. "ignored", labelPrefix, #groups.ignored)
         if not TrainerSpells:IsGroupCollapsed(keyPrefix .. "ignored") then TrainerSpells:AddEntryItems(items, groups.ignored, Colors.IGNORED, true, showCost, true, entryLevelLabel) end
     end
 
     if #groups.known > 0 then
-        TrainerSpells:AddHeaderItem(items, CategoryName(TrainerSpells:Trans("LID_ALREADYKNOWN"), #groups.known), Colors.KNOWN, showCost and TrainerSpells:SumCost(groups.known) or nil, keyPrefix .. "known", labelPrefix)
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_ALREADYKNOWN"), Colors.KNOWN, showCost and TrainerSpells:SumCost(groups.known) or nil, keyPrefix .. "known", labelPrefix, #groups.known)
         if not TrainerSpells:IsGroupCollapsed(keyPrefix .. "known") then TrainerSpells:AddEntryItems(items, groups.known, Colors.KNOWN, true, showCost, true, entryLevelLabel) end
     end
 end
@@ -244,7 +241,7 @@ function TrainerSpells:AppendPetAbilities(items, searchText, selectedLevel)
             if #subItems > 0 then
                 local groupCount = CountGroupEntries(groups)
                 petAbilityCount = petAbilityCount + groupCount
-                TrainerSpells:AddHeaderItem(petItems, CategoryName(petGroup.label, groupCount), Colors.PET_HEADER, nil, groupKey)
+                TrainerSpells:AddHeaderItem(petItems, petGroup.label, Colors.PET_HEADER, nil, groupKey, nil, groupCount)
                 if not TrainerSpells:IsGroupCollapsed(groupKey) then
                     for _, item in ipairs(subItems) do
                         table.insert(petItems, item)
@@ -255,7 +252,7 @@ function TrainerSpells:AppendPetAbilities(items, searchText, selectedLevel)
     end
 
     if #petItems > 0 then
-        TrainerSpells:AddHeaderItem(items, CategoryName(TrainerSpells:Trans("LID_PETTRAINING"), petAbilityCount), Colors.PET_HEADER, nil, "petAbilities")
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_PETTRAINING"), Colors.PET_HEADER, nil, "petAbilities", nil, petAbilityCount)
         if not TrainerSpells:IsGroupCollapsed("petAbilities") then
             for _, item in ipairs(petItems) do
                 table.insert(items, item)
@@ -271,7 +268,7 @@ function TrainerSpells:AppendPetTrainerAbilities(items, searchText, selectedLeve
     local subItems = {}
     TrainerSpells:AppendGroupItems(subItems, groups, "pettrainer_")
     if #subItems == 0 then return end
-    TrainerSpells:AddHeaderItem(items, CategoryName(TrainerSpells:Trans("LID_PETTRAINING"), CountGroupEntries(groups)), TrainerSpells.UIColors.PET_HEADER, nil, "petTraining")
+    TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_PETTRAINING"), TrainerSpells.UIColors.PET_HEADER, nil, "petTraining", nil, CountGroupEntries(groups))
     if not TrainerSpells:IsGroupCollapsed("petTraining") then
         for _, item in ipairs(subItems) do
             table.insert(items, item)

@@ -51,6 +51,7 @@ data\forever\Mage.lua
 data\forever\Hunter.lua
 data\forever\HunterPet.lua
 data\forever\Warrior.lua
+data\forever\Paladin.lua
 data\forever\WeaponSkills.lua
 data\forever\Alchemy.lua
 data\forever\Blacksmithing.lua

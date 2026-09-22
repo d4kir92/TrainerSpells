@@ -349,7 +349,7 @@ local function EnsureTradeSkillHooksInstalled()
 end
 
 local tradeSkillWatcher = CreateFrame("Frame")
-for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE"}) do
+for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "PLAYER_MONEY"}) do
     if not C_EventUtils or not C_EventUtils.IsEventValid or C_EventUtils.IsEventValid(event) then tradeSkillWatcher:RegisterEvent(event) end
 end
 tradeSkillWatcher:SetScript("OnEvent", function(_, event)
@@ -357,5 +357,7 @@ tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     if event == "TRADE_SKILL_UPDATE" and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
         HideNativeTradeSkillWidgets()
+    elseif event == "PLAYER_MONEY" and professionFrame:IsShown() then
+        TrainerSpells_ProfessionRefresh()
     end
 end)

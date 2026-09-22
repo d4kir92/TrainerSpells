@@ -159,9 +159,11 @@ local function FormatCost(copper)
     return GetMoneyString(copper, true)
 end
 
-local function GetLocalizedRankText(spellID)
+local function GetLocalizedRankText(spellID, rankNum, hasRealRank)
     local subtext = GetSpellSubtext and spellID and GetSpellSubtext(spellID)
-    return (subtext and subtext ~= "") and subtext or nil
+    if subtext and subtext ~= "" then return subtext end
+    if hasRealRank and rankNum then return ((_G.RANK or "Rank") .. " " .. rankNum) end
+    return nil
 end
 
 function TrainerSpells:EntryMatchesSearch(entry, search)
@@ -194,7 +196,7 @@ local function IgnoreMenu_Initialize(sel, level)
         end
     end
 
-    local rankSubtext = GetLocalizedRankText(entry.spellID)
+    local rankSubtext = GetLocalizedRankText(entry.spellID, entry.rankNum, entry.hasRealRank)
     local rankText = rankSubtext and (" " .. rankSubtext) or ""
     local info = UIDropDownMenu_CreateInfo()
     info.text = entry.name .. rankText
@@ -296,9 +298,18 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         levelFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
         levelFS:SetJustifyH("RIGHT")
         rowFrame.levelFS = levelFS
+        local countFS = rowFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        countFS:SetJustifyH("CENTER")
+        countFS:SetWordWrap(false)
+        rowFrame.countFS = countFS
+        local costFS = rowFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        costFS:SetJustifyH("RIGHT")
+        costFS:SetWordWrap(false)
+        rowFrame.costFS = costFS
     end
 
     local icon, nameFS, levelFS = rowFrame.icon, rowFrame.nameFS, rowFrame.levelFS
+    local countFS, costFS = rowFrame.countFS, rowFrame.costFS
     local iconSize = math.max(8, math.min(MAX_ICON_SIZE, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
     SetFontSize(nameFS, 16)
     SetFontSize(levelFS, 16)
@@ -323,6 +334,10 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
     nameFS:SetJustifyH("LEFT")
     nameFS:SetText("")
     levelFS:SetText("")
+    countFS:Hide()
+    countFS:SetText("")
+    costFS:Hide()
+    costFS:SetText("")
     if elementData.isHeader then
         local categoryInset = math.max(0, ((rowFrame:GetHeight() or TrainerSpells.HeaderHeight) - TrainerSpells.HeaderHeight) / 2)
         rowFrame.categoryBackground:ClearAllPoints()
@@ -334,12 +349,36 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         local textInset = elementData.groupKey and (COLLAPSE_BUTTON_SIZE + 6) or 4
         nameFS:ClearAllPoints()
         nameFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOPLEFT", textInset, 0)
-        nameFS:SetPoint("BOTTOMRIGHT", rowFrame.categoryBackground, "BOTTOMRIGHT", -textInset, 0)
-        nameFS:SetJustifyH("CENTER")
+        nameFS:SetPoint("BOTTOMRIGHT", rowFrame.categoryBackground, "BOTTOM", -60, 0)
+        nameFS:SetJustifyH("LEFT")
         nameFS:SetJustifyV("MIDDLE")
         UpdateCollapseButton(rowFrame, elementData, nameFS)
         local prefix = elementData.prefixText and (Colors.PET_HEADER .. "[" .. elementData.prefixText .. "] |r") or ""
         nameFS:SetText(prefix .. elementData.color .. elementData.text .. "|r")
+        if elementData.spellCount then
+            local spellLabel = elementData.spellCount == 1 and (_G.SPELL or "Spell") or (_G.SPELLS or "Spells")
+            SetFontSize(countFS, 18)
+            countFS:ClearAllPoints()
+            countFS:SetPoint("TOP", rowFrame.categoryBackground, "TOP", 0, 0)
+            countFS:SetPoint("BOTTOM", rowFrame.categoryBackground, "BOTTOM", 0, 0)
+            countFS:SetWidth(112)
+            countFS:SetJustifyV("MIDDLE")
+            countFS:SetText(elementData.color .. elementData.spellCount .. " " .. spellLabel .. "|r")
+            countFS:Show()
+        end
+
+        if elementData.totalCost ~= nil then
+            local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
+            local costColor = canAfford and "|cffffffff" or "|cffff3333"
+            SetFontSize(costFS, 18)
+            costFS:ClearAllPoints()
+            costFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOP", 60, 0)
+            costFS:SetPoint("BOTTOMRIGHT", rowFrame.categoryBackground, "BOTTOMRIGHT", -4, 0)
+            costFS:SetJustifyV("MIDDLE")
+            costFS:SetText(costColor .. GetMoneyString(elementData.totalCost, true) .. "|r")
+            costFS:Show()
+        end
+
         if elementData.totalCost or elementData.groupKey then
             rowFrame:EnableMouse(true)
             rowFrame:SetScript("OnEnter", function(sel)
@@ -400,7 +439,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
     else
         local entry = elementData.entry
         icon:SetTexture(entry.icon)
-        local rankSubtext = GetLocalizedRankText(entry.spellID)
+        local rankSubtext = GetLocalizedRankText(entry.spellID, entry.rankNum, entry.hasRealRank)
         local rankText = rankSubtext and (" " .. Colors.RANK .. "(" .. rankSubtext .. ")|r") or ""
         local nameColor = elementData.dimName and Colors.DIM_NAME or Colors.SPELL_NAME
         nameFS:SetText(nameColor .. entry.name .. "|r" .. rankText)
