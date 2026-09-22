@@ -164,6 +164,20 @@ local function GetLocalizedRankText(spellID, rankNum, hasRealRank)
     return nil
 end
 
+local function GetLocalizedPassiveText(spellID)
+    if not spellID then return nil end
+    local passive
+    if C_Spell and C_Spell.IsSpellPassive then
+        passive = C_Spell.IsSpellPassive(spellID)
+    elseif IsSpellPassive then
+        passive = IsSpellPassive(spellID)
+    elseif IsPassiveSpell then
+        passive = IsPassiveSpell(spellID)
+    end
+    if not passive then return nil end
+    return _G.SPELL_PASSIVE or _G.PASSIVE or "Passive"
+end
+
 function TrainerSpells:EntryMatchesSearch(entry, search)
     if not search or search == "" then return true end
     if entry.name and entry.name:lower():find(search, 1, true) then return true end
@@ -484,7 +498,11 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         end
         icon:SetTexture(entry.icon)
         local rankSubtext = GetLocalizedRankText(entry.spellID, entry.rankNum, entry.hasRealRank)
-        local rankText = rankSubtext and (" " .. Colors.RANK .. "(" .. rankSubtext .. ")|r") or ""
+        local passiveSubtext = GetLocalizedPassiveText(entry.spellID)
+        local subtexts = {}
+        if rankSubtext then table.insert(subtexts, rankSubtext) end
+        if passiveSubtext and passiveSubtext ~= rankSubtext then table.insert(subtexts, passiveSubtext) end
+        local rankText = #subtexts > 0 and (" " .. Colors.RANK .. "(" .. table.concat(subtexts, ") (") .. ")|r") or ""
         local nameColor = elementData.dimName and Colors.DIM_NAME or Colors.SPELL_NAME
         nameFS:SetText(nameColor .. entry.name .. "|r" .. rankText)
         if elementData.showLevel then
