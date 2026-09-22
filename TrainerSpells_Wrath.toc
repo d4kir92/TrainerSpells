@@ -108,6 +108,7 @@ data\wrath\MiningRecipes.lua
 core\Init.lua
 core\PetNames.lua
 core\BuiltinMerge.lua
+core\RecipeKnowledge.lua
 core\TrainerCapture.lua
 core\PetMerchantCapture.lua
 core\TrainerListUI.lua
