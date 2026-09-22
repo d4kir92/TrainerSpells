@@ -251,13 +251,9 @@ local function ScheduleOpenProfessionSync()
     end
 end
 
-eventFrame:RegisterEvent("PLAYER_LOGIN")
-eventFrame:RegisterEvent("SKILL_LINES_CHANGED")
-eventFrame:RegisterEvent("TRADE_SKILL_SHOW")
-eventFrame:RegisterEvent("TRADE_SKILL_UPDATE")
-eventFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
-eventFrame:RegisterEvent("PLAYER_LOGOUT")
-if C_EventUtils and C_EventUtils.IsEventValid and C_EventUtils.IsEventValid("NEW_RECIPE_LEARNED") then eventFrame:RegisterEvent("NEW_RECIPE_LEARNED") end
+for _, event in ipairs({"PLAYER_LOGIN", "SKILL_LINES_CHANGED", "TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "LEARNED_SPELL_IN_TAB", "PLAYER_LOGOUT", "NEW_RECIPE_LEARNED"}) do
+    D4:RegisterEvent(eventFrame, event)
+end
 eventFrame:SetScript("OnEvent", function(_, event, arg1)
     if event == "PLAYER_LOGIN" then
         if C_Timer then

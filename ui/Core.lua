@@ -198,15 +198,8 @@ local ignoreMenuEntry
 local function IgnoreMenu_Initialize(sel, level)
     local entry = ignoreMenuEntry
     if not entry then return end
-    local isProfessionSpell = false
-    local professionKey
-    if entry.spellID and GetTradeSkillLine then
-        local skillLine = GetTradeSkillLine()
-        if skillLine then
-            professionKey = TrainerSpells:GetProfessionKey(skillLine)
-            if professionKey then isProfessionSpell = true end
-        end
-    end
+    local professionKey = entry.professionKey
+    local isProfessionSpell = professionKey ~= nil
 
     local rankSubtext = GetLocalizedRankText(entry.spellID, entry.rankNum, entry.hasRealRank)
     local rankText = rankSubtext and (" " .. rankSubtext) or ""
@@ -218,7 +211,7 @@ local function IgnoreMenu_Initialize(sel, level)
     if isProfessionSpell then
         local spellIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID, professionKey)
         info = UIDropDownMenu_CreateInfo()
-        local isRecipeView = TrainerSpells.IsProfessionRecipeViewActive and TrainerSpells:IsProfessionRecipeViewActive()
+        local isRecipeView = entry.isProfessionRecipe
         if isRecipeView then
             info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRECIPE") or TrainerSpells:Trans("LID_IGNORINGTHISRECIPE")
         else

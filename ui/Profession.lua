@@ -97,6 +97,15 @@ function TrainerSpells:IsProfessionRecipeViewActive()
     return professionViewMode == PROFESSION_VIEW_RECIPES
 end
 
+local function MarkProfessionEntries(groups, professionKey, isRecipe)
+    for _, groupName in ipairs({"available", "soon", "higher", "missingTalents", "ignored", "known"}) do
+        for _, entry in ipairs(groups[groupName]) do
+            entry.professionKey = professionKey
+            entry.isProfessionRecipe = isRecipe
+        end
+    end
+end
+
 function TrainerSpells_ProfessionRefresh()
     local searchText = (TrainerSpells_ProfessionSearchText or ""):lower()
     local professionKey, skillLineName = GetOpenProfession()
@@ -106,7 +115,8 @@ function TrainerSpells_ProfessionRefresh()
         if data and next(data) then
             local currentSkill = GetCurrentProfessionSkill(skillLineName)
             local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true, professionKey)
-            TrainerSpells:AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_SKILL"))
+            MarkProfessionEntries(groups, professionKey, true)
+            TrainerSpells:AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_SKILL"), nil, nil, "skill")
         end
 
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and ("Keine Rezept-Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa") end
@@ -115,7 +125,8 @@ function TrainerSpells_ProfessionRefresh()
         if data and next(data) then
             local currentSkill = GetCurrentProfessionSkill(skillLineName)
             local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true, professionKey)
-            TrainerSpells:AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"))
+            MarkProfessionEntries(groups, professionKey, false)
+            TrainerSpells:AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"), nil, nil, "skill")
         end
 
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa") end
@@ -582,7 +593,7 @@ end
 
 local tradeSkillWatcher = CreateFrame("Frame")
 for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_LIST_UPDATE", "PLAYER_MONEY"}) do
-    if not C_EventUtils or not C_EventUtils.IsEventValid or C_EventUtils.IsEventValid(event) then tradeSkillWatcher:RegisterEvent(event) end
+    D4:RegisterEvent(tradeSkillWatcher, event)
 end
 tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     EnsureTradeSkillHooksInstalled()
