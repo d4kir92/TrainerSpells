@@ -390,6 +390,15 @@ local function IsProfessionsCombatLocked()
     return InCombatLockdown and InCombatLockdown()
 end
 
+local function UpdateProfessionsTabsCombatState()
+    local locked = IsProfessionsCombatLocked()
+    for _, tab in pairs(professionsModeTabs) do
+        tab.combatLocked = locked
+        tab:SetAlpha(locked and 0.5 or 1)
+        if tab.Icon and tab.Icon.SetDesaturated then tab.Icon:SetDesaturated(locked) end
+    end
+end
+
 local function PositionProfessionsFrameModeTabs()
     if not ProfessionsFrame then return end
     local trainerTab = professionsModeTabs[PROFESSION_VIEW_SKILL]
@@ -448,8 +457,11 @@ local function RestoreProfessionsFramePage()
 end
 
 local professionsCombatWatcher = CreateFrame("Frame")
+professionsCombatWatcher:RegisterEvent("PLAYER_REGEN_DISABLED")
 professionsCombatWatcher:RegisterEvent("PLAYER_REGEN_ENABLED")
-professionsCombatWatcher:SetScript("OnEvent", function()
+professionsCombatWatcher:SetScript("OnEvent", function(_, event)
+    UpdateProfessionsTabsCombatState()
+    if event ~= "PLAYER_REGEN_ENABLED" then return end
     if professionsRestorePending then RestoreProfessionsFramePage() end
     if professionsClosePending then CloseProfessionsFrameView() end
 end)
@@ -492,7 +504,9 @@ local function CreateProfessionsFrameSystemTab(mode, tabID, text, icon)
     tab.GetTabSystem = function() return ProfessionsFrame.TabSystem end
     tab:Init(tabID, nil, icon)
     tab:SetTooltipText(text)
-    tab:SetScript("OnClick", function() SetProfessionsFrameView(mode) end)
+    tab:SetScript("OnClick", function(self)
+        if not self.combatLocked then SetProfessionsFrameView(mode) end
+    end)
     tab:Show()
     professionsModeTabs[mode] = tab
     return tab
@@ -508,8 +522,8 @@ local function CreateProfessionsFrameSideTab(name, mode, text, icon)
     tab.tooltipText = text
     tab:SetFillToInterior(true)
     tab:SetChecked(false)
-    tab:SetCustomOnMouseUpHandler(function(_, button, upInside)
-        if button == "LeftButton" and upInside then SetProfessionsFrameView(mode) end
+    tab:SetCustomOnMouseUpHandler(function(self, button, upInside)
+        if button == "LeftButton" and upInside and not self.combatLocked then SetProfessionsFrameView(mode) end
     end)
     tab:Show()
     professionsModeTabs[mode] = tab
@@ -538,6 +552,7 @@ local function InstallProfessionsFrameIntegration()
         hooksecurefunc(ProfessionsFrame, "SetTab", CloseProfessionsFrameView)
         if ProfessionsFrame.UpdateTabs then hooksecurefunc(ProfessionsFrame, "UpdateTabs", PositionProfessionsFrameModeTabs) end
     end
+    UpdateProfessionsTabsCombatState()
     PositionProfessionsFrameModeTabs()
     ProfessionsFrame:HookScript("OnShow", function()
         RestoreProfessionsFramePage()
