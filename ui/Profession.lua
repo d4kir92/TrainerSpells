@@ -422,6 +422,7 @@ local function PositionProfessionsFrameModeTabs()
         for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
             if tab:IsShown() then lastTab = tab end
         end
+
         trainerTab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -16)
         modernRecipeTab:SetPoint("TOPLEFT", trainerTab, "BOTTOMLEFT", 0, -2)
     else
@@ -445,10 +446,13 @@ local function CloseProfessionsFrameView()
         if professionsModeActive or professionFrame:IsShown() then professionsClosePending = true end
         return
     end
+
     professionsClosePending = false
     professionsModeActive = false
     professionFrame:Hide()
-    for _, tab in pairs(professionsModeTabs) do SetProfessionsModeTabSelected(tab, false) end
+    for _, tab in pairs(professionsModeTabs) do
+        SetProfessionsModeTabSelected(tab, false)
+    end
 end
 
 local function RestoreProfessionsFramePage()
@@ -457,13 +461,16 @@ local function RestoreProfessionsFramePage()
         professionsRestorePending = true
         return
     end
+
     professionsRestorePending = false
     if professionsFrameUsesSideTabs then
         if ProfessionsFrame.BookPage then ProfessionsFrame.BookPage:Hide() end
         if ProfessionsFrame.CraftingPage then ProfessionsFrame.CraftingPage:Show() end
     elseif ProfessionsFrame.GetTab and ProfessionsFrame.GetElementsForTab then
         local tabID = ProfessionsFrame:GetTab()
-        for _, page in ipairs(tabID and ProfessionsFrame:GetElementsForTab(tabID) or {}) do page:Show() end
+        for _, page in ipairs(tabID and ProfessionsFrame:GetElementsForTab(tabID) or {}) do
+            page:Show()
+        end
     end
 end
 
@@ -482,14 +489,18 @@ local function SetProfessionsFrameView(mode)
         if UIErrorsFrame and ERR_NOT_IN_COMBAT then UIErrorsFrame:AddMessage(ERR_NOT_IN_COMBAT, 1, 0.1, 0.1) end
         return
     end
+
     professionViewMode = mode
     professionsModeActive = true
     if ProfessionsFrame.Pages then
-        for _, page in ipairs(ProfessionsFrame.Pages) do page:Hide() end
+        for _, page in ipairs(ProfessionsFrame.Pages) do
+            page:Hide()
+        end
     else
         if ProfessionsFrame.BookPage then ProfessionsFrame.BookPage:Hide() end
         if ProfessionsFrame.CraftingPage then ProfessionsFrame.CraftingPage:Hide() end
     end
+
     if professionsFrameUsesSideTabs then
         professionListBg:Hide()
     else
@@ -498,15 +509,22 @@ local function SetProfessionsFrameView(mode)
         professionListBg:SetColorTexture(0, 0, 0, 1)
         professionListBg:Show()
     end
+
     PositionProfessionFrame()
     professionFrame:Show()
-    for tabMode, tab in pairs(professionsModeTabs) do SetProfessionsModeTabSelected(tab, tabMode == mode) end
+    for tabMode, tab in pairs(professionsModeTabs) do
+        SetProfessionsModeTabSelected(tab, tabMode == mode)
+    end
+
     if professionsFrameUsesSideTabs then
         ProfessionsFrame.ProfessionsOverviewTab:SetChecked(false)
-        for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do tab:SetChecked(false) end
+        for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
+            tab:SetChecked(false)
+        end
     elseif ProfessionsFrame.TabSystem.SetTabVisuallySelected then
         ProfessionsFrame.TabSystem:SetTabVisuallySelected(0)
     end
+
     TrainerSpells_ProfessionRefresh()
 end
 
@@ -515,9 +533,7 @@ local function CreateProfessionsFrameSystemTab(mode, tabID, text, icon)
     tab.GetTabSystem = function() return ProfessionsFrame.TabSystem end
     tab:Init(tabID, nil, icon)
     tab:SetTooltipText(text)
-    tab:SetScript("OnClick", function(self)
-        if not self.combatLocked then SetProfessionsFrameView(mode) end
-    end)
+    tab:SetScript("OnClick", function(self) if not self.combatLocked then SetProfessionsFrameView(mode) end end)
     tab:Show()
     professionsModeTabs[mode] = tab
     return tab
@@ -533,9 +549,7 @@ local function CreateProfessionsFrameSideTab(name, mode, text, icon)
     tab.tooltipText = text
     tab:SetFillToInterior(true)
     tab:SetChecked(false)
-    tab:SetCustomOnMouseUpHandler(function(self, button, upInside)
-        if button == "LeftButton" and upInside and not self.combatLocked then SetProfessionsFrameView(mode) end
-    end)
+    tab:SetCustomOnMouseUpHandler(function(self, button, upInside) if button == "LeftButton" and upInside and not self.combatLocked then SetProfessionsFrameView(mode) end end)
     tab:Show()
     professionsModeTabs[mode] = tab
     return tab
@@ -563,19 +577,25 @@ local function InstallProfessionsFrameIntegration()
         hooksecurefunc(ProfessionsFrame, "SetTab", CloseProfessionsFrameView)
         if ProfessionsFrame.UpdateTabs then hooksecurefunc(ProfessionsFrame, "UpdateTabs", PositionProfessionsFrameModeTabs) end
     end
+
     UpdateProfessionsTabsCombatState()
     PositionProfessionsFrameModeTabs()
     ProfessionsFrame:HookScript("OnShow", function()
         RestoreProfessionsFramePage()
         PositionProfessionsFrameModeTabs()
-        for _, tab in pairs(professionsModeTabs) do tab:Show() end
+        for _, tab in pairs(professionsModeTabs) do
+            tab:Show()
+        end
+
         CloseProfessionsFrameView()
         C_Timer.After(0, PositionProfessionsFrameModeTabs)
     end)
+
     ProfessionsFrame:HookScript("OnHide", function()
         RestoreProfessionsFramePage()
         CloseProfessionsFrameView()
     end)
+
     hooksecurefunc(ProfessionsFrame, "SetScale", function() if professionFrame:IsShown() then PositionProfessionFrame() end end)
 end
 
@@ -593,8 +613,9 @@ end
 
 local tradeSkillWatcher = CreateFrame("Frame")
 for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_LIST_UPDATE", "PLAYER_MONEY"}) do
-    D4:RegisterEvent(tradeSkillWatcher, event)
+    TrainerSpells:RegisterEvent(tradeSkillWatcher, event)
 end
+
 tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     EnsureTradeSkillHooksInstalled()
     InstallProfessionsFrameIntegration()

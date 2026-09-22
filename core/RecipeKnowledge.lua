@@ -1,7 +1,6 @@
 local _, TrainerSpells = ...
 TrainerSpells_Global = TrainerSpells_Global or {}
 TrainerSpells_Global.characters = TrainerSpells_Global.characters or {}
-
 local RECIPE_ITEM_CLASS = Enum and Enum.ItemClass and Enum.ItemClass.Recipe or 9
 local RECIPE_SUBCLASS_TO_PROFESSION = {
     [1] = "Leatherworking",
@@ -70,6 +69,7 @@ local function SyncProfessionRoster()
             end
         end
     end
+
     if found then
         for professionKey in pairs(record.professions) do
             if not seen[professionKey] then record.professions[professionKey] = nil end
@@ -84,11 +84,10 @@ local function GetOpenProfession()
         local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
         if professionKey then return professionKey, professionName, professionInfo.skillLevel, professionInfo.maxSkillLevel, professionInfo end
     end
+
     if GetTradeSkillLine then
         local professionName, skillLevel, maxSkillLevel = GetTradeSkillLine()
-        if professionName and professionName ~= "" then
-            return TrainerSpells:GetProfessionKey(professionName), professionName, skillLevel, maxSkillLevel
-        end
+        if professionName and professionName ~= "" then return TrainerSpells:GetProfessionKey(professionName), professionName, skillLevel, maxSkillLevel end
     end
 end
 
@@ -98,10 +97,13 @@ local function GetModernKnownRecipes(professionInfo)
         local ok, knownSpells = pcall(C_TradeSkillUI.GetProfessionSpells, professionInfo.profession, professionInfo.professionID)
         if ok and type(knownSpells) == "table" and next(knownSpells) then
             local known = {}
-            for _, recipeID in pairs(knownSpells) do known[recipeID] = true end
+            for _, recipeID in pairs(knownSpells) do
+                known[recipeID] = true
+            end
             return known
         end
     end
+
     if not C_TradeSkillUI.GetAllRecipeIDs or not C_TradeSkillUI.GetRecipeInfo then return nil end
     local recipeIDs = C_TradeSkillUI.GetAllRecipeIDs()
     if type(recipeIDs) ~= "table" or not next(recipeIDs) then return nil end
@@ -154,6 +156,7 @@ local function GetRecipeSpellID(tooltipData, itemLink)
             end
         end
     end
+
     local _, spellID
     if C_Item and C_Item.GetItemSpell then
         _, spellID = C_Item.GetItemSpell(itemLink)
@@ -168,6 +171,7 @@ local function GetItemClass(itemLink)
         local _, _, _, _, _, itemClassID, itemSubclassID = C_Item.GetItemInfoInstant(itemLink)
         return itemClassID, itemSubclassID
     end
+
     if GetItemInfoInstant then
         local _, _, _, _, _, itemClassID, itemSubclassID = GetItemInfoInstant(itemLink)
         return itemClassID, itemSubclassID
@@ -180,6 +184,7 @@ local function GetRecipeProfession(recipeID, itemSubclassID)
         local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
         if professionKey then return professionKey end
     end
+
     for professionKey, levels in pairs(TrainerSpells_RecipeData or {}) do
         for _, recipes in pairs(levels) do
             if recipes[recipeID] then return professionKey end
@@ -200,6 +205,7 @@ local function IsCurrentCharacterRecipeKnown(characterKey, recipeID)
         local ok, recipeInfo = pcall(C_TradeSkillUI.GetRecipeInfo, recipeID)
         if ok and recipeInfo then return recipeInfo.learned and true or false end
     end
+
     if C_SpellBook and C_SpellBook.IsSpellKnown then return C_SpellBook.IsSpellKnown(recipeID) and true or nil end
     if IsSpellKnown then return IsSpellKnown(recipeID) and true or nil end
 end
@@ -220,10 +226,9 @@ local function AddRecipeKnowledgeToTooltip(tooltip, tooltipData)
         local liveKnown = IsCurrentCharacterRecipeKnown(characterKey, recipeID)
         local known = liveKnown
         if known == nil and profession and profession.recipes then known = profession.recipes[recipeID] and true or false end
-        if profession and profession.recipesScanned and known == false then
-            table.insert(missing, GetCharacterDisplayName(character))
-        end
+        if profession and profession.recipesScanned and known == false then table.insert(missing, GetCharacterDisplayName(character)) end
     end
+
     if #missing == 0 then return end
     table.sort(missing)
     tooltip:AddLine(" ")
@@ -252,8 +257,9 @@ local function ScheduleOpenProfessionSync()
 end
 
 for _, event in ipairs({"PLAYER_LOGIN", "SKILL_LINES_CHANGED", "TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "LEARNED_SPELL_IN_TAB", "PLAYER_LOGOUT", "NEW_RECIPE_LEARNED"}) do
-    D4:RegisterEvent(eventFrame, event)
+    TrainerSpells:RegisterEvent(eventFrame, event)
 end
+
 eventFrame:SetScript("OnEvent", function(_, event, arg1)
     if event == "PLAYER_LOGIN" then
         if C_Timer then
@@ -272,6 +278,7 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1)
             local profession = record and UpdateProfessionRecord(record, professionKey)
             if profession then profession.recipes[recipeID] = true end
         end
+
         ScheduleOpenProfessionSync()
     else
         SyncProfessionRoster()
