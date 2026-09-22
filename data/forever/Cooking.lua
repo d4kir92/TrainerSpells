@@ -44,6 +44,12 @@ TrainerSpellsBuiltin_Profession.Cooking = TrainerSpellsBuiltin_Profession.Cookin
             cost = 300
         },
     },
+    [175] = {
+        [4094] = {
+            icon = "Interface\\Icons\\inv_misc_food_18",
+            cost = 450
+        },
+    },
     [200] = {
         [21175] = {
             icon = 134022,

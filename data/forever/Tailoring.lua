@@ -244,4 +244,184 @@ TrainerSpellsBuiltin_Profession.Tailoring = TrainerSpellsBuiltin_Profession.Tail
             cost = 1450
         },
     },
+    [160] = {
+        [8483] = {
+            icon = "Interface\\Icons\\inv_shirt_white_01",
+            cost = 450
+        },
+        [8762] = {
+            icon = "Interface\\Icons\\inv_misc_bandana_01",
+            cost = 675
+        },
+    },
+    [170] = {
+        [3871] = {
+            icon = "Interface\\Icons\\inv_shirt_08",
+            cost = 450
+        },
+        [8764] = {
+            icon = "Interface\\Icons\\inv_shirt_04",
+            cost = 810
+        },
+        [439100] = {
+            icon = "Interface\\Icons\\ability_ensnare",
+            cost = 900
+        },
+    },
+    [175] = {
+        [3865] = {
+            icon = "Interface\\Icons\\inv_fabric_mageweave_03",
+            cost = 1000
+        },
+        [8489] = {
+            icon = "Interface\\Icons\\inv_shirt_red_01",
+            cost = 675
+        },
+        [8766] = {
+            icon = "Interface\\Icons\\inv_belt_22",
+            cost = 900
+        },
+        [8772] = {
+            icon = "Interface\\Icons\\inv_belt_04",
+            cost = 900
+        },
+        [439098] = {
+            icon = "Interface\\Icons\\ability_ensnare",
+            cost = 1000
+        },
+    },
+    [180] = {
+        [8774] = {
+            icon = "Interface\\Icons\\inv_shoulder_18",
+            cost = 900
+        },
+    },
+    [185] = {
+        [3861] = {
+            icon = "Interface\\Icons\\inv_misc_cape_02",
+            cost = 900
+        },
+        [8791] = {
+            icon = "Interface\\Icons\\inv_shirt_04",
+            cost = 2250
+        },
+        [439094] = {
+            icon = "Interface\\Icons\\ability_ensnare",
+            cost = 1000
+        },
+    },
+    [190] = {
+        [8770] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_02",
+            cost = 900
+        },
+    },
+    [195] = {
+        [8799] = {
+            icon = "Interface\\Icons\\inv_pants_06",
+            cost = 2700
+        },
+    },
+    [205] = {
+        [12048] = {
+            icon = "Interface\\Icons\\inv_chest_leather_03",
+            cost = 3600
+        },
+        [12049] = {
+            icon = "Interface\\Icons\\inv_pants_09",
+            cost = 3600
+        },
+        [439086] = {
+            icon = "Interface\\Icons\\ability_ensnare",
+            cost = 4000
+        },
+        [439088] = {
+            icon = "Interface\\Icons\\ability_ensnare",
+            cost = 4000
+        },
+    },
+    [210] = {
+        [8804] = {
+            icon = "Interface\\Icons\\inv_gauntlets_05",
+            cost = 4500
+        },
+        [12050] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_13",
+            cost = 3600
+        },
+    },
+    [215] = {
+        [12053] = {
+            icon = "Interface\\Icons\\inv_gauntlets_05",
+            cost = 4500
+        },
+        [12061] = {
+            icon = "Interface\\Icons\\inv_shirt_orange_01",
+            cost = 2250
+        },
+    },
+    [225] = {
+        [12065] = {
+            icon = "Interface\\Icons\\inv_misc_bag_10_black",
+            cost = 4500
+        },
+        [12067] = {
+            icon = "Interface\\Icons\\inv_gauntlets_18",
+            cost = 4500
+        },
+        [12069] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_25",
+            cost = 4500
+        },
+        [12070] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_42",
+            cost = 4500
+        },
+    },
+    [230] = {
+        [12072] = {
+            icon = "Interface\\Icons\\inv_misc_bandana_01",
+            cost = 6000
+        },
+        [12073] = {
+            icon = "Interface\\Icons\\inv_boots_05",
+            cost = 6000
+        },
+        [12074] = {
+            icon = "Interface\\Icons\\inv_shoulder_25",
+            cost = 6000
+        },
+    },
+    [235] = {
+        [12077] = {
+            icon = "Interface\\Icons\\inv_chest_cloth_21",
+            cost = 5000
+        },
+        [12079] = {
+            icon = "Interface\\Icons\\inv_misc_bag_10_red",
+            cost = 6500
+        },
+    },
+    [245] = {
+        [12088] = {
+            icon = "Interface\\Icons\\inv_boots_05",
+            cost = 7500
+        },
+    },
+    [250] = {
+        [12092] = {
+            icon = "Interface\\Icons\\inv_crown_01",
+            cost = 7500
+        },
+        [18401] = {
+            icon = "Interface\\Icons\\inv_fabric_purplefire_02",
+            cost = 10000
+        },
+    },
+    [255] = {
+        [18402] = {
+            icon = "Interface\\Icons\\inv_belt_15",
+            cost = 10000
+        },
+    },
 }
