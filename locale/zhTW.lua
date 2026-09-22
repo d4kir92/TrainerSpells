@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("zhTW", "LID_NOTSCANNEDYET", "尚未掃描，請更換寵
 TrainerSpells:AddTrans("zhTW", "LID_CLASSTRAINER", "職業訓練師")
 TrainerSpells:AddTrans("zhTW", "LID_PROFESSIONS", "專業技能")
 TrainerSpells:AddTrans("zhTW", "LID_SKILL", "技能")
+TrainerSpells:AddTrans("zhTW", "LID_TRAINERSPELLS", "訓練師法術")
 TrainerSpells:AddTrans("zhTW", "LID_RECIPES", "配方")
 TrainerSpells:AddTrans("zhTW", "LID_SOURCE", "來源")
 TrainerSpells:AddTrans("zhTW", "LID_GROUPBY", "分組方式")

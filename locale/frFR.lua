@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("frFR", "LID_NOTSCANNEDYET", "PAS ENCORE ANALYSÉ, CHANGE
 TrainerSpells:AddTrans("frFR", "LID_CLASSTRAINER", "Entraîneur de classe")
 TrainerSpells:AddTrans("frFR", "LID_PROFESSIONS", "Professions")
 TrainerSpells:AddTrans("frFR", "LID_SKILL", "Compétence")
+TrainerSpells:AddTrans("frFR", "LID_TRAINERSPELLS", "Sorts du maître")
 TrainerSpells:AddTrans("frFR", "LID_RECIPES", "Recettes")
 TrainerSpells:AddTrans("frFR", "LID_SOURCE", "Source")
 TrainerSpells:AddTrans("frFR", "LID_GROUPBY", "Regrouper par")

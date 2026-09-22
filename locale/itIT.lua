@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("itIT", "LID_NOTSCANNEDYET", "NON ANCORA SCANSIONATO, CAM
 TrainerSpells:AddTrans("itIT", "LID_CLASSTRAINER", "Addestratore di classe")
 TrainerSpells:AddTrans("itIT", "LID_PROFESSIONS", "Professioni")
 TrainerSpells:AddTrans("itIT", "LID_SKILL", "Abilità")
+TrainerSpells:AddTrans("itIT", "LID_TRAINERSPELLS", "Incantesimi dell'istruttore")
 TrainerSpells:AddTrans("itIT", "LID_RECIPES", "Ricette")
 TrainerSpells:AddTrans("itIT", "LID_SOURCE", "Fonte")
 TrainerSpells:AddTrans("itIT", "LID_GROUPBY", "Raggruppa per")

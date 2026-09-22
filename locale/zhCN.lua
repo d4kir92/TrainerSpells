@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("zhCN", "LID_NOTSCANNEDYET", "尚未扫描，请更换宠
 TrainerSpells:AddTrans("zhCN", "LID_CLASSTRAINER", "职业训练师")
 TrainerSpells:AddTrans("zhCN", "LID_PROFESSIONS", "专业技能")
 TrainerSpells:AddTrans("zhCN", "LID_SKILL", "技能")
+TrainerSpells:AddTrans("zhCN", "LID_TRAINERSPELLS", "训练师法术")
 TrainerSpells:AddTrans("zhCN", "LID_RECIPES", "配方")
 TrainerSpells:AddTrans("zhCN", "LID_SOURCE", "来源")
 TrainerSpells:AddTrans("zhCN", "LID_GROUPBY", "分组方式")

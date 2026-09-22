@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("esES", "LID_NOTSCANNEDYET", "AÚN NO ESCANEADO, CAMBIA D
 TrainerSpells:AddTrans("esES", "LID_CLASSTRAINER", "Entrenador de clase")
 TrainerSpells:AddTrans("esES", "LID_PROFESSIONS", "Profesiones")
 TrainerSpells:AddTrans("esES", "LID_SKILL", "Habilidad")
+TrainerSpells:AddTrans("esES", "LID_TRAINERSPELLS", "Hechizos de instructor")
 TrainerSpells:AddTrans("esES", "LID_RECIPES", "Recetas")
 TrainerSpells:AddTrans("esES", "LID_SOURCE", "Fuente")
 TrainerSpells:AddTrans("esES", "LID_GROUPBY", "Agrupar por")

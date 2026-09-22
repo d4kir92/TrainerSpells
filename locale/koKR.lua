@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("koKR", "LID_NOTSCANNEDYET", "아직 검색되지 않음,
 TrainerSpells:AddTrans("koKR", "LID_CLASSTRAINER", "직업 훈련사")
 TrainerSpells:AddTrans("koKR", "LID_PROFESSIONS", "전문 기술")
 TrainerSpells:AddTrans("koKR", "LID_SKILL", "기술")
+TrainerSpells:AddTrans("koKR", "LID_TRAINERSPELLS", "훈련사 주문")
 TrainerSpells:AddTrans("koKR", "LID_RECIPES", "조합법")
 TrainerSpells:AddTrans("koKR", "LID_SOURCE", "출처")
 TrainerSpells:AddTrans("koKR", "LID_GROUPBY", "그룹 기준")

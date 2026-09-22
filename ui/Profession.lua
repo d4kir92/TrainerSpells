@@ -1,6 +1,11 @@
 local _, TrainerSpells = ...
 local classFrame = TrainerSpells.ClassFrame
 local function GetCurrentProfessionSkill(professionName)
+    if ProfessionsFrame then
+        local professionInfo = ProfessionsFrame.GetProfessionInfo and ProfessionsFrame:GetProfessionInfo() or ProfessionsFrame.professionInfo
+        if type(professionInfo) == "table" and professionInfo.skillLevel then return professionInfo.skillLevel end
+    end
+
     if not GetNumSkillLines or not GetSkillLineInfo or not professionName then return 0 end
     for i = 1, GetNumSkillLines() do
         local skillName, isHeader, _, skillRank = GetSkillLineInfo(i)
@@ -65,10 +70,24 @@ professionRowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.
 end)
 
 local function GetOpenProfession()
-    if not GetTradeSkillLine then return nil, nil end
-    local skillLineName = GetTradeSkillLine()
-    if not skillLineName or skillLineName == "" then return nil, nil end
-    return TrainerSpells:GetProfessionKey(skillLineName), skillLineName
+    if GetTradeSkillLine then
+        local skillLineName = GetTradeSkillLine()
+        if skillLineName and skillLineName ~= "" then return TrainerSpells:GetProfessionKey(skillLineName), skillLineName end
+    end
+
+    local professionInfo = ProfessionsFrame and (ProfessionsFrame.GetProfessionInfo and ProfessionsFrame:GetProfessionInfo() or ProfessionsFrame.professionInfo)
+    if not professionInfo and C_TradeSkillUI and C_TradeSkillUI.GetBaseProfessionInfo then professionInfo = C_TradeSkillUI.GetBaseProfessionInfo() end
+    if type(professionInfo) ~= "table" then return nil, nil end
+    local professionName = professionInfo.parentProfessionName
+    local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
+    if professionKey then return professionKey, professionName end
+    professionName = professionInfo.professionName
+    professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
+    if professionKey then return professionKey, professionName end
+    professionName = professionInfo.name
+    professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
+    if professionKey then return professionKey, professionName end
+    return nil, professionInfo.parentProfessionName or professionInfo.professionName or professionInfo.name
 end
 
 local PROFESSION_VIEW_SKILL = "skill"
@@ -107,7 +126,11 @@ end
 
 local function PositionProfessionFrame()
     professionFrame:ClearAllPoints()
-    if TradeSkillFrame and TradeSkillFrame:IsShown() then
+    if ProfessionsFrame and ProfessionsFrame:IsShown() then
+        professionFrame:SetScale(ProfessionsFrame:GetScale())
+        professionFrame:SetPoint("TOPLEFT", ProfessionsFrame, "TOPLEFT", 5, -72)
+        professionFrame:SetPoint("BOTTOMRIGHT", ProfessionsFrame, "BOTTOMRIGHT", -5, 5)
+    elseif TradeSkillFrame and TradeSkillFrame:IsShown() then
         if TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
             professionFrame:SetScale(DragonflightUIProfessionFrame:GetScale())
             professionFrame:SetPoint("TOPLEFT", DragonflightUIProfessionFrame, "TOPLEFT", -4, -24)
@@ -128,7 +151,12 @@ local function PositionProfessionFrame()
 
     professionSearchBox:ClearAllPoints()
     professionScrollBox:ClearAllPoints()
-    if TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
+    if ProfessionsFrame and ProfessionsFrame:IsShown() then
+        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 10, -6)
+        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -6)
+        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -54)
+        professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
+    elseif TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
         professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 80, 0)
         professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, 0)
         professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -64)
@@ -348,13 +376,141 @@ local function EnsureTradeSkillHooksInstalled()
     end)
 end
 
+local professionsFrameHooksInstalled = false
+local professionsModeTabContainer
+local professionsModeTabs = {}
+local professionsFrameUsesSideTabs = false
+local function PositionProfessionsFrameModeTabs()
+    if not ProfessionsFrame then return end
+    local trainerTab = professionsModeTabs[PROFESSION_VIEW_SKILL]
+    local modernRecipeTab = professionsModeTabs[PROFESSION_VIEW_RECIPES]
+    if not trainerTab or not modernRecipeTab then return end
+    trainerTab:ClearAllPoints()
+    modernRecipeTab:ClearAllPoints()
+    if professionsFrameUsesSideTabs then
+        local lastTab = ProfessionsFrame.ProfessionsOverviewTab
+        for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
+            if tab:IsShown() then lastTab = tab end
+        end
+        trainerTab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -16)
+        modernRecipeTab:SetPoint("TOPLEFT", trainerTab, "BOTTOMLEFT", 0, -2)
+    else
+        professionsModeTabContainer:ClearAllPoints()
+        professionsModeTabContainer:SetPoint("LEFT", ProfessionsFrame.TabSystem, "RIGHT", 20, 0)
+        trainerTab:SetPoint("LEFT", professionsModeTabContainer, "LEFT", 0, 0)
+        modernRecipeTab:SetPoint("LEFT", trainerTab, "RIGHT", 1, 0)
+    end
+end
+
+local function SetProfessionsModeTabSelected(tab, selected)
+    if tab.SetTabSelected then
+        tab:SetTabSelected(selected)
+    else
+        tab:SetChecked(selected)
+    end
+end
+
+local function CloseProfessionsFrameView()
+    professionFrame:Hide()
+    for _, tab in pairs(professionsModeTabs) do SetProfessionsModeTabSelected(tab, false) end
+end
+
+local function SetProfessionsFrameView(mode)
+    professionViewMode = mode
+    professionListBg:ClearAllPoints()
+    professionListBg:SetAllPoints(professionFrame)
+    professionListBg:SetColorTexture(0, 0, 0, 1)
+    PositionProfessionFrame()
+    professionFrame:Show()
+    for tabMode, tab in pairs(professionsModeTabs) do SetProfessionsModeTabSelected(tab, tabMode == mode) end
+    if professionsFrameUsesSideTabs then
+        ProfessionsFrame.ProfessionsOverviewTab:SetChecked(false)
+        for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do tab:SetChecked(false) end
+    elseif ProfessionsFrame.TabSystem.SetTabVisuallySelected then
+        ProfessionsFrame.TabSystem:SetTabVisuallySelected(0)
+    end
+    TrainerSpells_ProfessionRefresh()
+end
+
+local function CreateProfessionsFrameSystemTab(mode, tabID, text, icon)
+    local tab = CreateFrame("Button", nil, professionsModeTabContainer, "TabSystemButtonTemplate")
+    tab.GetTabSystem = function() return ProfessionsFrame.TabSystem end
+    tab:Init(tabID, nil, icon)
+    tab:SetTooltipText(text)
+    tab:SetScript("OnClick", function() SetProfessionsFrameView(mode) end)
+    tab:Show()
+    professionsModeTabs[mode] = tab
+    return tab
+end
+
+local function CreateProfessionsFrameSideTab(name, mode, text, icon)
+    local tab = CreateFrame("Frame", name, ProfessionsFrame, "LargeSideTabButtonTemplate")
+    tab:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 200)
+    tab:EnableMouse(true)
+    tab.Icon:SetTexture(icon)
+    tab.Icon:SetSize(30, 30)
+    tab.Icon:SetTexCoord(0.03125, 0.96875, 0.03125, 0.96875)
+    tab.tooltipText = text
+    tab:SetFillToInterior(true)
+    tab:SetChecked(false)
+    tab:SetCustomOnMouseUpHandler(function(_, button, upInside)
+        if button == "LeftButton" and upInside then SetProfessionsFrameView(mode) end
+    end)
+    tab:Show()
+    professionsModeTabs[mode] = tab
+    return tab
+end
+
+local function InstallProfessionsFrameIntegration()
+    if professionsFrameHooksInstalled or not ProfessionsFrame then return end
+    professionsFrameUsesSideTabs = ProfessionsFrame.ProfessionsOverviewTab and ProfessionsFrame.rightProfessionTabs and true or false
+    if not professionsFrameUsesSideTabs and not ProfessionsFrame.TabSystem then return end
+    professionsFrameHooksInstalled = true
+    if professionsFrameUsesSideTabs then
+        CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTrainerTab", PROFESSION_VIEW_SKILL, TrainerSpells:Trans("LID_TRAINERSPELLS"), 133741)
+        CreateProfessionsFrameSideTab("TrainerSpellsProfessionsRecipeTab", PROFESSION_VIEW_RECIPES, TrainerSpells:Trans("LID_RECIPES"), "Interface\\Icons\\INV_Scroll_03")
+        hooksecurefunc(ProfessionsFrame, "RefreshRightTabs", PositionProfessionsFrameModeTabs)
+        hooksecurefunc(ProfessionsFrame, "RightTabSelected", CloseProfessionsFrameView)
+    else
+        professionsModeTabContainer = CreateFrame("Frame", "TrainerSpellsProfessionsModeTabs", ProfessionsFrame)
+        professionsModeTabContainer:SetSize(260, math.max(32, ProfessionsFrame.TabSystem:GetHeight()))
+        professionsModeTabContainer:SetFrameLevel(ProfessionsFrame.TabSystem:GetFrameLevel() + 200)
+        CreateProfessionsFrameSystemTab(PROFESSION_VIEW_SKILL, 1001, TrainerSpells:Trans("LID_TRAINERSPELLS"), 133741)
+        CreateProfessionsFrameSystemTab(PROFESSION_VIEW_RECIPES, 1002, TrainerSpells:Trans("LID_RECIPES"), "Interface\\Icons\\INV_Scroll_03")
+        hooksecurefunc(ProfessionsFrame, "SetTab", CloseProfessionsFrameView)
+        if ProfessionsFrame.UpdateTabs then hooksecurefunc(ProfessionsFrame, "UpdateTabs", PositionProfessionsFrameModeTabs) end
+    end
+    PositionProfessionsFrameModeTabs()
+    ProfessionsFrame:HookScript("OnShow", function()
+        PositionProfessionsFrameModeTabs()
+        for _, tab in pairs(professionsModeTabs) do tab:Show() end
+        CloseProfessionsFrameView()
+        C_Timer.After(0, PositionProfessionsFrameModeTabs)
+    end)
+    ProfessionsFrame:HookScript("OnHide", CloseProfessionsFrameView)
+    hooksecurefunc(ProfessionsFrame, "SetScale", function() if professionFrame:IsShown() then PositionProfessionFrame() end end)
+end
+
+if ProfessionsFrame then
+    InstallProfessionsFrameIntegration()
+else
+    local professionsFrameLoader = CreateFrame("Frame")
+    professionsFrameLoader:RegisterEvent("ADDON_LOADED")
+    professionsFrameLoader:SetScript("OnEvent", function(self, _, addonName)
+        if addonName ~= "Blizzard_Professions" then return end
+        self:UnregisterEvent("ADDON_LOADED")
+        InstallProfessionsFrameIntegration()
+    end)
+end
+
 local tradeSkillWatcher = CreateFrame("Frame")
-for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "PLAYER_MONEY"}) do
+for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_LIST_UPDATE", "PLAYER_MONEY"}) do
     if not C_EventUtils or not C_EventUtils.IsEventValid or C_EventUtils.IsEventValid(event) then tradeSkillWatcher:RegisterEvent(event) end
 end
 tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     EnsureTradeSkillHooksInstalled()
-    if event == "TRADE_SKILL_UPDATE" and professionFrame:IsShown() then
+    InstallProfessionsFrameIntegration()
+    if (event == "TRADE_SKILL_UPDATE" or event == "TRADE_SKILL_LIST_UPDATE") and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
         HideNativeTradeSkillWidgets()
     elseif event == "PLAYER_MONEY" and professionFrame:IsShown() then

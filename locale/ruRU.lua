@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("ruRU", "LID_NOTSCANNEDYET", "ЕЩЁ НЕ ОТСКАНИ�
 TrainerSpells:AddTrans("ruRU", "LID_CLASSTRAINER", "Учитель класса")
 TrainerSpells:AddTrans("ruRU", "LID_PROFESSIONS", "Профессии")
 TrainerSpells:AddTrans("ruRU", "LID_SKILL", "Навык")
+TrainerSpells:AddTrans("ruRU", "LID_TRAINERSPELLS", "Заклинания учителя")
 TrainerSpells:AddTrans("ruRU", "LID_RECIPES", "Рецепты")
 TrainerSpells:AddTrans("ruRU", "LID_SOURCE", "Источник")
 TrainerSpells:AddTrans("ruRU", "LID_GROUPBY", "Группировать по")

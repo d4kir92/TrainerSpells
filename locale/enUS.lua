@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("enUS", "LID_NOTSCANNEDYET", "NOT SCANNED YET, CHANGE PET
 TrainerSpells:AddTrans("enUS", "LID_CLASSTRAINER", "Classtrainer")
 TrainerSpells:AddTrans("enUS", "LID_PROFESSIONS", "Professions")
 TrainerSpells:AddTrans("enUS", "LID_SKILL", "Skill")
+TrainerSpells:AddTrans("enUS", "LID_TRAINERSPELLS", "Trainer Spells")
 TrainerSpells:AddTrans("enUS", "LID_RECIPES", "Recipes")
 TrainerSpells:AddTrans("enUS", "LID_SOURCE", "Source")
 TrainerSpells:AddTrans("enUS", "LID_GROUPBY", "Group By")

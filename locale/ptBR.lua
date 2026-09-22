@@ -28,6 +28,7 @@ TrainerSpells:AddTrans("ptBR", "LID_NOTSCANNEDYET", "AINDA NÃO ESCANEADO, TROQU
 TrainerSpells:AddTrans("ptBR", "LID_CLASSTRAINER", "Instrutor de classe")
 TrainerSpells:AddTrans("ptBR", "LID_PROFESSIONS", "Profissões")
 TrainerSpells:AddTrans("ptBR", "LID_SKILL", "Habilidade")
+TrainerSpells:AddTrans("ptBR", "LID_TRAINERSPELLS", "Feitiços do treinador")
 TrainerSpells:AddTrans("ptBR", "LID_RECIPES", "Receitas")
 TrainerSpells:AddTrans("ptBR", "LID_SOURCE", "Fonte")
 TrainerSpells:AddTrans("ptBR", "LID_GROUPBY", "Agrupar por")
