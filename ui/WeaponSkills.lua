@@ -3,6 +3,7 @@ local weaponData = TrainerSpellsWeaponSkills
 if not weaponData then return end
 
 local classFrame = TrainerSpells.ClassFrame
+local hideLearned
 local orderBySpellID = {}
 for index, spellID in ipairs(weaponData.order) do
     orderBySpellID[spellID] = index
@@ -87,9 +88,18 @@ local function AppendStatusCategories(items, available, future, known, keyPrefix
     AppendWeaponCategory(items, known, TrainerSpells:Trans("LID_ALREADYLEARNED"), TrainerSpells.UIColors.KNOWN, keyPrefix .. "known", false, headerDepth)
 end
 
+local function ShouldHideLearned()
+    if hideLearned then
+        local checked = hideLearned:GetChecked() and true or false
+        TrainerSpells_Character.hideLearnedWeaponSkills = checked
+        return checked
+    end
+    return TrainerSpells_Character.hideLearnedWeaponSkills ~= false
+end
+
 local function AddToStatus(entry, selectedLevel, available, future, known)
     if entry.known then
-        if not TrainerSpells_Character.hideLearnedWeaponSkills then table.insert(known, entry) end
+        if not ShouldHideLearned() then table.insert(known, entry) end
     else
         table.insert(entry.level <= selectedLevel and available or future, entry)
     end
@@ -109,7 +119,7 @@ local function BuildLocationItems(items, entries, searchText, selectedLevel)
                 locations = {location},
             }
 
-            if not (locationEntry.known and TrainerSpells_Character.hideLearnedWeaponSkills) and EntryMatchesSearch(locationEntry, searchText) then
+            if not (locationEntry.known and ShouldHideLearned()) and EntryMatchesSearch(locationEntry, searchText) then
                 local group = groups[location.id]
                 if not group then
                     group = {id = location.id, name = location.name, available = {}, future = {}, known = {}}
@@ -188,7 +198,7 @@ else
 end
 dropdown:SetPoint("LEFT")
 if modernDropdown then dropdown:SetSize(170, 26) end
-local hideLearned = CreateFrame("CheckButton", "TrainerSpellsHideLearnedWeaponSkills", controls, "UICheckButtonTemplate")
+hideLearned = CreateFrame("CheckButton", "TrainerSpellsHideLearnedWeaponSkills", controls, "UICheckButtonTemplate")
 hideLearned:SetPoint("LEFT", dropdown, "RIGHT", 10, 0)
 hideLearned:SetSize(24, 24)
 hideLearned:SetChecked(TrainerSpells_Character.hideLearnedWeaponSkills)
