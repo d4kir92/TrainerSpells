@@ -21,7 +21,8 @@ TrainerSpells_Character.collapsedGroups = TrainerSpells_Character.collapsedGroup
 TrainerSpells_Character.learnedSpellsPet = TrainerSpells_Character.learnedSpellsPet or {}
 if TrainerSpells_Character.showIgnoredInTrainer == nil then TrainerSpells_Character.showIgnoredInTrainer = false end
 TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 32
-TrainerSpells_Character.weaponGrouping = TrainerSpells_Character.weaponGrouping or "location"
+TrainerSpells_Character.weaponGrouping = TrainerSpells_Character.weaponGrouping or "weapon"
+if TrainerSpells_Character.hideLearnedWeaponSkills == nil then TrainerSpells_Character.hideLearnedWeaponSkills = true end
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}

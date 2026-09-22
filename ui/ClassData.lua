@@ -1,5 +1,5 @@
 local _, TrainerSpells = ...
-function TrainerSpells:AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText, spellCount)
+function TrainerSpells:AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText, spellCount, headerDepth, countKind)
     table.insert(items, {
         isHeader = true,
         text = text,
@@ -8,7 +8,9 @@ function TrainerSpells:AddHeaderItem(items, text, colorCode, totalCost, groupKey
         groupKey = groupKey,
         collapsed = TrainerSpells:IsGroupCollapsed(groupKey),
         prefixText = prefixText,
-        spellCount = spellCount
+        spellCount = spellCount,
+        headerDepth = headerDepth,
+        countKind = countKind
     })
 end
 

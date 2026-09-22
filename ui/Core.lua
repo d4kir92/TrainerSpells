@@ -314,6 +314,8 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
     SetFontSize(nameFS, 16)
     SetFontSize(levelFS, 16)
     icon:SetSize(iconSize, iconSize)
+    icon:ClearAllPoints()
+    icon:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
     rowFrame:EnableMouse(false)
     rowFrame:SetScript("OnEnter", nil)
     rowFrame:SetScript("OnLeave", nil)
@@ -341,7 +343,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
     if elementData.isHeader then
         local categoryInset = math.max(0, ((rowFrame:GetHeight() or TrainerSpells.HeaderHeight) - TrainerSpells.HeaderHeight) / 2)
         rowFrame.categoryBackground:ClearAllPoints()
-        rowFrame.categoryBackground:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", 0, -categoryInset)
+        rowFrame.categoryBackground:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", (elementData.headerDepth or 0) * 16, -categoryInset)
         rowFrame.categoryBackground:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", 0, categoryInset)
         rowFrame.categoryBackground:Show()
         icon:Hide()
@@ -356,14 +358,16 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         local prefix = elementData.prefixText and (Colors.PET_HEADER .. "[" .. elementData.prefixText .. "] |r") or ""
         nameFS:SetText(prefix .. elementData.color .. elementData.text .. "|r")
         if elementData.spellCount then
-            local spellLabel = elementData.spellCount == 1 and (_G.SPELL or "Spell") or (_G.SPELLS or "Spells")
+            local singular = elementData.countKind == "skill" and (_G.SKILL or "Skill") or (_G.SPELL or "Spell")
+            local plural = elementData.countKind == "skill" and (_G.SKILLS or "Skills") or (_G.SPELLS or "Spells")
+            local countLabel = elementData.spellCount == 1 and singular or plural
             SetFontSize(countFS, 18)
             countFS:ClearAllPoints()
             countFS:SetPoint("TOP", rowFrame.categoryBackground, "TOP", 0, 0)
             countFS:SetPoint("BOTTOM", rowFrame.categoryBackground, "BOTTOM", 0, 0)
             countFS:SetWidth(112)
             countFS:SetJustifyV("MIDDLE")
-            countFS:SetText(elementData.color .. elementData.spellCount .. " " .. spellLabel .. "|r")
+            countFS:SetText(elementData.color .. elementData.spellCount .. " " .. countLabel .. "|r")
             countFS:Show()
         end
 
@@ -397,12 +401,23 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData)
         end
     elseif elementData.isWeaponSkill then
         local entry = elementData.entry
+        if elementData.rowDepth and elementData.rowDepth > 0 then
+            icon:ClearAllPoints()
+            icon:SetPoint("LEFT", rowFrame, "LEFT", 4 + (elementData.rowDepth * 16), 0)
+        end
         icon:SetTexture(entry.icon)
         nameFS:SetText(elementData.color .. entry.name .. "|r")
         nameFS:ClearAllPoints()
         nameFS:SetPoint("LEFT", icon, "RIGHT", 6, 0)
         nameFS:SetPoint("RIGHT", rowFrame, "CENTER", -6, 0)
-        if entry.level > 1 then levelFS:SetText(elementData.color .. TrainerSpells:Trans("LID_LVL") .. " " .. entry.level .. "|r") end
+        local levelText = entry.level > 1 and (elementData.color .. TrainerSpells:Trans("LID_LVL") .. " " .. entry.level .. "|r  ") or ""
+        if elementData.showCost and entry.cost then
+            local canAfford = entry.cost == 0 or (GetMoney() or 0) >= entry.cost
+            local costColor = canAfford and "|cffffffff" or "|cffff3333"
+            levelFS:SetText(levelText .. costColor .. GetMoneyString(entry.cost, true) .. "|r")
+        else
+            levelFS:SetText(levelText)
+        end
         rowFrame.locationButtons = rowFrame.locationButtons or {}
         local locationSize = math.max(12, math.min(24, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
         for index, location in ipairs(entry.locations) do

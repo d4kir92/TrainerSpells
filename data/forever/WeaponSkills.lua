@@ -28,6 +28,7 @@ TrainerSpellsWeaponSkills = {
     },
     skills = {
         [196] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 PALADIN = true,
@@ -41,6 +42,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [197] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 PALADIN = true,
@@ -53,6 +55,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [198] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 PALADIN = true,
@@ -67,6 +70,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [199] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 PALADIN = true,
@@ -79,6 +83,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [200] = {
+            cost = 10000,
             classes = {
                 WARRIOR = true,
                 PALADIN = true,
@@ -92,6 +97,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [201] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 PALADIN = true,
@@ -106,6 +112,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [202] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 PALADIN = true,
@@ -117,6 +124,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [227] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 HUNTER = true,
@@ -132,6 +140,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [264] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 HUNTER = true,
@@ -143,6 +152,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [266] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 HUNTER = true,
@@ -154,6 +164,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [1180] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 HUNTER = true,
@@ -170,6 +181,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [2567] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 HUNTER = true,
@@ -181,6 +193,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [5011] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 HUNTER = true,
@@ -192,6 +205,7 @@ TrainerSpellsWeaponSkills = {
             },
         },
         [15590] = {
+            cost = 1000,
             classes = {
                 WARRIOR = true,
                 HUNTER = true,
