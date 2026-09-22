@@ -38,6 +38,65 @@ local function BuildClassExport(classToken)
     return BuildLevelExport(classData)
 end
 
+local function BuildRequirementText(requires)
+    if type(requires) ~= "table" then return "" end
+    local requirementIDs = {}
+    for _, requiredSpellID in ipairs(requires) do
+        table.insert(requirementIDs, tostring(requiredSpellID))
+    end
+    return table.concat(requirementIDs, "|")
+end
+
+local function SanitizeExportText(value)
+    return tostring(value or ""):gsub("[;\r\n]", " ")
+end
+
+local function BuildProfessionExport()
+    local sections = {}
+    local totalCount = 0
+    local professionKeys = {}
+    for professionKey in pairs(TrainerSpells_ProfessionData or {}) do
+        table.insert(professionKeys, professionKey)
+    end
+    table.sort(professionKeys)
+
+    for _, professionKey in ipairs(professionKeys) do
+        local lines = {}
+        local professionData = TrainerSpells_ProfessionData[professionKey]
+        for _, skillReq in ipairs(SortNumberKeys(professionData)) do
+            local recipes = {}
+            for name, entry in pairs(professionData[skillReq] or {}) do
+                table.insert(recipes, {name = name, entry = entry})
+            end
+            table.sort(recipes, function(left, right)
+                local leftID = tonumber(left.entry and left.entry.spellID) or math.huge
+                local rightID = tonumber(right.entry and right.entry.spellID) or math.huge
+                if leftID ~= rightID then return leftID < rightID end
+                return tostring(left.name) < tostring(right.name)
+            end)
+            for _, recipe in ipairs(recipes) do
+                local entry = recipe.entry or {}
+                table.insert(lines, table.concat({
+                    skillReq,
+                    entry.spellID or "",
+                    entry.cost or 0,
+                    entry.icon or "",
+                    entry.rankRow and 1 or "",
+                    BuildRequirementText(entry.requires),
+                    SanitizeExportText(entry.faction),
+                    SanitizeExportText(entry.race),
+                    SanitizeExportText(recipe.name)
+                }, ";"))
+            end
+        end
+        if #lines > 0 then
+            table.insert(sections, ("[%s]\n%s"):format(professionKey, table.concat(lines, "\n")))
+            totalCount = totalCount + #lines
+        end
+    end
+    return table.concat(sections, "\n\n"), totalCount
+end
+
 local WARLOCK_PETS = {
     {token = "Imp", spellID = 688},
     {token = "Voidwalker", spellID = 697},
@@ -163,6 +222,24 @@ function TrainerSpells:ShowPetExport()
     if count == 0 then TrainerSpells:MSG("Für die Pets der aktuellen Klasse wurden noch keine Daten erfasst.") end
 end
 
+function TrainerSpells:ShowProfessionExport()
+    local text, count = BuildProfessionExport()
+    ShowExport(("TrainerSpells Berufe (%d Einträge)"):format(count), text, count)
+    if count == 0 then TrainerSpells:MSG("Für Berufslehrer wurden noch keine Daten erfasst.") end
+end
+
+function TrainerSpells:EnableTrainerDebugFilters()
+    if not GetTrainerServiceTypeFilter or not SetTrainerServiceTypeFilter then return false end
+    local changed = false
+    for _, filter in ipairs({"available", "unavailable", "used"}) do
+        if not GetTrainerServiceTypeFilter(filter) then
+            SetTrainerServiceTypeFilter(filter, true)
+            changed = true
+        end
+    end
+    return changed
+end
+
 SLASH_TRAINERSPELLSDUMP1 = "/tsdump"
 SLASH_TRAINERSPELLSDUMP2 = "/trainerspellsdump"
 SlashCmdList.TRAINERSPELLSDUMP = function()
@@ -173,4 +250,32 @@ SLASH_TRAINERSPELLSPETDUMP1 = "/tspetdump"
 SLASH_TRAINERSPELLSPETDUMP2 = "/trainerspellspetdump"
 SlashCmdList.TRAINERSPELLSPETDUMP = function()
     TrainerSpells:ShowPetExport()
+end
+
+SLASH_TRAINERSPELLSPROFDUMP1 = "/tsprofdump"
+SLASH_TRAINERSPELLSPROFDUMP2 = "/trainerspellsprofdump"
+SlashCmdList.TRAINERSPELLSPROFDUMP = function()
+    TrainerSpells:ShowProfessionExport()
+end
+
+SLASH_TRAINERSPELLSDEBUG1 = "/tsdebug"
+SlashCmdList.TRAINERSPELLSDEBUG = function(input)
+    input = tostring(input or ""):lower():match("^%s*(.-)%s*$")
+    if input == "on" then
+        TrainerSpells.DebugTrainerEnabled = true
+    elseif input == "off" then
+        TrainerSpells.DebugTrainerEnabled = false
+    else
+        TrainerSpells.DebugTrainerEnabled = not TrainerSpells.DebugTrainerEnabled
+    end
+
+    if TrainerSpells.DebugTrainerEnabled then
+        TrainerSpells:EnableTrainerDebugFilters()
+        TrainerSpells:MSG("Trainer-Debug ist an; verfügbar, nicht verfügbar und gelernt werden erfasst.")
+        if ClassTrainerFrame and ClassTrainerFrame:IsShown() then
+            C_Timer.After(0.1, function() TrainerSpells:CaptureTrainer() end)
+        end
+    else
+        TrainerSpells:MSG("Trainer-Debug ist aus.")
+    end
 end

@@ -31,6 +31,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         _G.TrainerSpells_IsProfessionSpellIgnored = TrainerSpells_IsProfessionSpellIgnored
         TrainerSpells:MigrateLegacyProfessionIgnores()
     elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
+        if TrainerSpells.DebugTrainerEnabled then TrainerSpells:EnableTrainerDebugFilters() end
         do
             local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
             local professionKey, professionSkillLine
