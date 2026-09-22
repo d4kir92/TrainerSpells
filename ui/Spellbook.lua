@@ -153,7 +153,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         glow:SetBlendMode("ADD")
         glow:Hide()
         if previousTab then
-            tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -8)
+            tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -16)
         else
             tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, 0)
         end

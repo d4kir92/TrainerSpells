@@ -323,7 +323,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
     local icon, nameFS, levelFS = rowFrame.icon, rowFrame.nameFS, rowFrame.levelFS
     local countFS, costFS = rowFrame.countFS, rowFrame.costFS
     local iconSize = math.max(8, math.min(MAX_ICON_SIZE, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
-    local fontSize = math.max(8, math.min(16, (rowHeight or TrainerSpells.RowHeight) - 2))
+    local fontSize = math.max(8, math.min(14, (rowHeight or TrainerSpells.RowHeight) - 4))
     SetFontSize(nameFS, fontSize)
     SetFontSize(levelFS, fontSize)
     icon:SetSize(iconSize, iconSize)
