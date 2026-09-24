@@ -34,7 +34,7 @@ function D4:GetWoWBuild()
     return buildName
 end
 
-function D4:IsCamelot()
+function D4:IsForever()
     return isCamelot
 end
 
@@ -1039,7 +1039,10 @@ local function GetCamelotTalentInfo()
     num = num or 3
     local specid, icon, best = nil, nil, 0
     for i = 1, num do
-        local ok, _, _, _, tex, _, _, points = pcall(specInfo.GetSpecializationInfo, {["specializationIndex"] = i})
+        local ok, _, _, _, tex, _, _, points = pcall(specInfo.GetSpecializationInfo, {
+            ["specializationIndex"] = i
+        })
+
         if ok and points and points > best then
             best = points
             specid = i
@@ -1051,12 +1054,14 @@ local function GetCamelotTalentInfo()
     if specInfo.GetSpecialization then
         local ok, active = pcall(specInfo.GetSpecialization)
         if ok and active then
-            local ok2, _, _, _, tex = pcall(specInfo.GetSpecializationInfo, {["specializationIndex"] = active})
+            local ok2, _, _, _, tex = pcall(specInfo.GetSpecializationInfo, {
+                ["specializationIndex"] = active
+            })
+
             if ok2 then return active, tex end
             return active, nil
         end
     end
-
     return nil, nil
 end
 
@@ -1069,7 +1074,6 @@ function D4:GetTalentInfo()
                 local _, class = UnitClass("PLAYER")
                 icon = D4:GetSpecIcon(class, specid)
             end
-
             return specid, icon
         end
     end
@@ -1492,7 +1496,7 @@ function D4:GetMicroMenuButtons()
             end
         end
 
-        if D4:IsCamelot() and MicroMenu and MicroMenu.GenerateButtonInfos then
+        if D4:IsForever() and MicroMenu and MicroMenu.GenerateButtonInfos then
             MBTNS = {}
             for _, info in ipairs(MicroMenu:GenerateButtonInfos() or {}) do
                 local disabled = (info.gameRule and C_GameRules and C_GameRules.IsGameRuleActive(info.gameRule)) or (info.callback and info.callback())
