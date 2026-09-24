@@ -12,9 +12,9 @@ local GetAtlasInfo = _G["GetAtlasInfo"]
 -- Basics 
 local buildNr = select(4, GetBuildInfo())
 local buildName = "CLASSIC"
-local isCamelot = buildNr >= 16000 and buildNr < 20000
+local isForever = buildNr >= 16000 and buildNr < 20000
 local isTitanReforged = buildNr >= 38000 and buildNr < 40000
-if buildNr >= 100000 or isCamelot then
+if buildNr >= 100000 or isForever then
     buildName = "RETAIL"
 elseif buildNr >= 50000 then
     buildName = "MISTS"
@@ -35,7 +35,7 @@ function D4:GetWoWBuild()
 end
 
 function D4:IsForever()
-    return isCamelot
+    return isForever
 end
 
 function D4:IsTitanReforged()
@@ -1067,7 +1067,7 @@ end
 
 function D4:GetTalentInfo()
     local specid, icon
-    if isCamelot then
+    if D4:IsForever() then
         specid, icon = GetCamelotTalentInfo()
         if specid then
             if icon == nil then
