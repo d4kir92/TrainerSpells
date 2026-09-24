@@ -265,11 +265,11 @@ function TrainerSpells:ShowIgnoreMenu(anchor, entry)
 end
 
 local pendingSpellTooltipExtra
-local function OnTooltipSetSpell(tooltip)
+local function AddSpellTooltipExtra(tooltip, spellID)
     local extra = pendingSpellTooltipExtra
-    if not extra then return end
-    local spellID = TrainerSpells:GetTooltipSpellID(tooltip)
-    if spellID ~= extra.spellID then return end
+    if not extra or tooltip ~= GameTooltip then return false end
+    if issecretvalue and issecretvalue(spellID) then return false end
+    if spellID ~= extra.spellID then return false end
     if extra.showCost then
         local canAfford = not extra.cost or extra.cost == 0 or (GetMoney() or 0) >= extra.cost
         local costColor = canAfford and "|cffffffff" or "|cffff3333"
@@ -278,10 +278,19 @@ local function OnTooltipSetSpell(tooltip)
     end
 
     if extra.source then tooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. extra.source, 0.9, 0.9, 0.9, true) end
-    tooltip:Show()
+    return true
 end
 
-if GameTooltip:HasScript("OnTooltipSetSpell") then GameTooltip:HookScript("OnTooltipSetSpell", OnTooltipSetSpell) end
+if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum and Enum.TooltipDataType then
+    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(tooltip, tooltipData)
+        if not pendingSpellTooltipExtra then return end
+        AddSpellTooltipExtra(tooltip, tooltipData and tooltipData.id or TrainerSpells:GetTooltipSpellID(tooltip))
+    end)
+elseif GameTooltip:HasScript("OnTooltipSetSpell") then
+    GameTooltip:HookScript("OnTooltipSetSpell", function(tooltip)
+        if AddSpellTooltipExtra(tooltip, TrainerSpells:GetTooltipSpellID(tooltip)) then tooltip:Show() end
+    end)
+end
 function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
     local Colors = TrainerSpells.UIColors
     if not rowFrame.icon then
