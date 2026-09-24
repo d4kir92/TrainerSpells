@@ -157,6 +157,20 @@ local function FormatCost(copper)
     return GetMoneyString(copper, true)
 end
 
+local function GetCostColumnWidth(fontString, column, fontSize)
+    local width = column.widths[fontSize]
+    if width then return width end
+    width = 0
+    for _, cost in ipairs(column.costs) do
+        fontString:SetText(GetMoneyString(cost, true))
+        width = math.max(width, fontString:GetStringWidth())
+    end
+
+    width = math.ceil(width)
+    column.widths[fontSize] = width
+    return width
+end
+
 local function GetLocalizedRankText(spellID, rankNum, hasRealRank)
     local subtext = GetSpellSubtext and spellID and GetSpellSubtext(spellID)
     if subtext and subtext ~= "" then return subtext end
@@ -364,10 +378,13 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
     nameFS:SetPoint("RIGHT", levelFS, "LEFT", -4, 0)
     nameFS:SetJustifyH("LEFT")
     nameFS:SetText("")
+    levelFS:ClearAllPoints()
+    levelFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
     levelFS:SetText("")
     countFS:Hide()
     countFS:SetText("")
     costFS:Hide()
+    costFS:SetWidth(0)
     costFS:SetText("")
     if elementData.isHeader then
         local categoryInset = math.max(0, ((rowFrame:GetHeight() or TrainerSpells.HeaderHeight) - TrainerSpells.HeaderHeight) / 2)
@@ -514,6 +531,23 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             else
                 levelFS:SetText(GetLevelDiffColorCode(entry.level) .. "Level " .. entry.level .. "|r")
             end
+        end
+
+        if elementData.costColumn then
+            SetFontSize(costFS, fontSize)
+            costFS:ClearAllPoints()
+            costFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
+            costFS:Show()
+            costFS:SetWidth(GetCostColumnWidth(costFS, elementData.costColumn, fontSize))
+            if entry.cost and entry.cost > 0 then
+                local costColor = elementData.dimName and Colors.DIM_NAME or ((GetMoney() or 0) >= entry.cost and "|cffffffff" or "|cffff3333")
+                costFS:SetText(costColor .. GetMoneyString(entry.cost, true) .. "|r")
+            else
+                costFS:SetText("")
+            end
+
+            levelFS:ClearAllPoints()
+            levelFS:SetPoint("RIGHT", costFS, "LEFT", -12, 0)
         end
 
         rowFrame:EnableMouse(true)

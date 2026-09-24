@@ -37,6 +37,27 @@ function TrainerSpells:SumCost(list)
     return total
 end
 
+function TrainerSpells:AddCostColumn(items)
+    local column = {
+        costs = {},
+        widths = {}
+    }
+
+    local seen = {}
+    for _, item in ipairs(items) do
+        local cost = item.entry and item.showCostTooltip and item.entry.cost
+        if cost and cost > 0 and not seen[cost] then
+            seen[cost] = true
+            table.insert(column.costs, cost)
+        end
+    end
+
+    if #column.costs == 0 then return end
+    for _, item in ipairs(items) do
+        if item.entry and item.showCostTooltip then item.costColumn = column end
+    end
+end
+
 local function CountGroupEntries(groups)
     return #groups.available + #groups.soon + #groups.higher + #groups.missingTalents + #groups.ignored + #groups.known
 end

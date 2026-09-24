@@ -81,6 +81,7 @@ function TrainerSpells_Refresh()
         end
     end
 
+    TrainerSpells:AddCostColumn(items)
     scrollBox:SetDataProvider(CreateDataProvider(items), ScrollBoxConstants.RetainScrollPosition)
 end
 
