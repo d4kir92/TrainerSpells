@@ -219,41 +219,44 @@ end
 
 local function ApplyModernTrainerFilter(retainScrollPosition)
     if not ClassTrainerFrame or not ClassTrainerFrame.ScrollBox or not CreateTreeDataProvider then return end
+    local nativeProvider = ClassTrainerFrame.ScrollBox:GetDataProvider()
+    if not nativeProvider or not nativeProvider.EnumerateEntireRange then return end
     local cachedSpellIDs = BuildCachedSpellIDLookup()
     local professionKey = IsTradeskillTrainer and IsTradeskillTrainer() and TrainerSpells:DetectTrainerProfession()
-    local playerMoney = GetMoney()
-    local trainerType = C_Trainer.GetTrainerType()
-    local tradeSkillStepIndex = GetTrainerServiceStepIndex()
     local dataProvider = CreateTreeDataProvider()
     local categoryNodes = {}
-    for index = 1, GetNumTrainerServices() do
-        local _, _, serviceType, _, _, category = TrainerSpells:GetTrainerServiceInfo(index)
-        local isIgnored = IsTrainerServiceIgnored(index, cachedSpellIDs, professionKey)
-        if index ~= tradeSkillStepIndex and ServiceMatchesTrainerFilters(serviceType, isIgnored) then
-            local elementData = {
-                skillIndex = index,
-                playerMoney = playerMoney,
-                trainerType = trainerType
-            }
-            if TrainerUI_UseCategories() and category and category ~= "" then
-                local categoryNode = categoryNodes[category]
-                if not categoryNode then
-                    categoryNode = dataProvider:Insert({categoryInfo = {name = category}})
-                    categoryNodes[category] = categoryNode
-                    if ClassTrainerFrame.collapsedCategories[category] then categoryNode:SetCollapsed(true) end
+    local removedServices = {}
+    local hasRemovedServices = false
+    for _, node in nativeProvider:EnumerateEntireRange() do
+        local elementData = node:GetData()
+        if elementData and elementData.skillIndex then
+            local _, _, serviceType = TrainerSpells:GetTrainerServiceInfo(elementData.skillIndex)
+            local isIgnored = IsTrainerServiceIgnored(elementData.skillIndex, cachedSpellIDs, professionKey)
+            if ServiceMatchesTrainerFilters(serviceType, isIgnored) then
+                local parentNode = node:GetParent()
+                local categoryData = parentNode and parentNode:GetData()
+                if categoryData and categoryData.categoryInfo then
+                    local categoryNode = categoryNodes[categoryData]
+                    if not categoryNode then
+                        categoryNode = dataProvider:Insert(categoryData)
+                        categoryNodes[categoryData] = categoryNode
+                        if parentNode:IsCollapsed() then categoryNode:SetCollapsed(true) end
+                    end
+                    categoryNode:Insert(elementData)
+                    elementData.categoryNode = categoryNode
+                else
+                    dataProvider:Insert(elementData)
                 end
-                categoryNode:Insert(elementData)
             else
-                dataProvider:Insert(elementData)
+                removedServices[elementData.displayIndex or elementData.skillIndex] = true
+                hasRemovedServices = true
             end
         end
     end
+    if not hasRemovedServices then return end
     ClassTrainerFrame.ScrollBox:SetDataProvider(dataProvider, retainScrollPosition, false)
     local selectedService = ClassTrainerFrame.selectedService
-    if selectedService and selectedService ~= tradeSkillStepIndex then
-        local _, _, serviceType = TrainerSpells:GetTrainerServiceInfo(selectedService)
-        local isIgnored = IsTrainerServiceIgnored(selectedService, cachedSpellIDs, professionKey)
-        if ServiceMatchesTrainerFilters(serviceType, isIgnored) then return end
+    if selectedService and removedServices[selectedService] then
         ClassTrainer_SetSelection(nil)
         ClassTrainerFrame_SetTrainButtonEnabled(false)
     end
