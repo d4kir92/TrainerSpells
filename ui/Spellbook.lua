@@ -268,41 +268,84 @@ local function PositionPlayerSpellsFrame()
     end
 end
 
+local PLAYER_SPELLS_CONTENT_KEYS = {"PagedSpellsFrame", "SearchBox"}
+local NATIVE_TAB_TEXTURES = {Left = false, Middle = false, Right = false, LeftActive = true, MiddleActive = true, RightActive = true}
+local playerSpellsContentAlpha = {}
+local playerSpellsContentBlocker
+local function GetPlayerSpellsContentBlocker()
+    if not playerSpellsContentBlocker then
+        playerSpellsContentBlocker = CreateFrame("Frame", nil, classFrame)
+        playerSpellsContentBlocker:SetFrameLevel(classFrame:GetFrameLevel())
+        playerSpellsContentBlocker:EnableMouse(true)
+        playerSpellsContentBlocker:EnableMouseWheel(true)
+        playerSpellsContentBlocker:SetScript("OnMouseWheel", function() end)
+    end
+    return playerSpellsContentBlocker
+end
+
+local function SetNativeCategoryTabsVisual(book, showSelection)
+    local tabSystem = book and book.CategoryTabSystem
+    if not tabSystem or not tabSystem.tabs then return end
+    for _, tab in ipairs(tabSystem.tabs) do
+        local isSelected = showSelection and tab.IsSelected and tab:IsSelected() or false
+        for key, activeTexture in pairs(NATIVE_TAB_TEXTURES) do
+            if tab[key] then tab[key]:SetShown(activeTexture == isSelected) end
+        end
+        tab:SetNormalFontObject(isSelected and (tab.selectedFontObject or GameFontHighlightSmall) or (tab.unselectedFontObject or GameFontNormalSmall))
+        tab:SetEnabled(not isSelected and not (tab.IsForceDisabled and tab:IsForceDisabled()))
+        if tab.Text and tab.GetTextYOffset then tab.Text:SetPoint("CENTER", tab, "CENTER", 0, tab:GetTextYOffset(isSelected)) end
+    end
+end
+
 local function HidePlayerSpellsContent()
     local book = GetPlayerSpellsBook()
     if playerSpellsContentHidden or not book then return end
     playerSpellsContentHidden = true
-    if book.PagedSpellsFrame then book.PagedSpellsFrame:Hide() end
-    if book.SearchBox then book.SearchBox:Hide() end
+    for _, key in ipairs(PLAYER_SPELLS_CONTENT_KEYS) do
+        local content = book[key]
+        if content then
+            playerSpellsContentAlpha[content] = content:GetAlpha()
+            content:SetAlpha(0)
+        end
+    end
+
+    if book.PagedSpellsFrame then
+        local blocker = GetPlayerSpellsContentBlocker()
+        blocker:ClearAllPoints()
+        blocker:SetAllPoints(book.PagedSpellsFrame)
+        blocker:Show()
+    end
 end
 
 local function ShowPlayerSpellsContent()
-    local book = GetPlayerSpellsBook()
     if not playerSpellsContentHidden then return end
     playerSpellsContentHidden = false
-    if not book then return end
-    if book.PagedSpellsFrame then book.PagedSpellsFrame:Show() end
-    if book.SearchBox then book.SearchBox:Show() end
+    if playerSpellsContentBlocker then playerSpellsContentBlocker:Hide() end
+    for content, alpha in pairs(playerSpellsContentAlpha) do
+        content:SetAlpha(alpha)
+    end
+
+    wipe(playerSpellsContentAlpha)
 end
 
 local function ClosePlayerSpellsPanel()
-    local book = GetPlayerSpellsBook()
+    local wasOpen = playerSpellsContentHidden
     classFrame:Hide()
     ShowPlayerSpellsContent()
     for _, tab in pairs(playerSpellsModeTabs) do
         tab:SetTabSelected(false)
     end
 
-    local tabID = book and book.GetTab and book:GetTab()
-    if tabID and book.CategoryTabSystem then book.CategoryTabSystem:SetTabVisuallySelected(tabID) end
+    if wasOpen then SetNativeCategoryTabsVisual(GetPlayerSpellsBook(), true) end
 end
 
 local function OpenPlayerSpellsPanel()
-    if not GetPlayerSpellsBook() then return end
+    local book = GetPlayerSpellsBook()
+    if not book then return end
     PositionPlayerSpellsFrame()
     HidePlayerSpellsContent()
     classFrame:Show()
-    GetPlayerSpellsBook().CategoryTabSystem:SetTabVisuallySelected(0)
+    SetNativeCategoryTabsVisual(book, false)
     TrainerSpells:UpdateClassViewTabs()
 end
 
