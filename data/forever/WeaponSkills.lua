@@ -21,8 +21,8 @@ TrainerSpellsWeaponSkills = {
         },
         [11867] = {
             zoneID = 1519,
-            x = 57.1,
-            y = 57.7,
+            x = 63.9,
+            y = 69.1,
             names = {enUS = "Woo Ping", koKR = "우 핑", ruRU = "Ву Пинг", zhCN = "吴平", zhTW = "吳平"},
         },
         [11868] = {
