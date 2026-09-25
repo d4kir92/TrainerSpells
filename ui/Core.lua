@@ -445,6 +445,31 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             rowFrame:SetScript("OnLeave", GameTooltip_Hide)
             rowFrame:SetScript("OnMouseUp", function(sel, button) if button == "LeftButton" and elementData.groupKey then ToggleGroup(elementData.groupKey) end end)
         end
+    elseif elementData.isClassTrainer then
+        local entry = elementData.entry
+        if entry.displayID and SetPortraitTextureFromCreatureDisplayID then
+            SetPortraitTextureFromCreatureDisplayID(icon, entry.displayID)
+        else
+            icon:SetTexture(133741)
+        end
+        local nameColor = entry.starter and "|cffff8c00" or TrainerSpells.UIColors.SPELL_NAME
+        nameFS:SetText(nameColor .. entry.name .. "|r")
+        local starterLabel = entry.starter and "|cffff8c00≤ 6|r  " or ""
+        levelFS:SetText(starterLabel .. ("%.1f, %.1f"):format(entry.location.x, entry.location.y))
+        rowFrame:EnableMouse(true)
+        rowFrame:SetScript("OnEnter", function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+            GameTooltip:SetText(entry.name)
+            GameTooltip:AddLine(entry.zoneName, 1, 1, 1)
+            GameTooltip:AddLine(("%s: %.1f, %.1f"):format(TrainerSpells:Trans("LID_COORDINATES"), entry.location.x, entry.location.y), 1, 0.82, 0)
+            if entry.starter then GameTooltip:AddLine(TrainerSpells:Trans("LID_TRAINS_THROUGH_LEVEL_6"), 1, 0.5, 0.2) end
+            GameTooltip:AddLine(TrainerSpells:Trans("LID_LEFTCLICK_SETWAYPOINT"), 0.2, 1, 0.2)
+            GameTooltip:Show()
+        end)
+        rowFrame:SetScript("OnLeave", GameTooltip_Hide)
+        rowFrame:SetScript("OnMouseUp", function(_, button)
+            if button == "LeftButton" then TrainerSpells:SetClassTrainerWaypoint(entry) end
+        end)
     elseif elementData.isWeaponSkill then
         local entry = elementData.entry
         if elementData.rowDepth and elementData.rowDepth > 0 then

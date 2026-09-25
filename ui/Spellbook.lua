@@ -48,15 +48,23 @@ local function PositionFrame()
     end
 
     local showWeaponControls = TrainerSpells.ClassView == "weapons" and TrainerSpells.WeaponControls
+    local showClassTrainerControls = TrainerSpells.ClassView == "trainers" and TrainerSpells.ClassTrainerControls
     if TrainerSpells.WeaponControls then
         TrainerSpells.WeaponControls:ClearAllPoints()
         TrainerSpells.WeaponControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
         TrainerSpells.WeaponControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
         TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false)
     end
+    if TrainerSpells.ClassTrainerControls then
+        TrainerSpells.ClassTrainerControls:ClearAllPoints()
+        TrainerSpells.ClassTrainerControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
+        TrainerSpells.ClassTrainerControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
+        TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false)
+    end
     if TrainerSpells.ClassScrollBox then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
-        TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, showWeaponControls and -36 or -4)
+        local controlsOffset = showClassTrainerControls and -44 or showWeaponControls and -36 or -4
+        TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, controlsOffset)
         TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
     end
 end
@@ -175,9 +183,10 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     if TrainerSpells:HasPetClassData(classToken) then
         previousTab = CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab)
     end
-    if TrainerSpells.BuildWeaponSkillItems then
-        CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab)
+    if TrainerSpells.BuildClassTrainerItems then
+        previousTab = CreateClassicModeTab("TrainerSpellsClassTrainerMapTab", "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS"), previousTab)
     end
+    if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab) end
 
     SpellBookFrame:HookScript("OnShow", function()
         for _, tab in pairs(classicModeTabs) do
@@ -238,14 +247,21 @@ local function PositionPlayerSpellsFrame()
     listBg:ClearAllPoints()
     listBg:Hide()
     local showWeaponControls = TrainerSpells.ClassView == "weapons" and TrainerSpells.WeaponControls
+    local showClassTrainerControls = TrainerSpells.ClassView == "trainers" and TrainerSpells.ClassTrainerControls
     if TrainerSpells.WeaponControls then
         TrainerSpells.WeaponControls:ClearAllPoints()
         TrainerSpells.WeaponControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 48, -2)
         TrainerSpells.WeaponControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -100, -2)
         TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false)
     end
+    if TrainerSpells.ClassTrainerControls then
+        TrainerSpells.ClassTrainerControls:ClearAllPoints()
+        TrainerSpells.ClassTrainerControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 48, -2)
+        TrainerSpells.ClassTrainerControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -100, -2)
+        TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false)
+    end
 
-    local dividerOffset = showWeaponControls and -35 or -1
+    local dividerOffset = showClassTrainerControls and -43 or showWeaponControls and -35 or -1
     if playerSpellsModeDivider then
         playerSpellsModeDivider:ClearAllPoints()
         playerSpellsModeDivider:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 48, dividerOffset)
@@ -400,7 +416,8 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
 
     local previousTab = classTab
     if TrainerSpells:HasPetClassData(classToken) then previousTab = CreatePlayerSpellsModeTab(container, tabSystem, 2, "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab) end
-    CreatePlayerSpellsModeTab(container, tabSystem, 3, "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab)
+    previousTab = CreatePlayerSpellsModeTab(container, tabSystem, 3, "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS"), previousTab)
+    CreatePlayerSpellsModeTab(container, tabSystem, 4, "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab)
 end
 
 local function InstallPlayerSpellsIntegration()

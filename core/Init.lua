@@ -23,6 +23,7 @@ if TrainerSpells_Character.showIgnoredInTrainer == nil then TrainerSpells_Charac
 TrainerSpells_Character.rowHeight = TrainerSpells_Character.rowHeight or 32
 TrainerSpells_Character.weaponGrouping = TrainerSpells_Character.weaponGrouping or "weapon"
 if TrainerSpells_Character.hideLearnedWeaponSkills == nil then TrainerSpells_Character.hideLearnedWeaponSkills = true end
+if TrainerSpells_Character.hideStarterClassTrainers == nil then TrainerSpells_Character.hideStarterClassTrainers = false end
 TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}

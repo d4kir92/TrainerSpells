@@ -71,8 +71,12 @@ function TrainerSpells_Refresh()
         TrainerSpells:BuildWeaponSkillItems(items, searchText, selectedLevel)
     end
 
+    if TrainerSpells.ClassView == "trainers" and TrainerSpells.BuildClassTrainerItems then
+        TrainerSpells:BuildClassTrainerItems(items, searchText)
+    end
+
     if #items == 0 then
-        if TrainerSpells.ClassView == "weapons" then
+        if TrainerSpells.ClassView == "weapons" or TrainerSpells.ClassView == "trainers" then
             TrainerSpells:AddHeaderItem(items, "Keine Einträge vorhanden.", "|cffaaaaaa")
         elseif not classData then
             TrainerSpells:AddHeaderItem(items, "Keine Daten für " .. tostring(selectedClass) .. " gesammelt. Lehrer besuchen!", "|cffff5555")
