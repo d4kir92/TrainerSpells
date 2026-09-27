@@ -111,8 +111,49 @@ local function SetFontSize(fontString, size)
     fontString:SetFont(font, size, flags)
 end
 
-function TrainerSpells:GetTalentNameSet()
+local function AddModernTalent(configID, entryID, isLearned, names, learned)
+    local entryInfo = C_Traits.GetEntryInfo(configID, entryID)
+    if not entryInfo or not entryInfo.definitionID then return end
+    local definitionInfo = C_Traits.GetDefinitionInfo(entryInfo.definitionID)
+    if not definitionInfo then return end
+    local talentName = definitionInfo.overrideName or TrainerSpells:GetSpellInfo(definitionInfo.spellID)
+    if not talentName then return end
+    names[talentName] = true
+    if isLearned then learned[talentName] = true end
+end
+
+local function ReadModernTalentNode(configID, nodeID, names, learned)
+    local nodeInfo = C_Traits.GetNodeInfo(configID, nodeID)
+    if not nodeInfo then return end
+    local committedEntries = {}
+    for _, entryID in ipairs(nodeInfo.entryIDsWithCommittedRanks or {}) do
+        committedEntries[entryID] = true
+    end
+
+    for _, entryID in ipairs(nodeInfo.entryIDs or {}) do
+        AddModernTalent(configID, entryID, committedEntries[entryID], names, learned)
+    end
+end
+
+local function GetModernTalentNameSet()
+    if not C_ClassTalents or not C_ClassTalents.GetActiveConfigID or not C_Traits or not C_Traits.GetConfigInfo or not C_Traits.GetTreeNodes or not C_Traits.GetNodeInfo or not C_Traits.GetEntryInfo or not C_Traits.GetDefinitionInfo then return end
+    local configID = C_ClassTalents.GetActiveConfigID()
+    local configInfo = configID and C_Traits.GetConfigInfo(configID)
+    if not configInfo then return end
     local names, learned = {}, {}
+    for _, treeID in ipairs(configInfo.treeIDs or {}) do
+        for _, nodeID in ipairs(C_Traits.GetTreeNodes(treeID) or {}) do
+            ReadModernTalentNode(configID, nodeID, names, learned)
+        end
+    end
+    if next(names) then return names, learned end
+end
+
+function TrainerSpells:GetTalentNameSet()
+    local names, learned = GetModernTalentNameSet()
+    if names then return names, learned end
+    names, learned = {}, {}
+
     if GetNumTalentTabs and GetNumTalents and GetTalentInfo then
         for tab = 1, GetNumTalentTabs() do
             for i = 1, GetNumTalents(tab) do
