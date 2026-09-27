@@ -77,8 +77,49 @@ local function IsRidingTrainer(numServices)
     return false
 end
 
+local function GetTrainerNPCID()
+    local guid = UnitGUID and UnitGUID("npc")
+    if type(guid) ~= "string" then return nil end
+    return tonumber(guid:match("^[^-]+%-[^-]+%-[^-]+%-[^-]+%-[^-]+%-(%d+)"))
+end
+
+local function IsListedClassTrainer(classToken)
+    if not TrainerSpellsClassTrainers then return nil end
+    local npcID = GetTrainerNPCID()
+    if not npcID then return false end
+    for _, trainer in ipairs(TrainerSpellsClassTrainers[classToken] or {}) do
+        if trainer.npcID == npcID then return true end
+    end
+    return false
+end
+
+local function TrainerTitleMatchesClass(className)
+    if not C_TooltipInfo or not C_TooltipInfo.GetUnit or not className then return false end
+    local ok, data = pcall(C_TooltipInfo.GetUnit, "npc")
+    if not ok or not data or not data.lines then return false end
+    for i = 2, #data.lines do
+        local text = data.lines[i].leftText
+        if type(text) == "string" and text:find(className, 1, true) then return true end
+    end
+    return false
+end
+
+local function IsCurrentClassTrainer(className, classToken)
+    local listed = IsListedClassTrainer(classToken)
+    if listed == nil then return true end
+    return listed or TrainerTitleMatchesClass(className)
+end
+
+local function IsPetTrainer(numServices)
+    for i = 1, numServices do
+        local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
+        if TrainerSpells:IsPetTrainerSkillLine(skillLine) then return true end
+    end
+    return false
+end
+
 local function CaptureTrainerInner()
-    local _, classToken = UnitClass("player")
+    local className, classToken = UnitClass("player")
     local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
     local professionKey, professionSkillLine
     if isTradeskill then professionKey, professionSkillLine = TrainerSpells:DetectTrainerProfession() end
@@ -98,6 +139,10 @@ local function CaptureTrainerInner()
     TrainerSpells:DebugTrainer("CaptureTrainerInner: numServices=%d", numServices)
     if IsRidingTrainer(numServices) then
         TrainerSpells:DebugTrainer("CaptureTrainerInner: riding trainer ignored")
+        return
+    end
+    if not professionKey and not IsPetTrainer(numServices) and not IsCurrentClassTrainer(className, classToken) then
+        TrainerSpells:DebugTrainer("CaptureTrainerInner: trainer does not match player class")
         return
     end
     local neu = 0
