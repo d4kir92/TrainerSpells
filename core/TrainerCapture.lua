@@ -70,6 +70,13 @@ local function AddSeen(seen, value)
     return seen
 end
 
+local function IsRidingTrainer(numServices)
+    for i = 1, numServices do
+        if TrainerSpells:IsRidingSpell(TrainerSpells:GetSpellIDForService(i)) then return true end
+    end
+    return false
+end
+
 local function CaptureTrainerInner()
     local _, classToken = UnitClass("player")
     local isTradeskill = IsTradeskillTrainer and IsTradeskillTrainer()
@@ -89,6 +96,10 @@ local function CaptureTrainerInner()
     TrainerSpells:ExpandAllTrainerHeaders()
     local numServices = GetNumTrainerServices()
     TrainerSpells:DebugTrainer("CaptureTrainerInner: numServices=%d", numServices)
+    if IsRidingTrainer(numServices) then
+        TrainerSpells:DebugTrainer("CaptureTrainerInner: riding trainer ignored")
+        return
+    end
     local neu = 0
     local neuPet = 0
     local neuProf = 0

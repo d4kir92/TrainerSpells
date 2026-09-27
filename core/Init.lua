@@ -54,6 +54,17 @@ local PROFESSION_SPELLS = {
     ["Jewelcrafting"] = 28897,
 }
 
+local RIDING_SPELL_IDS = {
+    [33388] = true,
+    [33391] = true,
+    [34090] = true,
+    [34091] = true,
+    [54197] = true,
+    [90265] = true,
+    [90266] = true,
+    [90267] = true,
+}
+
 for key, spellID in pairs(PROFESSION_SPELLS) do
     local spellInfo = C_Spell.GetSpellInfo(spellID)
     if spellInfo and spellInfo.name then
@@ -82,6 +93,25 @@ end
 
 function TrainerSpells:IsPetTrainerSkillLine(skillLine)
     return skillLine == PET_TRAINER_SKILL_LINE
+end
+
+function TrainerSpells:IsRidingSpell(spellID)
+    return RIDING_SPELL_IDS[spellID] == true
+end
+
+local function RemoveRidingSpells(spells)
+    if type(spells) ~= "table" then return end
+    for spellID in pairs(spells) do
+        if TrainerSpells:IsRidingSpell(spellID) then spells[spellID] = nil end
+    end
+end
+
+function TrainerSpells:RemoveRidingSpellsFromClassData()
+    for _, levels in pairs(TrainerSpells_Data) do
+        if type(levels) == "table" then
+            for _, spells in pairs(levels) do RemoveRidingSpells(spells) end
+        end
+    end
 end
 
 TrainerSpells.ScanTooltip = CreateFrame("GameTooltip", "TrainerSpellsScanTooltip", nil, "GameTooltipTemplate")
