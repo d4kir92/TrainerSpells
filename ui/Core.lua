@@ -323,7 +323,7 @@ local pendingSpellTooltipExtra
 local function AddSpellTooltipExtra(tooltip, spellID)
     local extra = pendingSpellTooltipExtra
     if not extra or tooltip ~= GameTooltip then return false end
-    if issecretvalue and issecretvalue(spellID) then return false end
+    if TrainerSpells:IsSecret(spellID) then return false end
     if spellID ~= extra.spellID then return false end
     if extra.showCost then
         local canAfford = not extra.cost or extra.cost == 0 or (GetMoney() or 0) >= extra.cost
