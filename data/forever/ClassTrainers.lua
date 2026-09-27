@@ -737,6 +737,52 @@ TrainerSpellsClassTrainers = {
                 {areaID = 15, uiMapID = 1445, x = 67.4, y = 47.41},
             },
         },
+        {
+            npcID = 244808,
+            displayID = 129405,
+            faction = "H",
+            starter = true,
+            names = {enUS = "Aramis Hammerhand"},
+            locations = {
+                {areaID = 85, uiMapID = 1420, x = 31, y = 66.2},
+            },
+        },
+        {
+            npcID = 246152,
+            displayID = 129943,
+            faction = "H",
+            names = {enUS = "Shari Stilwell"},
+            locations = {
+                {areaID = 85, uiMapID = 1420, x = 60.2, y = 52.6},
+            },
+        },
+        {
+            npcID = 246344,
+            displayID = 129975,
+            faction = "H",
+            names = {enUS = "Alodan the Hopeful"},
+            locations = {
+                {areaID = 1638, uiMapID = 1456, x = 25.4, y = 14.6},
+            },
+        },
+        {
+            npcID = 246389,
+            displayID = 129986,
+            faction = "H",
+            names = {enUS = "Hilda the Breaker"},
+            locations = {
+                {areaID = 85, uiMapID = 1420, x = 22, y = 47.2},
+            },
+        },
+        {
+            npcID = 260093,
+            displayID = 142188,
+            faction = "H",
+            names = {enUS = "Garen Largo"},
+            locations = {
+                {areaID = 1497, uiMapID = 1458, x = 47.6, y = 14.8},
+            },
+        },
     },
     PRIEST = {
         {
