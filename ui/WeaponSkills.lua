@@ -46,32 +46,7 @@ local function BuildLocations(skill, faction)
 end
 
 function TrainerSpells:SetWeaponTrainerWaypoint(location)
-    if not location or not location.uiMapID or not location.x or not location.y then return false end
-    if C_Map and C_Map.SetUserWaypoint and UiMapPoint and UiMapPoint.CreateFromCoordinates then
-        local point = UiMapPoint.CreateFromCoordinates(location.uiMapID, location.x / 100, location.y / 100)
-        C_Map.SetUserWaypoint(point)
-        if C_SuperTrack and C_SuperTrack.SetSuperTrackedUserWaypoint then C_SuperTrack.SetSuperTrackedUserWaypoint(true) end
-        if OpenWorldMap then
-            OpenWorldMap(location.uiMapID)
-        elseif WorldMapFrame then
-            if WorldMapFrame.SetMapID then WorldMapFrame:SetMapID(location.uiMapID) end
-            if ShowUIPanel then ShowUIPanel(WorldMapFrame) else WorldMapFrame:Show() end
-        end
-        return true
-    end
-
-    if TomTom and TomTom.AddWaypoint then
-        TomTom:AddWaypoint(location.uiMapID, location.x / 100, location.y / 100, {
-            title = location.npcName,
-            persistent = false,
-            minimap = true,
-            world = true,
-            crazy = true,
-        })
-        return true
-    end
-
-    return false
+    return TrainerSpells:SetMapWaypoint(location)
 end
 
 local function EntryMatchesSearch(entry, searchText)

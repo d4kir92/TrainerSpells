@@ -112,7 +112,8 @@ function TrainerSpells:MergeBuiltinData()
                                 icon = data.icon,
                                 requires = data.requires,
                                 faction = data.faction,
-                                source = data.source
+                                source = data.source,
+                                vendorLocations = data.vendorLocations
                             }
                         else
                             if bucket[name].spellID == nil then bucket[name].spellID = spellID end
@@ -120,6 +121,7 @@ function TrainerSpells:MergeBuiltinData()
                             if data.requires and bucket[name].requires == nil then bucket[name].requires = data.requires end
                             if data.faction and bucket[name].faction == nil then bucket[name].faction = data.faction end
                             if data.source and bucket[name].source == nil then bucket[name].source = data.source end
+                            if data.vendorLocations and bucket[name].vendorLocations == nil then bucket[name].vendorLocations = data.vendorLocations end
                         end
                     end
                 end

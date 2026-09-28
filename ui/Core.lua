@@ -238,6 +238,11 @@ function TrainerSpells:EntryMatchesSearch(entry, search)
     if entry.name and entry.name:lower():find(search, 1, true) then return true end
     if entry.level and tostring(entry.level):find(search, 1, true) then return true end
     if entry.levelReq and tostring(entry.levelReq):find(search, 1, true) then return true end
+    if entry.source and entry.source:lower():find(search, 1, true) then return true end
+    for _, location in ipairs(entry.vendorLocations or {}) do
+        if location.npcName and location.npcName:lower():find(search, 1, true) then return true end
+        if location.zoneName and location.zoneName:lower():find(search, 1, true) then return true end
+    end
     return false
 end
 
@@ -246,6 +251,35 @@ function TrainerSpells:SortEntries(list)
         if a.level ~= b.level then return a.level < b.level end
         return a.key < b.key
     end)
+end
+
+function TrainerSpells:SetMapWaypoint(location)
+    if not location or not location.uiMapID or not location.x or not location.y then return false end
+    if C_Map and C_Map.SetUserWaypoint and UiMapPoint and UiMapPoint.CreateFromCoordinates then
+        local point = UiMapPoint.CreateFromCoordinates(location.uiMapID, location.x / 100, location.y / 100)
+        C_Map.SetUserWaypoint(point)
+        if C_SuperTrack and C_SuperTrack.SetSuperTrackedUserWaypoint then C_SuperTrack.SetSuperTrackedUserWaypoint(true) end
+        if OpenWorldMap then
+            OpenWorldMap(location.uiMapID)
+        elseif WorldMapFrame then
+            if WorldMapFrame.SetMapID then WorldMapFrame:SetMapID(location.uiMapID) end
+            if ShowUIPanel then ShowUIPanel(WorldMapFrame) else WorldMapFrame:Show() end
+        end
+        return true
+    end
+
+    if TomTom and TomTom.AddWaypoint then
+        TomTom:AddWaypoint(location.uiMapID, location.x / 100, location.y / 100, {
+            title = location.npcName or location.name,
+            persistent = false,
+            minimap = true,
+            world = true,
+            crazy = true,
+        })
+        return true
+    end
+
+    return false
 end
 
 local ignoreMenuFrame = CreateFrame("Frame", "TrainerSpellsIgnoreMenu", UIParent, "UIDropDownMenuTemplate")
@@ -389,10 +423,14 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         costFS:SetJustifyH("RIGHT")
         costFS:SetWordWrap(false)
         rowFrame.costFS = costFS
+        local sourceFS = rowFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        sourceFS:SetJustifyH("RIGHT")
+        sourceFS:SetWordWrap(false)
+        rowFrame.sourceFS = sourceFS
     end
 
     local icon, nameFS, levelFS = rowFrame.icon, rowFrame.nameFS, rowFrame.levelFS
-    local countFS, costFS = rowFrame.countFS, rowFrame.costFS
+    local countFS, costFS, sourceFS = rowFrame.countFS, rowFrame.costFS, rowFrame.sourceFS
     local iconSize = math.max(8, math.min(MAX_ICON_SIZE, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
     local fontSize = math.max(8, math.min(14, (rowHeight or TrainerSpells.RowHeight) - 4))
     SetFontSize(nameFS, fontSize)
@@ -427,6 +465,8 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
     costFS:Hide()
     costFS:SetWidth(0)
     costFS:SetText("")
+    sourceFS:Hide()
+    sourceFS:SetText("")
     if elementData.isHeader then
         local categoryInset = math.max(0, ((rowFrame:GetHeight() or TrainerSpells.HeaderHeight) - TrainerSpells.HeaderHeight) / 2)
         rowFrame.categoryBackground:ClearAllPoints()
@@ -614,6 +654,55 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
 
             levelFS:ClearAllPoints()
             levelFS:SetPoint("RIGHT", costFS, "LEFT", -12, 0)
+        end
+
+        if entry.isProfessionRecipe and entry.source then
+            SetFontSize(sourceFS, fontSize)
+            sourceFS:ClearAllPoints()
+            sourceFS:SetPoint("RIGHT", levelFS, "LEFT", -8, 0)
+            sourceFS:SetWidth(math.max(80, math.min(150, (rowFrame:GetWidth() or 420) * 0.32)))
+            sourceFS:SetText("|cffaaaaaa" .. entry.source .. "|r")
+            sourceFS:Show()
+            nameFS:ClearAllPoints()
+            nameFS:SetPoint("LEFT", icon, "RIGHT", 6, 0)
+            nameFS:SetPoint("RIGHT", sourceFS, "LEFT", -8, 0)
+        end
+
+        local locations = entry.isProfessionRecipe and entry.vendorLocations
+        if locations and #locations > 0 then
+            rowFrame.locationButtons = rowFrame.locationButtons or {}
+            local locationSize = math.max(12, math.min(20, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
+            local shown = math.min(3, #locations)
+            for index = 1, shown do
+                local locationInfo = locations[index]
+                local button = rowFrame.locationButtons[index]
+                if not button then
+                    button = CreateFrame("Button", nil, rowFrame)
+                    button.icon = button:CreateTexture(nil, "ARTWORK")
+                    button.icon:SetAllPoints()
+                    rowFrame.locationButtons[index] = button
+                end
+
+                button:ClearAllPoints()
+                button:SetPoint("RIGHT", levelFS, "LEFT", -6 - ((index - 1) * (locationSize + 3)), 0)
+                button:SetSize(locationSize, locationSize)
+                button.icon:SetTexture("Interface\\Icons\\INV_Misc_Map_01")
+                button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                button:SetScript("OnEnter", function(sel)
+                    GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+                    GameTooltip:SetText(locationInfo.npcName or TrainerSpells:Trans("LID_SOURCE"))
+                    GameTooltip:AddLine(locationInfo.zoneName or (C_Map and C_Map.GetAreaInfo and C_Map.GetAreaInfo(locationInfo.uiMapID)) or tostring(locationInfo.uiMapID), 1, 1, 1)
+                    GameTooltip:AddLine(("%s: %.1f, %.1f"):format(TrainerSpells:Trans("LID_COORDINATES"), locationInfo.x, locationInfo.y), 1, 0.82, 0)
+                    GameTooltip:AddLine(TrainerSpells:Trans("LID_LEFTCLICK_SETWAYPOINT"), 0.2, 1, 0.2)
+                    GameTooltip:Show()
+                end)
+                button:SetScript("OnLeave", GameTooltip_Hide)
+                button:SetScript("OnClick", function() TrainerSpells:SetMapWaypoint(locationInfo) end)
+                button:Show()
+            end
+
+            sourceFS:ClearAllPoints()
+            sourceFS:SetPoint("RIGHT", rowFrame.locationButtons[shown], "LEFT", -5, 0)
         end
 
         rowFrame:EnableMouse(true)
