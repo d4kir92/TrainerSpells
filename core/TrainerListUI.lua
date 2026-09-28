@@ -205,73 +205,12 @@ local function TrainerSpells_ClassTrainerFrame_Update()
 end
 
 local trainerUpdateOverrideInstalled = false
-local modernTrainerFilterInstalled = false
-
-local function IsTrainerServiceIgnored(index, cachedSpellIDs, professionKey)
-    local name, subText, serviceType = TrainerSpells:GetTrainerServiceInfo(index)
-    if not name or serviceType == "header" then return false end
-    local rankNum = subText and tonumber(subText:match("%d+")) or 0
-    local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rankNum]
-    if not spellID then spellID = TrainerSpells:GetSpellIDForService(index) end
-    if professionKey then return TrainerSpells_IsProfessionSpellIgnored(spellID, professionKey) end
-    return TrainerSpells_IsIgnored(spellID, name)
-end
-
-local function ApplyModernTrainerFilter(retainScrollPosition)
-    if not ClassTrainerFrame or not ClassTrainerFrame.ScrollBox or not CreateTreeDataProvider then return end
-    local nativeProvider = ClassTrainerFrame.ScrollBox:GetDataProvider()
-    if not nativeProvider or not nativeProvider.EnumerateEntireRange then return end
-    local cachedSpellIDs = BuildCachedSpellIDLookup()
-    local professionKey = IsTradeskillTrainer and IsTradeskillTrainer() and TrainerSpells:DetectTrainerProfession()
-    local dataProvider = CreateTreeDataProvider()
-    local categoryNodes = {}
-    local removedServices = {}
-    local hasRemovedServices = false
-    for _, node in nativeProvider:EnumerateEntireRange() do
-        local elementData = node:GetData()
-        if elementData and elementData.skillIndex then
-            local _, _, serviceType = TrainerSpells:GetTrainerServiceInfo(elementData.skillIndex)
-            local isIgnored = IsTrainerServiceIgnored(elementData.skillIndex, cachedSpellIDs, professionKey)
-            if ServiceMatchesTrainerFilters(serviceType, isIgnored) then
-                local parentNode = node:GetParent()
-                local categoryData = parentNode and parentNode:GetData()
-                if categoryData and categoryData.categoryInfo then
-                    local categoryNode = categoryNodes[categoryData]
-                    if not categoryNode then
-                        categoryNode = dataProvider:Insert(categoryData)
-                        categoryNodes[categoryData] = categoryNode
-                        if parentNode:IsCollapsed() then categoryNode:SetCollapsed(true) end
-                    end
-                    categoryNode:Insert(elementData)
-                    elementData.categoryNode = categoryNode
-                else
-                    dataProvider:Insert(elementData)
-                end
-            else
-                removedServices[elementData.displayIndex or elementData.skillIndex] = true
-                hasRemovedServices = true
-            end
-        end
-    end
-    if not hasRemovedServices then return end
-    ClassTrainerFrame.ScrollBox:SetDataProvider(dataProvider, retainScrollPosition, false)
-    local selectedService = ClassTrainerFrame.selectedService
-    if selectedService and removedServices[selectedService] then
-        ClassTrainer_SetSelection(nil)
-        ClassTrainerFrame_SetTrainButtonEnabled(false)
-    end
-end
 
 function TrainerSpells:EnsureTrainerUpdateOverrideInstalled()
-    if trainerUpdateOverrideInstalled or modernTrainerFilterInstalled then return end
+    if trainerUpdateOverrideInstalled then return end
     if not ClassTrainerFrame_Update then return end
     if not TrainerSpells_IsIgnored then return end
-    if ClassTrainerFrame and ClassTrainerFrame.ScrollBox then
-        modernTrainerFilterInstalled = true
-        hooksecurefunc("ClassTrainerFrame_Update", ApplyModernTrainerFilter)
-        ClassTrainerFrame_Update(false)
-        return
-    end
+    if ClassTrainerFrame and ClassTrainerFrame.ScrollBox then return end
     if not ClassTrainerListScrollFrame then return end
     trainerUpdateOverrideInstalled = true
     ClassTrainerFrame_Update = TrainerSpells_ClassTrainerFrame_Update
@@ -280,7 +219,7 @@ end
 
 local trainerFilterHookInstalled = false
 function TrainerSpells:EnsureTrainerFilterHookInstalled()
-    if trainerFilterHookInstalled or (not trainerUpdateOverrideInstalled and not modernTrainerFilterInstalled) then return end
+    if trainerFilterHookInstalled or not trainerUpdateOverrideInstalled then return end
     if not ClassTrainerFrame or not ClassTrainerFrame.FilterDropdown then return end
     trainerFilterHookInstalled = true
     local function IsNativeFilterSelected(filter)
