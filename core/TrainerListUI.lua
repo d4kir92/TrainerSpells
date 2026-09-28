@@ -281,7 +281,7 @@ local function ScanTrainerServicesStep(button, offset, maxOffset, targetCount, v
     if visitedCount >= targetCount or offset > maxOffset then
         FauxScrollFrame_SetOffset(ClassTrainerListScrollFrame, 0)
         ClassTrainerFrame_Update()
-        TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r Scan abgeschlossen (%d/%d erfasst)."):format(visitedCount, targetCount))
+        TrainerSpells:MSG("|cff33ff99TrainerSpells:|r " .. TrainerSpells:Trans("LID_SCANFINISHED"):format(visitedCount, targetCount))
         return
     end
 
@@ -302,19 +302,19 @@ end
 
 function TrainerSpells:ScanAllTrainerRequirements()
     if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine or not ClassTrainerListScrollFrame or not FauxScrollFrame_SetOffset or not ClassTrainerFrame_Update or not C_Timer then
-        TrainerSpells:MSG("|cffff5555TrainerSpells:|r Scan nicht möglich, benötigte API fehlt.")
+        TrainerSpells:MSG("|cffff5555TrainerSpells:|r " .. TrainerSpells:Trans("LID_SCANNOAPI"))
         return
     end
 
     local button = _G["ClassTrainerSkill1"]
     if not button then
-        TrainerSpells:MSG("|cffff5555TrainerSpells:|r Scan nicht möglich, Trainer-Button nicht gefunden.")
+        TrainerSpells:MSG("|cffff5555TrainerSpells:|r " .. TrainerSpells:Trans("LID_SCANNOBUTTON"))
         return
     end
 
     TrainerSpells:ExpandAllTrainerHeaders()
     local targetCount = CountRealTrainerServices()
     local maxOffset = GetNumTrainerServices() + 200
-    TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r Scan gestartet (%d Einträge, das dauert einen Moment)..."):format(targetCount))
+    TrainerSpells:MSG("|cff33ff99TrainerSpells:|r " .. TrainerSpells:Trans("LID_SCANSTARTED"):format(targetCount))
     ScanTrainerServicesStep(button, 0, maxOffset, targetCount, {}, 0)
 end

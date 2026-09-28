@@ -53,7 +53,7 @@ local function CaptureMerchantInner()
         end
     end
 
-    if neu > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Fähigkeit(en) erfasst."):format(neu)) end
+    if neu > 0 then TrainerSpells:MSG("|cff33ff99TrainerSpells:|r " .. TrainerSpells:Trans("LID_NEWPETSKILLS"):format(neu)) end
 end
 
 function TrainerSpells:CaptureMerchant()

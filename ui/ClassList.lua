@@ -77,11 +77,11 @@ function TrainerSpells_Refresh()
 
     if #items == 0 then
         if TrainerSpells.ClassView == "weapons" or TrainerSpells.ClassView == "trainers" then
-            TrainerSpells:AddHeaderItem(items, "Keine Einträge vorhanden.", "|cffaaaaaa")
+            TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NOENTRIES"), "|cffaaaaaa")
         elseif not classData then
-            TrainerSpells:AddHeaderItem(items, "Keine Daten für " .. tostring(selectedClass) .. " gesammelt. Lehrer besuchen!", "|cffff5555")
+            TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NODATAFORCLASS"):format(tostring(selectedClass)), "|cffff5555")
         else
-            TrainerSpells:AddHeaderItem(items, "Keine Einträge vorhanden.", "|cffaaaaaa")
+            TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NOENTRIES"), "|cffaaaaaa")
         end
     end
 

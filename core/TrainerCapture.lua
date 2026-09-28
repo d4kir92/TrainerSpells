@@ -130,7 +130,7 @@ local function CaptureTrainerInner()
     end
 
     if not GetNumTrainerServices then
-        TrainerSpells:ERR("GetNumTrainerServices existiert nicht (API in dieser Client-Version anders).")
+        TrainerSpells:ERR(TrainerSpells:Trans("LID_NOTRAINERAPI"))
         return
     end
 
@@ -237,9 +237,9 @@ local function CaptureTrainerInner()
     end
 
     if TrainerSpells.DebugTrainerEnabled then
-        if neu > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Spell(s) für %s erfasst."):format(neu, classToken)) end
-        if neuPet > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Pet-Trainer-Fähigkeit(en) für %s erfasst."):format(neuPet, classToken)) end
-        if neuProf > 0 then TrainerSpells:MSG(("|cff33ff99TrainerSpells:|r %d neue Rezept(e) für %s erfasst."):format(neuProf, professionSkillLine or "Beruf")) end
+        if neu > 0 then TrainerSpells:MSG("|cff33ff99TrainerSpells:|r " .. TrainerSpells:Trans("LID_NEWSPELLS"):format(neu, classToken)) end
+        if neuPet > 0 then TrainerSpells:MSG("|cff33ff99TrainerSpells:|r " .. TrainerSpells:Trans("LID_NEWPETTRAINERSKILLS"):format(neuPet, classToken)) end
+        if neuProf > 0 then TrainerSpells:MSG("|cff33ff99TrainerSpells:|r " .. TrainerSpells:Trans("LID_NEWRECIPES"):format(neuProf, professionSkillLine or TrainerSpells:Trans("LID_PROFESSION"))) end
     end
 end
 

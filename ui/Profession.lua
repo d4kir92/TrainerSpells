@@ -119,7 +119,7 @@ function TrainerSpells_ProfessionRefresh()
             TrainerSpells:AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_SKILL"), nil, nil, "skill")
         end
 
-        if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and ("Keine Rezept-Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa") end
+        if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NORECIPEDATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
     else
         local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
         if data and next(data) then
@@ -129,7 +129,7 @@ function TrainerSpells_ProfessionRefresh()
             TrainerSpells:AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"), nil, nil, "skill")
         end
 
-        if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and ("Keine Daten für " .. skillLineName .. " gesammelt.") or "Kein Beruf erkannt.", "|cffaaaaaa") end
+        if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NODATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
     end
 
     TrainerSpells:AddCostColumn(items)

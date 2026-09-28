@@ -197,13 +197,13 @@ end
 function TrainerSpells:ShowClassExport()
     local localizedClass, classToken = UnitClass("player")
     if not classToken then
-        TrainerSpells:MSG("Die aktuelle Klasse konnte nicht ermittelt werden.")
+        TrainerSpells:MSG(TrainerSpells:Trans("LID_CLASSUNKNOWN"))
         return
     end
 
     local text, count = BuildClassExport(classToken)
-    ShowExport(("TrainerSpells: %s (%d Einträge)"):format(localizedClass or classToken, count), text, count)
-    if count == 0 then TrainerSpells:MSG("Für die aktuelle Klasse wurden noch keine Daten erfasst.") end
+    ShowExport(("TrainerSpells: %s (%s)"):format(localizedClass or classToken, TrainerSpells:Trans("LID_ENTRIESCOUNT"):format(count)), text, count)
+    if count == 0 then TrainerSpells:MSG(TrainerSpells:Trans("LID_NOCLASSDATA")) end
 end
 
 function TrainerSpells:ShowPetExport()
@@ -214,18 +214,18 @@ function TrainerSpells:ShowPetExport()
     elseif classToken == "WARLOCK" then
         text, count = BuildWarlockPetExport()
     else
-        TrainerSpells:MSG("Der Pet-Export ist nur für Jäger und Hexenmeister verfügbar.")
+        TrainerSpells:MSG(TrainerSpells:Trans("LID_PETEXPORTONLY"))
         return
     end
 
-    ShowExport(("TrainerSpells Pets: %s (%d Einträge)"):format(localizedClass or classToken, count), text, count)
-    if count == 0 then TrainerSpells:MSG("Für die Pets der aktuellen Klasse wurden noch keine Daten erfasst.") end
+    ShowExport(("TrainerSpells %s: %s (%s)"):format(TrainerSpells:Trans("LID_PETTRAINING"), localizedClass or classToken, TrainerSpells:Trans("LID_ENTRIESCOUNT"):format(count)), text, count)
+    if count == 0 then TrainerSpells:MSG(TrainerSpells:Trans("LID_NOPETDATA")) end
 end
 
 function TrainerSpells:ShowProfessionExport()
     local text, count = BuildProfessionExport()
-    ShowExport(("TrainerSpells Berufe (%d Einträge)"):format(count), text, count)
-    if count == 0 then TrainerSpells:MSG("Für Berufslehrer wurden noch keine Daten erfasst.") end
+    ShowExport(("TrainerSpells %s (%s)"):format(TrainerSpells:Trans("LID_PROFESSIONS"), TrainerSpells:Trans("LID_ENTRIESCOUNT"):format(count)), text, count)
+    if count == 0 then TrainerSpells:MSG(TrainerSpells:Trans("LID_NOPROFESSIONDATA")) end
 end
 
 function TrainerSpells:EnableTrainerDebugFilters()
@@ -271,11 +271,11 @@ SlashCmdList.TRAINERSPELLSDEBUG = function(input)
 
     if TrainerSpells.DebugTrainerEnabled then
         TrainerSpells:EnableTrainerDebugFilters()
-        TrainerSpells:MSG("Trainer-Debug ist an; verfügbar, nicht verfügbar und gelernt werden erfasst.")
+        TrainerSpells:MSG(TrainerSpells:Trans("LID_TRAINERDEBUGON"))
         if ClassTrainerFrame and ClassTrainerFrame:IsShown() then
             C_Timer.After(0.1, function() TrainerSpells:CaptureTrainer() end)
         end
     else
-        TrainerSpells:MSG("Trainer-Debug ist aus.")
+        TrainerSpells:MSG(TrainerSpells:Trans("LID_TRAINERDEBUGOFF"))
     end
 end
