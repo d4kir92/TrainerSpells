@@ -8,7 +8,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [1302604] = {
                 icon = "Interface\\Icons\\inv_misc_bag_19",
-                source = "Sold by Saenorion (Darnassus)",
+                source = "Sold by Saenorion (Darnassus) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -208,7 +208,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [6702] = {
                 icon = "Interface\\Icons\\inv_belt_02",
-                source = "Sold by Gina MacGregor (Westfall), Andrew Hilbert (Silverpine Forest), Mavralyn (Darkshore)",
+                source = "Sold by Gina MacGregor (Westfall), Andrew Hilbert (Silverpine Forest), Mavralyn (Darkshore) / World drop",
                 vendorLocations = {
                     {
                         npcID = 843,
@@ -250,7 +250,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [70] = {
             [6703] = {
                 icon = "Interface\\Icons\\inv_chest_chain_12",
-                source = "Sold by Gina MacGregor (Westfall), Andrew Hilbert (Silverpine Forest), Mavralyn (Darkshore)",
+                source = "Sold by Gina MacGregor (Westfall), Andrew Hilbert (Silverpine Forest), Mavralyn (Darkshore) / World drop",
                 vendorLocations = {
                     {
                         npcID = 843,
@@ -292,7 +292,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [9070] = {
                 icon = "Interface\\Icons\\inv_misc_monsterscales_03",
-                source = "Sold by Clyde Ranthal (Redridge Mountains)",
+                source = "Sold by Clyde Ranthal (Redridge Mountains) / World drop",
                 vendorLocations = {
                     {
                         npcID = 2697,
@@ -306,7 +306,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [24940] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_45",
-                source = "Sold by Amy Davenport (Redridge Mountains)",
+                source = "Sold by Amy Davenport (Redridge Mountains) / World drop",
                 vendorLocations = {
                     {
                         npcID = 777,
@@ -1462,7 +1462,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [145] = {
             [6704] = {
                 icon = "Interface\\Icons\\inv_chest_chain_12",
-                source = "Sold by Micha Yance (Hillsbrad Foothills), Christoph Jeffcoat (Hillsbrad Foothills), Blixrez Goodstitch (Stranglethorn Vale)",
+                source = "Sold by Micha Yance (Hillsbrad Foothills), Christoph Jeffcoat (Hillsbrad Foothills), Blixrez Goodstitch (Stranglethorn Vale) / World drop",
                 vendorLocations = {
                     {
                         npcID = 2381,
@@ -1586,7 +1586,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [165] = {
             [6705] = {
                 icon = "Interface\\Icons\\inv_bracer_05",
-                source = "Sold by Blixrez Goodstitch (Stranglethorn Vale), Helenia Olden (Dustwallow Marsh)",
+                source = "Sold by Blixrez Goodstitch (Stranglethorn Vale), Helenia Olden (Dustwallow Marsh) / World drop",
                 vendorLocations = {
                     {
                         npcID = 2846,
@@ -2004,7 +2004,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [180] = {
             [439118] = {
                 icon = "Interface\\Icons\\inv_gauntlets_05",
-                source = "Sold by Pratt McGrubben (Feralas), Jangdor Swiftstrider (Feralas)",
+                source = "Sold by Pratt McGrubben (Feralas), Jangdor Swiftstrider (Feralas) / World drop",
                 vendorLocations = {
                     {
                         npcID = 7852,
@@ -3500,7 +3500,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [270] = {
             [16661] = {
                 icon = "Interface\\Icons\\inv_gauntlets_30",
-                source = "Sold by Magnus Frostwake (Western Plaguelands)",
+                source = "Sold by Magnus Frostwake (Western Plaguelands) / World drop",
                 vendorLocations = {
                     {
                         npcID = 11278,

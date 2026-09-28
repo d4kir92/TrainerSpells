@@ -471,7 +471,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [50] = {
             [6686] = {
                 icon = "Interface\\Icons\\inv_misc_bag_02",
-                source = "Sold by Gina MacGregor (Westfall), Mahu (Thunder Bluff), Andrew Hilbert (Silverpine Forest), Valdaron (Darkshore)",
+                source = "Sold by Gina MacGregor (Westfall), Mahu (Thunder Bluff), Andrew Hilbert (Silverpine Forest), Valdaron (Darkshore) / World drop",
                 vendorLocations = {
                     {
                         npcID = 843,
@@ -1376,7 +1376,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [90] = {
             [6688] = {
                 icon = "Interface\\Icons\\inv_misc_bag_10_red",
-                source = "Sold by Amy Davenport (Redridge Mountains), Jennabink Powerseam (Wetlands), Rann Flamespinner (Loch Modan), Mahu (Thunder Bluff), Borya (Orgrimmar), Wrahk (The Barrens), Zixil (Hillsbrad Foothills), Kiknikle (The Barrens), Valdaron (Darkshore), Millie Gregorian (Undercity), Yonada (The Barrens)",
+                source = "Sold by Amy Davenport (Redridge Mountains), Jennabink Powerseam (Wetlands), Rann Flamespinner (Loch Modan), Mahu (Thunder Bluff), Borya (Orgrimmar), Wrahk (The Barrens), Zixil (Hillsbrad Foothills), Kiknikle (The Barrens), Valdaron (Darkshore), Millie Gregorian (Undercity), Yonada (The Barrens) / World drop",
                 vendorLocations = {
                     {
                         npcID = 777,

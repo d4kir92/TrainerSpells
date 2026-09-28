@@ -184,7 +184,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [9269] = {
                 icon = "Interface\\Icons\\inv_misc_pocketwatch_01",
-                source = "Sold by Gearcutter Cogspinner (Ironforge), Jinky Twizzlefixxit (Thousand Needles)",
+                source = "Sold by Gearcutter Cogspinner (Ironforge), Jinky Twizzlefixxit (Thousand Needles) / World drop",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -241,7 +241,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [140] = {
             [3952] = {
                 icon = "Interface\\Icons\\inv_gizmo_07",
-                source = "Sold by Fradd Swiftgear (Wetlands), Namdo Bizzfizzle, Namdo Bizzfizzle",
+                source = "Sold by Fradd Swiftgear (Wetlands), Namdo Bizzfizzle, Namdo Bizzfizzle / World drop",
                 vendorLocations = {
                     {
                         npcID = 2682,
@@ -398,7 +398,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [9273] = {
                 icon = "Interface\\Icons\\inv_misc_enggizmos_10",
-                source = "Sold by Kzixx (Duskwood), Zixil (Hillsbrad Foothills), Veenix (Stonetalon Mountains), Super-Seller 680 (Desolace)",
+                source = "Sold by Kzixx (Duskwood), Zixil (Hillsbrad Foothills), Veenix (Stonetalon Mountains), Super-Seller 680 (Desolace) / World drop",
                 vendorLocations = {
                     {
                         npcID = 3134,
@@ -592,7 +592,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [8243] = {
                 icon = "Interface\\Icons\\inv_misc_ammo_bullet_01",
-                source = "Quest reward",
+                source = "World drop / Quest reward",
             },
         },
         [190] = {
@@ -662,7 +662,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [3971] = {
                 icon = "Interface\\Icons\\inv_gizmo_01",
-                source = "Sold by Zan Shivsproket (Alterac Mountains)",
+                source = "Sold by Zan Shivsproket (Alterac Mountains) / World drop",
                 vendorLocations = {
                     {
                         npcID = 6777,

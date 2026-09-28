@@ -99,7 +99,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [20] = {
             [7443] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
-                source = "Sold by Jessara Cordell (Stormwind City), Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Vaean (Darnassus), Thaddeus Webb (Undercity), Tilli Thistlefuzz (Ironforge), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest), Kania (Silithus), Eaysaa Brightgust (Zephras Isle), Nasalanna Windsinger (Zephras Isle)",
+                source = "Sold by Jessara Cordell (Stormwind City), Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Vaean (Darnassus), Thaddeus Webb (Undercity), Tilli Thistlefuzz (Ironforge), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest), Kania (Silithus), Eaysaa Brightgust (Zephras Isle), Nasalanna Windsinger (Zephras Isle) / World drop",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -297,7 +297,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [13419] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
-                source = "Sold by Dalria (Ashenvale), Kulwia (Stonetalon Mountains)",
+                source = "Sold by Dalria (Ashenvale), Kulwia (Stonetalon Mountains) / World drop",
                 vendorLocations = {
                     {
                         npcID = 3954,
@@ -1799,7 +1799,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [1213607] = {
                 icon = "Interface\\Icons\\inv_scroll_14",
-                source = "Sold by Kania (Silithus)",
+                source = "Sold by Kania (Silithus) / World drop",
                 vendorLocations = {
                     {
                         npcID = 15419,

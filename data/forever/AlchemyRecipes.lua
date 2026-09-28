@@ -1606,7 +1606,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [295] = {
             [17580] = {
                 icon = "Interface\\Icons\\inv_potion_76",
-                source = "Sold by Magnus Frostwake (Western Plaguelands)",
+                source = "Sold by Magnus Frostwake (Western Plaguelands) / World drop",
                 vendorLocations = {
                     {
                         npcID = 11278,
@@ -1622,7 +1622,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [300] = {
             [17634] = {
                 icon = "Interface\\Icons\\inv_potion_26",
-                source = "Sold by Pix Xizzix (Stranglethorn Vale)",
+                source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
                 vendorLocations = {
                     {
                         npcID = 227853,
@@ -1636,7 +1636,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [17635] = {
                 icon = "Interface\\Icons\\inv_potion_62",
-                source = "Sold by Pix Xizzix (Stranglethorn Vale)",
+                source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
                 vendorLocations = {
                     {
                         npcID = 227853,
@@ -1650,7 +1650,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [17636] = {
                 icon = "Interface\\Icons\\inv_potion_97",
-                source = "Sold by Pix Xizzix (Stranglethorn Vale)",
+                source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
                 vendorLocations = {
                     {
                         npcID = 227853,
@@ -1664,7 +1664,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [17637] = {
                 icon = "Interface\\Icons\\inv_potion_41",
-                source = "Sold by Pix Xizzix (Stranglethorn Vale)",
+                source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
                 vendorLocations = {
                     {
                         npcID = 227853,
@@ -1678,7 +1678,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [17638] = {
                 icon = "Interface\\Icons\\inv_potion_48",
-                source = "Sold by Pix Xizzix (Stranglethorn Vale)",
+                source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
                 vendorLocations = {
                     {
                         npcID = 227853,

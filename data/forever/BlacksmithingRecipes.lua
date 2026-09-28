@@ -4,7 +4,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [30] = {
             [3321] = {
                 icon = "Interface\\Icons\\inv_chest_chain",
-                source = "Quest reward",
+                source = "World drop / Quest reward",
             },
         },
         [35] = {
@@ -2280,7 +2280,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [295] = {
             [461737] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
-                source = "Sold by Magnus Frostwake (Western Plaguelands)",
+                source = "Sold by Magnus Frostwake (Western Plaguelands) / World drop",
                 vendorLocations = {
                     {
                         npcID = 11278,

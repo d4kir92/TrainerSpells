@@ -261,7 +261,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [25] = {
             [2795] = {
                 icon = "Interface\\Icons\\inv_misc_food_48",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -421,7 +421,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [50] = {
             [2542] = {
                 icon = "Interface\\Icons\\inv_misc_food_10",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -450,7 +450,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [6416] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Tari'qa (The Barrens)",
+                source = "Sold by Tari'qa (The Barrens) / Quest reward",
                 vendorLocations = {
                     {
                         npcID = 3482,
@@ -664,7 +664,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [60] = {
             [3371] = {
                 icon = "Interface\\Icons\\inv_misc_food_49",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -679,7 +679,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [9513] = {
                 icon = "Interface\\Icons\\inv_drink_milk_05",
-                source = "Sold by Smudge Thunderwood (Alterac Mountains)",
+                source = "Sold by Smudge Thunderwood (Alterac Mountains) / Quest reward",
                 vendorLocations = {
                     {
                         npcID = 6779,
@@ -695,7 +695,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [75] = {
             [2543] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -716,7 +716,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [80] = {
             [3370] = {
                 icon = "Interface\\Icons\\inv_misc_food_47",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -987,7 +987,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [85] = {
             [2545] = {
                 icon = "Interface\\Icons\\inv_misc_birdbeck_02",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / World drop",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -1008,7 +1008,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [90] = {
             [3372] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -1051,7 +1051,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [100] = {
             [2547] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -1066,7 +1066,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [2549] = {
                 icon = "Interface\\Icons\\inv_misc_food_16",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -1194,7 +1194,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [110] = {
             [2548] = {
                 icon = "Interface\\Icons\\inv_misc_food_16",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / World drop",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -1209,7 +1209,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [3377] = {
                 icon = "Interface\\Icons\\inv_misc_food_10",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -1224,7 +1224,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [3397] = {
                 icon = "Interface\\Icons\\inv_misc_food_47",
-                source = "Sold by Ulthaan (Ashenvale), Super-Seller 680 (Desolace)",
+                source = "Sold by Ulthaan (Ashenvale), Super-Seller 680 (Desolace) / Quest reward",
                 vendorLocations = {
                     {
                         npcID = 3960,
@@ -1270,7 +1270,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [120] = {
             [3373] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City)",
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
@@ -1287,7 +1287,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [125] = {
             [3398] = {
                 icon = "Interface\\Icons\\inv_misc_food_18",
-                source = "Sold by Zargh (The Barrens), Vendor-Tron 1000 (Desolace)",
+                source = "Sold by Zargh (The Barrens), Vendor-Tron 1000 (Desolace) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Horde",
@@ -1350,7 +1350,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [130] = {
             [3376] = {
                 icon = "Interface\\Icons\\inv_egg_04",
-                source = "Sold by Kendor Kabonka (Stormwind City), Nerrist (Stranglethorn Vale), Keena (Arathi Highlands)",
+                source = "Sold by Kendor Kabonka (Stormwind City), Nerrist (Stranglethorn Vale), Keena (Arathi Highlands) / Quest reward",
                 vendorLocations = {
                     {
                         faction = "Alliance",
