@@ -145,6 +145,52 @@ TrainerSpellsClassTrainers = {
                 {areaID = 493, uiMapID = 1450, x = 52.53, y = 40.57},
             },
         },
+        {
+            npcID = 251373,
+            displayID = 136974,
+            faction = "AH",
+            starter = true,
+            names = {enUS = "Xyton Silverwind"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 41.6, y = 23.4},
+            },
+        },
+        {
+            npcID = 252359,
+            displayID = 137418,
+            faction = "AH",
+            names = {enUS = "Lotheluum Starbreeze"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 64, y = 75},
+            },
+        },
+        {
+            npcID = 254081,
+            displayID = 137997,
+            faction = "AH",
+            names = {enUS = "Naeluna Swiftmend"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 45.2, y = 44.2},
+            },
+        },
+        {
+            npcID = 262560,
+            displayID = 143264,
+            faction = "H",
+            names = {enUS = "Hana Lighthoof"},
+            locations = {
+                {areaID = 215, uiMapID = 1412, x = 33.4, y = 22},
+            },
+        },
+        {
+            npcID = 270459,
+            displayID = 2191,
+            faction = "A",
+            names = {enUS = "Alfina Nightgaze"},
+            locations = {
+                {areaID = 36, uiMapID = 1416, x = 11.8, y = 56.5},
+            },
+        },
     },
     HUNTER = {
         {
@@ -411,6 +457,53 @@ TrainerSpellsClassTrainers = {
                 {areaID = 38, uiMapID = 1432, x = 82.39, y = 62.4},
             },
         },
+        {
+            npcID = 248415,
+            displayID = 3395,
+            faction = "A",
+            starter = true,
+            names = {enUS = "Tordrin Sternblade"},
+            locations = {
+                {areaID = 12, uiMapID = 1429, x = 51.1, y = 40.6},
+            },
+        },
+        {
+            npcID = 251376,
+            displayID = 136976,
+            faction = "AH",
+            starter = true,
+            names = {enUS = "Tai'ree Farsight"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 42.5, y = 23.5},
+            },
+        },
+        {
+            npcID = 251507,
+            displayID = 137105,
+            faction = "A",
+            names = {enUS = "Josephine Carson"},
+            locations = {
+                {areaID = 12, uiMapID = 1429, x = 41.2, y = 66.2},
+            },
+        },
+        {
+            npcID = 252389,
+            displayID = 140075,
+            faction = "AH",
+            names = {enUS = "Quel'ana Quickgale"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 59.6, y = 72.6},
+            },
+        },
+        {
+            npcID = 254084,
+            displayID = 137999,
+            faction = "AH",
+            names = {enUS = "Elayaa Easewind"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 45.2, y = 44.2},
+            },
+        },
     },
     MAGE = {
         {
@@ -632,6 +725,43 @@ TrainerSpellsClassTrainers = {
             names = {enUS = "Dink", koKR = "딩크", ruRU = "Динк", zhCN = "丁克", zhTW = "丁克"},
             locations = {
                 {areaID = 1537, uiMapID = 1455, x = 27.16, y = 8.57},
+            },
+        },
+        {
+            npcID = 246797,
+            displayID = 130187,
+            faction = "A",
+            names = {enUS = "Jessa Weaver"},
+            locations = {
+                {areaID = 36, uiMapID = 1416, x = 17.6, y = 69.5},
+            },
+        },
+        {
+            npcID = 251379,
+            displayID = 136977,
+            faction = "A",
+            starter = true,
+            names = {enUS = "Dorii Brightwhisper"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 41.5, y = 23.5},
+            },
+        },
+        {
+            npcID = 252373,
+            displayID = 140063,
+            faction = "A",
+            names = {enUS = "Anathamaas Aetherwind"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 65.8, y = 80.5},
+            },
+        },
+        {
+            npcID = 254086,
+            displayID = 138001,
+            faction = "AH",
+            names = {enUS = "Shenaan Spellwind"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 45, y = 45.8},
             },
         },
     },
@@ -1061,6 +1191,15 @@ TrainerSpellsClassTrainers = {
                 {areaID = 1537, uiMapID = 1455, x = 24.73, y = 8.16},
             },
         },
+        {
+            npcID = 258785,
+            displayID = 140941,
+            faction = "A",
+            names = {enUS = "High Priestess Mims"},
+            locations = {
+                {areaID = 1537, uiMapID = 1455, x = 24.8, y = 10},
+            },
+        },
     },
     ROGUE = {
         {
@@ -1292,6 +1431,34 @@ TrainerSpellsClassTrainers = {
                 {areaID = 1519, uiMapID = 1453, x = 80.28, y = 68.58},
             },
         },
+        {
+            npcID = 251389,
+            displayID = 136981,
+            faction = "AH",
+            starter = true,
+            names = {enUS = "Akeri Duskblade"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 43.6, y = 24.2},
+            },
+        },
+        {
+            npcID = 252379,
+            displayID = 140071,
+            faction = "AH",
+            names = {enUS = "Eltheen Nightbreeze"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 59.8, y = 72.5},
+            },
+        },
+        {
+            npcID = 254087,
+            displayID = 138002,
+            faction = "AH",
+            names = {enUS = "Miriaan Mistblade"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 43.2, y = 43.2},
+            },
+        },
     },
     SHAMAN = {
         {
@@ -1393,6 +1560,71 @@ TrainerSpellsClassTrainers = {
             names = {enUS = "Sagorne Creststrider", esES = "Sagorne Zanca Cresta", esMX = "Sagorne Zanca Cresta", koKR = "사고른 크레스트스트라이더", ptBR = "Sagorne Monta Crista", ruRU = "Сагорн Гривастый Странник", zhCN = "萨格尼", zhTW = "薩格尼"},
             locations = {
                 {areaID = 1637, uiMapID = 1454, x = 38.66, y = 35.92},
+            },
+        },
+        {
+            npcID = 251374,
+            displayID = 136975,
+            faction = "H",
+            starter = true,
+            names = {enUS = "Windshaper Boro"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 42.8, y = 23.5},
+            },
+        },
+        {
+            npcID = 252382,
+            displayID = 140050,
+            faction = "H",
+            names = {enUS = "Sessaria Skystride"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 58.2, y = 78.5},
+            },
+        },
+        {
+            npcID = 254082,
+            displayID = 137998,
+            faction = "H",
+            names = {enUS = "Aarnor Galestrike"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 43.5, y = 44.8},
+            },
+        },
+        {
+            npcID = 257446,
+            displayID = 126743,
+            faction = "A",
+            starter = true,
+            names = {enUS = "Teo Hammerstorm"},
+            locations = {
+                {areaID = 1, uiMapID = 1426, x = 28.7, y = 66.1},
+            },
+        },
+        {
+            npcID = 258098,
+            displayID = 143525,
+            faction = "A",
+            names = {enUS = "Eldrun Stormbreaker"},
+            locations = {
+                {areaID = 1537, uiMapID = 1455, x = 47.3, y = 13.1},
+            },
+        },
+        {
+            npcID = 258113,
+            displayID = 140654,
+            faction = "A",
+            names = {enUS = "Ingrid Dunwald"},
+            locations = {
+                {areaID = 1, uiMapID = 1426, x = 47.5, y = 52},
+            },
+        },
+        {
+            npcID = 262558,
+            displayID = 143263,
+            faction = "H",
+            names = {enUS = "Palah Thunderhoof"},
+            locations = {
+                {areaID = 215, uiMapID = 1412, x = 33.5, y = 22.4},
             },
         },
     },
@@ -1884,6 +2116,34 @@ TrainerSpellsClassTrainers = {
             names = {enUS = "Captain Evencane", esES = "Capitán Sempremimbre", esMX = "Capitán Sempremimbre", frFR = "Capitaine Evencane", koKR = "대장 이븐케인", ptBR = "Capitão Canajusta", ruRU = "Капитан Ровноступ", zhCN = "伊文凯恩队长", zhTW = "伊文凱恩隊長"},
             locations = {
                 {areaID = 15, uiMapID = 1445, x = 67.88, y = 48.41},
+            },
+        },
+        {
+            npcID = 251964,
+            displayID = 138170,
+            faction = "AH",
+            starter = true,
+            names = {enUS = "Blademaster Ren"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 43.5, y = 24.2},
+            },
+        },
+        {
+            npcID = 252377,
+            displayID = 138004,
+            faction = "AH",
+            names = {enUS = "Seena Skybreaker"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 59.8, y = 72.8},
+            },
+        },
+        {
+            npcID = 254088,
+            displayID = 138003,
+            faction = "AH",
+            names = {enUS = "Corsan Earthrazer"},
+            locations = {
+                {areaID = 16593, uiMapID = 2521, x = 44.8, y = 45.2},
             },
         },
     },

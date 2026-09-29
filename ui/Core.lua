@@ -534,13 +534,15 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             icon:SetTexture(133741)
         end
         local nameColor = entry.starter and "|cffff8c00" or TrainerSpells.UIColors.SPELL_NAME
-        nameFS:SetText(nameColor .. entry.name .. "|r")
+        local petLabel = entry.petLabel and ("  |cff9d9d9d<" .. entry.petLabel .. ">|r") or ""
+        nameFS:SetText(nameColor .. entry.name .. "|r" .. petLabel)
         local starterLabel = entry.starter and "|cffff8c00≤ 6|r  " or ""
         levelFS:SetText(starterLabel .. ("%.1f, %.1f"):format(entry.location.x, entry.location.y))
         rowFrame:EnableMouse(true)
         rowFrame:SetScript("OnEnter", function(sel)
             GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
             GameTooltip:SetText(entry.name)
+            if entry.petLabel then GameTooltip:AddLine("<" .. entry.petLabel .. ">", 0.62, 0.62, 0.62) end
             GameTooltip:AddLine(entry.zoneName, 1, 1, 1)
             GameTooltip:AddLine(("%s: %.1f, %.1f"):format(TrainerSpells:Trans("LID_COORDINATES"), entry.location.x, entry.location.y), 1, 0.82, 0)
             if entry.starter then GameTooltip:AddLine(TrainerSpells:Trans("LID_TRAINS_THROUGH_LEVEL_6"), 1, 0.5, 0.2) end

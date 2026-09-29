@@ -57,6 +57,7 @@ data\forever\Rogue.lua
 data\forever\Priest.lua
 data\forever\Warlock.lua
 data\forever\ClassTrainers.lua
+data\forever\PetTrainers.lua
 data\forever\WeaponSkills.lua
 data\forever\Alchemy.lua
 data\forever\Blacksmithing.lua
