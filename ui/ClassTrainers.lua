@@ -167,6 +167,7 @@ nearestButton:SetScript("OnEnter", function(self)
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     GameTooltip:SetText(TrainerSpells:Trans("LID_NEARESTCLASSTRAINER"))
     GameTooltip:AddLine(TrainerSpells:Trans("LID_NEARESTCLASSTRAINER_DESC"), 1, 1, 1, true)
+    if not self:IsEnabled() and ERR_NOT_IN_COMBAT then GameTooltip:AddLine(ERR_NOT_IN_COMBAT, 1, 0.2, 0.2, true) end
     GameTooltip:Show()
 end)
 nearestButton:SetScript("OnLeave", GameTooltip_Hide)
@@ -184,6 +185,7 @@ nearestPetButton:SetScript("OnEnter", function(self)
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     GameTooltip:SetText(TrainerSpells:Trans(texts.nearest))
     GameTooltip:AddLine(TrainerSpells:Trans(texts.desc), 1, 1, 1, true)
+    if not self:IsEnabled() and ERR_NOT_IN_COMBAT then GameTooltip:AddLine(ERR_NOT_IN_COMBAT, 1, 0.2, 0.2, true) end
     GameTooltip:Show()
 end)
 nearestPetButton:SetScript("OnLeave", GameTooltip_Hide)
@@ -197,7 +199,18 @@ hideStarter:SetScript("OnClick", function(self)
     TrainerSpells_Character.hideStarterClassTrainers = self:GetChecked() and true or false
     TrainerSpells_Refresh()
 end)
+local function UpdateNearestButtons(inCombat)
+    if inCombat == nil then inCombat = InCombatLockdown and InCombatLockdown() end
+    nearestButton:SetEnabled(not inCombat)
+    nearestPetButton:SetEnabled(not inCombat)
+end
+controls:RegisterEvent("PLAYER_REGEN_DISABLED")
+controls:RegisterEvent("PLAYER_REGEN_ENABLED")
+controls:SetScript("OnEvent", function(_, event)
+    UpdateNearestButtons(event == "PLAYER_REGEN_DISABLED")
+end)
 controls:SetScript("OnShow", function()
+    UpdateNearestButtons()
     hideStarter:SetChecked(TrainerSpells_Character.hideStarterClassTrainers)
     local texts = petTrainerTexts[GetPlayerClassToken()]
     local showPetButton = texts and petTrainerData[GetPlayerClassToken()] and true or false

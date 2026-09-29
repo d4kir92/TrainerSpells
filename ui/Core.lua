@@ -259,7 +259,9 @@ function TrainerSpells:SetMapWaypoint(location)
         local point = UiMapPoint.CreateFromCoordinates(location.uiMapID, location.x / 100, location.y / 100)
         C_Map.SetUserWaypoint(point)
         if C_SuperTrack and C_SuperTrack.SetSuperTrackedUserWaypoint then C_SuperTrack.SetSuperTrackedUserWaypoint(true) end
-        if OpenWorldMap then
+        if InCombatLockdown and InCombatLockdown() then
+            return true
+        elseif OpenWorldMap then
             OpenWorldMap(location.uiMapID)
         elseif WorldMapFrame then
             if WorldMapFrame.SetMapID then WorldMapFrame:SetMapID(location.uiMapID) end

@@ -2,6 +2,32 @@ local _, TrainerSpells = ...
 local classFrame = TrainerSpells.ClassFrame
 local listBg = TrainerSpells.ClassListBackground
 local searchBox = TrainerSpells.SearchBox
+local SPELLBOOK_TAB_NAMES = {"TrainerSpellsSpellbookTab", "TrainerSpellsPetSpellbookTab", "TrainerSpellsClassTrainerMapTab", "TrainerSpellsWeaponSpellbookTab"}
+for i = 1, 8 do table.insert(SPELLBOOK_TAB_NAMES, "SpellBookSkillLineTab" .. i) end
+
+local function GetSearchLeftOffset(defaultOffset, topOffset)
+    local frameScale = classFrame:GetEffectiveScale()
+    local frameLeft = classFrame:GetLeft()
+    local frameRight = classFrame:GetRight()
+    local frameTop = classFrame:GetTop()
+    if not frameLeft or not frameRight or not frameTop then return defaultOffset end
+    local rowTop = frameTop + topOffset
+    local rowBottom = rowTop - 40
+    local offset = defaultOffset
+    for _, name in ipairs(SPELLBOOK_TAB_NAMES) do
+        local tab = _G[name]
+        if tab and tab:IsShown() and tab:GetLeft() then
+            local scale = tab:GetEffectiveScale() / frameScale
+            local left, right = tab:GetLeft() * scale, tab:GetRight() * scale
+            local top, bottom = tab:GetTop() * scale, tab:GetBottom() * scale
+            if left < frameRight - 4 and bottom < rowTop and top > rowBottom then
+                offset = math.max(offset, right - frameLeft + 8)
+            end
+        end
+    end
+    return offset
+end
+
 local function PositionFrame()
     classFrame:ClearAllPoints()
     if TrainerSpells:IsDragonflightUIEnabled() and DragonflightUISpellBookBG and DragonflightUISpellBookBG:IsShown() then
@@ -40,7 +66,7 @@ local function PositionFrame()
     local titleText = SpellBookFrame and _G["SpellBookTitleText"]
     if titleText and classFrame:GetTop() and titleText:GetBottom() then
         local topOffset = titleText:GetBottom() - classFrame:GetTop() - 4
-        searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 66, topOffset)
+        searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", GetSearchLeftOffset(66, topOffset), topOffset)
         searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, topOffset)
     else
         searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 10, -6)
@@ -240,8 +266,13 @@ local function PositionPlayerSpellsFrame()
     local book = GetPlayerSpellsBook()
     if not book then return end
     local content = book.PagedSpellsFrame or book
+    local frameLevel = content:GetFrameLevel()
+    if playerSpellsModeTabContainer then frameLevel = math.max(frameLevel, playerSpellsModeTabContainer:GetFrameLevel()) end
+    classFrame:SetParent(book)
+    classFrame:SetFrameStrata(book:GetFrameStrata())
+    classFrame:SetFrameLevel(frameLevel + 1)
     classFrame:ClearAllPoints()
-    classFrame:SetScale(book:GetScale())
+    classFrame:SetScale(1)
     classFrame:SetPoint("TOPLEFT", content, "TOPLEFT", 4, -50)
     classFrame:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT", 0, -8)
     listBg:ClearAllPoints()
