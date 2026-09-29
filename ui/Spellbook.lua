@@ -96,6 +96,33 @@ local function PositionFrame()
 end
 
 if SpellBookFrame then hooksecurefunc(SpellBookFrame, "SetScale", function() if classFrame:IsShown() then PositionFrame() end end) end
+local repositionQueued = false
+local function QueuePositionFrame()
+    if repositionQueued or not classFrame:IsShown() then return end
+    repositionQueued = true
+    C_Timer.After(0, function()
+        repositionQueued = false
+        if classFrame:IsShown() then PositionFrame() end
+    end)
+end
+
+if SpellBookFrame then
+    for _, funcName in ipairs({"SpellBookFrame_Update", "SpellBookFrame_UpdateSkillLineTabs"}) do
+        if _G[funcName] then hooksecurefunc(funcName, QueuePositionFrame) end
+    end
+    for i = 1, 8 do
+        local tab = _G["SpellBookSkillLineTab" .. i]
+        if tab then
+            tab:HookScript("OnShow", QueuePositionFrame)
+            tab:HookScript("OnHide", QueuePositionFrame)
+        end
+    end
+    local tabWatcher = CreateFrame("Frame")
+    for _, event in ipairs({"SPELLS_CHANGED", "LEARNED_SPELL_IN_TAB", "UNIT_PET"}) do
+        TrainerSpells:RegisterEvent(tabWatcher, event)
+    end
+    tabWatcher:SetScript("OnEvent", QueuePositionFrame)
+end
 local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame", "SpellBookFrameShowAllSpellRanksCheckbox", "ShowAllSpellRanksCheckbox",}
 local spellButtonsHidden = false
 local hiddenPageRegions = {}
