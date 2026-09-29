@@ -70,9 +70,10 @@ local function AddSeen(seen, value)
     return seen
 end
 
-local function IsRidingTrainer(numServices)
+local function IsNonClassTrainer(numServices)
     for i = 1, numServices do
-        if TrainerSpells:IsRidingSpell(TrainerSpells:GetSpellIDForService(i)) then return true end
+        local spellID = TrainerSpells:GetSpellIDForService(i)
+        if TrainerSpells:IsRidingSpell(spellID) or TrainerSpells:IsWeaponSkillSpell(spellID) then return true end
     end
     return false
 end
@@ -137,8 +138,8 @@ local function CaptureTrainerInner()
     TrainerSpells:ExpandAllTrainerHeaders()
     local numServices = GetNumTrainerServices()
     TrainerSpells:DebugTrainer("CaptureTrainerInner: numServices=%d", numServices)
-    if IsRidingTrainer(numServices) then
-        TrainerSpells:DebugTrainer("CaptureTrainerInner: riding trainer ignored")
+    if IsNonClassTrainer(numServices) then
+        TrainerSpells:DebugTrainer("CaptureTrainerInner: riding or weapon trainer ignored")
         return
     end
     if not professionKey and not IsPetTrainer(numServices) and not IsCurrentClassTrainer(className, classToken) then

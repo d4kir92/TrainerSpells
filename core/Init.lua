@@ -65,6 +65,23 @@ local RIDING_SPELL_IDS = {
     [90267] = true,
 }
 
+local WEAPON_SKILL_SPELL_IDS = {
+    [196] = true,
+    [197] = true,
+    [198] = true,
+    [199] = true,
+    [200] = true,
+    [201] = true,
+    [202] = true,
+    [227] = true,
+    [264] = true,
+    [266] = true,
+    [1180] = true,
+    [2567] = true,
+    [5011] = true,
+    [15590] = true,
+}
+
 for key, spellID in pairs(PROFESSION_SPELLS) do
     local spellInfo = C_Spell.GetSpellInfo(spellID)
     if spellInfo and spellInfo.name then
@@ -99,17 +116,21 @@ function TrainerSpells:IsRidingSpell(spellID)
     return RIDING_SPELL_IDS[spellID] == true
 end
 
-local function RemoveRidingSpells(spells)
+function TrainerSpells:IsWeaponSkillSpell(spellID)
+    return WEAPON_SKILL_SPELL_IDS[spellID] == true
+end
+
+local function RemoveNonClassSpells(spells)
     if type(spells) ~= "table" then return end
     for spellID in pairs(spells) do
-        if TrainerSpells:IsRidingSpell(spellID) then spells[spellID] = nil end
+        if TrainerSpells:IsRidingSpell(spellID) or TrainerSpells:IsWeaponSkillSpell(spellID) then spells[spellID] = nil end
     end
 end
 
-function TrainerSpells:RemoveRidingSpellsFromClassData()
+function TrainerSpells:RemoveNonClassSpellsFromClassData()
     for _, levels in pairs(TrainerSpells_Data) do
         if type(levels) == "table" then
-            for _, spells in pairs(levels) do RemoveRidingSpells(spells) end
+            for _, spells in pairs(levels) do RemoveNonClassSpells(spells) end
         end
     end
 end
