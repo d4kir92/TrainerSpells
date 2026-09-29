@@ -4,7 +4,20 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [30] = {
             [3321] = {
                 icon = "Interface\\Icons\\inv_chest_chain",
-                source = "World drop / Quest reward",
+                source = "World drop / Quest reward: Supplying the Front",
+                sourceLocations = {
+                    {
+                        faction = "Alliance",
+                        npcID = 6031,
+                        npcName = "Tormus Deepforge",
+                        questID = 1578,
+                        questName = "Supplying the Front",
+                        uiMapID = 1455,
+                        zoneName = "Ironforge",
+                        x = 48.6,
+                        y = 43,
+                    },
+                },
             },
         },
         [35] = {
@@ -17,7 +30,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252262] = {
                 icon = "Interface\\Icons\\inv_belt_17",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -41,7 +54,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252263] = {
                 icon = "Interface\\Icons\\inv_belt_15",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -65,7 +78,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252264] = {
                 icon = "Interface\\Icons\\inv_belt_17",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -89,7 +102,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252265] = {
                 icon = "Interface\\Icons\\inv_belt_23",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -113,7 +126,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252266] = {
                 icon = "Interface\\Icons\\inv_belt_22",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -138,7 +151,31 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [50] = {
             [1302598] = {
                 icon = "Interface\\Icons\\inv_boots_01",
-                source = "Quest reward",
+                source = "Quest reward: The Quarry's Smith, This Is Spinal Axe",
+                sourceLocations = {
+                    {
+                        faction = "Alliance",
+                        npcID = 1698,
+                        npcName = "Frast Dokner",
+                        questID = 95217,
+                        questName = "The Quarry's Smith",
+                        uiMapID = 1426,
+                        zoneName = "Dun Morogh",
+                        x = 68.8,
+                        y = 55.8,
+                    },
+                    {
+                        faction = "Horde",
+                        npcID = 10266,
+                        npcName = "Ug'thok",
+                        questID = 96874,
+                        questName = "This Is Spinal Axe",
+                        uiMapID = 1454,
+                        zoneName = "Orgrimmar",
+                        x = 80.6,
+                        y = 23.4,
+                    },
+                },
             },
         },
         [55] = {
@@ -151,7 +188,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252257] = {
                 icon = "Interface\\Icons\\inv_gauntlets_26",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -175,7 +212,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252258] = {
                 icon = "Interface\\Icons\\inv_gauntlets_15",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -199,7 +236,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252259] = {
                 icon = "Interface\\Icons\\inv_gauntlets_26",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -223,7 +260,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252260] = {
                 icon = "Interface\\Icons\\inv_gauntlets_11",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -247,7 +284,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252261] = {
                 icon = "Interface\\Icons\\inv_gauntlets_12",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -273,7 +310,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252252] = {
                 icon = "Interface\\Icons\\inv_boots_chain_03",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -297,7 +334,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252253] = {
                 icon = "Interface\\Icons\\inv_boots_chain_01",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -321,7 +358,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252254] = {
                 icon = "Interface\\Icons\\inv_boots_chain_03",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -345,7 +382,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252255] = {
                 icon = "Interface\\Icons\\inv_boots_chain_02",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -369,7 +406,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252256] = {
                 icon = "Interface\\Icons\\inv_boots_chain_05",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -395,7 +432,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252277] = {
                 icon = "Interface\\Icons\\inv_helmet_39",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -419,7 +456,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252278] = {
                 icon = "Interface\\Icons\\inv_helmet_38",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -443,7 +480,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252279] = {
                 icon = "Interface\\Icons\\inv_helmet_39",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -467,7 +504,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252280] = {
                 icon = "Interface\\Icons\\inv_helmet_36",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -491,7 +528,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252281] = {
                 icon = "Interface\\Icons\\inv_helmet_37",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -524,7 +561,20 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [8367] = {
                 icon = "Interface\\Icons\\inv_chest_plate05",
-                source = "Quest reward",
+                source = "Quest reward: Gearing Redridge",
+                sourceLocations = {
+                    {
+                        faction = "Alliance",
+                        npcID = 6031,
+                        npcName = "Tormus Deepforge",
+                        questID = 1618,
+                        questName = "Gearing Redridge",
+                        uiMapID = 1455,
+                        zoneName = "Ironforge",
+                        x = 48.6,
+                        y = 43,
+                    },
+                },
             },
         },
         [105] = {
@@ -537,7 +587,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252267] = {
                 icon = "Interface\\Icons\\inv_chest_chain_07",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -561,7 +611,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252268] = {
                 icon = "Interface\\Icons\\inv_chest_chain_09",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -585,7 +635,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252269] = {
                 icon = "Interface\\Icons\\inv_chest_chain_07",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -609,7 +659,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252270] = {
                 icon = "Interface\\Icons\\inv_chest_chain_08",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -633,7 +683,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252271] = {
                 icon = "Interface\\Icons\\inv_chest_chain_09",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -683,7 +733,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252272] = {
                 icon = "Interface\\Icons\\inv_pants_mail_05",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -707,7 +757,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252273] = {
                 icon = "Interface\\Icons\\inv_pants_mail_16",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -731,7 +781,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252274] = {
                 icon = "Interface\\Icons\\inv_pants_mail_05",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -755,7 +805,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252275] = {
                 icon = "Interface\\Icons\\inv_pants_mail_10",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -779,7 +829,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252276] = {
                 icon = "Interface\\Icons\\inv_pants_mail_13",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -805,7 +855,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3494] = {
                 icon = "Interface\\Icons\\inv_hammer_07",
                 source = "Sold by Jannos Ironwill (Arathi Highlands), Muuran (Desolace), Jazzrik (Badlands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 1471,
                         npcName = "Jannos Ironwill",
@@ -841,7 +891,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3492] = {
                 icon = "Interface\\Icons\\inv_sword_20",
                 source = "Sold by Jutak (Stranglethorn Vale), Sumi (Orgrimmar), Kaita Deepforge (Stormwind City)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2843,
                         npcName = "Jutak",
@@ -876,11 +926,37 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [9811] = {
                 icon = "Interface\\Icons\\inv_shoulder_23",
-                source = "Quest reward",
+                source = "Quest reward: On Iron Pauldrons",
+                sourceLocations = {
+                    {
+                        faction = "Horde",
+                        npcID = 7790,
+                        npcName = "Orokk Omosh",
+                        questID = 2752,
+                        questName = "On Iron Pauldrons",
+                        uiMapID = 1454,
+                        zoneName = "Orgrimmar",
+                        x = 79.4,
+                        y = 22.4,
+                    },
+                },
             },
             [9813] = {
                 icon = "Interface\\Icons\\inv_chest_chain_14",
-                source = "Quest reward",
+                source = "Quest reward: Barbaric Battlements",
+                sourceLocations = {
+                    {
+                        faction = "Horde",
+                        npcID = 7790,
+                        npcName = "Orokk Omosh",
+                        questID = 2751,
+                        questName = "Barbaric Battlements",
+                        uiMapID = 1454,
+                        zoneName = "Orgrimmar",
+                        x = 79.4,
+                        y = 22.4,
+                    },
+                },
             },
         },
         [140] = {
@@ -906,12 +982,25 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [9814] = {
                 icon = "Interface\\Icons\\inv_helmet_25",
-                source = "Quest reward",
+                source = "Quest reward: Horns of Frenzy",
+                sourceLocations = {
+                    {
+                        faction = "Horde",
+                        npcID = 7790,
+                        npcName = "Orokk Omosh",
+                        questID = 2754,
+                        questName = "Horns of Frenzy",
+                        uiMapID = 1454,
+                        zoneName = "Orgrimmar",
+                        x = 79.4,
+                        y = 22.4,
+                    },
+                },
             },
             [427061] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
                 source = "Sold by Elaine Compton (Stormwind City), Jornah (Orgrimmar), Dokimi (Thunder Bluff), Gishah (Undercity), Tamelyn Aldridge (Ironforge), Marcy Baker (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 213077,
@@ -976,12 +1065,25 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [155] = {
             [9818] = {
                 icon = "Interface\\Icons\\inv_boots_plate_01",
-                source = "Quest reward",
+                source = "Quest reward: Trampled Under Foot",
+                sourceLocations = {
+                    {
+                        faction = "Horde",
+                        npcID = 7790,
+                        npcName = "Orokk Omosh",
+                        questID = 2753,
+                        questName = "Trampled Under Foot",
+                        uiMapID = 1454,
+                        zoneName = "Orgrimmar",
+                        x = 79.4,
+                        y = 22.4,
+                    },
+                },
             },
             [439128] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
                 source = "Sold by Zarena Cromwind (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2482,
                         npcName = "Zarena Cromwind",
@@ -997,15 +1099,15 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3498] = {
                 icon = "Interface\\Icons\\inv_throwingaxe_05",
                 source = "Sold by Vharr (Stranglethorn Vale), Jaquilina Dramet (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 1146,
                         npcName = "Vharr",
                         uiMapID = 1434,
                         zoneName = "Stranglethorn Vale",
-                        x = 35.6,
-                        y = 10.6,
+                        x = 32.2,
+                        y = 28,
                     },
                     {
                         npcID = 2483,
@@ -1023,7 +1125,20 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [9820] = {
                 icon = "Interface\\Icons\\inv_gauntlets_31",
-                source = "Quest reward",
+                source = "Quest reward: Joys of Omosh",
+                sourceLocations = {
+                    {
+                        faction = "Horde",
+                        npcID = 7790,
+                        npcName = "Orokk Omosh",
+                        questID = 2755,
+                        questName = "Joys of Omosh",
+                        uiMapID = 1454,
+                        zoneName = "Orgrimmar",
+                        x = 79.4,
+                        y = 22.4,
+                    },
+                },
             },
         },
         [165] = {
@@ -1042,7 +1157,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [439126] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
                 source = "Sold by Krinkle Goodsteel (Tanaris)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 5411,
                         npcName = "Krinkle Goodsteel",
@@ -1056,7 +1171,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252355] = {
                 icon = "Interface\\Icons\\inv_mace_15",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -1090,7 +1205,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252287] = {
                 icon = "Interface\\Icons\\inv_gauntlets_29",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -1104,7 +1219,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252315] = {
                 icon = "Interface\\Icons\\inv_gauntlets_51",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1128,7 +1243,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252316] = {
                 icon = "Interface\\Icons\\inv_gauntlets_22",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1152,7 +1267,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252317] = {
                 icon = "Interface\\Icons\\inv_gauntlets_50",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1176,7 +1291,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252318] = {
                 icon = "Interface\\Icons\\inv_gauntlets_26",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1200,7 +1315,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252319] = {
                 icon = "Interface\\Icons\\inv_gauntlets_30",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1224,7 +1339,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301526] = {
                 icon = "Interface\\Icons\\inv_helm_mail_skybornec60_b_01",
                 source = "Sold by Sutara Plainstalker (Mulgore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 264078,
@@ -1239,7 +1354,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301527] = {
                 icon = "Interface\\Icons\\inv_shoulder_mail_skybornec60_b_01",
                 source = "Sold by Sutara Plainstalker (Mulgore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 264078,
@@ -1254,7 +1369,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301534] = {
                 icon = "Interface\\Icons\\inv_helm_mail_skybornec60_b_01",
                 source = "Sold by Archmage Alvareaux (Alterac Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 32287,
@@ -1269,7 +1384,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301535] = {
                 icon = "Interface\\Icons\\inv_shoulder_mail_skybornec60_b_01",
                 source = "Sold by Archmage Alvareaux (Alterac Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 32287,
@@ -1285,7 +1400,20 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [180] = {
             [439120] = {
                 icon = "Interface\\Icons\\inv_gauntlets_29",
-                source = "Quest reward",
+                source = "Quest reward: The Origins of Smithing",
+                sourceLocations = {
+                    {
+                        faction = "Alliance",
+                        npcID = 7798,
+                        npcName = "Hank the Hammer",
+                        questID = 2758,
+                        questName = "The Origins of Smithing",
+                        uiMapID = 1453,
+                        zoneName = "Stormwind City",
+                        x = 56,
+                        y = 16,
+                    },
+                },
             },
         },
         [185] = {
@@ -1298,7 +1426,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [9937] = {
                 icon = "Interface\\Icons\\inv_bracer_07",
                 source = "Sold by Harggan (The Hinterlands), Gharash (Swamp of Sorrows)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 8161,
@@ -1326,7 +1454,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252357] = {
                 icon = "Interface\\Icons\\inv_hammer_03",
                 source = "Sold by Martha Wellsworth (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 259860,
@@ -1342,11 +1470,35 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [195] = {
             [9945] = {
                 icon = "Interface\\Icons\\inv_pants_04",
-                source = "Quest reward",
+                source = "Quest reward: Smelt On, Smelt Off",
+                sourceLocations = {
+                    {
+                        npcID = 7802,
+                        npcName = "Galvan the Ancient",
+                        questID = 2761,
+                        questName = "Smelt On, Smelt Off",
+                        uiMapID = 1434,
+                        zoneName = "Stranglethorn Vale",
+                        x = 50.6,
+                        y = 20.4,
+                    },
+                },
             },
             [9950] = {
                 icon = "Interface\\Icons\\inv_gauntlets_31",
-                source = "Quest reward",
+                source = "Quest reward: The Great Silver Deceiver",
+                sourceLocations = {
+                    {
+                        npcID = 7802,
+                        npcName = "Galvan the Ancient",
+                        questID = 2762,
+                        questName = "The Great Silver Deceiver",
+                        uiMapID = 1434,
+                        zoneName = "Stranglethorn Vale",
+                        x = 50.6,
+                        y = 20.4,
+                    },
+                },
             },
             [9995] = {
                 icon = "Interface\\Icons\\inv_axe_03",
@@ -1356,7 +1508,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [200] = {
             [9952] = {
                 icon = "Interface\\Icons\\inv_shoulder_09",
-                source = "Quest reward",
+                source = "Quest reward: The Art of the Imbue",
+                sourceLocations = {
+                    {
+                        npcID = 7802,
+                        npcName = "Galvan the Ancient",
+                        questID = 2763,
+                        questName = "The Art of the Imbue",
+                        uiMapID = 1434,
+                        zoneName = "Stranglethorn Vale",
+                        x = 50.6,
+                        y = 20.4,
+                    },
+                },
             },
             [9997] = {
                 icon = "Interface\\Icons\\inv_sword_10",
@@ -1368,7 +1532,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [435910] = {
                 icon = "Interface\\Icons\\inv_gizmo_mithrilcasing_02",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
         },
         [210] = {
@@ -1383,7 +1557,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252325] = {
                 icon = "Interface\\Icons\\inv_shoulder_13",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1407,7 +1581,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252326] = {
                 icon = "Interface\\Icons\\inv_shoulder_12",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1431,7 +1605,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252327] = {
                 icon = "Interface\\Icons\\inv_shoulder_03",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1455,7 +1629,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252328] = {
                 icon = "Interface\\Icons\\inv_shoulder_20",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1479,7 +1653,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252329] = {
                 icon = "Interface\\Icons\\inv_shoulder_22",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1528,16 +1702,36 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [435906] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
             [435908] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
             [1252330] = {
                 icon = "Interface\\Icons\\inv_bracer_22c",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1561,7 +1755,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252331] = {
                 icon = "Interface\\Icons\\inv_bracer_23a",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1585,7 +1779,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252332] = {
                 icon = "Interface\\Icons\\inv_bracer_14",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1609,7 +1803,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252333] = {
                 icon = "Interface\\Icons\\inv_bracer_21b",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1633,7 +1827,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252334] = {
                 icon = "Interface\\Icons\\inv_bracer_22a",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1659,7 +1853,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [10013] = {
                 icon = "Interface\\Icons\\inv_weapon_shortblade_14",
                 source = "Sold by Magnus Frostwake (Western Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11278,
                         npcName = "Magnus Frostwake",
@@ -1688,16 +1882,40 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16646] = {
                 icon = "Interface\\Icons\\inv_shoulder_02",
-                source = "Quest reward",
+                source = "Quest reward: Imperial Plate Shoulders",
+                sourceLocations = {
+                    {
+                        npcID = 14567,
+                        npcName = "Derotain Mudsipper",
+                        questID = 7659,
+                        questName = "Imperial Plate Shoulders",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 51.4,
+                        y = 28.6,
+                    },
+                },
             },
             [16647] = {
                 icon = "Interface\\Icons\\inv_belt_01",
-                source = "Quest reward",
+                source = "Quest reward: Imperial Plate Belt",
+                sourceLocations = {
+                    {
+                        npcID = 14567,
+                        npcName = "Derotain Mudsipper",
+                        questID = 7653,
+                        questName = "Imperial Plate Belt",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 51.4,
+                        y = 28.6,
+                    },
+                },
             },
             [1252310] = {
                 icon = "Interface\\Icons\\inv_boots_plate_19v2",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1721,7 +1939,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252311] = {
                 icon = "Interface\\Icons\\inv_boots_plate_20v1",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1745,7 +1963,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252312] = {
                 icon = "Interface\\Icons\\inv_boots_plate_19v1",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1769,7 +1987,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252313] = {
                 icon = "Interface\\Icons\\inv_boots_plate_19v3",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1793,7 +2011,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252314] = {
                 icon = "Interface\\Icons\\inv_boots_plate_05",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1826,7 +2044,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16649] = {
                 icon = "Interface\\Icons\\inv_bracer_19",
-                source = "Quest reward",
+                source = "Quest reward: Imperial Plate Bracer",
+                sourceLocations = {
+                    {
+                        npcID = 14567,
+                        npcName = "Derotain Mudsipper",
+                        questID = 7655,
+                        questName = "Imperial Plate Bracer",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 51.4,
+                        y = 28.6,
+                    },
+                },
             },
         },
         [250] = {
@@ -1841,7 +2071,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [16969] = {
                 icon = "Interface\\Icons\\inv_axe_12",
                 source = "Sold by Magnus Frostwake (Western Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11278,
                         npcName = "Magnus Frostwake",
@@ -1854,7 +2084,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16970] = {
                 icon = "Interface\\Icons\\inv_axe_05",
-                source = "Quest reward",
+                source = "Quest reward: Snakestone of the Shadow Huntress",
+                sourceLocations = {
+                    {
+                        npcID = 11192,
+                        npcName = "Kilram",
+                        questID = 5306,
+                        questName = "Snakestone of the Shadow Huntress",
+                        uiMapID = 1452,
+                        zoneName = "Winterspring",
+                        x = 61.2,
+                        y = 37,
+                    },
+                },
             },
             [1224635] = {
                 icon = "Interface\\Icons\\trade_tailoring",
@@ -1867,7 +2109,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252320] = {
                 icon = "Interface\\Icons\\inv_belt_20",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1891,7 +2133,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252321] = {
                 icon = "Interface\\Icons\\inv_belt_37a",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1915,7 +2157,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252322] = {
                 icon = "Interface\\Icons\\inv_belt_29",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1939,7 +2181,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252323] = {
                 icon = "Interface\\Icons\\inv_belt_08",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1963,7 +2205,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252324] = {
                 icon = "Interface\\Icons\\inv_belt_13",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -1987,7 +2229,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252362] = {
                 icon = "Interface\\Icons\\inv_hammer_10",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -2011,7 +2253,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252363] = {
                 icon = "Interface\\Icons\\inv_gauntlets_11",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -2049,7 +2291,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [16971] = {
                 icon = "Interface\\Icons\\inv_weapon_halberd_11",
                 source = "Sold by Magnus Frostwake (Western Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11278,
                         npcName = "Magnus Frostwake",
@@ -2062,11 +2304,35 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16973] = {
                 icon = "Interface\\Icons\\inv_hammer_05",
-                source = "Quest reward",
+                source = "Quest reward: Sweet Serenity",
+                sourceLocations = {
+                    {
+                        npcID = 11191,
+                        npcName = "Lilith the Lithe",
+                        questID = 5305,
+                        questName = "Sweet Serenity",
+                        uiMapID = 1452,
+                        zoneName = "Winterspring",
+                        x = 61.2,
+                        y = 37.2,
+                    },
+                },
             },
             [16978] = {
                 icon = "Interface\\Icons\\inv_sword_30",
-                source = "Quest reward",
+                source = "Quest reward: Corruption",
+                sourceLocations = {
+                    {
+                        npcID = 11193,
+                        npcName = "Seril Scourgebane",
+                        questID = 5307,
+                        questName = "Corruption",
+                        uiMapID = 1452,
+                        zoneName = "Winterspring",
+                        x = 61.2,
+                        y = 37.2,
+                    },
+                },
             },
         },
         [260] = {
@@ -2080,7 +2346,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16667] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
-                source = "Quest reward",
+                source = "Quest reward: The Demon Forge",
+                sourceLocations = {
+                    {
+                        npcID = 10918,
+                        npcName = "Lorax",
+                        questID = 5127,
+                        questName = "The Demon Forge",
+                        uiMapID = 1452,
+                        zoneName = "Winterspring",
+                        x = 63.8,
+                        y = 73.8,
+                    },
+                },
             },
             [16983] = {
                 icon = "Interface\\Icons\\inv_mace_02",
@@ -2098,7 +2376,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [265] = {
             [16655] = {
                 icon = "Interface\\Icons\\inv_gauntlets_03",
-                source = "Quest reward",
+                source = "Quest reward: Fiery Plate Gauntlets",
+                sourceLocations = {
+                    {
+                        npcID = 10637,
+                        npcName = "Malyfous Darkhammer",
+                        questID = 5124,
+                        questName = "Fiery Plate Gauntlets",
+                        uiMapID = 1452,
+                        zoneName = "Winterspring",
+                        x = 61,
+                        y = 38.6,
+                    },
+                },
             },
             [16656] = {
                 icon = "Interface\\Icons\\inv_boots_plate_03",
@@ -2107,7 +2397,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [16660] = {
                 icon = "Interface\\Icons\\inv_shoulder_20",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -2145,7 +2435,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23632] = {
                 icon = "Interface\\Icons\\inv_belt_11",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -2176,11 +2466,35 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [270] = {
             [16657] = {
                 icon = "Interface\\Icons\\inv_boots_plate_01",
-                source = "Quest reward",
+                source = "Quest reward: Imperial Plate Boots",
+                sourceLocations = {
+                    {
+                        npcID = 14567,
+                        npcName = "Derotain Mudsipper",
+                        questID = 7654,
+                        questName = "Imperial Plate Boots",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 51.4,
+                        y = 28.6,
+                    },
+                },
             },
             [16658] = {
                 icon = "Interface\\Icons\\inv_helmet_22",
-                source = "Quest reward",
+                source = "Quest reward: Imperial Plate Helm",
+                sourceLocations = {
+                    {
+                        npcID = 14567,
+                        npcName = "Derotain Mudsipper",
+                        questID = 7657,
+                        questName = "Imperial Plate Helm",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 51.4,
+                        y = 28.6,
+                    },
+                },
             },
             [16659] = {
                 icon = "Interface\\Icons\\inv_crown_01",
@@ -2188,11 +2502,31 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [20872] = {
                 icon = "Interface\\Icons\\inv_belt_13",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [20874] = {
                 icon = "Interface\\Icons\\inv_bracer_07",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [1224638] = {
                 icon = "Interface\\Icons\\trade_tailoring",
@@ -2201,7 +2535,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252365] = {
                 icon = "Interface\\Icons\\inv_weapon_shortblade_01",
                 source = "Sold by Pexmit (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 266901,
                         npcName = "Pexmit",
@@ -2220,7 +2554,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16663] = {
                 icon = "Interface\\Icons\\inv_chest_plate10",
-                source = "Quest reward",
+                source = "Quest reward: Imperial Plate Chest",
+                sourceLocations = {
+                    {
+                        npcID = 14567,
+                        npcName = "Derotain Mudsipper",
+                        questID = 7656,
+                        questName = "Imperial Plate Chest",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 51.4,
+                        y = 28.6,
+                    },
+                },
             },
             [16664] = {
                 icon = "Interface\\Icons\\inv_shoulder_23",
@@ -2242,7 +2588,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16730] = {
                 icon = "Interface\\Icons\\inv_pants_04",
-                source = "Quest reward",
+                source = "Quest reward: Imperial Plate Leggings",
+                sourceLocations = {
+                    {
+                        npcID = 14567,
+                        npcName = "Derotain Mudsipper",
+                        questID = 7658,
+                        questName = "Imperial Plate Leggings",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 51.4,
+                        y = 28.6,
+                    },
+                },
             },
             [1224631] = {
                 icon = "Interface\\Icons\\trade_tailoring",
@@ -2281,7 +2639,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [461737] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
                 source = "Sold by Magnus Frostwake (Western Plaguelands) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11278,
                         npcName = "Magnus Frostwake",
@@ -2304,15 +2662,51 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [16742] = {
                 icon = "Interface\\Icons\\inv_helmet_02",
-                source = "Quest reward",
+                source = "Quest reward: Enchanted Thorium Platemail: Volume III",
+                sourceLocations = {
+                    {
+                        npcID = 14368,
+                        npcName = "Lorekeeper Lydros",
+                        questID = 7651,
+                        questName = "Enchanted Thorium Platemail: Volume III",
+                        uiMapID = 1444,
+                        zoneName = "Dire Maul (West)",
+                        x = 60.3,
+                        y = 30.2,
+                    },
+                },
             },
             [16744] = {
                 icon = "Interface\\Icons\\inv_pants_04",
-                source = "Quest reward",
+                source = "Quest reward: Enchanted Thorium Platemail: Volume II",
+                sourceLocations = {
+                    {
+                        npcID = 14368,
+                        npcName = "Lorekeeper Lydros",
+                        questID = 7650,
+                        questName = "Enchanted Thorium Platemail: Volume II",
+                        uiMapID = 1444,
+                        zoneName = "Dire Maul (West)",
+                        x = 60.3,
+                        y = 30.2,
+                    },
+                },
             },
             [16745] = {
                 icon = "Interface\\Icons\\inv_chest_plate10",
-                source = "Quest reward",
+                source = "Quest reward: Enchanted Thorium Platemail: Volume I",
+                sourceLocations = {
+                    {
+                        npcID = 14368,
+                        npcName = "Lorekeeper Lydros",
+                        questID = 7649,
+                        questName = "Enchanted Thorium Platemail: Volume I",
+                        uiMapID = 1444,
+                        zoneName = "Dire Maul (West)",
+                        x = 60.3,
+                        y = 30.2,
+                    },
+                },
             },
             [16988] = {
                 icon = "Interface\\Icons\\inv_hammer_09",
@@ -2344,19 +2738,59 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [20873] = {
                 icon = "Interface\\Icons\\inv_shoulder_23",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [20876] = {
                 icon = "Interface\\Icons\\inv_pants_04",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [20890] = {
                 icon = "Interface\\Icons\\inv_sword_48",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [20897] = {
                 icon = "Interface\\Icons\\inv_axe_12",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [22757] = {
                 icon = "Interface\\Icons\\inv_stone_02",
@@ -2365,7 +2799,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23633] = {
                 icon = "Interface\\Icons\\inv_gauntlets_29",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -2394,36 +2828,106 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [23636] = {
                 icon = "Interface\\Icons\\inv_helmet_22",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23637] = {
                 icon = "Interface\\Icons\\inv_gauntlets_22",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23638] = {
                 icon = "Interface\\Icons\\inv_weapon_shortblade_12",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23639] = {
                 icon = "Interface\\Icons\\inv_spear_08",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23650] = {
                 icon = "Interface\\Icons\\inv_hammer_19",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23652] = {
                 icon = "Interface\\Icons\\inv_sword_39",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23653] = {
                 icon = "Interface\\Icons\\inv_axe_12",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [24136] = {
                 icon = "Interface\\Icons\\inv_chest_chain_14",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -2437,7 +2941,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24137] = {
                 icon = "Interface\\Icons\\inv_shoulder_15",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -2451,7 +2955,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24138] = {
                 icon = "Interface\\Icons\\inv_gauntlets_31",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -2465,7 +2969,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24139] = {
                 icon = "Interface\\Icons\\inv_chest_plate08",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -2479,7 +2983,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24140] = {
                 icon = "Interface\\Icons\\inv_pants_plate_21",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -2493,7 +2997,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24141] = {
                 icon = "Interface\\Icons\\inv_shoulder_01",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -2506,7 +3010,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [24399] = {
                 icon = "Interface\\Icons\\inv_boots_chain_08",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [24912] = {
                 icon = "Interface\\Icons\\inv_gauntlets_27",
@@ -2534,7 +3048,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [460460] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
-                source = "Quest reward",
+                source = "Quest reward: A Binding Contract",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        questID = 7604,
+                        questName = "A Binding Contract",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [461647] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
@@ -2574,11 +3100,31 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [1214270] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
-                source = "Sold by Lieutenant General Andorov",
+                source = "Sold by Lieutenant General Andorov (Ruins of Ahn'Qiraj)",
+                sourceLocations = {
+                    {
+                        npcID = 15471,
+                        npcName = "Lieutenant General Andorov",
+                        uiMapID = 1451,
+                        zoneName = "Ruins of Ahn'Qiraj",
+                        x = 28.6,
+                        y = 92.4,
+                    },
+                },
             },
             [1214274] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
-                source = "Sold by Lieutenant General Andorov",
+                source = "Sold by Lieutenant General Andorov (Ruins of Ahn'Qiraj)",
+                sourceLocations = {
+                    {
+                        npcID = 15471,
+                        npcName = "Lieutenant General Andorov",
+                        uiMapID = 1451,
+                        zoneName = "Ruins of Ahn'Qiraj",
+                        x = 28.6,
+                        y = 92.4,
+                    },
+                },
             },
             [1215507] = {
                 icon = "Interface\\Icons\\spell_shadow_sealofkings",
@@ -2587,7 +3133,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252344] = {
                 icon = "Interface\\Icons\\inv_chest_plate11",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -2611,7 +3157,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252345] = {
                 icon = "Interface\\Icons\\inv_pants_plate_10",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -2635,7 +3181,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252346] = {
                 icon = "Interface\\Icons\\inv_helmet_10",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -2659,7 +3205,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1252368] = {
                 icon = "Interface\\Icons\\inv_spear_05",
                 source = "Sold by Gor'mak (The Barrens), Stondry Darkhammer (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248197,
@@ -2683,7 +3229,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292945] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2698,7 +3244,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292946] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2713,7 +3259,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292947] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2728,7 +3274,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292948] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2743,7 +3289,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292949] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2758,7 +3304,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292950] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2773,7 +3319,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292951] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2788,7 +3334,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292952] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2803,7 +3349,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292953] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2818,7 +3364,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292954] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2833,7 +3379,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292955] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2848,7 +3394,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292956] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2863,7 +3409,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292981] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2878,7 +3424,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292982] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2893,7 +3439,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292983] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2908,7 +3454,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292984] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2923,7 +3469,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292985] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2938,7 +3484,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292986] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2953,7 +3499,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292987] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -2968,7 +3514,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292988] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,

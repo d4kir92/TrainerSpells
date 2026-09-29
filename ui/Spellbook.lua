@@ -284,6 +284,7 @@ end
 local playerSpellsModeTabs = {}
 local playerSpellsModeTabContainer
 local playerSpellsModeDivider
+local playerSpellsModeLastTab
 local playerSpellsContentHidden = false
 local function GetPlayerSpellsBook()
     return PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
@@ -475,7 +476,27 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
     local previousTab = classTab
     if TrainerSpells:HasPetClassData(classToken) then previousTab = CreatePlayerSpellsModeTab(container, tabSystem, 2, "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab) end
     previousTab = CreatePlayerSpellsModeTab(container, tabSystem, 3, "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS"), previousTab)
-    CreatePlayerSpellsModeTab(container, tabSystem, 4, "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab)
+    playerSpellsModeLastTab = CreatePlayerSpellsModeTab(container, tabSystem, 4, "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab)
+end
+
+local function FitNativeSearchBox()
+    local book = GetPlayerSpellsBook()
+    local nativeSearchBox = book and book.SearchBox
+    if not nativeSearchBox or not playerSpellsModeLastTab then return end
+    local tabRight = playerSpellsModeLastTab:GetRight()
+    local left, right, top = nativeSearchBox:GetLeft(), nativeSearchBox:GetRight(), nativeSearchBox:GetTop()
+    local bookLeft, bookRight, bookTop = book:GetLeft(), book:GetRight(), book:GetTop()
+    if not tabRight or not left or not right or not top or not bookLeft or not bookRight or not bookTop then return end
+    tabRight = tabRight * playerSpellsModeLastTab:GetEffectiveScale() / book:GetEffectiveScale()
+    if left >= tabRight + 8 or right <= tabRight + 60 then return end
+    nativeSearchBox:ClearAllPoints()
+    nativeSearchBox:SetPoint("TOPLEFT", book, "TOPLEFT", tabRight - bookLeft + 12, top - bookTop)
+    nativeSearchBox:SetPoint("TOPRIGHT", book, "TOPRIGHT", right - bookRight, top - bookTop)
+    if classFrame:IsShown() then PositionPlayerSpellsFrame() end
+end
+
+local function QueueFitNativeSearchBox()
+    C_Timer.After(0, FitNativeSearchBox)
 end
 
 local function InstallPlayerSpellsIntegration()
@@ -487,6 +508,9 @@ local function InstallPlayerSpellsIntegration()
     book:HookScript("OnHide", ClosePlayerSpellsPanel)
     hooksecurefunc(tabSystem, "SetTab", ClosePlayerSpellsPanel)
     PlayerSpellsFrame:HookScript("OnHide", ClosePlayerSpellsPanel)
+    book:HookScript("OnShow", QueueFitNativeSearchBox)
+    book:HookScript("OnSizeChanged", QueueFitNativeSearchBox)
+    if book:IsShown() then QueueFitNativeSearchBox() end
 end
 
 if not SpellBookFrame and TrainerSpells:HasClassTrainers() then

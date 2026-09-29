@@ -5,7 +5,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257013] = {
                 icon = "Interface\\Icons\\inv_misc_bag_30",
                 source = "Sold by Alexandra Bolero (Stormwind City), Jennabink Powerseam (Wetlands), Rann Flamespinner (Loch Modan), Lohgan Eva (Duskwood), Mallen Swain (Hillsbrad Foothills), Danielle Zipstitch (Duskwood), Sheri Zipstitch (Duskwood), Xizk Goodstitch (Stranglethorn Vale), Mahu (Thunder Bluff), Franklin Hamar (Redridge Mountains), Captured Servant of Azora (Redridge Mountains), Borya (Orgrimmar), Wrahk (The Barrens), Elynna (Darnassus), Valdaron (Darkshore), Millie Gregorian (Undercity), Poranna Snowbraid (Ironforge), Yonada (The Barrens), Ghok'kah (Dustwallow Marsh), Vizzklick (Tanaris), Jun'ha (Arathi Highlands), Brienna Starglow (Feralas), Darnall (Moonglade), Outfitter Eric (Ironforge), Reagent Bot (Westfall), Reagent Bot (Loch Modan), Reagent Bot (Elwynn Forest), Dominique Stefano (Alterac Mountains), Taleen Shimmerthread (Zephras Isle), Othesia Evengale (Zephras Isle), Repair Bot (Westfall), Repair Bot (Durotar), Repair Bot (Elwynn Forest), Angela Ward (Undercity), Darah (Orgrimmar), Boramu (Thunder Bluff), Ellie Stonebrow (Ironforge), Antonio Bolero (Stormwind City), Dani'ill (Darnassus), Stitch Pinwizzle (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1347,
@@ -30,8 +30,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Rann Flamespinner",
                         uiMapID = 1432,
                         zoneName = "Loch Modan",
-                        x = 26,
-                        y = 17.2,
+                        x = 36,
+                        y = 46,
                     },
                     {
                         faction = "Alliance",
@@ -40,7 +40,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         uiMapID = 1431,
                         zoneName = "Duskwood",
                         x = 75.6,
-                        y = 45.4,
+                        y = 44.6,
                     },
                     {
                         npcID = 2394,
@@ -56,7 +56,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Danielle Zipstitch",
                         uiMapID = 1431,
                         zoneName = "Duskwood",
-                        x = 75.6,
+                        x = 75.8,
                         y = 45.4,
                     },
                     {
@@ -99,8 +99,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Captured Servant of Azora",
                         uiMapID = 1433,
                         zoneName = "Redridge Mountains",
-                        x = 22,
-                        y = 45.4,
+                        x = 74.4,
+                        y = 79.4,
                     },
                     {
                         faction = "Horde",
@@ -117,8 +117,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Wrahk",
                         uiMapID = 1413,
                         zoneName = "The Barrens",
-                        x = 45,
-                        y = 59.2,
+                        x = 52.2,
+                        y = 31.6,
                     },
                     {
                         faction = "Alliance",
@@ -126,8 +126,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Elynna",
                         uiMapID = 1457,
                         zoneName = "Darnassus",
-                        x = 63.8,
-                        y = 21.2,
+                        x = 64.2,
+                        y = 21.4,
                     },
                     {
                         faction = "Alliance",
@@ -214,15 +214,15 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         uiMapID = 1455,
                         zoneName = "Ironforge",
                         x = 43.2,
-                        y = 28.4,
+                        y = 29.2,
                     },
                     {
                         npcID = 242498,
                         npcName = "Reagent Bot",
                         uiMapID = 1436,
                         zoneName = "Westfall",
-                        x = 37,
-                        y = 88.6,
+                        x = 33.2,
+                        y = 56,
                     },
                     {
                         npcID = 242498,
@@ -262,8 +262,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Othesia Evengale",
                         uiMapID = 2521,
                         zoneName = "Zephras Isle",
-                        x = 44.8,
-                        y = 44.2,
+                        x = 64.4,
+                        y = 81,
                     },
                     {
                         npcID = 254695,
@@ -286,8 +286,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Repair Bot",
                         uiMapID = 1429,
                         zoneName = "Elwynn Forest",
-                        x = 32,
-                        y = 49.2,
+                        x = 33.2,
+                        y = 50.4,
                     },
                     {
                         faction = "Horde",
@@ -304,8 +304,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Darah",
                         uiMapID = 1454,
                         zoneName = "Orgrimmar",
-                        x = 63,
-                        y = 51.2,
+                        x = 63.4,
+                        y = 50.4,
                     },
                     {
                         faction = "Horde",
@@ -313,8 +313,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Boramu",
                         uiMapID = 1456,
                         zoneName = "Thunder Bluff",
-                        x = 43.4,
-                        y = 43.8,
+                        x = 44,
+                        y = 44.8,
                     },
                     {
                         faction = "Alliance",
@@ -322,8 +322,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Ellie Stonebrow",
                         uiMapID = 1455,
                         zoneName = "Ironforge",
-                        x = 43.2,
-                        y = 28.4,
+                        x = 43.4,
+                        y = 27.4,
                     },
                     {
                         faction = "Alliance",
@@ -331,8 +331,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Antonio Bolero",
                         uiMapID = 1453,
                         zoneName = "Stormwind City",
-                        x = 43.4,
-                        y = 74,
+                        x = 53.4,
+                        y = 81.8,
                     },
                     {
                         faction = "Alliance",
@@ -368,7 +368,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7630] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_37",
                 source = "Sold by Tharynn Bouden (Elwynn Forest), Borya (Orgrimmar), Wrahk (The Barrens), Constance Brisboise (Tirisfal Glades), Valdaron (Darkshore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 66,
                         npcName = "Tharynn Bouden",
@@ -420,7 +420,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7633] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_23",
                 source = "Sold by Drake Lindgren (Elwynn Forest), Wrahk (The Barrens), Ranik (The Barrens), Andrew Hilbert (Silverpine Forest), Elynna (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1250,
@@ -436,8 +436,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Wrahk",
                         uiMapID = 1413,
                         zoneName = "The Barrens",
-                        x = 61.8,
-                        y = 38.6,
+                        x = 52.2,
+                        y = 31.6,
                     },
                     {
                         npcID = 3499,
@@ -472,7 +472,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [6686] = {
                 icon = "Interface\\Icons\\inv_misc_bag_02",
                 source = "Sold by Gina MacGregor (Westfall), Mahu (Thunder Bluff), Andrew Hilbert (Silverpine Forest), Valdaron (Darkshore) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 843,
                         npcName = "Gina MacGregor",
@@ -515,7 +515,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257370] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_03",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -539,7 +539,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257371] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -563,7 +563,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257372] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_02",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -587,7 +587,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257373] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_05",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -611,7 +611,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257374] = {
                 icon = "Interface\\Icons\\inv_boots_05",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -635,7 +635,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257375] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_08",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -665,7 +665,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257017] = {
                 icon = "Interface\\Icons\\inv_misc_bag_30",
                 source = "Sold by Alexandra Bolero (Stormwind City), Jennabink Powerseam (Wetlands), Rann Flamespinner (Loch Modan), Lohgan Eva (Duskwood), Mallen Swain (Hillsbrad Foothills), Danielle Zipstitch (Duskwood), Sheri Zipstitch (Duskwood), Xizk Goodstitch (Stranglethorn Vale), Mahu (Thunder Bluff), Franklin Hamar (Redridge Mountains), Captured Servant of Azora (Redridge Mountains), Borya (Orgrimmar), Wrahk (The Barrens), Elynna (Darnassus), Valdaron (Darkshore), Millie Gregorian (Undercity), Poranna Snowbraid (Ironforge), Yonada (The Barrens), Ghok'kah (Dustwallow Marsh), Vizzklick (Tanaris), Jun'ha (Arathi Highlands), Brienna Starglow (Feralas), Darnall (Moonglade), Outfitter Eric (Ironforge), Reagent Bot (Westfall), Reagent Bot (Loch Modan), Reagent Bot (Elwynn Forest), Dominique Stefano (Alterac Mountains), Taleen Shimmerthread (Zephras Isle), Othesia Evengale (Zephras Isle), Repair Bot (Westfall), Repair Bot (Durotar), Repair Bot (Elwynn Forest), Angela Ward (Undercity), Darah (Orgrimmar), Boramu (Thunder Bluff), Ellie Stonebrow (Ironforge), Antonio Bolero (Stormwind City), Dani'ill (Darnassus), Stitch Pinwizzle (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1347,
@@ -690,8 +690,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Rann Flamespinner",
                         uiMapID = 1432,
                         zoneName = "Loch Modan",
-                        x = 26,
-                        y = 17.2,
+                        x = 36,
+                        y = 46,
                     },
                     {
                         faction = "Alliance",
@@ -700,7 +700,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         uiMapID = 1431,
                         zoneName = "Duskwood",
                         x = 75.6,
-                        y = 45.4,
+                        y = 44.6,
                     },
                     {
                         npcID = 2394,
@@ -716,7 +716,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Danielle Zipstitch",
                         uiMapID = 1431,
                         zoneName = "Duskwood",
-                        x = 75.6,
+                        x = 75.8,
                         y = 45.4,
                     },
                     {
@@ -759,8 +759,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Captured Servant of Azora",
                         uiMapID = 1433,
                         zoneName = "Redridge Mountains",
-                        x = 22,
-                        y = 45.4,
+                        x = 74.4,
+                        y = 79.4,
                     },
                     {
                         faction = "Horde",
@@ -777,8 +777,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Wrahk",
                         uiMapID = 1413,
                         zoneName = "The Barrens",
-                        x = 45,
-                        y = 59.2,
+                        x = 52.2,
+                        y = 31.6,
                     },
                     {
                         faction = "Alliance",
@@ -786,8 +786,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Elynna",
                         uiMapID = 1457,
                         zoneName = "Darnassus",
-                        x = 63.8,
-                        y = 21.2,
+                        x = 64.2,
+                        y = 21.4,
                     },
                     {
                         faction = "Alliance",
@@ -874,15 +874,15 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         uiMapID = 1455,
                         zoneName = "Ironforge",
                         x = 43.2,
-                        y = 28.4,
+                        y = 29.2,
                     },
                     {
                         npcID = 242498,
                         npcName = "Reagent Bot",
                         uiMapID = 1436,
                         zoneName = "Westfall",
-                        x = 37,
-                        y = 88.6,
+                        x = 33.2,
+                        y = 56,
                     },
                     {
                         npcID = 242498,
@@ -922,8 +922,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Othesia Evengale",
                         uiMapID = 2521,
                         zoneName = "Zephras Isle",
-                        x = 44.8,
-                        y = 44.2,
+                        x = 64.4,
+                        y = 81,
                     },
                     {
                         npcID = 254695,
@@ -946,8 +946,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Repair Bot",
                         uiMapID = 1429,
                         zoneName = "Elwynn Forest",
-                        x = 32,
-                        y = 49.2,
+                        x = 33.2,
+                        y = 50.4,
                     },
                     {
                         faction = "Horde",
@@ -964,8 +964,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Darah",
                         uiMapID = 1454,
                         zoneName = "Orgrimmar",
-                        x = 63,
-                        y = 51.2,
+                        x = 63.4,
+                        y = 50.4,
                     },
                     {
                         faction = "Horde",
@@ -973,8 +973,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Boramu",
                         uiMapID = 1456,
                         zoneName = "Thunder Bluff",
-                        x = 43.4,
-                        y = 43.8,
+                        x = 44,
+                        y = 44.8,
                     },
                     {
                         faction = "Alliance",
@@ -982,8 +982,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Ellie Stonebrow",
                         uiMapID = 1455,
                         zoneName = "Ironforge",
-                        x = 43.2,
-                        y = 28.4,
+                        x = 43.4,
+                        y = 27.4,
                     },
                     {
                         faction = "Alliance",
@@ -991,8 +991,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Antonio Bolero",
                         uiMapID = 1453,
                         zoneName = "Stormwind City",
-                        x = 43.4,
-                        y = 74,
+                        x = 53.4,
+                        y = 81.8,
                     },
                     {
                         faction = "Alliance",
@@ -1026,7 +1026,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7639] = {
                 icon = "Interface\\Icons\\inv_shirt_13",
                 source = "Sold by Gina MacGregor (Westfall), Alexandra Bolero (Stormwind City), Mallen Swain (Hillsbrad Foothills), Borya (Orgrimmar), Yonada (The Barrens)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 843,
                         npcName = "Gina MacGregor",
@@ -1075,7 +1075,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257382] = {
                 icon = "Interface\\Icons\\inv_gauntlets_16",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1099,7 +1099,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257383] = {
                 icon = "Interface\\Icons\\inv_gauntlets_17",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1123,7 +1123,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257384] = {
                 icon = "Interface\\Icons\\inv_gauntlets_19",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1147,7 +1147,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257385] = {
                 icon = "Interface\\Icons\\inv_gauntlets_27",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1171,7 +1171,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257386] = {
                 icon = "Interface\\Icons\\inv_gauntlets_20",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1195,7 +1195,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257387] = {
                 icon = "Interface\\Icons\\inv_gauntlets_21",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1231,7 +1231,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257388] = {
                 icon = "Interface\\Icons\\inv_belt_43",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1255,7 +1255,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257389] = {
                 icon = "Interface\\Icons\\inv_belt_43a",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1279,7 +1279,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257390] = {
                 icon = "Interface\\Icons\\inv_belt_43c",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1303,7 +1303,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257391] = {
                 icon = "Interface\\Icons\\inv_belt_43",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1327,7 +1327,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257392] = {
                 icon = "Interface\\Icons\\inv_belt_43a",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1351,7 +1351,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257393] = {
                 icon = "Interface\\Icons\\inv_belt_43b",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1377,7 +1377,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [6688] = {
                 icon = "Interface\\Icons\\inv_misc_bag_10_red",
                 source = "Sold by Amy Davenport (Redridge Mountains), Jennabink Powerseam (Wetlands), Rann Flamespinner (Loch Modan), Mahu (Thunder Bluff), Borya (Orgrimmar), Wrahk (The Barrens), Zixil (Hillsbrad Foothills), Kiknikle (The Barrens), Valdaron (Darkshore), Millie Gregorian (Undercity), Yonada (The Barrens) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 777,
                         npcName = "Amy Davenport",
@@ -1428,8 +1428,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Wrahk",
                         uiMapID = 1413,
                         zoneName = "The Barrens",
-                        x = 45,
-                        y = 59.2,
+                        x = 52.2,
+                        y = 31.6,
                     },
                     {
                         npcID = 3537,
@@ -1444,8 +1444,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Kiknikle",
                         uiMapID = 1413,
                         zoneName = "The Barrens",
-                        x = 45,
-                        y = 59.2,
+                        x = 41.8,
+                        y = 38.6,
                     },
                     {
                         faction = "Alliance",
@@ -1479,7 +1479,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7643] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_24",
                 source = "Sold by Jennabink Powerseam (Wetlands), Rann Flamespinner (Loch Modan), Sheri Zipstitch (Duskwood), Ranik (The Barrens), Elynna (Darnassus), Millie Gregorian (Undercity)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1454,
@@ -1562,7 +1562,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257400] = {
                 icon = "Interface\\Icons\\inv_crown_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1586,7 +1586,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257401] = {
                 icon = "Interface\\Icons\\inv_crown_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1610,7 +1610,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257402] = {
                 icon = "Interface\\Icons\\inv_crown_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1634,7 +1634,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257403] = {
                 icon = "Interface\\Icons\\inv_crown_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1658,7 +1658,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257404] = {
                 icon = "Interface\\Icons\\inv_crown_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1682,7 +1682,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257405] = {
                 icon = "Interface\\Icons\\inv_crown_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1708,7 +1708,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3869] = {
                 icon = "Interface\\Icons\\inv_shirt_yellow_01",
                 source = "Sold by Danielle Zipstitch (Duskwood)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 2668,
@@ -1723,7 +1723,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257406] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_32",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1747,7 +1747,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257407] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_03",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1771,7 +1771,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257408] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_02",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1795,7 +1795,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257409] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_48",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1819,7 +1819,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257410] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_51",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1843,7 +1843,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257411] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_26",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -1875,7 +1875,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3854] = {
                 icon = "Interface\\Icons\\inv_gauntlets_17",
                 source = "Sold by Wenna Silkbeard (Wetlands), Kireena (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 2679,
@@ -1899,7 +1899,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3870] = {
                 icon = "Interface\\Icons\\inv_shirt_black_01",
                 source = "Sold by Mallen Swain (Hillsbrad Foothills), Sheri Zipstitch (Duskwood), Super-Seller 680 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2394,
                         npcName = "Mallen Swain",
@@ -1944,7 +1944,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [428424] = {
                 icon = "Interface\\Icons\\inv_bracer_25a",
                 source = "Sold by Elaine Compton (Stormwind City), Jornah (Orgrimmar), Dokimi (Thunder Bluff), Gishah (Undercity), Tamelyn Aldridge (Ironforge), Marcy Baker (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 213077,
@@ -2004,7 +2004,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257412] = {
                 icon = "Interface\\Icons\\inv_misc_bag_01",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -2018,7 +2018,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257419] = {
                 icon = "Interface\\Icons\\inv_pants_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2042,7 +2042,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257420] = {
                 icon = "Interface\\Icons\\inv_pants_08",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2066,7 +2066,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257421] = {
                 icon = "Interface\\Icons\\inv_pants_06",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2090,7 +2090,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257422] = {
                 icon = "Interface\\Icons\\inv_pants_11",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2114,7 +2114,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257423] = {
                 icon = "Interface\\Icons\\inv_pants_10",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2138,7 +2138,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257424] = {
                 icon = "Interface\\Icons\\inv_pants_cloth_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2168,7 +2168,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [439102] = {
                 icon = "Interface\\Icons\\ability_ensnare",
                 source = "Sold by Xizk Goodstitch (Stranglethorn Vale), Super-Seller 680 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2670,
                         npcName = "Xizk Goodstitch",
@@ -2202,7 +2202,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [8786] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_14",
                 source = "Sold by Jun'ha (Arathi Highlands), Brienna Starglow (Feralas), Norvin Alderman (Alterac Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 6574,
@@ -2234,7 +2234,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12089] = {
                 icon = "Interface\\Icons\\inv_pants_01",
                 source = "Sold by Millie Gregorian (Undercity), Outfitter Eric (Ironforge)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 4577,
@@ -2258,7 +2258,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12091] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_04",
                 source = "Sold by Alexandra Bolero (Stormwind City), Mahu (Thunder Bluff)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1347,
@@ -2282,7 +2282,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12093] = {
                 icon = "Interface\\Icons\\inv_shirt_black_01",
                 source = "Sold by Millie Gregorian (Undercity), Outfitter Eric (Ironforge)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 4577,
@@ -2316,7 +2316,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [8789] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_16",
                 source = "Sold by Xizk Goodstitch (Stranglethorn Vale), Super-Seller 680 (Desolace), Norvin Alderman (Alterac Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2670,
                         npcName = "Xizk Goodstitch",
@@ -2357,7 +2357,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [435841] = {
                 icon = "Interface\\Icons\\inv_belt_03",
                 source = "Sold by Borya (Orgrimmar), Elynna (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3364,
@@ -2381,7 +2381,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [435848] = {
                 icon = "Interface\\Icons\\inv_shoulder_02",
                 source = "Sold by Borya (Orgrimmar), Elynna (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3364,
@@ -2427,7 +2427,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3862] = {
                 icon = "Interface\\Icons\\inv_misc_cape_04",
                 source = "Sold by Micha Yance (Hillsbrad Foothills), Ghok'kah (Dustwallow Marsh)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2381,
                         npcName = "Micha Yance",
@@ -2454,7 +2454,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3873] = {
                 icon = "Interface\\Icons\\inv_shirt_black_01",
                 source = "Sold by Narkk (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2663,
                         npcName = "Narkk",
@@ -2468,7 +2468,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257437] = {
                 icon = "Interface\\Icons\\inv_gauntlets_30",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2492,7 +2492,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257438] = {
                 icon = "Interface\\Icons\\inv_gauntlets_13",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2516,7 +2516,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257439] = {
                 icon = "Interface\\Icons\\inv_gauntlets_27",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2540,7 +2540,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257440] = {
                 icon = "Interface\\Icons\\inv_gauntlets_23",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2564,7 +2564,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257441] = {
                 icon = "Interface\\Icons\\inv_gauntlets_16",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2590,7 +2590,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [439085] = {
                 icon = "Interface\\Icons\\ability_ensnare",
                 source = "Sold by Vizzklick (Tanaris), Stitch Pinwizzle (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 6568,
                         npcName = "Vizzklick",
@@ -2614,7 +2614,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301532] = {
                 icon = "Interface\\Icons\\inv_helm_cloth_skybornec60_b_01",
                 source = "Sold by Sutara Plainstalker (Mulgore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 264078,
@@ -2629,7 +2629,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301533] = {
                 icon = "Interface\\Icons\\inv_shoulder_cloth_skybornec60_b_01",
                 source = "Sold by Sutara Plainstalker (Mulgore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 264078,
@@ -2644,7 +2644,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301540] = {
                 icon = "Interface\\Icons\\inv_helm_cloth_skybornec60_b_01",
                 source = "Sold by Archmage Alvareaux (Alterac Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 32287,
@@ -2659,7 +2659,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1301541] = {
                 icon = "Interface\\Icons\\inv_shoulder_cloth_skybornec60_b_01",
                 source = "Sold by Archmage Alvareaux (Alterac Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 32287,
@@ -2690,7 +2690,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12063] = {
                 icon = "Interface\\Icons\\inv_gauntlets_17",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -2704,7 +2704,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12064] = {
                 icon = "Interface\\Icons\\inv_shirt_orange_01",
                 source = "Sold by Mahu (Thunder Bluff), Elynna (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3005,
@@ -2734,7 +2734,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12075] = {
                 icon = "Interface\\Icons\\inv_shirt_purple_01",
                 source = "Sold by Borya (Orgrimmar), Outfitter Eric (Ironforge)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3364,
@@ -2758,7 +2758,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [27658] = {
                 icon = "Interface\\Icons\\inv_misc_bag_enchantedmageweave",
                 source = "Sold by Jessara Cordell (Stormwind City), Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Vaean (Darnassus), Thaddeus Webb (Undercity), Tilli Thistlefuzz (Ironforge), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest), Kania (Silithus), Nasalanna Windsinger (Zephras Isle)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1318,
@@ -2819,8 +2819,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Lilly",
                         uiMapID = 1421,
                         zoneName = "Silverpine Forest",
-                        x = 53.8,
-                        y = 82.6,
+                        x = 43,
+                        y = 50.8,
                     },
                     {
                         npcID = 5758,
@@ -2851,7 +2851,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257443] = {
                 icon = "Interface\\Icons\\inv_misc_bag_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2881,7 +2881,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12080] = {
                 icon = "Interface\\Icons\\inv_shirt_red_01",
                 source = "Sold by Borya (Orgrimmar), Outfitter Eric (Ironforge)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3364,
@@ -2905,7 +2905,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257450] = {
                 icon = "Interface\\Icons\\inv_shoulder_22",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2929,7 +2929,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257451] = {
                 icon = "Interface\\Icons\\inv_shoulder_02",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2953,7 +2953,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257452] = {
                 icon = "Interface\\Icons\\inv_shoulder_23",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -2977,7 +2977,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257453] = {
                 icon = "Interface\\Icons\\inv_shoulder_25",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3001,7 +3001,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257454] = {
                 icon = "Interface\\Icons\\inv_shoulder_09",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3025,7 +3025,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257455] = {
                 icon = "Interface\\Icons\\inv_shoulder_05",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3051,7 +3051,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12081] = {
                 icon = "Interface\\Icons\\inv_helmet_29",
                 source = "Sold by Cowardly Crosby (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2672,
                         npcName = "Cowardly Crosby",
@@ -3069,7 +3069,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [12085] = {
                 icon = "Interface\\Icons\\inv_shirt_08",
                 source = "Sold by Millie Gregorian (Undercity), Outfitter Eric (Ironforge)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 4577,
@@ -3092,26 +3092,72 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [12086] = {
                 icon = "Interface\\Icons\\inv_helmet_27",
-                source = "Quest reward",
+                source = "Quest reward: The Undermarket",
+                sourceLocations = {
+                    {
+                        npcID = 8439,
+                        npcName = "Nilith Lokrav",
+                        questID = 3402,
+                        questName = "The Undermarket",
+                        uiMapID = 1427,
+                        zoneName = "Searing Gorge",
+                        x = 41,
+                        y = 74.8,
+                    },
+                },
             },
             [435827] = {
                 icon = "Interface\\Icons\\inv_misc_thread_eternium",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
         },
         [205] = {
             [26403] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_56",
-                source = "Quest reward",
+                source = "Quest reward: Festive Recipes",
+                sourceLocations = {
+                    {
+                        npcID = 15909,
+                        npcName = "Fariel Starsong",
+                        questID = 8878,
+                        questName = "Festive Recipes",
+                        uiMapID = 1450,
+                        zoneName = "Moonglade",
+                        x = 53.6,
+                        y = 35.4,
+                    },
+                },
             },
             [26407] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_55",
-                source = "Quest reward",
+                source = "Quest reward: Festive Recipes",
+                sourceLocations = {
+                    {
+                        npcID = 15909,
+                        npcName = "Fariel Starsong",
+                        questID = 8878,
+                        questName = "Festive Recipes",
+                        uiMapID = 1450,
+                        zoneName = "Moonglade",
+                        x = 53.6,
+                        y = 35.4,
+                    },
+                },
             },
             [1257456] = {
                 icon = "Interface\\Icons\\inv_bracer_23b",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3135,7 +3181,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257457] = {
                 icon = "Interface\\Icons\\inv_bracer_22a",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3159,7 +3205,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257458] = {
                 icon = "Interface\\Icons\\inv_bracer_23a",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3183,7 +3229,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257459] = {
                 icon = "Interface\\Icons\\inv_bracer_13",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3207,7 +3253,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257460] = {
                 icon = "Interface\\Icons\\inv_bracer_21b",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3231,7 +3277,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257461] = {
                 icon = "Interface\\Icons\\inv_bracer_20b",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3267,7 +3313,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18405] = {
                 icon = "Interface\\Icons\\inv_misc_bag_19",
                 source = "Sold by Qia (Winterspring)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11189,
                         npcName = "Qia",
@@ -3281,7 +3327,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18406] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_04",
                 source = "Sold by Darnall (Moonglade)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 7940,
                         npcName = "Darnall",
@@ -3307,7 +3353,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [26085] = {
                 icon = "Interface\\Icons\\inv_misc_bag_soulbag",
                 source = "Sold by Vizzklick (Tanaris), Stitch Pinwizzle (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 6568,
                         npcName = "Vizzklick",
@@ -3329,7 +3375,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257465] = {
                 icon = "Interface\\Icons\\inv_misc_bag_01",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3353,7 +3399,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257466] = {
                 icon = "Interface\\Icons\\inv_belt_07",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3377,7 +3423,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257467] = {
                 icon = "Interface\\Icons\\inv_belt_39a",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3401,7 +3447,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257468] = {
                 icon = "Interface\\Icons\\inv_belt_37a",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3425,7 +3471,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257469] = {
                 icon = "Interface\\Icons\\inv_belt_04",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3449,7 +3495,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257470] = {
                 icon = "Interface\\Icons\\inv_belt_32",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3473,7 +3519,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257471] = {
                 icon = "Interface\\Icons\\inv_belt_43",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3499,7 +3545,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18409] = {
                 icon = "Interface\\Icons\\inv_misc_cape_10",
                 source = "Sold by Darnall (Moonglade)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 7940,
                         npcName = "Darnall",
@@ -3538,14 +3584,24 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [435610] = {
                 icon = "Interface\\Icons\\temp",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
         },
         [230] = {
             [18417] = {
                 icon = "Interface\\Icons\\inv_gauntlets_25",
                 source = "Sold by Qia (Winterspring)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11189,
                         npcName = "Qia",
@@ -3563,7 +3619,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18419] = {
                 icon = "Interface\\Icons\\inv_pants_06",
                 source = "Sold by Lorelae Wintersong (Moonglade)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 12022,
                         npcName = "Lorelae Wintersong",
@@ -3585,7 +3641,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18560] = {
                 icon = "Interface\\Icons\\inv_fabric_moonrag_01",
                 source = "Sold by Qia (Winterspring)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11189,
                         npcName = "Qia",
@@ -3598,8 +3654,16 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [27659] = {
                 icon = "Interface\\Icons\\inv_misc_bag_enchantedrunecloth",
-                source = "Sold by Kania (Silithus), Lokhtos Darkbargainer",
-                vendorLocations = {
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths), Kania (Silithus)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
                     {
                         npcID = 15419,
                         npcName = "Kania",
@@ -3613,7 +3677,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [27724] = {
                 icon = "Interface\\Icons\\inv_misc_bag_cenarionherbbag",
                 source = "Sold by Mishta (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15179,
                         npcName = "Mishta",
@@ -3633,7 +3697,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18423] = {
                 icon = "Interface\\Icons\\inv_boots_05",
                 source = "Sold by Darnall (Moonglade)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 7940,
                         npcName = "Darnall",
@@ -3655,7 +3719,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257479] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_06",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3679,7 +3743,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257480] = {
                 icon = "Interface\\Icons\\inv_boots_07",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3703,7 +3767,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257481] = {
                 icon = "Interface\\Icons\\inv_boots_05",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3727,7 +3791,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257482] = {
                 icon = "Interface\\Icons\\inv_boots_05",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3751,7 +3815,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257483] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_11",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3775,7 +3839,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257484] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_03",
                 source = "Sold by Jim'bek (The Barrens), Mivin Shadowweave (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248202,
@@ -3845,7 +3909,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1257487] = {
                 icon = "Interface\\Icons\\inv_bracer_13",
                 source = "Sold by Pexmit (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 266901,
                         npcName = "Pexmit",
@@ -3869,7 +3933,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23662] = {
                 icon = "Interface\\Icons\\inv_belt_09",
                 source = "Sold by Meilosh (Felwood)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11557,
                         npcName = "Meilosh",
@@ -3883,7 +3947,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23664] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_03",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -3917,7 +3981,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [27725] = {
                 icon = "Interface\\Icons\\inv_misc_bag_satchelofcenarius",
                 source = "Sold by Mishta (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15179,
                         npcName = "Mishta",
@@ -3974,7 +4038,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [22902] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_04",
-                source = "Sold by Shen'dralar Provisioner",
+                source = "Sold by Shen'dralar Provisioner (Dire Maul (West))",
+                sourceLocations = {
+                    {
+                        npcID = 14371,
+                        npcName = "Shen'dralar Provisioner",
+                        uiMapID = 1444,
+                        zoneName = "Dire Maul (West)",
+                        x = 60.3,
+                        y = 30.2,
+                    },
+                },
             },
         },
         [280] = {
@@ -4029,7 +4103,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23663] = {
                 icon = "Interface\\Icons\\inv_shoulder_19",
                 source = "Sold by Meilosh (Felwood)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11557,
                         npcName = "Meilosh",
@@ -4043,7 +4117,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23665] = {
                 icon = "Interface\\Icons\\inv_shoulder_13",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -4100,11 +4174,31 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [300] = {
             [20848] = {
                 icon = "Interface\\Icons\\inv_shoulder_23",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [20849] = {
                 icon = "Interface\\Icons\\inv_gauntlets_26",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [22759] = {
                 icon = "Interface\\Icons\\inv_bracer_09",
@@ -4112,16 +4206,36 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [23666] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_18",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23667] = {
                 icon = "Interface\\Icons\\inv_pants_06",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [24091] = {
                 icon = "Interface\\Icons\\inv_chest_cloth_07",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -4135,7 +4249,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24092] = {
                 icon = "Interface\\Icons\\inv_pants_cloth_14",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -4149,7 +4263,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24093] = {
                 icon = "Interface\\Icons\\inv_boots_cloth_02",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -4167,7 +4281,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [28210] = {
                 icon = "Interface\\Icons\\inv_misc_cape_17",
                 source = "Sold by Mishta (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15179,
                         npcName = "Mishta",
@@ -4180,12 +4294,22 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [461708] = {
                 icon = "Interface\\Icons\\ability_ensnare",
-                source = "Sold by Shen'dralar Provisioner",
+                source = "Sold by Shen'dralar Provisioner (Dire Maul (West))",
+                sourceLocations = {
+                    {
+                        npcID = 14371,
+                        npcName = "Shen'dralar Provisioner",
+                        uiMapID = 1444,
+                        zoneName = "Dire Maul (West)",
+                        x = 60.3,
+                        y = 30.2,
+                    },
+                },
             },
             [461727] = {
                 icon = "Interface\\Icons\\inv_misc_bag_26_spellfire",
                 source = "Sold by Pix Xizzix (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 227853,
                         npcName = "Pix Xizzix",
@@ -4215,7 +4339,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1213740] = {
                 icon = "Interface\\Icons\\ability_ensnare",
                 source = "Sold by Mishta (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15179,
                         npcName = "Mishta",
@@ -4229,7 +4353,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1213742] = {
                 icon = "Interface\\Icons\\ability_ensnare",
                 source = "Sold by Mishta (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15179,
                         npcName = "Mishta",
@@ -4243,7 +4367,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1213744] = {
                 icon = "Interface\\Icons\\ability_ensnare",
                 source = "Sold by Mishta (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15179,
                         npcName = "Mishta",
@@ -4257,7 +4381,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292941] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4272,7 +4396,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292942] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4287,7 +4411,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292943] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4302,7 +4426,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292944] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4317,7 +4441,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292957] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4332,7 +4456,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292958] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4347,7 +4471,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292959] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4362,7 +4486,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292960] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4377,7 +4501,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292961] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4392,7 +4516,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292962] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4407,7 +4531,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292963] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4422,7 +4546,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292964] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4437,7 +4561,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292977] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4452,7 +4576,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292978] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4467,7 +4591,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292979] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,
@@ -4482,7 +4606,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1292980] = {
                 icon = "Interface\\Icons\\temp",
                 source = "Sold by Aisarra Nightmeadow (Mount Hyjal)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 264797,

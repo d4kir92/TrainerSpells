@@ -44,7 +44,20 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [4508] = {
                 icon = "Interface\\Icons\\inv_potion_35",
-                source = "Quest reward",
+                source = "Quest reward: Wild Eyes, My First Real Potion",
+                sourceLocations = {
+                    {
+                        faction = "Horde",
+                        npcID = 1951,
+                        npcName = "Quinn Yorick",
+                        questID = 91920,
+                        questName = "Wild Eyes",
+                        uiMapID = 1421,
+                        zoneName = "Silverpine Forest",
+                        x = 53.4,
+                        y = 12.6,
+                    },
+                },
             },
         },
         [60] = {
@@ -55,7 +68,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [6617] = {
                 icon = "Interface\\Icons\\inv_potion_24",
                 source = "Sold by Defias Profiteer (Westfall), Xandar Goodbeard (Loch Modan), Hagrus (Orgrimmar), Ranik (The Barrens)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 1669,
                         npcName = "Defias Profiteer",
@@ -97,7 +110,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250794] = {
                 icon = "Interface\\Icons\\inv_potion_114",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -123,7 +136,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250789] = {
                 icon = "Interface\\Icons\\inv_potion_126",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -165,7 +178,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [426607] = {
                 icon = "Interface\\Icons\\inv_potion_19",
                 source = "Sold by Kzixx (Duskwood), Zixil (Hillsbrad Foothills)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 3134,
                         npcName = "Kzixx",
@@ -193,7 +206,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250780] = {
                 icon = "Interface\\Icons\\inv_potion_128",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -217,7 +230,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250801] = {
                 icon = "Interface\\Icons\\inv_potion_43",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -243,7 +256,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7255] = {
                 icon = "Interface\\Icons\\inv_potion_09",
                 source = "Sold by Xandar Goodbeard (Loch Modan), Kzixx (Duskwood), Hula'mahi (The Barrens)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1685,
@@ -288,7 +301,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251743] = {
                 icon = "Interface\\Icons\\inv_potiond_6",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -314,7 +327,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7256] = {
                 icon = "Interface\\Icons\\inv_potion_44",
                 source = "Sold by Christoph Jeffcoat (Hillsbrad Foothills), Harklan Moongrove (Ashenvale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 2393,
@@ -338,7 +351,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251731] = {
                 icon = "Interface\\Icons\\inv_potiond_2",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -368,7 +381,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251737] = {
                 icon = "Interface\\Icons\\inv_potiond_3",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -398,7 +411,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [6624] = {
                 icon = "Interface\\Icons\\inv_potion_04",
                 source = "Sold by Kor'geld (Orgrimmar), Ulthir (Darnassus), Soolie Berryfizz (Ironforge), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3348,
@@ -441,7 +454,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3449] = {
                 icon = "Interface\\Icons\\inv_potion_23",
                 source = "Sold by Bliztik (Duskwood), Montarr (Thousand Needles), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2481,
                         npcName = "Bliztik",
@@ -472,7 +485,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7257] = {
                 icon = "Interface\\Icons\\inv_potion_16",
                 source = "Sold by Nandar Branson (Hillsbrad Foothills), Jeeda (Stonetalon Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2380,
                         npcName = "Nandar Branson",
@@ -495,7 +508,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250796] = {
                 icon = "Interface\\Icons\\inv_potion_116",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -521,7 +534,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [6618] = {
                 icon = "Interface\\Icons\\inv_potion_21",
                 source = "Sold by Hagrus (Orgrimmar), Ulthir (Darnassus), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3335,
@@ -553,7 +566,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250790] = {
                 icon = "Interface\\Icons\\inv_potion_168",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -583,7 +596,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251750] = {
                 icon = "Interface\\Icons\\trade_alchemy_dpotion_c24",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -609,7 +622,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251732] = {
                 icon = "Interface\\Icons\\inv_potionf_4",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -625,7 +638,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7258] = {
                 icon = "Interface\\Icons\\inv_potion_13",
                 source = "Sold by Drovnar Strongbrew (Arathi Highlands), Glyx Brewright (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2812,
                         npcName = "Drovnar Strongbrew",
@@ -647,7 +660,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7259] = {
                 icon = "Interface\\Icons\\inv_potion_06",
                 source = "Sold by Glyx Brewright (Stranglethorn Vale), Alchemist Pestlezugg (Tanaris), Logannas (Feralas), Bronk (Feralas)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2848,
                         npcName = "Glyx Brewright",
@@ -670,8 +683,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Logannas",
                         uiMapID = 1444,
                         zoneName = "Feralas",
-                        x = 76,
-                        y = 43.4,
+                        x = 32.4,
+                        y = 44,
                     },
                     {
                         npcID = 8158,
@@ -690,7 +703,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250791] = {
                 icon = "Interface\\Icons\\inv_potion_107",
                 source = "Sold by Elaine Compton (Stormwind City), Jornah (Orgrimmar), Dokimi (Thunder Bluff), Gishah (Undercity), Tamelyn Aldridge (Ironforge), Marcy Baker (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 213077,
@@ -750,7 +763,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251738] = {
                 icon = "Interface\\Icons\\inv_potionf_1",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -770,7 +783,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250782] = {
                 icon = "Interface\\Icons\\inv_potion_150",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -796,7 +809,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [3454] = {
                 icon = "Interface\\Icons\\inv_potion_20",
                 source = "Sold by Bro'kin (Alterac Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2480,
                         npcName = "Bro'kin",
@@ -809,12 +822,22 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [435969] = {
                 icon = "Interface\\Icons\\temp",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
             [1250784] = {
                 icon = "Interface\\Icons\\inv_potion_45",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -849,7 +872,19 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [215] = {
             [4942] = {
                 icon = "Interface\\Icons\\inv_potion_67",
-                source = "Quest reward",
+                source = "Quest reward: Liquid Stone",
+                sourceLocations = {
+                    {
+                        npcID = 2920,
+                        npcName = "Lucien Tosselwrench",
+                        questID = 715,
+                        questName = "Liquid Stone",
+                        uiMapID = 1418,
+                        zoneName = "Badlands",
+                        x = 25.8,
+                        y = 44.4,
+                    },
+                },
             },
         },
         [225] = {
@@ -860,7 +895,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [11459] = {
                 icon = "Interface\\Icons\\inv_misc_orb_01",
                 source = "Sold by Alchemist Pestlezugg (Tanaris)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 5594,
                         npcName = "Alchemist Pestlezugg",
@@ -873,7 +908,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [435971] = {
                 icon = "Interface\\Icons\\temp",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
         },
         [235] = {
@@ -900,15 +945,15 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [11473] = {
                 icon = "Interface\\Icons\\inv_poison_mindnumbing",
                 source = "Sold by Logannas (Feralas), Bronk (Feralas)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 8157,
                         npcName = "Logannas",
                         uiMapID = 1444,
                         zoneName = "Feralas",
-                        x = 76,
-                        y = 43.4,
+                        x = 32.4,
+                        y = 44,
                     },
                     {
                         npcID = 8158,
@@ -923,7 +968,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251751] = {
                 icon = "Interface\\Icons\\inv_potion_33",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -953,7 +998,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [11476] = {
                 icon = "Interface\\Icons\\inv_potion_48",
                 source = "Sold by Maria Lumere (Stormwind City), Algernon (Undercity)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1313,
@@ -977,7 +1022,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [11477] = {
                 icon = "Interface\\Icons\\inv_potion_27",
                 source = "Sold by Rartar (Swamp of Sorrows), Nina Lightbrew (Blasted Lands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 8177,
@@ -1005,7 +1050,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250778] = {
                 icon = "Interface\\Icons\\trade_alchemy_dpotion_a25",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1037,7 +1082,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17553] = {
                 icon = "Interface\\Icons\\inv_potion_74",
                 source = "Sold by Ulthir (Darnassus), Algernon (Undercity)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 4226,
@@ -1063,7 +1108,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17554] = {
                 icon = "Interface\\Icons\\inv_potion_66",
                 source = "Sold by Kor'geld (Orgrimmar), Soolie Berryfizz (Ironforge)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3348,
@@ -1087,7 +1132,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251749] = {
                 icon = "Interface\\Icons\\trade_alchemy_dpotion_c26",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1119,7 +1164,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17187] = {
                 icon = "Interface\\Icons\\inv_misc_stonetablet_05",
                 source = "Sold by Alchemist Pestlezugg (Tanaris)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 5594,
                         npcName = "Alchemist Pestlezugg",
@@ -1137,7 +1182,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17559] = {
                 icon = "Interface\\Icons\\spell_fire_volcano",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -1166,12 +1211,22 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [17560] = {
                 icon = "Interface\\Icons\\spell_nature_strengthofearthtotem02",
-                source = "Sold by Plugger Spazzring",
+                source = "Sold by Plugger Spazzring (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 9499,
+                        npcName = "Plugger Spazzring",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [17561] = {
                 icon = "Interface\\Icons\\spell_nature_acid_01",
                 source = "Sold by Meilosh (Felwood)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11557,
                         npcName = "Meilosh",
@@ -1185,7 +1240,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17562] = {
                 icon = "Interface\\Icons\\spell_nature_earthbind",
                 source = "Sold by Magnus Frostwake (Western Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11278,
                         npcName = "Magnus Frostwake",
@@ -1215,7 +1270,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24365] = {
                 icon = "Interface\\Icons\\inv_potion_137",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -1229,7 +1284,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24366] = {
                 icon = "Interface\\Icons\\inv_potion_83",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -1243,7 +1298,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250777] = {
                 icon = "Interface\\Icons\\inv_potion_166",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1267,7 +1322,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250787] = {
                 icon = "Interface\\Icons\\inv_potion_165",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1291,7 +1346,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250797] = {
                 icon = "Interface\\Icons\\inv_potion_163",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1315,7 +1370,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250799] = {
                 icon = "Interface\\Icons\\inv_potion_161",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1339,7 +1394,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251748] = {
                 icon = "Interface\\Icons\\inv_potion_19",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1373,7 +1428,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250786] = {
                 icon = "Interface\\Icons\\inv_potion_164",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1397,7 +1452,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251747] = {
                 icon = "Interface\\Icons\\inv_potione_2",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1421,7 +1476,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251752] = {
                 icon = "Interface\\Icons\\inv_alchemy_80_potion02blue",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1455,7 +1510,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24367] = {
                 icon = "Interface\\Icons\\inv_potion_07",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -1469,7 +1524,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250785] = {
                 icon = "Interface\\Icons\\trade_alchemy_dpotion_a22",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1493,7 +1548,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1250792] = {
                 icon = "Interface\\Icons\\inv_potion_97",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1517,7 +1572,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251734] = {
                 icon = "Interface\\Icons\\inv_potione_4",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1567,7 +1622,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [24368] = {
                 icon = "Interface\\Icons\\inv_potion_82",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -1581,7 +1636,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1251740] = {
                 icon = "Interface\\Icons\\inv_potione_6",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,
@@ -1607,7 +1662,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17580] = {
                 icon = "Interface\\Icons\\inv_potion_76",
                 source = "Sold by Magnus Frostwake (Western Plaguelands) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11278,
                         npcName = "Magnus Frostwake",
@@ -1623,7 +1678,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17634] = {
                 icon = "Interface\\Icons\\inv_potion_26",
                 source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 227853,
                         npcName = "Pix Xizzix",
@@ -1637,7 +1692,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17635] = {
                 icon = "Interface\\Icons\\inv_potion_62",
                 source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 227853,
                         npcName = "Pix Xizzix",
@@ -1651,7 +1706,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17636] = {
                 icon = "Interface\\Icons\\inv_potion_97",
                 source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 227853,
                         npcName = "Pix Xizzix",
@@ -1665,7 +1720,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17637] = {
                 icon = "Interface\\Icons\\inv_potion_41",
                 source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 227853,
                         npcName = "Pix Xizzix",
@@ -1679,7 +1734,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [17638] = {
                 icon = "Interface\\Icons\\inv_potion_48",
                 source = "Sold by Pix Xizzix (Stranglethorn Vale) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 227853,
                         npcName = "Pix Xizzix",
@@ -1696,12 +1751,22 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [25146] = {
                 icon = "Interface\\Icons\\spell_fire_fire",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [1250800] = {
                 icon = "Interface\\Icons\\inv_potion_160",
                 source = "Sold by Apothecary Durelle (The Barrens), Nina Surefire (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248196,

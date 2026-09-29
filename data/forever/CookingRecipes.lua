@@ -5,7 +5,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7751] = {
                 icon = "Interface\\Icons\\inv_misc_fish_07",
                 source = "Sold by Tharynn Bouden (Elwynn Forest), Khara Deepwater (Loch Modan), Sewa Mistrunner (Thunder Bluff), Martine Tramblay (Tirisfal Glades), Nyoma (Teldrassil), Lizbeth Cromwell (Undercity), Catherine Leland (Stormwind City), Harn Longcast (Mulgore), Gretta Ganter (Dun Morogh), Nyalah Brightfire (Zephras Isle)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 66,
                         npcName = "Tharynn Bouden",
@@ -97,7 +97,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7752] = {
                 icon = "Interface\\Icons\\inv_misc_fish_24",
                 source = "Sold by Martine Tramblay (Tirisfal Glades), Kriggon Talsone (Westfall), Tansy Puddlefizz (Ironforge), Zansoa (Durotar), Nessa Shadowsong (Teldrassil), Nyalah Brightfire (Zephras Isle)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 3550,
                         npcName = "Martine Tramblay",
@@ -153,7 +153,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15935] = {
                 icon = "Interface\\Icons\\inv_misc_food_46",
                 source = "Sold by Abigail Shiel (Tirisfal Glades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 2118,
@@ -168,7 +168,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [21143] = {
                 icon = "Interface\\Icons\\inv_misc_food_62",
                 source = "Sold by Penney Copperpinch (Orgrimmar), Nardstrum Copperpinch (Undercity), Seersa Copperpinch (Thunder Bluff), Wulmort Jinglepocket (Ironforge), Khole Jinglepocket (Stormwind City)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 13420,
@@ -202,8 +202,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Wulmort Jinglepocket",
                         uiMapID = 1455,
                         zoneName = "Ironforge",
-                        x = 32.4,
-                        y = 67.4,
+                        x = 33.4,
+                        y = 65.4,
                     },
                     {
                         faction = "Alliance",
@@ -229,14 +229,27 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [10] = {
             [6412] = {
                 icon = "Interface\\Icons\\inv_misc_food_68",
-                source = "Quest reward",
+                source = "Quest reward: Recipe of the Kaldorei",
+                sourceLocations = {
+                    {
+                        faction = "Alliance",
+                        npcID = 6286,
+                        npcName = "Zarrin",
+                        questID = 4161,
+                        questName = "Recipe of the Kaldorei",
+                        uiMapID = 1438,
+                        zoneName = "Teldrassil",
+                        x = 57,
+                        y = 61.2,
+                    },
+                },
             },
         },
         [20] = {
             [6413] = {
                 icon = "Interface\\Icons\\inv_misc_food_10",
                 source = "Sold by Grimtak (Durotar), Naluk (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3881,
@@ -261,8 +274,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [25] = {
             [2795] = {
                 icon = "Interface\\Icons\\inv_misc_food_48",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Beer Basted Boar Ribs",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -271,6 +284,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         zoneName = "Stormwind City",
                         x = 74.4,
                         y = 36.4,
+                    },
+                    {
+                        faction = "Alliance",
+                        npcID = 1267,
+                        npcName = "Ragnar Thunderbrew",
+                        questID = 384,
+                        questName = "Beer Basted Boar Ribs",
+                        uiMapID = 1426,
+                        zoneName = "Dun Morogh",
+                        x = 46.8,
+                        y = 52.4,
                     },
                 },
             },
@@ -281,7 +305,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249963] = {
                 icon = "Interface\\Icons\\inv_drink_21",
                 source = "Sold by Aza'bek (The Barrens), Kalsey Sanden (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248198,
@@ -308,14 +332,26 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [1270633] = {
                 icon = "Interface\\Icons\\inv_misc_food_cooked_fishcake",
-                source = "Quest reward",
+                source = "Quest reward: Restocking the Larders",
+                sourceLocations = {
+                    {
+                        npcID = 251905,
+                        npcName = "Zerril Softbreeze",
+                        questID = 92553,
+                        questName = "Restocking the Larders",
+                        uiMapID = 2521,
+                        zoneName = "Zephras Isle",
+                        x = 43.8,
+                        y = 43.8,
+                    },
+                },
             },
         },
         [35] = {
             [6414] = {
                 icon = "Interface\\Icons\\inv_misc_food_60",
                 source = "Sold by Wunna Darkmane (Mulgore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3081,
@@ -330,7 +366,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [21144] = {
                 icon = "Interface\\Icons\\inv_drink_04",
                 source = "Sold by Penney Copperpinch (Orgrimmar), Nardstrum Copperpinch (Undercity), Seersa Copperpinch (Thunder Bluff), Wulmort Jinglepocket (Ironforge), Khole Jinglepocket (Stormwind City)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 13420,
@@ -364,8 +400,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Wulmort Jinglepocket",
                         uiMapID = 1455,
                         zoneName = "Ironforge",
-                        x = 32.4,
-                        y = 67.4,
+                        x = 33.4,
+                        y = 65.4,
                     },
                     {
                         faction = "Alliance",
@@ -389,14 +425,26 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [1270635] = {
                 icon = "Interface\\Icons\\inv_misc_claw_deepcrab_purple",
-                source = "Quest reward",
+                source = "Quest reward: Crab Season",
+                sourceLocations = {
+                    {
+                        npcID = 257006,
+                        npcName = "Nyalah Brightfire",
+                        questID = 93317,
+                        questName = "Crab Season",
+                        uiMapID = 2521,
+                        zoneName = "Zephras Isle",
+                        x = 60.6,
+                        y = 72.6,
+                    },
+                },
             },
         },
         [40] = {
             [8607] = {
                 icon = "Interface\\Icons\\inv_misc_food_13",
                 source = "Sold by Drac Roughcut (Loch Modan), Andrew Hilbert (Silverpine Forest)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1465,
@@ -421,8 +469,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [50] = {
             [2542] = {
                 icon = "Interface\\Icons\\inv_misc_food_10",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Goretusk Liver Pie",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -432,12 +480,23 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 74.4,
                         y = 36.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 235,
+                        npcName = "Salma Saldean",
+                        questID = 22,
+                        questName = "Goretusk Liver Pie",
+                        uiMapID = 1436,
+                        zoneName = "Westfall",
+                        x = 56.4,
+                        y = 30.6,
+                    },
                 },
             },
             [6415] = {
                 icon = "Interface\\Icons\\inv_misc_fish_05",
                 source = "Sold by Laird (Darkshore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 4200,
                         npcName = "Laird",
@@ -450,8 +509,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [6416] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Tari'qa (The Barrens) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Tari'qa (The Barrens) / Quest reward: Easy Strider Living",
+                sourceLocations = {
                     {
                         npcID = 3482,
                         npcName = "Tari'qa",
@@ -460,12 +519,23 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 51.6,
                         y = 30,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 3702,
+                        npcName = "Alanndarian Nightsong",
+                        questID = 2178,
+                        questName = "Easy Strider Living",
+                        uiMapID = 1439,
+                        zoneName = "Darkshore",
+                        x = 37.6,
+                        y = 40.6,
+                    },
                 },
             },
             [7753] = {
                 icon = "Interface\\Icons\\inv_misc_fish_32",
                 source = "Sold by Tharynn Bouden (Elwynn Forest), Khara Deepwater (Loch Modan), Naal Mistrunner (Thunder Bluff), Nyoma (Teldrassil), Lizbeth Cromwell (Undercity), Tansy Puddlefizz (Ironforge), Killian Sanatha (Silverpine Forest), Harn Longcast (Mulgore), Nyalah Brightfire (Zephras Isle)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 66,
                         npcName = "Tharynn Bouden",
@@ -550,7 +620,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7754] = {
                 icon = "Interface\\Icons\\inv_potion_01",
                 source = "Sold by Khara Deepwater (Loch Modan)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1684,
@@ -565,7 +635,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7827] = {
                 icon = "Interface\\Icons\\inv_misc_fish_27",
                 source = "Sold by Stuart Fleming (Wetlands), Shankys (Orgrimmar), Kilxx (The Barrens), Kriggon Talsone (Westfall), Heldan Galesong (Darkshore), Ronald Burch (Undercity), Catherine Leland (Stormwind City), Killian Sanatha (Silverpine Forest), Zansoa (Durotar), Nessa Shadowsong (Teldrassil), Gritta Chumwater (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 3178,
                         npcName = "Stuart Fleming",
@@ -664,8 +734,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [60] = {
             [3371] = {
                 icon = "Interface\\Icons\\inv_misc_food_49",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Thelsamar Blood Sausages",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -675,12 +745,23 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 74.4,
                         y = 36.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 1963,
+                        npcName = "Vidra Hearthstove",
+                        questID = 418,
+                        questName = "Thelsamar Blood Sausages",
+                        uiMapID = 1432,
+                        zoneName = "Loch Modan",
+                        x = 34.8,
+                        y = 49,
+                    },
                 },
             },
             [9513] = {
                 icon = "Interface\\Icons\\inv_drink_milk_05",
-                source = "Sold by Smudge Thunderwood (Alterac Mountains) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Smudge Thunderwood (Alterac Mountains) / Quest reward: Klaven's Tower, Mission: Possible But Not Probable",
+                sourceLocations = {
                     {
                         npcID = 6779,
                         npcName = "Smudge Thunderwood",
@@ -689,14 +770,36 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 86,
                         y = 79.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 7024,
+                        npcName = "Agent Kearnen",
+                        questID = 2359,
+                        questName = "Klaven's Tower",
+                        uiMapID = 1436,
+                        zoneName = "Westfall",
+                        x = 68.4,
+                        y = 70,
+                    },
+                    {
+                        faction = "Horde",
+                        npcID = 7233,
+                        npcName = "Taskmaster Fizzule",
+                        questID = 2478,
+                        questName = "Mission: Possible But Not Probable",
+                        uiMapID = 1413,
+                        zoneName = "The Barrens",
+                        x = 55.4,
+                        y = 5.6,
+                    },
                 },
             },
         },
         [75] = {
             [2543] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Westfall Stew",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -705,6 +808,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         zoneName = "Stormwind City",
                         x = 74.4,
                         y = 36.4,
+                    },
+                    {
+                        faction = "Alliance",
+                        npcID = 235,
+                        npcName = "Salma Saldean",
+                        questID = 38,
+                        questName = "Westfall Stew",
+                        uiMapID = 1436,
+                        zoneName = "Westfall",
+                        x = 56.4,
+                        y = 30.6,
                     },
                 },
             },
@@ -716,8 +830,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [80] = {
             [3370] = {
                 icon = "Interface\\Icons\\inv_misc_food_47",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Crocolisk Hunting",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -727,12 +841,23 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 74.4,
                         y = 36.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 1154,
+                        npcName = "Marek Ironheart",
+                        questID = 385,
+                        questName = "Crocolisk Hunting",
+                        uiMapID = 1432,
+                        zoneName = "Loch Modan",
+                        x = 81.8,
+                        y = 61.8,
+                    },
                 },
             },
             [25704] = {
                 icon = "Interface\\Icons\\inv_misc_fish_20",
                 source = "Sold by Micha Yance (Hillsbrad Foothills), Derak Nightfall (Hillsbrad Foothills), Kelsey Yance (Stranglethorn Vale), Naal Mistrunner (Thunder Bluff), Gloria Femmel (Redridge Mountains), Xen'to (Orgrimmar), Fyldan (Darnassus), Nyoma (Teldrassil), Ronald Burch (Undercity), Emrul Riknussun (Ironforge), Erika Tate (Stormwind City), Tarban Hearthgrain (The Barrens), Wulan (Desolace), Otho Moji'ko (The Hinterlands), Carrie Hearthfire (Eastern Plaguelands), Reagent Bot (Westfall), Reagent Bot (Loch Modan), Reagent Bot (Elwynn Forest), Aza'bek (The Barrens), Zerril Softbreeze (Zephras Isle), Derek Odds (Alterac Mountains), Repair Bot (Westfall), Repair Bot (Durotar), Repair Bot (Elwynn Forest), Kalsey Sanden (Redridge Mountains), Fimbo Greasemitz (Riverglades), Paige (Alterac Mountains), Qujo (The Hinterlands), Miranda Turner (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2381,
                         npcName = "Micha Yance",
@@ -746,8 +871,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Derak Nightfall",
                         uiMapID = 1424,
                         zoneName = "Hillsbrad Foothills",
-                        x = 49,
-                        y = 55,
+                        x = 63,
+                        y = 19.4,
                     },
                     {
                         npcID = 2664,
@@ -852,8 +977,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Otho Moji'ko",
                         uiMapID = 1425,
                         zoneName = "The Hinterlands",
-                        x = 77.8,
-                        y = 78,
+                        x = 79.2,
+                        y = 79,
                     },
                     {
                         npcID = 240604,
@@ -884,8 +1009,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Reagent Bot",
                         uiMapID = 1429,
                         zoneName = "Elwynn Forest",
-                        x = 33.2,
-                        y = 50.4,
+                        x = 32,
+                        y = 49.2,
                     },
                     {
                         faction = "Horde",
@@ -893,8 +1018,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Aza'bek",
                         uiMapID = 1413,
                         zoneName = "The Barrens",
-                        x = 55,
-                        y = 32,
+                        x = 49.6,
+                        y = 29.2,
                     },
                     {
                         npcID = 251905,
@@ -910,16 +1035,16 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Derek Odds",
                         uiMapID = 1416,
                         zoneName = "Alterac Mountains",
-                        x = 20.8,
-                        y = 74.6,
+                        x = 12.4,
+                        y = 66,
                     },
                     {
                         npcID = 254695,
                         npcName = "Repair Bot",
                         uiMapID = 1436,
                         zoneName = "Westfall",
-                        x = 33.2,
-                        y = 56,
+                        x = 37,
+                        y = 88.6,
                     },
                     {
                         npcID = 254695,
@@ -943,8 +1068,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Kalsey Sanden",
                         uiMapID = 1433,
                         zoneName = "Redridge Mountains",
-                        x = 21.6,
-                        y = 43.4,
+                        x = 10.8,
+                        y = 72.4,
                     },
                     {
                         faction = "Horde",
@@ -952,8 +1077,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Fimbo Greasemitz",
                         uiMapID = 2548,
                         zoneName = "Riverglades",
-                        x = 63.4,
-                        y = 82.4,
+                        x = 78.8,
+                        y = 54,
                     },
                     {
                         faction = "Alliance",
@@ -988,7 +1113,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [2545] = {
                 icon = "Interface\\Icons\\inv_misc_birdbeck_02",
                 source = "Sold by Kendor Kabonka (Stormwind City) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1008,8 +1133,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [90] = {
             [3372] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Selling Fish",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1019,16 +1144,40 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 74.4,
                         y = 36.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 381,
+                        npcName = "Dockmaster Baren",
+                        questID = 127,
+                        questName = "Selling Fish",
+                        uiMapID = 1433,
+                        zoneName = "Redridge Mountains",
+                        x = 27.8,
+                        y = 47.2,
+                    },
                 },
             },
             [6417] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Quest reward",
+                source = "Quest reward: Dig Rat Stew",
+                sourceLocations = {
+                    {
+                        faction = "Horde",
+                        npcID = 3443,
+                        npcName = "Grub",
+                        questID = 862,
+                        questName = "Dig Rat Stew",
+                        uiMapID = 1413,
+                        zoneName = "The Barrens",
+                        x = 55.2,
+                        y = 31.8,
+                    },
+                },
             },
             [6501] = {
                 icon = "Interface\\Icons\\inv_potion_01",
                 source = "Sold by Kriggon Talsone (Westfall), Heldan Galesong (Darkshore)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 4305,
                         npcName = "Kriggon Talsone",
@@ -1051,8 +1200,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [100] = {
             [2547] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Redridge Goulash",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1062,12 +1211,23 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 74.4,
                         y = 36.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 343,
+                        npcName = "Chef Breanna",
+                        questID = 92,
+                        questName = "Redridge Goulash",
+                        uiMapID = 1433,
+                        zoneName = "Redridge Mountains",
+                        x = 22.6,
+                        y = 44,
+                    },
                 },
             },
             [2549] = {
                 icon = "Interface\\Icons\\inv_misc_food_16",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Seasoned Wolf Kabobs",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1076,13 +1236,24 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         zoneName = "Stormwind City",
                         x = 74.4,
                         y = 36.4,
+                    },
+                    {
+                        faction = "Alliance",
+                        npcID = 272,
+                        npcName = "Chef Grual",
+                        questID = 90,
+                        questName = "Seasoned Wolf Kabobs",
+                        uiMapID = 1431,
+                        zoneName = "Duskwood",
+                        x = 73.8,
+                        y = 43.6,
                     },
                 },
             },
             [6418] = {
                 icon = "Interface\\Icons\\inv_misc_food_17",
                 source = "Sold by Tari'qa (The Barrens)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 3482,
                         npcName = "Tari'qa",
@@ -1096,14 +1267,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7755] = {
                 icon = "Interface\\Icons\\inv_misc_fish_30",
                 source = "Sold by Lindea Rabonne (Hillsbrad Foothills), Derak Nightfall (Hillsbrad Foothills), Naal Mistrunner (Thunder Bluff), Sewa Mistrunner (Thunder Bluff), Kilxx (The Barrens), Ronald Burch (Undercity), Catherine Leland (Stormwind City), Gritta Chumwater (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2383,
                         npcName = "Lindea Rabonne",
                         uiMapID = 1424,
                         zoneName = "Hillsbrad Foothills",
-                        x = 63,
-                        y = 19.4,
+                        x = 50.4,
+                        y = 61,
                     },
                     {
                         npcID = 2397,
@@ -1119,8 +1290,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Naal Mistrunner",
                         uiMapID = 1456,
                         zoneName = "Thunder Bluff",
-                        x = 55.2,
-                        y = 48,
+                        x = 50.2,
+                        y = 51.6,
                     },
                     {
                         faction = "Horde",
@@ -1169,7 +1340,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249964] = {
                 icon = "Interface\\Icons\\inv_drink_15_color03",
                 source = "Sold by Aza'bek (The Barrens), Kalsey Sanden (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248198,
@@ -1195,7 +1366,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [2548] = {
                 icon = "Interface\\Icons\\inv_misc_food_16",
                 source = "Sold by Kendor Kabonka (Stormwind City) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1209,8 +1380,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [3377] = {
                 icon = "Interface\\Icons\\inv_misc_food_10",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Dusky Crab Cakes",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1220,12 +1391,23 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 74.4,
                         y = 36.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 272,
+                        npcName = "Chef Grual",
+                        questID = 93,
+                        questName = "Dusky Crab Cakes",
+                        uiMapID = 1431,
+                        zoneName = "Duskwood",
+                        x = 73.8,
+                        y = 43.6,
+                    },
                 },
             },
             [3397] = {
                 icon = "Interface\\Icons\\inv_misc_food_47",
-                source = "Sold by Ulthaan (Ashenvale), Super-Seller 680 (Desolace) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Ulthaan (Ashenvale), Super-Seller 680 (Desolace) / Quest reward: The Rescue",
+                sourceLocations = {
                     {
                         npcID = 3960,
                         npcName = "Ulthaan",
@@ -1233,6 +1415,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         zoneName = "Ashenvale",
                         x = 50,
                         y = 66.4,
+                    },
+                    {
+                        faction = "Horde",
+                        npcID = 2229,
+                        npcName = "Krusk",
+                        questID = 498,
+                        questName = "The Rescue",
+                        uiMapID = 1424,
+                        zoneName = "Hillsbrad Foothills",
+                        x = 63.2,
+                        y = 20.6,
                     },
                     {
                         npcID = 12246,
@@ -1247,7 +1440,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [6419] = {
                 icon = "Interface\\Icons\\inv_misc_food_72",
                 source = "Sold by Ulthaan (Ashenvale), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 3960,
                         npcName = "Ulthaan",
@@ -1270,8 +1463,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [120] = {
             [3373] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City) / Quest reward: Apprentice's Duties",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1281,14 +1474,25 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         x = 74.4,
                         y = 36.4,
                     },
+                    {
+                        faction = "Alliance",
+                        npcID = 2094,
+                        npcName = "James Halloran",
+                        questID = 471,
+                        questName = "Apprentice's Duties",
+                        uiMapID = 1437,
+                        zoneName = "Wetlands",
+                        x = 8.6,
+                        y = 55.6,
+                    },
                 },
             },
         },
         [125] = {
             [3398] = {
                 icon = "Interface\\Icons\\inv_misc_food_18",
-                source = "Sold by Zargh (The Barrens), Vendor-Tron 1000 (Desolace) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Zargh (The Barrens), Vendor-Tron 1000 (Desolace) / Quest reward: Elixir of Pain",
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3489,
@@ -1297,6 +1501,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         zoneName = "The Barrens",
                         x = 52.4,
                         y = 29.8,
+                    },
+                    {
+                        faction = "Horde",
+                        npcID = 2216,
+                        npcName = "Apothecary Lydon",
+                        questID = 501,
+                        questName = "Elixir of Pain",
+                        uiMapID = 1424,
+                        zoneName = "Hillsbrad Foothills",
+                        x = 61.4,
+                        y = 19.2,
                     },
                     {
                         npcID = 12245,
@@ -1311,7 +1526,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15853] = {
                 icon = "Interface\\Icons\\inv_misc_food_47",
                 source = "Sold by Super-Seller 680 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 12246,
                         npcName = "Super-Seller 680",
@@ -1325,7 +1540,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249965] = {
                 icon = "Interface\\Icons\\inv_drink_21_color01",
                 source = "Sold by Aza'bek (The Barrens), Kalsey Sanden (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248198,
@@ -1350,8 +1565,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [130] = {
             [3376] = {
                 icon = "Interface\\Icons\\inv_egg_04",
-                source = "Sold by Kendor Kabonka (Stormwind City), Nerrist (Stranglethorn Vale), Keena (Arathi Highlands) / Quest reward",
-                vendorLocations = {
+                source = "Sold by Kendor Kabonka (Stormwind City), Nerrist (Stranglethorn Vale), Keena (Arathi Highlands) / Quest reward: Ormer's Revenge",
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 340,
@@ -1360,6 +1575,17 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         zoneName = "Stormwind City",
                         x = 74.4,
                         y = 36.4,
+                    },
+                    {
+                        faction = "Alliance",
+                        npcID = 1078,
+                        npcName = "Ormer Ironbraid",
+                        questID = 296,
+                        questName = "Ormer's Revenge",
+                        uiMapID = 1437,
+                        zoneName = "Wetlands",
+                        x = 38,
+                        y = 51.2,
                     },
                     {
                         npcID = 1148,
@@ -1384,12 +1610,25 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [150] = {
             [3399] = {
                 icon = "Interface\\Icons\\inv_misc_food_14",
-                source = "Quest reward",
+                source = "Quest reward: Costly Menace",
+                sourceLocations = {
+                    {
+                        faction = "Alliance",
+                        npcID = 2382,
+                        npcName = "Darren Malvew",
+                        questID = 564,
+                        questName = "Costly Menace",
+                        uiMapID = 1424,
+                        zoneName = "Hillsbrad Foothills",
+                        x = 52.4,
+                        y = 56,
+                    },
+                },
             },
             [24418] = {
                 icon = "Interface\\Icons\\inv_misc_food_64",
                 source = "Sold by Ogg'marr (Dustwallow Marsh)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 4879,
@@ -1405,12 +1644,36 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [175] = {
             [3400] = {
                 icon = "Interface\\Icons\\inv_misc_bowl_01",
-                source = "Quest reward",
+                source = "Quest reward: Soothing Turtle Bisque",
+                sourceLocations = {
+                    {
+                        faction = "Alliance",
+                        npcID = 2430,
+                        npcName = "Chef Jessen",
+                        questID = 555,
+                        questName = "Soothing Turtle Bisque",
+                        uiMapID = 1424,
+                        zoneName = "Hillsbrad Foothills",
+                        x = 51.8,
+                        y = 58.6,
+                    },
+                    {
+                        faction = "Horde",
+                        npcID = 2393,
+                        npcName = "Christoph Jeffcoat",
+                        questID = 7321,
+                        questName = "Soothing Turtle Bisque",
+                        uiMapID = 1424,
+                        zoneName = "Hillsbrad Foothills",
+                        x = 62.2,
+                        y = 19,
+                    },
+                },
             },
             [7213] = {
                 icon = "Interface\\Icons\\inv_ammo_firetar",
                 source = "Sold by Kelsey Yance (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2664,
                         npcName = "Kelsey Yance",
@@ -1424,7 +1687,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7828] = {
                 icon = "Interface\\Icons\\inv_misc_fish_04",
                 source = "Sold by Lindea Rabonne (Hillsbrad Foothills), Kelsey Yance (Stranglethorn Vale), Stuart Fleming (Wetlands), Shankys (Orgrimmar), Heldan Galesong (Darkshore), Lizbeth Cromwell (Undercity), Tansy Puddlefizz (Ironforge), Wulan (Desolace), Wik'Tar (Ashenvale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2383,
                         npcName = "Lindea Rabonne",
@@ -1506,14 +1769,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15855] = {
                 icon = "Interface\\Icons\\inv_misc_food_50",
                 source = "Sold by Corporal Bluth (Stranglethorn Vale), Nerrist (Stranglethorn Vale), Hammon Karwn (Arathi Highlands), Keena (Arathi Highlands), Ogg'marr (Dustwallow Marsh), Helenia Olden (Dustwallow Marsh), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 734,
                         npcName = "Corporal Bluth",
                         uiMapID = 1434,
                         zoneName = "Stranglethorn Vale",
-                        x = 32.6,
-                        y = 29.2,
+                        x = 38,
+                        y = 3,
                     },
                     {
                         npcID = 1148,
@@ -1528,8 +1791,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Hammon Karwn",
                         uiMapID = 1417,
                         zoneName = "Arathi Highlands",
-                        x = 74,
-                        y = 32.4,
+                        x = 46.4,
+                        y = 47.4,
                     },
                     {
                         faction = "Horde",
@@ -1546,8 +1809,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Ogg'marr",
                         uiMapID = 1445,
                         zoneName = "Dustwallow Marsh",
-                        x = 66.4,
-                        y = 51.4,
+                        x = 36.6,
+                        y = 31,
                     },
                     {
                         faction = "Alliance",
@@ -1571,14 +1834,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15856] = {
                 icon = "Interface\\Icons\\inv_misc_food_48",
                 source = "Sold by Vivianna (Feralas), Sheendra Tallgrass (Feralas), Super-Seller 680 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 7947,
                         npcName = "Vivianna",
                         uiMapID = 1444,
                         zoneName = "Feralas",
-                        x = 74.4,
-                        y = 42.8,
+                        x = 31.2,
+                        y = 43.4,
                     },
                     {
                         faction = "Horde",
@@ -1602,14 +1865,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15861] = {
                 icon = "Interface\\Icons\\inv_drink_17",
                 source = "Sold by Corporal Bluth (Stranglethorn Vale), Nerrist (Stranglethorn Vale), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 734,
                         npcName = "Corporal Bluth",
                         uiMapID = 1434,
                         zoneName = "Stranglethorn Vale",
-                        x = 32.6,
-                        y = 29.2,
+                        x = 38,
+                        y = 3,
                     },
                     {
                         npcID = 1148,
@@ -1632,7 +1895,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15863] = {
                 icon = "Interface\\Icons\\inv_misc_food_49",
                 source = "Sold by Banalash (Swamp of Sorrows), Ogg'marr (Dustwallow Marsh), Kireena (Desolace), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 989,
@@ -1657,8 +1920,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Kireena",
                         uiMapID = 1443,
                         zoneName = "Desolace",
-                        x = 60.2,
-                        y = 38.2,
+                        x = 51,
+                        y = 53.4,
                     },
                     {
                         npcID = 12245,
@@ -1673,7 +1936,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15865] = {
                 icon = "Interface\\Icons\\inv_drink_19",
                 source = "Sold by Helenia Olden (Dustwallow Marsh), Janet Hommers (Desolace), Super-Seller 680 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 4897,
@@ -1689,8 +1952,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Janet Hommers",
                         uiMapID = 1443,
                         zoneName = "Desolace",
-                        x = 40.4,
-                        y = 79.2,
+                        x = 66.2,
+                        y = 6.6,
                     },
                     {
                         npcID = 12246,
@@ -1705,7 +1968,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [20916] = {
                 icon = "Interface\\Icons\\inv_misc_fish_02",
                 source = "Sold by Lindea Rabonne (Hillsbrad Foothills), Kelsey Yance (Stranglethorn Vale), Stuart Fleming (Wetlands), Shankys (Orgrimmar), Heldan Galesong (Darkshore), Lizbeth Cromwell (Undercity), Tansy Puddlefizz (Ironforge), Wulan (Desolace), Wik'Tar (Ashenvale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2383,
                         npcName = "Lindea Rabonne",
@@ -1787,7 +2050,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25954] = {
                 icon = "Interface\\Icons\\inv_misc_fish_21",
                 source = "Sold by Micha Yance (Hillsbrad Foothills), Derak Nightfall (Hillsbrad Foothills), Kelsey Yance (Stranglethorn Vale), Naal Mistrunner (Thunder Bluff), Gloria Femmel (Redridge Mountains), Xen'to (Orgrimmar), Fyldan (Darnassus), Nyoma (Teldrassil), Ronald Burch (Undercity), Emrul Riknussun (Ironforge), Erika Tate (Stormwind City), Tarban Hearthgrain (The Barrens), Wulan (Desolace), Otho Moji'ko (The Hinterlands), Carrie Hearthfire (Eastern Plaguelands), Reagent Bot (Westfall), Reagent Bot (Loch Modan), Reagent Bot (Elwynn Forest), Aza'bek (The Barrens), Zerril Softbreeze (Zephras Isle), Derek Odds (Alterac Mountains), Repair Bot (Westfall), Repair Bot (Durotar), Repair Bot (Elwynn Forest), Kalsey Sanden (Redridge Mountains), Fimbo Greasemitz (Riverglades), Paige (Alterac Mountains), Qujo (The Hinterlands), Miranda Turner (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2381,
                         npcName = "Micha Yance",
@@ -1801,8 +2064,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Derak Nightfall",
                         uiMapID = 1424,
                         zoneName = "Hillsbrad Foothills",
-                        x = 49,
-                        y = 55,
+                        x = 63,
+                        y = 19.4,
                     },
                     {
                         npcID = 2664,
@@ -1907,8 +2170,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Otho Moji'ko",
                         uiMapID = 1425,
                         zoneName = "The Hinterlands",
-                        x = 77.8,
-                        y = 78,
+                        x = 79.2,
+                        y = 79,
                     },
                     {
                         npcID = 240604,
@@ -1939,8 +2202,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Reagent Bot",
                         uiMapID = 1429,
                         zoneName = "Elwynn Forest",
-                        x = 33.2,
-                        y = 50.4,
+                        x = 32,
+                        y = 49.2,
                     },
                     {
                         faction = "Horde",
@@ -1948,8 +2211,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Aza'bek",
                         uiMapID = 1413,
                         zoneName = "The Barrens",
-                        x = 55,
-                        y = 32,
+                        x = 49.6,
+                        y = 29.2,
                     },
                     {
                         npcID = 251905,
@@ -1965,16 +2228,16 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Derek Odds",
                         uiMapID = 1416,
                         zoneName = "Alterac Mountains",
-                        x = 20.8,
-                        y = 74.6,
+                        x = 12.4,
+                        y = 66,
                     },
                     {
                         npcID = 254695,
                         npcName = "Repair Bot",
                         uiMapID = 1436,
                         zoneName = "Westfall",
-                        x = 33.2,
-                        y = 56,
+                        x = 37,
+                        y = 88.6,
                     },
                     {
                         npcID = 254695,
@@ -1998,8 +2261,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Kalsey Sanden",
                         uiMapID = 1433,
                         zoneName = "Redridge Mountains",
-                        x = 21.6,
-                        y = 43.4,
+                        x = 10.8,
+                        y = 72.4,
                     },
                     {
                         faction = "Horde",
@@ -2007,8 +2270,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Fimbo Greasemitz",
                         uiMapID = 2548,
                         zoneName = "Riverglades",
-                        x = 63.4,
-                        y = 82.4,
+                        x = 78.8,
+                        y = 54,
                     },
                     {
                         faction = "Alliance",
@@ -2043,7 +2306,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249966] = {
                 icon = "Interface\\Icons\\inv_drink_15_color01",
                 source = "Sold by Aza'bek (The Barrens), Kalsey Sanden (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248198,
@@ -2069,7 +2332,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1295834] = {
                 icon = "Interface\\Icons\\inv_misc_food_16",
                 source = "Sold by Martha Wellsworth (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 259860,
@@ -2086,15 +2349,15 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15906] = {
                 icon = "Interface\\Icons\\inv_drink_17",
                 source = "Sold by Ogg'marr (Dustwallow Marsh), Helenia Olden (Dustwallow Marsh), Super-Seller 680 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 4879,
                         npcName = "Ogg'marr",
                         uiMapID = 1445,
                         zoneName = "Dustwallow Marsh",
-                        x = 66.4,
-                        y = 51.4,
+                        x = 36.6,
+                        y = 31,
                     },
                     {
                         faction = "Alliance",
@@ -2118,15 +2381,15 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15910] = {
                 icon = "Interface\\Icons\\inv_drink_19",
                 source = "Sold by Janet Hommers (Desolace), Kireena (Desolace), Vendor-Tron 1000 (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 8150,
                         npcName = "Janet Hommers",
                         uiMapID = 1443,
                         zoneName = "Desolace",
-                        x = 60.2,
-                        y = 38.2,
+                        x = 66.2,
+                        y = 6.6,
                     },
                     {
                         faction = "Horde",
@@ -2134,8 +2397,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Kireena",
                         uiMapID = 1443,
                         zoneName = "Desolace",
-                        x = 60.2,
-                        y = 38.2,
+                        x = 51,
+                        y = 53.4,
                     },
                     {
                         npcID = 12245,
@@ -2150,7 +2413,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249967] = {
                 icon = "Interface\\Icons\\inv_drink_21_color04",
                 source = "Sold by Aza'bek (The Barrens), Kalsey Sanden (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248198,
@@ -2176,7 +2439,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15915] = {
                 icon = "Interface\\Icons\\inv_misc_food_48",
                 source = "Sold by Banalash (Swamp of Sorrows), Uthok (Stranglethorn Vale), Kriggon Talsone (Westfall)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 989,
@@ -2208,14 +2471,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [15933] = {
                 icon = "Interface\\Icons\\inv_misc_food_06",
                 source = "Sold by Malygen (Felwood), Bale (Felwood), Himmik (Winterspring)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2803,
                         npcName = "Malygen",
                         uiMapID = 1448,
                         zoneName = "Felwood",
-                        x = 34.8,
-                        y = 53.2,
+                        x = 62.2,
+                        y = 25.4,
                     },
                     {
                         npcID = 2806,
@@ -2238,7 +2501,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18238] = {
                 icon = "Interface\\Icons\\inv_misc_fish_01",
                 source = "Sold by Gikkix (Tanaris)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 8137,
                         npcName = "Gikkix",
@@ -2252,7 +2515,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18239] = {
                 icon = "Interface\\Icons\\inv_misc_monsterhead_03",
                 source = "Sold by Kelsey Yance (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2664,
                         npcName = "Kelsey Yance",
@@ -2266,7 +2529,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18241] = {
                 icon = "Interface\\Icons\\inv_misc_fish_06",
                 source = "Sold by Kelsey Yance (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2664,
                         npcName = "Kelsey Yance",
@@ -2280,7 +2543,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [20626] = {
                 icon = "Interface\\Icons\\inv_drink_17",
                 source = "Sold by Jabbey (Tanaris), Grizzek (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 8139,
                         npcName = "Jabbey",
@@ -2302,7 +2565,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [22480] = {
                 icon = "Interface\\Icons\\inv_misc_food_47",
                 source = "Sold by Truk Wildbeard (The Hinterlands), Innkeeper Fizzgrimble (Tanaris), Dirge Quikcleave (Tanaris), Innkeeper Zizplink (Riverglades)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 4782,
@@ -2317,8 +2580,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Innkeeper Fizzgrimble",
                         uiMapID = 1446,
                         zoneName = "Tanaris",
-                        x = 52.6,
-                        y = 28,
+                        x = 52.4,
+                        y = 27.8,
                     },
                     {
                         npcID = 8125,
@@ -2343,7 +2606,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18240] = {
                 icon = "Interface\\Icons\\inv_misc_fish_13",
                 source = "Sold by Gikkix (Tanaris)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 8137,
                         npcName = "Gikkix",
@@ -2357,7 +2620,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18242] = {
                 icon = "Interface\\Icons\\inv_misc_fish_03",
                 source = "Sold by Kelsey Yance (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2664,
                         npcName = "Kelsey Yance",
@@ -2373,7 +2636,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18243] = {
                 icon = "Interface\\Icons\\inv_drink_17",
                 source = "Sold by Gikkix (Tanaris)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 8137,
                         npcName = "Gikkix",
@@ -2387,7 +2650,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18244] = {
                 icon = "Interface\\Icons\\inv_misc_fish_19",
                 source = "Sold by Gikkix (Tanaris)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 8137,
                         npcName = "Gikkix",
@@ -2401,7 +2664,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249968] = {
                 icon = "Interface\\Icons\\inv_drink_15_color04",
                 source = "Sold by Aza'bek (The Barrens), Kalsey Sanden (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248198,
@@ -2427,14 +2690,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18245] = {
                 icon = "Interface\\Icons\\inv_drink_17",
                 source = "Sold by Vivianna (Feralas), Sheendra Tallgrass (Feralas)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 7947,
                         npcName = "Vivianna",
                         uiMapID = 1444,
                         zoneName = "Feralas",
-                        x = 74.4,
-                        y = 42.8,
+                        x = 31.2,
+                        y = 43.4,
                     },
                     {
                         faction = "Horde",
@@ -2450,14 +2713,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18246] = {
                 icon = "Interface\\Icons\\inv_misc_food_47",
                 source = "Sold by Vivianna (Feralas), Sheendra Tallgrass (Feralas)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 7947,
                         npcName = "Vivianna",
                         uiMapID = 1444,
                         zoneName = "Feralas",
-                        x = 74.4,
-                        y = 42.8,
+                        x = 31.2,
+                        y = 43.4,
                     },
                     {
                         faction = "Horde",
@@ -2473,14 +2736,14 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [18247] = {
                 icon = "Interface\\Icons\\inv_misc_fish_20",
                 source = "Sold by Vivianna (Feralas), Sheendra Tallgrass (Feralas)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 7947,
                         npcName = "Vivianna",
                         uiMapID = 1444,
                         zoneName = "Feralas",
-                        x = 74.4,
-                        y = 42.8,
+                        x = 31.2,
+                        y = 43.4,
                     },
                     {
                         faction = "Horde",
@@ -2501,20 +2764,32 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
         [300] = {
             [25659] = {
                 icon = "Interface\\Icons\\inv_misc_food_65",
-                source = "Quest reward",
+                source = "Quest reward: Dirge's Kickin' Chimaerok Chops",
+                sourceLocations = {
+                    {
+                        npcID = 8125,
+                        npcName = "Dirge Quikcleave",
+                        questID = 8586,
+                        questName = "Dirge's Kickin' Chimaerok Chops",
+                        uiMapID = 1446,
+                        zoneName = "Tanaris",
+                        x = 52.6,
+                        y = 28,
+                    },
+                },
             },
             [470359] = {
                 icon = "Interface\\Icons\\inv_misc_food_117_heartysoup",
                 source = "Sold by Chief Expeditionary Requisitioner Enkles (Silithus), Apothecary Quinard (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 17068,
                         npcName = "Chief Expeditionary Requisitioner Enkles",
                         uiMapID = 1451,
                         zoneName = "Silithus",
-                        x = 50.8,
-                        y = 69.4,
+                        x = 33.2,
+                        y = 51,
                     },
                     {
                         faction = "Horde",
@@ -2530,15 +2805,15 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [470370] = {
                 icon = "Interface\\Icons\\inv_misc_food_110_emperorsalmon",
                 source = "Sold by Chief Expeditionary Requisitioner Enkles (Silithus), Apothecary Quinard (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 17068,
                         npcName = "Chief Expeditionary Requisitioner Enkles",
                         uiMapID = 1451,
                         zoneName = "Silithus",
-                        x = 50.8,
-                        y = 69.4,
+                        x = 33.2,
+                        y = 51,
                     },
                     {
                         faction = "Horde",

@@ -5,7 +5,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25124] = {
                 icon = "Interface\\Icons\\inv_poison_mindnumbing",
                 source = "Sold by Jessara Cordell (Stormwind City), Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Vaean (Darnassus), Thaddeus Webb (Undercity), Tilli Thistlefuzz (Ironforge), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest), Kania (Silithus), Nasalanna Windsinger (Zephras Isle)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1318,
@@ -66,8 +66,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Lilly",
                         uiMapID = 1421,
                         zoneName = "Silverpine Forest",
-                        x = 53.8,
-                        y = 82.6,
+                        x = 43,
+                        y = 50.8,
                     },
                     {
                         npcID = 5758,
@@ -100,7 +100,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7443] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Jessara Cordell (Stormwind City), Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Vaean (Darnassus), Thaddeus Webb (Undercity), Tilli Thistlefuzz (Ironforge), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest), Kania (Silithus), Eaysaa Brightgust (Zephras Isle), Nasalanna Windsinger (Zephras Isle) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1318,
@@ -161,8 +161,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Lilly",
                         uiMapID = 1421,
                         zoneName = "Silverpine Forest",
-                        x = 53.8,
-                        y = 82.6,
+                        x = 43,
+                        y = 50.8,
                     },
                     {
                         npcID = 5758,
@@ -185,8 +185,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Eaysaa Brightgust",
                         uiMapID = 2521,
                         zoneName = "Zephras Isle",
-                        x = 43.2,
-                        y = 43.2,
+                        x = 59.2,
+                        y = 76.2,
                     },
                     {
                         npcID = 257020,
@@ -215,7 +215,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7776] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Kithas (Orgrimmar), Lilly (Silverpine Forest)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3346,
@@ -251,7 +251,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7793] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Tilli Thistlefuzz (Ironforge), Leo Sarn (Silverpine Forest)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3012,
@@ -298,7 +298,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [13419] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Dalria (Ashenvale), Kulwia (Stonetalon Mountains) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 3954,
                         npcName = "Dalria",
@@ -339,7 +339,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [7867] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Nata Dawnstrider (Thunder Bluff), Zixil (Hillsbrad Foothills)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 3012,
@@ -364,7 +364,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248752] = {
                 icon = "Interface\\Icons\\inv_mushroom_11",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -388,7 +388,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248754] = {
                 icon = "Interface\\Icons\\inv_misc_book_13",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -412,7 +412,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248755] = {
                 icon = "Interface\\Icons\\spell_shaman_totemrecall",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -444,7 +444,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [13536] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Dalria (Ashenvale), Kulwia (Stonetalon Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 3954,
                         npcName = "Dalria",
@@ -467,7 +467,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248460] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -481,7 +481,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248703] = {
                 icon = "Interface\\Icons\\inv_staff_19",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -505,7 +505,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248739] = {
                 icon = "Interface\\Icons\\inv_staff_31",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -529,7 +529,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248745] = {
                 icon = "Interface\\Icons\\inv_misc_orb_blue",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -553,7 +553,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248748] = {
                 icon = "Interface\\Icons\\inv_misc_orb_04",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -577,7 +577,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248757] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -601,7 +601,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248760] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -625,7 +625,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248805] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -665,7 +665,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25125] = {
                 icon = "Interface\\Icons\\inv_potion_98",
                 source = "Sold by Jessara Cordell (Stormwind City), Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Vaean (Darnassus), Thaddeus Webb (Undercity), Tilli Thistlefuzz (Ironforge), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest), Kania (Silithus), Nasalanna Windsinger (Zephras Isle)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1318,
@@ -726,8 +726,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Lilly",
                         uiMapID = 1421,
                         zoneName = "Silverpine Forest",
-                        x = 53.8,
-                        y = 82.6,
+                        x = 43,
+                        y = 50.8,
                     },
                     {
                         npcID = 5758,
@@ -760,7 +760,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [13646] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Micha Yance (Hillsbrad Foothills), Keena (Arathi Highlands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 2381,
                         npcName = "Micha Yance",
@@ -815,7 +815,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25126] = {
                 icon = "Interface\\Icons\\inv_potion_103",
                 source = "Sold by Jessara Cordell (Stormwind City), Nata Dawnstrider (Thunder Bluff), Kithas (Orgrimmar), Vaean (Darnassus), Thaddeus Webb (Undercity), Tilli Thistlefuzz (Ironforge), Lilly (Silverpine Forest), Leo Sarn (Silverpine Forest), Kania (Silithus), Nasalanna Windsinger (Zephras Isle)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 1318,
@@ -876,8 +876,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Lilly",
                         uiMapID = 1421,
                         zoneName = "Silverpine Forest",
-                        x = 53.8,
-                        y = 82.6,
+                        x = 43,
+                        y = 50.8,
                     },
                     {
                         npcID = 5758,
@@ -910,7 +910,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248498] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Gorhak (Desolace)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 253139,
                         npcName = "Gorhak",
@@ -930,7 +930,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248974] = {
                 icon = "Interface\\Icons\\spell_nature_natureswrath",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -954,7 +954,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249006] = {
                 icon = "Interface\\Icons\\inv_relics_libramofhope",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -978,7 +978,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249015] = {
                 icon = "Interface\\Icons\\inv_relics_totemofrage",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1002,7 +1002,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249019] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1026,7 +1026,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249057] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1050,7 +1050,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249058] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1074,7 +1074,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249059] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1098,7 +1098,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249060] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1134,7 +1134,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249061] = {
                 icon = "Interface\\Icons\\inv_staff_13",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1158,7 +1158,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249064] = {
                 icon = "Interface\\Icons\\inv_staff_14",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1182,7 +1182,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249069] = {
                 icon = "Interface\\Icons\\inv_rod_enchantedadamantite",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1206,7 +1206,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249070] = {
                 icon = "Interface\\Icons\\inv_10_misc_dragonorb_color1",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1230,7 +1230,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249071] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1263,15 +1263,45 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [435481] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
             [435903] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
             [439156] = {
                 icon = "Interface\\Icons\\inv_sigil_mimiron",
-                source = "Sold by Ziri \"The Wrench\" Littlesprocket",
+                source = "Sold by Ziri \"The Wrench\" Littlesprocket (Gnomeregan)",
+                sourceLocations = {
+                    {
+                        npcID = 217689,
+                        npcName = "Ziri \"The Wrench\" Littlesprocket",
+                        uiMapID = 1426,
+                        zoneName = "Gnomeregan",
+                        x = 24.3,
+                        y = 39.8,
+                    },
+                },
             },
         },
         [230] = {
@@ -1284,7 +1314,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [13931] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Banalash (Swamp of Sorrows), Mythrin'dir (Darnassus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 989,
@@ -1323,8 +1353,16 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [25127] = {
                 icon = "Interface\\Icons\\inv_potion_99",
-                source = "Sold by Kania (Silithus), Lokhtos Darkbargainer",
-                vendorLocations = {
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths), Kania (Silithus)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
                     {
                         npcID = 15419,
                         npcName = "Kania",
@@ -1364,7 +1402,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [20017] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Mythrin'dir (Darnassus), Daniel Bartlett (Undercity)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Alliance",
                         npcID = 4229,
@@ -1404,7 +1442,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [20026] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Qia (Winterspring)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11189,
                         npcName = "Qia",
@@ -1417,8 +1455,16 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [25128] = {
                 icon = "Interface\\Icons\\inv_potion_104",
-                source = "Sold by Kania (Silithus), Lokhtos Darkbargainer",
-                vendorLocations = {
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths), Kania (Silithus)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
                     {
                         npcID = 15419,
                         npcName = "Kania",
@@ -1431,12 +1477,22 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [463869] = {
                 icon = "Interface\\Icons\\inv_potion_100",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [1248650] = {
                 icon = "Interface\\Icons\\inv_wand_07",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1468,7 +1524,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [20015] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Lorelae Wintersong (Moonglade)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 12022,
                         npcName = "Lorelae Wintersong",
@@ -1492,7 +1548,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [20051] = {
                 icon = "Interface\\Icons\\inv_wand_09",
                 source = "Sold by Lorelae Wintersong (Moonglade)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 12022,
                         npcName = "Lorelae Wintersong",
@@ -1505,12 +1561,22 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [23799] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23800] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Meilosh (Felwood)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11557,
                         npcName = "Meilosh",
@@ -1524,7 +1590,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23801] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -1554,7 +1620,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [27837] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Meilosh (Felwood)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11557,
                         npcName = "Meilosh",
@@ -1568,7 +1634,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [463866] = {
                 icon = "Interface\\Icons\\inv_sigil_hodir",
                 source = "Sold by Duke Hydraxis (Azshara)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 13278,
                         npcName = "Duke Hydraxis",
@@ -1642,7 +1708,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [23802] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Argent Quartermaster Hasana (Tirisfal Glades), Argent Quartermaster Lightspark (Western Plaguelands), Quartermaster Miranda Breechlock (Eastern Plaguelands)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 10856,
                         npcName = "Argent Quartermaster Hasana",
@@ -1671,11 +1737,31 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             },
             [23803] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [23804] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
-                source = "Sold by Lokhtos Darkbargainer",
+                source = "Sold by Lokhtos Darkbargainer (Blackrock Depths)",
+                sourceLocations = {
+                    {
+                        npcID = 12944,
+                        npcName = "Lokhtos Darkbargainer",
+                        uiMapID = 1428,
+                        zoneName = "Blackrock Depths",
+                        x = 29.4,
+                        y = 38.3,
+                    },
+                },
             },
             [25072] = {
                 icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
@@ -1704,7 +1790,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25081] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Kania (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15419,
                         npcName = "Kania",
@@ -1718,7 +1804,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25082] = {
                 icon = "Interface\\Icons\\inv_misc_note_01",
                 source = "Sold by Kania (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15419,
                         npcName = "Kania",
@@ -1744,7 +1830,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25129] = {
                 icon = "Interface\\Icons\\inv_potion_105",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -1758,7 +1844,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [25130] = {
                 icon = "Interface\\Icons\\inv_potion_100",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -1772,7 +1858,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [463871] = {
                 icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
                 source = "Sold by Meilosh (Felwood)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 11557,
                         npcName = "Meilosh",
@@ -1786,7 +1872,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [471400] = {
                 icon = "Interface\\Icons\\inv_potion_96",
                 source = "Sold by Rin'wosho the Trader (Stranglethorn Vale)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 14921,
                         npcName = "Rin'wosho the Trader",
@@ -1800,7 +1886,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1213607] = {
                 icon = "Interface\\Icons\\inv_scroll_14",
                 source = "Sold by Kania (Silithus) / World drop",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15419,
                         npcName = "Kania",
@@ -1814,7 +1900,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1213610] = {
                 icon = "Interface\\Icons\\inv_potion_101",
                 source = "Sold by Kania (Silithus)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         npcID = 15419,
                         npcName = "Kania",
@@ -1828,7 +1914,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1213622] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1852,7 +1938,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1213626] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1876,7 +1962,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1219579] = {
                 icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1900,7 +1986,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1219580] = {
                 icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1924,7 +2010,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1219587] = {
                 icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1948,7 +2034,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1220624] = {
                 icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1972,7 +2058,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248607] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -1996,7 +2082,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248636] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -2020,7 +2106,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248640] = {
                 icon = "Interface\\Icons\\inv_enchant_formulasuperior_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -2044,7 +2130,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248645] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -2068,7 +2154,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248661] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -2092,7 +2178,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1248665] = {
                 icon = "Interface\\Icons\\inv_enchant_formulagood_01",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -2116,7 +2202,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249128] = {
                 icon = "Interface\\Icons\\inv_relics_idolofferocity",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -2140,7 +2226,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249152] = {
                 icon = "Interface\\Icons\\inv_relics_libramofhope",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,
@@ -2164,7 +2250,7 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
             [1249154] = {
                 icon = "Interface\\Icons\\inv_relics_totemofrebirth",
                 source = "Sold by Beneris (The Barrens), Alynsia (Redridge Mountains)",
-                vendorLocations = {
+                sourceLocations = {
                     {
                         faction = "Horde",
                         npcID = 248199,

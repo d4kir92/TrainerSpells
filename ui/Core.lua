@@ -239,8 +239,9 @@ function TrainerSpells:EntryMatchesSearch(entry, search)
     if entry.level and tostring(entry.level):find(search, 1, true) then return true end
     if entry.levelReq and tostring(entry.levelReq):find(search, 1, true) then return true end
     if entry.source and entry.source:lower():find(search, 1, true) then return true end
-    for _, location in ipairs(entry.vendorLocations or {}) do
+    for _, location in ipairs(entry.sourceLocations or {}) do
         if location.npcName and location.npcName:lower():find(search, 1, true) then return true end
+        if location.questName and location.questName:lower():find(search, 1, true) then return true end
         if location.zoneName and location.zoneName:lower():find(search, 1, true) then return true end
     end
     return false
@@ -272,7 +273,7 @@ function TrainerSpells:SetMapWaypoint(location)
 
     if TomTom and TomTom.AddWaypoint then
         TomTom:AddWaypoint(location.uiMapID, location.x / 100, location.y / 100, {
-            title = location.npcName or location.name,
+            title = location.questName or location.npcName or location.name,
             persistent = false,
             minimap = true,
             world = true,
@@ -672,7 +673,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             nameFS:SetPoint("RIGHT", sourceFS, "LEFT", -8, 0)
         end
 
-        local locations = entry.isProfessionRecipe and entry.vendorLocations
+        local locations = entry.isProfessionRecipe and entry.sourceLocations
         if locations and #locations > 0 then
             rowFrame.locationButtons = rowFrame.locationButtons or {}
             local locationSize = math.max(12, math.min(20, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
@@ -690,11 +691,18 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
                 button:ClearAllPoints()
                 button:SetPoint("RIGHT", levelFS, "LEFT", -6 - ((index - 1) * (locationSize + 3)), 0)
                 button:SetSize(locationSize, locationSize)
-                button.icon:SetTexture("Interface\\Icons\\INV_Misc_Map_01")
-                button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                if locationInfo.questID then
+                    button.icon:SetTexture("Interface\\GossipFrame\\AvailableQuestIcon")
+                    button.icon:SetTexCoord(0, 1, 0, 1)
+                else
+                    button.icon:SetTexture("Interface\\Icons\\INV_Misc_Map_01")
+                    button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                end
+
                 button:SetScript("OnEnter", function(sel)
                     GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-                    GameTooltip:SetText(locationInfo.npcName or TrainerSpells:Trans("LID_SOURCE"))
+                    GameTooltip:SetText(locationInfo.questName or locationInfo.npcName or TrainerSpells:Trans("LID_SOURCE"))
+                    if locationInfo.questName and locationInfo.npcName then GameTooltip:AddLine(locationInfo.npcName, 1, 0.82, 0) end
                     GameTooltip:AddLine(locationInfo.zoneName or (C_Map and C_Map.GetAreaInfo and C_Map.GetAreaInfo(locationInfo.uiMapID)) or tostring(locationInfo.uiMapID), 1, 1, 1)
                     GameTooltip:AddLine(("%s: %.1f, %.1f"):format(TrainerSpells:Trans("LID_COORDINATES"), locationInfo.x, locationInfo.y), 1, 0.82, 0)
                     GameTooltip:AddLine(TrainerSpells:Trans("LID_LEFTCLICK_SETWAYPOINT"), 0.2, 1, 0.2)

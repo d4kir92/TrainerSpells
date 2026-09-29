@@ -72,7 +72,7 @@ local function RaceMatches(race, playerRace)
     return false
 end
 
-local function GetVendorLocations(locations, playerFaction)
+local function GetSourceLocations(locations, playerFaction)
     if type(locations) ~= "table" then return nil end
     local result = {}
     for _, location in ipairs(locations) do
@@ -89,11 +89,11 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
     for lvl, spells in pairs(dataTable) do
         for key, data in pairs(spells) do
             local cost, rank, status, requires, faction, race, spellID, icon, levelReq
-            local source, vendorLocations
+            local source, sourceLocations
             if type(data) == "table" then
                 cost, rank, status, requires, faction, race = data.cost, data.rank, data.status, data.requires, data.faction, data.race
                 spellID, icon, levelReq = data.spellID, data.icon, data.levelReq
-                source, vendorLocations = data.source, data.vendorLocations
+                source, sourceLocations = data.source, data.sourceLocations
             else
                 cost = data
             end
@@ -133,7 +133,7 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
                     requires = requires,
                     levelReq = levelReq,
                     source = source,
-                    vendorLocations = GetVendorLocations(vendorLocations, playerFaction),
+                    sourceLocations = GetSourceLocations(sourceLocations, playerFaction),
                 }
 
                 table.insert(allEntries, entry)
