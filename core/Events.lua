@@ -24,7 +24,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
         TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
         TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
-        TrainerSpells:SetVersion(133741, "0.7.9")
+        TrainerSpells:SetVersion(133741, "0.7.10")
         TrainerSpells:MergeBuiltinData()
         TrainerSpells:RemoveNonClassSpellsFromClassData()
         TrainerSpells_IgnoredProfessions = TrainerSpells_IgnoredProfessions or {}

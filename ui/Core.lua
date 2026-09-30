@@ -533,6 +533,10 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         end
     elseif elementData.isClassTrainer then
         local entry = elementData.entry
+        if elementData.rowDepth and elementData.rowDepth > 0 then
+            icon:ClearAllPoints()
+            icon:SetPoint("LEFT", rowFrame, "LEFT", 4 + (elementData.rowDepth * 16), 0)
+        end
         if entry.displayID and SetPortraitTextureFromCreatureDisplayID then
             SetPortraitTextureFromCreatureDisplayID(icon, entry.displayID)
         else
