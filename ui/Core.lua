@@ -262,6 +262,8 @@ function TrainerSpells:SetMapWaypoint(location)
         if C_SuperTrack and C_SuperTrack.SetSuperTrackedUserWaypoint then C_SuperTrack.SetSuperTrackedUserWaypoint(true) end
         if InCombatLockdown and InCombatLockdown() then
             return true
+        elseif C_Map.OpenWorldMap then
+            C_Map.OpenWorldMap(location.uiMapID)
         elseif OpenWorldMap then
             OpenWorldMap(location.uiMapID)
         elseif WorldMapFrame then
