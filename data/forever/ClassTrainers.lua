@@ -50,6 +50,7 @@ TrainerSpellsClassTrainers = {
             npcID = 3597,
             displayID = 1732,
             faction = "A",
+            starter = true,
             names = {enUS = "Mardant Strongoak", esES = "Mardant Cebaforte", esMX = "Mardant Cebaforte", koKR = "마르단트 스트롱오크", ptBR = "Mardant Carvalhaço", ruRU = "Мардант Крепкий Дуб", zhCN = "玛丹特·硬木", zhTW = "瑪丹特·硬木"},
             locations = {
                 {areaID = 141, uiMapID = 1438, x = 58.63, y = 40.29},
@@ -261,6 +262,7 @@ TrainerSpellsClassTrainers = {
             npcID = 3061,
             displayID = 3810,
             faction = "H",
+            starter = true,
             names = {enUS = "Lanka Farshot", esES = "Lanka Tirolejano", esMX = "Lanka Tirolejano", koKR = "랑카 파샷", ptBR = "Lanka Tiro Distante", ruRU = "Ланко Дальний Выстрел", zhCN = "兰卡·远箭", zhTW = "蘭卡·遠箭"},
             locations = {
                 {areaID = 215, uiMapID = 1412, x = 43.96, y = 76.35},
@@ -539,7 +541,6 @@ TrainerSpellsClassTrainers = {
             npcID = 1228,
             displayID = 10215,
             faction = "A",
-            starter = true,
             names = {enUS = "Magis Sparkmantle", esES = "Magis Chispamanto", esMX = "Magis Chispamanto", koKR = "마지스 스파크맨틀", ptBR = "Magis Fagulhamanto", ruRU = "Магис Искроплащ", zhCN = "玛济斯·石衣", zhTW = "瑪濟斯·石衣"},
             locations = {
                 {areaID = 1, uiMapID = 1426, x = 47.5, y = 52.08},
@@ -957,7 +958,6 @@ TrainerSpellsClassTrainers = {
             npcID = 1226,
             displayID = 3429,
             faction = "A",
-            starter = true,
             names = {enUS = "Maxan Anvol", koKR = "막산 앤볼", ptBR = "Maxan Begurno", ruRU = "Максан Анвол", zhCN = "马克萨恩·安沃尔", zhTW = "馬克薩恩·安沃爾"},
             locations = {
                 {areaID = 1, uiMapID = 1426, x = 47.34, y = 52.19},
@@ -1327,6 +1327,7 @@ TrainerSpellsClassTrainers = {
             npcID = 3594,
             displayID = 1725,
             faction = "A",
+            starter = true,
             names = {enUS = "Frahun Shadewhisper", esES = "Frahun Sombrusurro", esMX = "Frahun Sombrusurro", koKR = "프라훈 섀이드위스퍼", ptBR = "Frahun Umbrurmúrio", ruRU = "Фрагун Шепот Тени", zhCN = "弗拉胡恩·影语者", zhTW = "弗拉胡恩·影語"},
             locations = {
                 {areaID = 141, uiMapID = 1438, x = 59.64, y = 38.66},
@@ -1662,7 +1663,6 @@ TrainerSpellsClassTrainers = {
             npcID = 906,
             displayID = 3271,
             faction = "A",
-            starter = true,
             names = {enUS = "Maximillian Crowe", koKR = "맥시밀리언 크로우", ptBR = "Wagner Nascimento", ruRU = "Максимилиан Кроу", zhCN = "玛克西米利安·克洛文", zhTW = "瑪克西米利安·克洛文"},
             locations = {
                 {areaID = 12, uiMapID = 1429, x = 44.39, y = 66.24},
@@ -1876,7 +1876,6 @@ TrainerSpellsClassTrainers = {
             npcID = 1229,
             displayID = 3431,
             faction = "A",
-            starter = true,
             names = {enUS = "Granis Swiftaxe", esES = "Granis Hachaveloz", esMX = "Granis Hachaveloz", koKR = "그라니스 스위프트액스", ptBR = "Granis Celeraxa", ruRU = "Гранис Быстрый Топор", zhCN = "格兰尼斯·快斧", zhTW = "格蘭尼斯·快斧"},
             locations = {
                 {areaID = 1, uiMapID = 1426, x = 47.36, y = 52.65},
@@ -1960,6 +1959,7 @@ TrainerSpellsClassTrainers = {
             npcID = 3153,
             displayID = 1880,
             faction = "H",
+            starter = true,
             names = {enUS = "Frang", koKR = "프랑", ruRU = "Франг", zhCN = "弗朗恩", zhTW = "弗朗恩"},
             locations = {
                 {areaID = 14, uiMapID = 1411, x = 42.89, y = 69.44},
@@ -2005,6 +2005,7 @@ TrainerSpellsClassTrainers = {
             npcID = 3593,
             displayID = 1721,
             faction = "A",
+            starter = true,
             names = {enUS = "Alyissia", koKR = "알리시아", ruRU = "Алайссия", zhCN = "奥莉希亚", zhTW = "奧莉希亞"},
             locations = {
                 {areaID = 141, uiMapID = 1438, x = 59.64, y = 38.44},

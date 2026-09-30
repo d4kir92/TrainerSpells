@@ -34,7 +34,7 @@ local function AddEntries(entries, trainers, searchText, usableOnly, petLabel)
     local hideStarter = TrainerSpells_Character.hideStarterClassTrainers
     for _, trainer in ipairs(trainers or {}) do
         local matchesFaction = faction and trainer.faction:find(faction, 1, true)
-        local isUsable = not trainer.starter or level <= 6
+        local isUsable = not trainer.starter or level < 8
         local isVisible = usableOnly or not hideStarter or not trainer.starter
         if matchesFaction and isVisible and (not usableOnly or isUsable) then
             for _, location in ipairs(trainer.locations) do
