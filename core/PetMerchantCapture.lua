@@ -117,7 +117,9 @@ end
 if GameTooltip:HasScript("OnTooltipSetItem") then GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem) end
 
 local function MarkKnownPetSpells(pet, dataTable)
-    if not UnitExists("pet") or UnitHealth("pet") <= 0 then return end
+    if not UnitExists("pet") then return end
+    local health = UnitHealth("pet")
+    if TrainerSpells:IsSecret(health) or health <= 0 then return end
     local petSpells = {}
     local i = 1
     while true do
