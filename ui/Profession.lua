@@ -299,6 +299,48 @@ function professionPicker.Create()
     professionPicker.measure:SetAlpha(0)
 end
 
+function professionPicker.GetRankRange(rank)
+    return rank == 1 and 1 or rank * 75 - 100, rank * 75
+end
+
+function professionPicker.GetRankTrainers(trainers, minRank, exactRank)
+    local result = {}
+    for _, trainer in ipairs(trainers) do
+        if (exactRank and trainer.rank == exactRank) or (not exactRank and trainer.rank >= minRank) then table.insert(result, trainer) end
+    end
+    return result
+end
+
+function professionPicker.GetNearestTrainer(trainers, rank)
+    return TrainerSpells.TrainerLocations.FindNearest(TrainerSpells:GetTrainerLocationEntries(professionPicker.GetRankTrainers(trainers, rank), "", true))
+end
+
+function professionPicker.AddTrainerItems(items, professionKey, trainers, searchText)
+    local maxRank = 0
+    for _, trainer in ipairs(trainers) do maxRank = math.max(maxRank, trainer.rank or 1) end
+    local professionIcon = TrainerSpells:GetProfessionIcon(professionKey)
+    for rank = 1, maxRank do
+        local entries = TrainerSpells:GetTrainerLocationEntries(professionPicker.GetRankTrainers(trainers, rank, rank), searchText)
+        if #entries > 0 then
+            local rankName = TrainerSpells:Trans("LID_PROFRANK_" .. rank)
+            local minSkill, maxSkill = professionPicker.GetRankRange(rank)
+            local groupPrefix = "profession_trainer_" .. professionKey .. "_rank" .. rank .. "_"
+            TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_PROFTRAINER_RANKHEADER"):format(rankName, minSkill, maxSkill), "|cffffd100", nil, groupPrefix .. "group")
+            if not TrainerSpells:IsGroupCollapsed(groupPrefix .. "group") then
+                table.insert(items, {isNearestTrainer = true, rowDepth = 1, rank = rank, rankName = rankName, icon = professionIcon, nearest = professionPicker.GetNearestTrainer(trainers, rank), findNearest = function() return professionPicker.GetNearestTrainer(trainers, rank) end})
+                for _, entry in ipairs(entries) do
+                    if not entry.displayID then entry.icon = professionIcon end
+                end
+                TrainerSpells:AddTrainerLocationItems(items, entries, groupPrefix, 1)
+            end
+        end
+    end
+end
+
+TrainerSpells.TrainerLocations.AddResolveListener(function()
+    if professionFrame:IsVisible() and professionViewMode == PROFESSION_VIEW_TRAINERS then TrainerSpells_ProfessionRefresh() end
+end)
+
 function TrainerSpells_ProfessionRefresh()
     local searchText = (professionFrame.compendiumHost and professionFrame.compendiumHost.searchText or TrainerSpells_ProfessionSearchText or ""):lower()
     local professionKey, skillLineName, currentSkill = professionPicker.GetActive()
@@ -314,7 +356,7 @@ function TrainerSpells_ProfessionRefresh()
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NORECIPEDATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
     elseif professionViewMode == PROFESSION_VIEW_TRAINERS then
         local trainers = professionKey and TrainerSpellsProfessionTrainers and TrainerSpellsProfessionTrainers[professionKey]
-        if trainers and TrainerSpells.AddTrainerLocationItems then TrainerSpells:AddTrainerLocationItems(items, TrainerSpells:GetTrainerLocationEntries(trainers, searchText), "profession_trainer_" .. professionKey .. "_") end
+        if trainers then professionPicker.AddTrainerItems(items, professionKey, trainers, searchText) end
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NOTRAINERDATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
     else
         local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
@@ -400,8 +442,14 @@ function TrainerSpells:PositionCompendiumProfessions()
     panel:ClearAllPoints()
     panel:SetAllPoints(host)
     professionSubTabs.bar:Hide()
-    professionSubTabs.title:Hide()
-    professionSubTabs.desc:Hide()
+    professionSubTabs.title:ClearAllPoints()
+    professionSubTabs.title:SetPoint("BOTTOMLEFT", host, "TOPLEFT", 120, 17)
+    professionSubTabs.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", -180, 17)
+    professionSubTabs.desc:ClearAllPoints()
+    professionSubTabs.desc:SetPoint("TOPLEFT", professionSubTabs.title, "BOTTOMLEFT", 0, -3)
+    professionSubTabs.desc:SetPoint("TOPRIGHT", professionSubTabs.title, "BOTTOMRIGHT", 0, -3)
+    professionSubTabs.title:Show()
+    professionSubTabs.desc:Show()
     for index, tab in ipairs(host.professionTabs) do
         tab:SetTabSelected(tab.mode == professionViewMode)
         AzerothCompendiumAPI.PositionContentTab(tab, host, host.professionTabs[index - 1])

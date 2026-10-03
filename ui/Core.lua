@@ -555,7 +555,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         if entry.displayID and SetPortraitTextureFromCreatureDisplayID then
             SetPortraitTextureFromCreatureDisplayID(icon, entry.displayID)
         else
-            icon:SetTexture(133741)
+            icon:SetTexture(entry.icon or 133741)
         end
         local nameColor = entry.starter and "|cffff8c00" or TrainerSpells.UIColors.SPELL_NAME
         local petLabel = entry.petLabel and ("  |cff9d9d9d<" .. entry.petLabel .. ">|r") or ""
@@ -576,6 +576,35 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         rowFrame:SetScript("OnLeave", GameTooltip_Hide)
         rowFrame:SetScript("OnMouseUp", function(_, button)
             if button == "LeftButton" then TrainerSpells:SetClassTrainerWaypoint(entry) end
+        end)
+    elseif elementData.isNearestTrainer then
+        icon:ClearAllPoints()
+        icon:SetPoint("LEFT", rowFrame, "LEFT", 4 + ((elementData.rowDepth or 0) * 16), 0)
+        icon:SetTexture(elementData.icon or 134269)
+        local title = TrainerSpells:Trans("LID_NEARESTPROFTRAINER"):format(elementData.rankName)
+        nameFS:SetText("|cff33ff99" .. title .. "|r")
+        local nearest = elementData.nearest
+        levelFS:SetText(nearest and (nearest.name .. "  |cff9d9d9d" .. nearest.zoneName .. "|r") or "|cff9d9d9d-|r")
+        rowFrame:EnableMouse(true)
+        rowFrame:SetScript("OnEnter", function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+            GameTooltip:SetText(title)
+            GameTooltip:AddLine(TrainerSpells:Trans("LID_NEARESTPROFTRAINER_DESC"), 1, 1, 1, true)
+            if nearest then
+                GameTooltip:AddLine(" ")
+                GameTooltip:AddLine(nearest.name)
+                if nearest.petLabel then GameTooltip:AddLine("<" .. nearest.petLabel .. ">", 0.62, 0.62, 0.62) end
+                GameTooltip:AddLine(nearest.zoneName, 1, 1, 1)
+                GameTooltip:AddLine(("%s: %.1f, %.1f"):format(TrainerSpells:Trans("LID_COORDINATES"), nearest.location.x, nearest.location.y), 1, 0.82, 0)
+            end
+            GameTooltip:AddLine(TrainerSpells:Trans("LID_LEFTCLICK_SETWAYPOINT"), 0.2, 1, 0.2)
+            GameTooltip:Show()
+        end)
+        rowFrame:SetScript("OnLeave", GameTooltip_Hide)
+        rowFrame:SetScript("OnMouseUp", function(_, button)
+            if button ~= "LeftButton" then return end
+            local current = elementData.findNearest and elementData.findNearest() or nearest
+            TrainerSpells.TrainerLocations.SetNearestWaypoint(current, "LID_NOPROFTRAINER")
         end)
     elseif elementData.isWeaponSkill then
         local entry = elementData.entry

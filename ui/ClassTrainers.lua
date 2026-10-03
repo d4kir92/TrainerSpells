@@ -2,86 +2,17 @@ local _, TrainerSpells = ...
 local trainerData = TrainerSpellsClassTrainers
 if not trainerData then return end
 local petTrainerData = TrainerSpellsPetTrainers or {}
+local TrainerLocations = TrainerSpells.TrainerLocations
+local AddEntries = TrainerLocations.AddEntries
+local SortEntries = TrainerLocations.SortEntries
+local FindNearest = TrainerLocations.FindNearest
+local SetNearestWaypoint = TrainerLocations.SetNearestWaypoint
 
 local classFrame = TrainerSpells.ClassFrame
-local localeAliases = {enGB = "enUS"}
-local factionTokens = {Alliance = "A", Horde = "H"}
 local petTrainerTexts = {
     HUNTER = {label = "LID_PETTRAINER", nearest = "LID_NEARESTPETTRAINER", desc = "LID_NEARESTPETTRAINER_DESC", none = "LID_NOPETTRAINER"},
     WARLOCK = {label = "LID_DEMONTRAINER", nearest = "LID_NEARESTDEMONTRAINER", desc = "LID_NEARESTDEMONTRAINER_DESC", none = "LID_NODEMONTRAINER"},
 }
-
-local function GetTrainerName(trainer)
-    local locale = localeAliases[GetLocale()] or GetLocale()
-    return trainer.names[locale] or trainer.names.enUS
-end
-
-local continentCache = {}
-local function GetContinent(uiMapID)
-    if continentCache[uiMapID] then return continentCache[uiMapID] end
-    local continentType = Enum and Enum.UIMapType and Enum.UIMapType.Continent or 2
-    local stopType = Enum and Enum.UIMapType and Enum.UIMapType.World or 1
-    local info = C_Map.GetMapInfo(uiMapID)
-    local fallback = info
-    while info do
-        if info.mapType == continentType then break end
-        local parent = info.parentMapID and info.parentMapID ~= 0 and C_Map.GetMapInfo(info.parentMapID)
-        if not parent or parent.mapType <= stopType then
-            info = nil
-        else
-            fallback = parent
-            info = parent
-        end
-    end
-    local continent = info or fallback
-    local result = {id = continent and continent.mapID or uiMapID, name = continent and continent.name or tostring(uiMapID)}
-    continentCache[uiMapID] = result
-    return result
-end
-
-local function BuildEntry(trainer, location, petLabel)
-    local continent = GetContinent(location.uiMapID)
-    return {
-        continentID = continent.id,
-        continentName = continent.name,
-        displayID = trainer.displayID,
-        location = location,
-        name = GetTrainerName(trainer),
-        npcID = trainer.npcID,
-        starter = trainer.starter,
-        petLabel = petLabel,
-        zoneName = C_Map.GetAreaInfo(location.areaID) or tostring(location.areaID),
-    }
-end
-
-local function AddEntries(entries, trainers, searchText, usableOnly, petLabel)
-    local faction = factionTokens[UnitFactionGroup("player")]
-    local level = UnitLevel("player") or 1
-    local hideStarter = TrainerSpells_Character.hideStarterClassTrainers
-    for _, trainer in ipairs(trainers or {}) do
-        local matchesFaction = faction and trainer.faction:find(faction, 1, true)
-        local isUsable = not trainer.starter or level < 8
-        local isVisible = usableOnly or not hideStarter or not trainer.starter
-        if matchesFaction and isVisible and (not usableOnly or isUsable) then
-            for _, location in ipairs(trainer.locations) do
-                local entry = BuildEntry(trainer, location, petLabel)
-                local searchable = (entry.name .. " " .. entry.zoneName .. " " .. entry.continentName .. " " .. (petLabel or "")):lower()
-                if searchText == "" or searchable:find(searchText, 1, true) then table.insert(entries, entry) end
-            end
-        end
-    end
-end
-
-local function SortEntries(entries)
-    table.sort(entries, function(a, b)
-        if a.continentName ~= b.continentName then return a.continentName < b.continentName end
-        if a.continentID ~= b.continentID then return a.continentID < b.continentID end
-        if a.zoneName ~= b.zoneName then return a.zoneName < b.zoneName end
-        if (a.petLabel ~= nil) ~= (b.petLabel ~= nil) then return a.petLabel == nil end
-        return a.name < b.name
-    end)
-    return entries
-end
 
 local function GetPlayerClassToken()
     return select(2, UnitClass("player"))
@@ -105,69 +36,10 @@ local function GetPetEntries(searchText, usableOnly)
     return SortEntries(entries)
 end
 
-function TrainerSpells:GetTrainerLocationEntries(trainers, searchText)
-    local entries = {}
-    AddEntries(entries, trainers, searchText, false)
-    return SortEntries(entries)
-end
-
-function TrainerSpells:AddTrainerLocationItems(items, entries, groupPrefix)
-    local lastContinentID
-    local lastAreaID
-    for _, entry in ipairs(entries) do
-        local continentKey = groupPrefix .. "continent_" .. entry.continentID
-        if entry.continentID ~= lastContinentID then
-            lastContinentID = entry.continentID
-            lastAreaID = nil
-            TrainerSpells:AddHeaderItem(items, entry.continentName, "|cffffd100", nil, continentKey)
-        end
-        if not TrainerSpells:IsGroupCollapsed(continentKey) then
-            if entry.location.areaID ~= lastAreaID then
-                lastAreaID = entry.location.areaID
-                TrainerSpells:AddHeaderItem(items, entry.zoneName, "|cffffffff", nil, groupPrefix .. lastAreaID, nil, nil, 1)
-            end
-            if not TrainerSpells:IsGroupCollapsed(groupPrefix .. lastAreaID) then
-                table.insert(items, {isClassTrainer = true, entry = entry, rowDepth = 1})
-            end
-        end
-    end
-end
-
 function TrainerSpells:BuildClassTrainerItems(items, searchText)
     local entries = GetEntries(searchText, false)
     for _, entry in ipairs(GetPetEntries(searchText, false)) do table.insert(entries, entry) end
     TrainerSpells:AddTrainerLocationItems(items, SortEntries(entries), "class_trainer_")
-end
-
-local function GetWorldPosition(uiMapID, x, y)
-    if not C_Map.GetWorldPosFromMapPos or not CreateVector2D then return nil end
-    local continentID, position = C_Map.GetWorldPosFromMapPos(uiMapID, CreateVector2D(x / 100, y / 100))
-    if not continentID or not position then return nil end
-    return continentID, position
-end
-
-local function FindNearest(entries)
-    if not C_Map.GetWorldPosFromMapPos then return nil end
-    local mapID = C_Map.GetBestMapForUnit("player")
-    local mapPosition = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
-    if not mapID or not mapPosition then return nil end
-    local playerContinent, playerWorld = C_Map.GetWorldPosFromMapPos(mapID, mapPosition)
-    local nearest
-    local nearestDistance
-    for _, entry in ipairs(entries) do
-        local location = entry.location
-        local continentID, worldPosition = GetWorldPosition(location.uiMapID, location.x, location.y)
-        if playerWorld and continentID == playerContinent and worldPosition then
-            local dx = worldPosition.x - playerWorld.x
-            local dy = worldPosition.y - playerWorld.y
-            local distance = dx * dx + dy * dy
-            if not nearestDistance or distance < nearestDistance then
-                nearest = entry
-                nearestDistance = distance
-            end
-        end
-    end
-    return nearest
 end
 
 function TrainerSpells:GetNearestClassTrainer()
@@ -178,30 +50,13 @@ function TrainerSpells:GetNearestPetTrainer()
     return FindNearest(GetPetEntries("", true))
 end
 
-function TrainerSpells:SetClassTrainerWaypoint(entry)
-    if not entry or not entry.location then return false end
-    local location = entry.location
-    local waypoint = {
-        uiMapID = location.uiMapID,
-        x = location.x,
-        y = location.y,
-        npcName = entry.name,
-    }
-    return TrainerSpells:SetWeaponTrainerWaypoint(waypoint)
-end
-
-local function SetNearestWaypoint(entry, noneKey)
-    if entry and TrainerSpells:SetClassTrainerWaypoint(entry) then
-        TrainerSpells:MSG((TrainerSpells:Trans("LID_WAYPOINTFOR")):format(entry.name, entry.zoneName, entry.location.x, entry.location.y))
-    else
-        TrainerSpells:MSG(TrainerSpells:Trans(noneKey))
-    end
-end
-
 local controls = CreateFrame("Frame", "TrainerSpellsClassTrainerControls", classFrame)
 TrainerSpells.ClassTrainerControls = controls
 controls:SetHeight(36)
 controls:Hide()
+TrainerLocations.AddResolveListener(function()
+    if controls:IsVisible() then TrainerSpells_Refresh() end
+end)
 local nearestButton = CreateFrame("Button", nil, controls, "MainMenuFrameButtonTemplate")
 nearestButton:SetPoint("LEFT")
 nearestButton:SetSize(200, 36)

@@ -1,5 +1,5 @@
 ## Interface: 20506
-## Version: 0.7.12
+## Version: 0.8.0
 ## Title: TrainerSpells |T133741:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: An add-on that shows you what you can learn at a classtrainer.
 ## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Klassenlehrer anzeigt.
@@ -72,6 +72,7 @@ data\tbc\Mining.lua
 data\tbc\Skinning.lua
 data\tbc\Fishing.lua
 
+data\tbc\ProfessionTrainers.lua
 data\ProfessionRecipes.lua
 
 data\classicera\LeatherworkingRecipes.lua
@@ -105,6 +106,7 @@ core\Events.lua
 ui\Core.lua
 ui\ClassData.lua
 ui\ClassList.lua
+ui\TrainerLocations.lua
 ui\Profession.lua
 ui\WeaponSkills.lua
 ui\Spellbook.lua

@@ -746,8 +746,14 @@ function TrainerSpells:PositionCompendiumClass()
     if playerSpellsModeDivider then playerSpellsModeDivider:Hide() end
     panel:Show()
     playerSpellsSubTabs.bar:Hide()
-    playerSpellsSubTabs.title:Hide()
-    playerSpellsSubTabs.desc:Hide()
+    playerSpellsSubTabs.title:ClearAllPoints()
+    playerSpellsSubTabs.title:SetPoint("BOTTOMLEFT", host, "TOPLEFT", #host.classTabs * 40, 17)
+    playerSpellsSubTabs.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 17)
+    playerSpellsSubTabs.desc:ClearAllPoints()
+    playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
+    playerSpellsSubTabs.desc:SetPoint("TOPRIGHT", playerSpellsSubTabs.title, "BOTTOMRIGHT", 0, -3)
+    playerSpellsSubTabs.title:Show()
+    playerSpellsSubTabs.desc:Show()
     playerSpellsSubTabs.Update()
 end
 
