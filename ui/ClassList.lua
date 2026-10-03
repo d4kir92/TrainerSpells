@@ -51,32 +51,32 @@ rowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueCha
     if TrainerSpells_Refresh then TrainerSpells_Refresh() end
 end)
 
-function TrainerSpells_Refresh()
-    local searchText = (classFrame.compendiumHost and classFrame.compendiumHost.searchText or TrainerSpells_SearchText or ""):lower()
+function TrainerSpells:BuildClassViewItems(viewMode, searchText)
+    searchText = (searchText or ""):lower()
     local selectedLevel = UnitLevel("player") or 1
     local selectedClass = select(2, UnitClass("player"))
     local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]
     local items = {}
-    if TrainerSpells.ClassView == "class" and classData then
+    if viewMode == "class" and classData then
         local groups = TrainerSpells:ClassifyEntries(classData, searchText, selectedLevel)
         TrainerSpells:AppendGroupItems(items, groups, "")
     end
 
-    if TrainerSpells.ClassView == "pet" then
+    if viewMode == "pet" then
         if selectedClass == "WARLOCK" then TrainerSpells:AppendPetAbilities(items, searchText, selectedLevel) end
         if selectedClass == "HUNTER" then TrainerSpells:AppendPetTrainerAbilities(items, searchText, selectedLevel, selectedClass) end
     end
 
-    if TrainerSpells.ClassView == "weapons" and TrainerSpells.BuildWeaponSkillItems then
+    if viewMode == "weapons" and TrainerSpells.BuildWeaponSkillItems then
         TrainerSpells:BuildWeaponSkillItems(items, searchText, selectedLevel)
     end
 
-    if TrainerSpells.ClassView == "trainers" and TrainerSpells.BuildClassTrainerItems then
+    if viewMode == "trainers" and TrainerSpells.BuildClassTrainerItems then
         TrainerSpells:BuildClassTrainerItems(items, searchText)
     end
 
     if #items == 0 then
-        if TrainerSpells.ClassView == "weapons" or TrainerSpells.ClassView == "trainers" then
+        if viewMode == "weapons" or viewMode == "trainers" then
             TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NOENTRIES"), "|cffaaaaaa")
         elseif not classData then
             TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NODATAFORCLASS"):format(tostring(selectedClass)), "|cffff5555")
@@ -86,7 +86,12 @@ function TrainerSpells_Refresh()
     end
 
     TrainerSpells:AddCostColumn(items)
-    scrollBox:SetDataProvider(CreateDataProvider(items), ScrollBoxConstants.RetainScrollPosition)
+    return items
+end
+
+function TrainerSpells_Refresh()
+    scrollBox:SetDataProvider(CreateDataProvider(TrainerSpells:BuildClassViewItems(TrainerSpells.ClassView, TrainerSpells_SearchText)), ScrollBoxConstants.RetainScrollPosition)
+    if TrainerSpells.CompendiumClassView then TrainerSpells.CompendiumClassView:Refresh() end
 end
 
 function TrainerSpells:HasPetClassData(classToken)

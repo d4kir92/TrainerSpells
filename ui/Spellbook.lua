@@ -134,7 +134,7 @@ local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame", "SpellBookFrameSho
 local spellButtonsHidden = false
 local hiddenPageRegions = {}
 local function HideNativeSpellButtons()
-    if spellButtonsHidden then return end
+    if classFrame.compendiumHost or spellButtonsHidden then return end
     spellButtonsHidden = true
     for _, name in ipairs(NATIVE_EXTRA_WIDGETS) do
         local widget = _G[name]
@@ -194,7 +194,7 @@ local function HideClassicModeTabGlows()
 end
 
 local function OpenFrame(view)
-    if classFrame.compendiumHost then TrainerSpells:SetClassView(view); return end
+    if classFrame.compendiumHost then TrainerSpells:UndockCompendiumFrame(classFrame) end
     TrainerSpells:SetClassView(view)
     PositionFrame()
     classFrame:Show()
@@ -458,6 +458,7 @@ local function SetNativeCategoryTabsVisual(book, showSelection)
 end
 
 local function HidePlayerSpellsContent()
+    if classFrame.compendiumHost then return end
     local book = GetPlayerSpellsBook()
     if playerSpellsContentHidden or not book then return end
     playerSpellsContentHidden = true
@@ -489,7 +490,7 @@ local function ShowPlayerSpellsContent()
 end
 
 local function ClosePlayerSpellsPanel()
-    if classFrame.compendiumHost then return end
+    if classFrame.compendiumHost then ShowPlayerSpellsContent(); SetNativeCategoryTabsVisual(GetPlayerSpellsBook(), true); return end
     local wasOpen = playerSpellsContentHidden
     classFrame:Hide()
     ShowPlayerSpellsContent()
@@ -501,7 +502,7 @@ local function ClosePlayerSpellsPanel()
 end
 
 local function OpenPlayerSpellsPanel()
-    if classFrame.compendiumHost then TrainerSpells:PositionCompendiumClass(); classFrame:Show(); return end
+    if classFrame.compendiumHost then TrainerSpells:UndockCompendiumFrame(classFrame) end
     local book = GetPlayerSpellsBook()
     if not book then return end
     PositionPlayerSpellsFrame()
@@ -699,6 +700,7 @@ function TrainerSpells:UndockCompendiumFrame(frame)
     if not frame.compendiumHost then return end
     frame:Hide()
     frame.compendiumHost = nil
+    for _, state in ipairs(frame.compendiumState) do state.widget:ClearAllPoints() end
     for _, state in ipairs(frame.compendiumState) do
         local widget = state.widget
         widget:SetParent(state.parent)
@@ -747,7 +749,7 @@ function TrainerSpells:PositionCompendiumClass()
     panel:Show()
     playerSpellsSubTabs.bar:Hide()
     playerSpellsSubTabs.title:ClearAllPoints()
-    playerSpellsSubTabs.title:SetPoint("BOTTOMLEFT", host, "TOPLEFT", #host.classTabs * 40, 17)
+    playerSpellsSubTabs.title:SetPoint("BOTTOMLEFT", host.classTabs[#host.classTabs], "BOTTOMRIGHT", 12, 17)
     playerSpellsSubTabs.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 17)
     playerSpellsSubTabs.desc:ClearAllPoints()
     playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
@@ -757,52 +759,105 @@ function TrainerSpells:PositionCompendiumClass()
     playerSpellsSubTabs.Update()
 end
 
-function TrainerSpells:CreateCompendiumClass(host)
-    host.OnSearchChanged = function() TrainerSpells_Refresh() end
-    playerSpellsSubTabs.Create()
-    host.classTabs = {}
-    for _, entry in ipairs(playerSpellsSubTabs.views) do
-        local tab = AzerothCompendiumAPI.CreateContentTab(host, entry.title, entry.icon, function() TrainerSpells:SetClassView(entry.view) end)
-        tab.view = entry.view
+function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
+    local view = {host = host, mode = mode, rowHeight = rowHeight, tabs = {}, entries = entries}
+    function view:TranslateTitle(text)
+        if type(text) == "string" and text:find("LID_", 1, true) == 1 then return TrainerSpells:Trans(text) end
+        return text
+    end
+    view.title = host:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    view.title:SetJustifyH("LEFT")
+    view.title:SetWordWrap(false)
+    view.desc = host:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    view.desc:SetJustifyH("LEFT")
+    view.desc:SetWordWrap(false)
+    view.desc:SetTextColor(0.75, 0.75, 0.75)
+    view.desc:SetPoint("TOPLEFT", view.title, "BOTTOMLEFT", 0, -3)
+    view.desc:SetPoint("TOPRIGHT", view.title, "BOTTOMRIGHT", 0, -3)
+    for _, entry in ipairs(entries) do
+        local tab = AzerothCompendiumAPI.CreateContentTab(host, view:TranslateTitle(entry.title), entry.icon, function() view.mode = entry.mode or entry.view; view:Refresh() end)
+        tab.mode = entry.mode or entry.view
         if entry.classToken then playerSpellsSubTabs.SetClassIcon(tab.Icon, entry.classToken) end
-        tab:SetScript("OnEnter", function(sel)
-            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-            GameTooltip:SetText(entry.title)
+        tab:SetScript("OnEnter", function(button)
+            GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+            GameTooltip:SetText(view:TranslateTitle(entry.title))
             GameTooltip:AddLine(TrainerSpells:Trans(entry.desc), 1, 1, 1, true)
             GameTooltip:Show()
         end)
-        tab:SetScript("OnLeave", GameTooltip_Hide)
-        table.insert(host.classTabs, tab)
+        table.insert(view.tabs, tab)
+        AzerothCompendiumAPI.PositionContentTab(tab, host, view.tabs[#view.tabs - 1])
     end
-    host.listPanel = CreateFrame("Frame", nil, host)
-    host.listPanel:SetAllPoints(host)
-    TrainerSpells:AddContentBorder(host.listPanel, host)
-    host.listPanel.borderFrame:SetFrameLevel(host:GetFrameLevel() + 20)
+    view.title:SetPoint("BOTTOMLEFT", view.tabs[#view.tabs], "BOTTOMRIGHT", 12, 17)
+    view.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 17)
+    view.scrollBox = CreateFrame("Frame", nil, host, "WowScrollBoxList")
+    view.scrollBox:SetPoint("TOPLEFT", host, "TOPLEFT", 0, -4)
+    view.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -22, 0)
+    view.scrollBar = CreateFrame("EventFrame", nil, host, "MinimalScrollBar")
+    view.scrollBar:SetPoint("TOPLEFT", view.scrollBox, "TOPRIGHT", 4, -2)
+    view.scrollBar:SetPoint("BOTTOMLEFT", host, "BOTTOMRIGHT", -18, 8)
+    local list = CreateScrollBoxListLinearView()
+    list:SetElementExtentCalculator(function(_, item) return item.isHeader and TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap or view.rowHeight end)
+    list:SetPadding(0, 0, 0, 0, TrainerSpells.RowSpacing)
+    list:SetElementInitializer("Frame", function(row, item) TrainerSpells:InitScrollRow(row, item, view.rowHeight) end)
+    ScrollUtil.InitScrollBoxListWithScrollBar(view.scrollBox, view.scrollBar, list)
+    view.slider = CreateFrame("Slider", nil, host, "MinimalSliderWithSteppersTemplate")
+    view.slider:SetScale(0.75)
+    view.slider:SetHeight(10)
+    view.slider:Init(rowHeight, TrainerSpells.MinRowHeight, TrainerSpells.MaxRowHeight, TrainerSpells.MaxRowHeight - TrainerSpells.MinRowHeight, {
+        [MinimalSliderWithSteppersMixin.Label.Right] = CreateMinimalSliderFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value) return WHITE_FONT_COLOR:WrapTextInColorCode(tostring(math.floor(value + 0.5))) end)
+    })
+    if view.slider.MinText then view.slider.MinText:Hide() end
+    if view.slider.MaxText then view.slider.MaxText:Hide() end
+    view.slider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value) view.rowHeight = math.floor(value + 0.5); if view.BuildItems then view:Refresh() end end)
+    function view:Refresh()
+        for index, tab in ipairs(self.tabs) do
+            tab:SetTabSelected(tab.mode == self.mode)
+            if tab.mode == self.mode then
+                self.title:SetText(self:TranslateTitle(self.entries[index].title))
+                self.desc:SetText(TrainerSpells:Trans(self.entries[index].desc))
+            end
+        end
+        local offset = -4
+        for _, control in ipairs(self.controls or {}) do
+            local active = control.mode == self.mode
+            control.frame:SetShown(active)
+            if active then offset = -control.height end
+        end
+        self.scrollBox:ClearAllPoints()
+        self.scrollBox:SetPoint("TOPLEFT", host, "TOPLEFT", 0, offset)
+        self.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -22, 0)
+        if self.BuildItems then self.scrollBox:SetDataProvider(CreateDataProvider(self:BuildItems()), ScrollBoxConstants.RetainScrollPosition) end
+    end
+    host.OnSearchChanged = function() view:Refresh() end
     host:SetScript("OnSizeChanged", function()
-        if classFrame.compendiumHost == host then TrainerSpells:PositionCompendiumClass() end
+        AzerothCompendiumAPI.PositionHeaderSlider(view.slider)
+        for index, tab in ipairs(view.tabs) do AzerothCompendiumAPI.PositionContentTab(tab, host, view.tabs[index - 1]) end
     end)
-    if not playerSpellsModeTabContainer then
-        playerSpellsSubTabs.panel:Hide()
-        playerSpellsSubTabs.bar:Hide()
-        playerSpellsSubTabs.title:Hide()
-        playerSpellsSubTabs.desc:Hide()
-    end
-    host:SetScript("OnShow", function()
-        ClosePlayerSpellsPanel()
-        ShowNativeSpellButtons()
-        HideClassicModeTabGlows()
-        local widgets = {classFrame, listBg, searchBox, TrainerSpells.RowHeightSlider, TrainerSpells.ClassScrollBox, _G.TrainerSpellsScrollBar, playerSpellsSubTabs.panel, playerSpellsSubTabs.bar, playerSpellsSubTabs.title, playerSpellsSubTabs.desc}
-        if TrainerSpells.ClassTrainerControls then table.insert(widgets, TrainerSpells.ClassTrainerControls) end
-        if TrainerSpells.WeaponControls then table.insert(widgets, TrainerSpells.WeaponControls) end
-        if playerSpellsModeDivider then table.insert(widgets, playerSpellsModeDivider) end
-        TrainerSpells:DockCompendiumFrame(classFrame, host, widgets)
-        TrainerSpells:SetClassView(playerSpellsSubTabs.GetSavedView())
-        TrainerSpells:PositionCompendiumClass()
-        classFrame:Show()
-    end)
-    host:SetScript("OnHide", function() TrainerSpells:UndockCompendiumFrame(classFrame) end)
+    AzerothCompendiumAPI.PositionHeaderSlider(view.slider)
+    host:RegisterEvent("PLAYER_LEVEL_UP")
+    host:RegisterEvent("SPELLS_CHANGED")
+    host:RegisterEvent("PLAYER_MONEY")
+    if TrainerSpells.TrainerLocations then TrainerSpells.TrainerLocations.AddResolveListener(function() if host:IsShown() then view:Refresh() end end) end
+    host:SetScript("OnEvent", function() if host:IsShown() then view:Refresh() end end)
+    return view
 end
 
+function TrainerSpells:CreateCompendiumClass(host)
+    playerSpellsSubTabs.Create()
+    local view = self:CreateCompendiumListView(host, playerSpellsSubTabs.views, playerSpellsSubTabs.GetSavedView(), self.RowHeight)
+    self.CompendiumClassView = view
+    view.BuildItems = function(current) return TrainerSpells:BuildClassViewItems(current.mode, host.searchText) end
+    view.controls = {}
+    for _, entry in ipairs({{self.CreateClassTrainerControls, "trainers", 48}, {self.CreateWeaponControls, "weapons", 40}}) do
+        if entry[1] then
+            local controls = entry[1](self, host)
+            controls:SetPoint("TOPLEFT", host, "TOPLEFT", 4, -4)
+            controls:SetPoint("TOPRIGHT", host, "TOPRIGHT", -4, -4)
+            table.insert(view.controls, {frame = controls, mode = entry[2], height = entry[3]})
+        end
+    end
+    host:SetScript("OnShow", function() view:Refresh() end)
+end
 function TrainerSpells:RegisterCompendiumTabs()
     local api = _G["AzerothCompendiumAPI"]
     if type(api) ~= "table" or type(api.RegisterTab) ~= "function" then return end

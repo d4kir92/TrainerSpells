@@ -373,11 +373,10 @@ TrainerSpells.TrainerLocations.AddResolveListener(function()
     if professionFrame:IsVisible() and professionViewMode == PROFESSION_VIEW_TRAINERS then TrainerSpells_ProfessionRefresh() end
 end)
 
-function TrainerSpells_ProfessionRefresh()
-    local searchText = (professionFrame.compendiumHost and professionFrame.compendiumHost.searchText or TrainerSpells_ProfessionSearchText or ""):lower()
-    local professionKey, skillLineName, currentSkill = professionPicker.GetActive()
+function TrainerSpells:BuildProfessionViewItems(viewMode, searchText, professionKey, skillLineName, currentSkill)
+    searchText = (searchText or ""):lower()
     local items = {}
-    if professionViewMode == PROFESSION_VIEW_RECIPES then
+    if viewMode == PROFESSION_VIEW_RECIPES then
         local data = professionKey and TrainerSpells_RecipeData and TrainerSpells_RecipeData[professionKey]
         if data and next(data) then
             local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true, professionKey)
@@ -386,7 +385,7 @@ function TrainerSpells_ProfessionRefresh()
         end
 
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NORECIPEDATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
-    elseif professionViewMode == PROFESSION_VIEW_TRAINERS then
+    elseif viewMode == PROFESSION_VIEW_TRAINERS then
         local trainers = professionKey and TrainerSpellsProfessionTrainers and TrainerSpellsProfessionTrainers[professionKey]
         if trainers then professionPicker.AddTrainerItems(items, professionKey, trainers, searchText) end
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NOTRAINERDATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
@@ -402,7 +401,13 @@ function TrainerSpells_ProfessionRefresh()
     end
 
     TrainerSpells:AddCostColumn(items)
-    professionScrollBox:SetDataProvider(CreateDataProvider(items), ScrollBoxConstants.RetainScrollPosition)
+    return items
+end
+
+function TrainerSpells_ProfessionRefresh()
+    local key, name, rank = professionPicker.GetActive()
+    professionScrollBox:SetDataProvider(CreateDataProvider(TrainerSpells:BuildProfessionViewItems(professionViewMode, TrainerSpells_ProfessionSearchText, key, name, rank)), ScrollBoxConstants.RetainScrollPosition)
+    if TrainerSpells.CompendiumProfessionView then TrainerSpells.CompendiumProfessionView:Refresh() end
     professionPicker.UpdateText()
 end
 
@@ -475,7 +480,7 @@ function TrainerSpells:PositionCompendiumProfessions()
     panel:SetAllPoints(host)
     professionSubTabs.bar:Hide()
     professionSubTabs.title:ClearAllPoints()
-    professionSubTabs.title:SetPoint("BOTTOMLEFT", host, "TOPLEFT", 120, 17)
+    professionSubTabs.title:SetPoint("BOTTOMLEFT", host.professionTabs[#host.professionTabs], "BOTTOMRIGHT", 12, 17)
     professionSubTabs.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", -180, 17)
     professionSubTabs.desc:ClearAllPoints()
     professionSubTabs.desc:SetPoint("TOPLEFT", professionSubTabs.title, "BOTTOMLEFT", 0, -3)
@@ -697,10 +702,11 @@ local function ShowNativeTradeSkillWidgets()
 end
 
 local function SetTradeSkillView(mode)
-    if professionFrame.compendiumHost then return end
+    if professionFrame.compendiumHost then TrainerSpells:UndockCompendiumFrame(professionFrame) end
     if mode == PROFESSION_VIEW_SKILL or mode == PROFESSION_VIEW_RECIPES then
         professionViewMode = mode
         C_Timer.After(TrainerSpells:IsDragonflightUIEnabled() and 0.1 or 0, function()
+            if professionFrame.compendiumHost then ShowNativeTradeSkillWidgets(); return end
             if TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
                 professionListBg:ClearAllPoints()
                 professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -32)
@@ -907,7 +913,7 @@ professionsCombatWatcher:SetScript("OnEvent", function(_, event)
 end)
 
 local function OpenProfessionsFrameView()
-    if professionFrame.compendiumHost then return end
+    if professionFrame.compendiumHost then TrainerSpells:UndockCompendiumFrame(professionFrame) end
     if IsProfessionsCombatLocked() then
         if UIErrorsFrame and ERR_NOT_IN_COMBAT then UIErrorsFrame:AddMessage(ERR_NOT_IN_COMBAT, 1, 0.1, 0.1) end
         return
@@ -1058,42 +1064,36 @@ tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     end
 end)
 
+function professionPicker.PopulateCompendiumMenu(view, menu)
+    for index, group in ipairs({professionPicker.GetLists()}) do
+        if #group > 0 then
+            menu:CreateTitle(TrainerSpells:Trans(index == 1 and "LID_YOURPROFESSIONS" or "LID_OTHERPROFESSIONS"))
+            for _, info in ipairs(group) do
+                local key = info.key
+                menu:CreateRadio(professionPicker.GetLabel(info), function() return view.professionKey == key end, function() view.professionKey = key; view:Refresh() end)
+            end
+        end
+    end
+end
+
 function TrainerSpells:CreateCompendiumProfessions(host)
-    host.OnSearchChanged = function() TrainerSpells_ProfessionRefresh() end
-    professionPicker.Create()
-    professionSubTabs.Create()
-    host.professionTabs = {}
-    for _, view in ipairs(PROFESSION_SUB_VIEWS) do
-        local tab = AzerothCompendiumAPI.CreateContentTab(host, TrainerSpells:Trans(view.title), view.icon, function() professionSubTabs.Select(view.mode) end)
-        tab.mode = view.mode
-        table.insert(host.professionTabs, tab)
+    local view = self:CreateCompendiumListView(host, PROFESSION_SUB_VIEWS, professionSubTabs.GetSavedView(), self.ProfessionRowHeight)
+    self.CompendiumProfessionView = view
+    view.BuildItems = function(current)
+        if not current.professionKey then
+            local owned, others = professionPicker.GetLists()
+            current.professionKey = owned[1] and owned[1].key or others[1] and others[1].key
+        end
+        local info = current.professionKey and professionPicker.GetInfo(current.professionKey)
+        if current.dropdown then current.dropdown:SetText(info and professionPicker.GetLabel(info) or TrainerSpells:Trans("LID_PROFESSIONS")) end
+        return TrainerSpells:BuildProfessionViewItems(current.mode, host.searchText, current.professionKey, info and info.name, info and info.rank or 0)
     end
-    host:SetScript("OnSizeChanged", function()
-        if professionFrame.compendiumHost == host then TrainerSpells:PositionCompendiumProfessions() end
-    end)
-    if not professionsFrameHooksInstalled then
-        professionSubTabs.panel:Hide()
-        professionSubTabs.bar:Hide()
-        professionSubTabs.title:Hide()
-        professionSubTabs.desc:Hide()
-        if professionPicker.dropdown then professionPicker.dropdown:Hide() end
+    if MenuUtil and MenuUtil.CreateRootMenuDescription then
+        view.dropdown = CreateFrame("DropdownButton", nil, host, "WowStyle1DropdownTemplate")
+        view.dropdown:SetSize(180, 26)
+        view.dropdown:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 2)
+        view.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", -190, 17)
+        view.dropdown:SetupMenu(function(_, menu) professionPicker.PopulateCompendiumMenu(view, menu) end)
     end
-    host:SetScript("OnShow", function()
-        RestoreProfessionsFramePage()
-        CloseProfessionsFrameView()
-        ShowNativeTradeSkillWidgets()
-        local widgets = {professionFrame, professionSearchBox, professionRowHeightSlider, professionScrollBox, professionScrollBar, professionListBg, professionSubTabs.panel, professionSubTabs.bar, professionSubTabs.title, professionSubTabs.desc}
-        if professionPicker.dropdown then table.insert(widgets, professionPicker.dropdown) end
-        TrainerSpells:DockCompendiumFrame(professionFrame, host, widgets)
-        professionViewMode = professionSubTabs.GetSavedView()
-        if not professionPicker.key then professionPicker.Reset() end
-        professionPicker.UpdateText()
-        if professionPicker.dropdown then professionPicker.dropdown:Show() end
-        professionSubTabs.Update()
-        PositionProfessionFrame()
-        professionListBg:Hide()
-        professionFrame:Show()
-        TrainerSpells_ProfessionRefresh()
-    end)
-    host:SetScript("OnHide", function() TrainerSpells:UndockCompendiumFrame(professionFrame) end)
+    host:SetScript("OnShow", function() view:Refresh() end)
 end

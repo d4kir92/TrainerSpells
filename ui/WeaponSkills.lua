@@ -3,7 +3,6 @@ local weaponData = TrainerSpellsWeaponSkills
 if not weaponData then return end
 
 local classFrame = TrainerSpells.ClassFrame
-local hideLearned
 local orderBySpellID = {}
 local localeAliases = {enGB = "enUS", esMX = "esES"}
 for index, spellID in ipairs(weaponData.order) do
@@ -100,11 +99,6 @@ local function AppendStatusCategories(items, available, future, known, keyPrefix
 end
 
 local function ShouldHideLearned()
-    if hideLearned then
-        local checked = hideLearned:GetChecked() and true or false
-        TrainerSpells_Character.hideLearnedWeaponSkills = checked
-        return checked
-    end
     return TrainerSpells_Character.hideLearnedWeaponSkills ~= false
 end
 
@@ -195,21 +189,21 @@ function TrainerSpells:BuildWeaponSkillItems(items, searchText, selectedLevel)
     AppendStatusCategories(items, available, future, known, "weapon_", 0)
 end
 
-local controls = CreateFrame("Frame", "TrainerSpellsWeaponControls", classFrame)
-TrainerSpells.WeaponControls = controls
+function TrainerSpells.CreateWeaponControls(addon, parent)
+local controls = CreateFrame("Frame", nil, parent)
 controls:SetHeight(28)
 controls:Hide()
 local modernDropdown = MenuUtil and MenuUtil.CreateRootMenuDescription
 local dropdown
 if modernDropdown then
-    dropdown = CreateFrame("DropdownButton", "TrainerSpellsWeaponGroupingDropdown", controls, "WowStyle1DropdownTemplate")
+    dropdown = CreateFrame("DropdownButton", nil, controls, "WowStyle1DropdownTemplate")
 else
-    dropdown = CreateFrame("Frame", "TrainerSpellsWeaponGroupingDropdown", controls, "UIDropDownMenuTemplate")
+    dropdown = CreateFrame("Frame", nil, controls, "UIDropDownMenuTemplate")
     UIDropDownMenu_SetWidth(dropdown, 140)
 end
 dropdown:SetPoint("LEFT")
 if modernDropdown then dropdown:SetSize(170, 26) end
-hideLearned = CreateFrame("CheckButton", "TrainerSpellsHideLearnedWeaponSkills", controls, "UICheckButtonTemplate")
+local hideLearned = CreateFrame("CheckButton", nil, controls, "UICheckButtonTemplate")
 hideLearned:SetPoint("LEFT", dropdown, "RIGHT", 10, 0)
 hideLearned:SetSize(24, 24)
 hideLearned:SetChecked(TrainerSpells_Character.hideLearnedWeaponSkills)
@@ -265,3 +259,8 @@ else
 end
 
 UpdateDropdownText()
+
+controls:SetScript("OnShow", function() hideLearned:SetChecked(TrainerSpells_Character.hideLearnedWeaponSkills); UpdateDropdownText() end)
+return controls
+end
+TrainerSpells.WeaponControls = TrainerSpells:CreateWeaponControls(classFrame)

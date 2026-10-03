@@ -50,8 +50,8 @@ function TrainerSpells:GetNearestPetTrainer()
     return FindNearest(GetPetEntries("", true))
 end
 
-local controls = CreateFrame("Frame", "TrainerSpellsClassTrainerControls", classFrame)
-TrainerSpells.ClassTrainerControls = controls
+function TrainerSpells.CreateClassTrainerControls(addon, parent)
+local controls = CreateFrame("Frame", nil, parent)
 controls:SetHeight(36)
 controls:Hide()
 TrainerLocations.AddResolveListener(function()
@@ -90,7 +90,7 @@ nearestPetButton:SetScript("OnEnter", function(self)
     GameTooltip:Show()
 end)
 nearestPetButton:SetScript("OnLeave", GameTooltip_Hide)
-local hideStarter = CreateFrame("CheckButton", "TrainerSpellsHideStarterClassTrainers", controls, "UICheckButtonTemplate")
+local hideStarter = CreateFrame("CheckButton", nil, controls, "UICheckButtonTemplate")
 hideStarter:SetSize(24, 24)
 hideStarter:SetChecked(TrainerSpells_Character.hideStarterClassTrainers)
 local hideStarterText = controls:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -120,3 +120,7 @@ controls:SetScript("OnShow", function()
     hideStarter:ClearAllPoints()
     hideStarter:SetPoint("LEFT", showPetButton and nearestPetButton or nearestButton, "RIGHT", 12, 0)
 end)
+
+return controls
+end
+TrainerSpells.ClassTrainerControls = TrainerSpells:CreateClassTrainerControls(classFrame)
