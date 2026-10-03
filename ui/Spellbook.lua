@@ -429,9 +429,22 @@ end
 local function SetNativeCategoryTabsVisual(book, showSelection)
     local tabSystem = book and book.CategoryTabSystem
     if not tabSystem or not tabSystem.tabs then return end
-    local selectedTabID = tabSystem.selectedTabID or (book.GetTab and book:GetTab())
     for _, tab in ipairs(tabSystem.tabs) do
-        if tab.SetTabSelected then tab:SetTabSelected(showSelection and tab:GetTabID() == selectedTabID or false) end
+        local isSelected = showSelection and tab.isSelected and true or false
+        local active = tab.squareMode and {"SquareBackgroundActive", "SquareBackgroundActiveGlow"} or {"LeftActive", "MiddleActive", "RightActive"}
+        local inactive = tab.squareMode and {"SquareBackground"} or {"Left", "Middle", "Right"}
+        for _, key in ipairs(active) do
+            if tab[key] then tab[key]:SetShown(isSelected) end
+        end
+
+        for _, key in ipairs(inactive) do
+            if tab[key] then tab[key]:SetShown(not isSelected) end
+        end
+
+        tab:SetNormalFontObject(isSelected and (tab.selectedFontObject or GameFontHighlightSmall) or (tab.unselectedFontObject or GameFontNormalSmall))
+        tab:SetEnabled(not isSelected and not (tab.IsForceDisabled and tab:IsForceDisabled()))
+        if tab.Text and tab.GetTextYOffset then tab.Text:SetPoint("CENTER", tab, "CENTER", 0, tab:GetTextYOffset(isSelected)) end
+        if tab.Icon and tab.GetIconYOffset then tab.Icon:SetPoint("CENTER", tab, "CENTER", 0, tab:GetIconYOffset(isSelected)) end
     end
 end
 
