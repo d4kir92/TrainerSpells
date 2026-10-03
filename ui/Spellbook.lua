@@ -330,15 +330,25 @@ local function PositionPlayerSpellsFrame()
     local panel = playerSpellsSubTabs.panel
     local anchor, left, right, top = classFrame, 48, -100, -2
     if panel then
-        anchor, left, right, top = panel, 8, -34, -8
+        anchor, left, right, top = panel, 8, -90, -8
         panel:ClearAllPoints()
-        panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 44, -48)
-        panel:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -66, 24)
-        playerSpellsSubTabs.bar:ClearAllPoints()
-        playerSpellsSubTabs.bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 0, 6)
+        if content.View1 then
+            panel:SetPoint("TOPLEFT", content.View1, "TOPLEFT", -37, -46)
+            panel:SetPoint("BOTTOMRIGHT", content.View1, "BOTTOMRIGHT", 0, 0)
+        else
+            panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 44, -61)
+            panel:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -10, 24)
+        end
+        local bar, slider = playerSpellsSubTabs.bar, TrainerSpells.RowHeightSlider
+        bar:ClearAllPoints()
+        bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 33, 3)
+        local sliderScale = slider:GetScale()
+        slider:ClearAllPoints()
+        slider:SetPoint("RIGHT", panel, "TOPRIGHT", -86 / sliderScale, 20 / sliderScale)
+        slider:SetWidth(168 / sliderScale)
         playerSpellsSubTabs.title:ClearAllPoints()
-        playerSpellsSubTabs.title:SetPoint("TOPLEFT", playerSpellsSubTabs.bar, "TOPRIGHT", 12, -2)
-        playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -4, 36)
+        playerSpellsSubTabs.title:SetPoint("TOPLEFT", bar, "TOPRIGHT", 12, 0)
+        playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -266, 35)
         playerSpellsSubTabs.desc:ClearAllPoints()
         playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
         playerSpellsSubTabs.desc:SetPoint("TOPRIGHT", playerSpellsSubTabs.title, "BOTTOMRIGHT", 0, -3)
@@ -356,23 +366,27 @@ local function PositionPlayerSpellsFrame()
     local dividerOffset = top + 1 + (showClassTrainerControls and -42 or showWeaponControls and -34 or 0)
     if playerSpellsModeDivider then
         playerSpellsModeDivider:ClearAllPoints()
-        playerSpellsModeDivider:SetPoint("TOPLEFT", anchor, "TOPLEFT", left, dividerOffset)
-        playerSpellsModeDivider:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", right, dividerOffset)
-        playerSpellsModeDivider:SetShown((not panel or showWeaponControls or showClassTrainerControls) and true or false)
+        if panel then
+            playerSpellsModeDivider:GetParent():SetFrameLevel(playerSpellsSubTabs.bar:GetFrameLevel() + 10)
+            playerSpellsModeDivider:SetPoint("TOPLEFT", panel, "TOPLEFT", 5, 6)
+            playerSpellsModeDivider:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -60, 6)
+        else
+            playerSpellsModeDivider:SetPoint("TOPLEFT", anchor, "TOPLEFT", left, dividerOffset)
+            playerSpellsModeDivider:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", right, dividerOffset)
+        end
+        playerSpellsModeDivider:Show()
     end
 
     if TrainerSpells.ClassScrollBox and playerSpellsModeDivider then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
         if panel then
             local scrollBar = _G.TrainerSpellsScrollBar
-            TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", playerSpellsModeDivider, "BOTTOMLEFT", -left, -2)
+            TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", panel, "TOPLEFT", 0, dividerOffset - 13)
             TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -22, 0)
-            panel.borderFrame:SetFrameLevel(TrainerSpells.ClassScrollBox:GetFrameLevel() + 20)
             if scrollBar then
                 scrollBar:ClearAllPoints()
                 scrollBar:SetPoint("TOPLEFT", TrainerSpells.ClassScrollBox, "TOPRIGHT", 4, -2)
                 scrollBar:SetPoint("BOTTOMLEFT", panel, "BOTTOMRIGHT", -18, 8)
-                scrollBar:SetFrameLevel(panel.borderFrame:GetFrameLevel() + 1)
             end
         else
             TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", playerSpellsModeDivider, "BOTTOMLEFT", 0, -2)
@@ -511,7 +525,6 @@ function playerSpellsSubTabs.Create()
 
     bar:Layout()
     local panel = CreateFrame("Frame", nil, classFrame)
-    TrainerSpells:AddContentBorder(panel, classFrame)
     playerSpellsSubTabs.panel = panel
     local title = classFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     title:SetJustifyH("LEFT")
@@ -531,7 +544,9 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
     playerSpellsModeTabContainer = container
     container:SetSize(48, 32)
     container:SetPoint("LEFT", tabSystem, "RIGHT", 8, 0)
-    local divider = classFrame:CreateTexture(nil, "ARTWORK")
+    local dividerFrame = CreateFrame("Frame", nil, classFrame)
+    dividerFrame:SetAllPoints(classFrame)
+    local divider = dividerFrame:CreateTexture(nil, "OVERLAY")
     playerSpellsModeDivider = divider
     divider:SetAtlas("spellbook-divider")
     divider:SetHeight(11)
