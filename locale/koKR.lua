@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("koKR", "LID_PROFESSION_OTHERRECIPES_DESC", "전리품, �
 TrainerSpells:AddTrans("koKR", "LID_PROFESSION_FINDTRAINER", "훈련사 찾기")
 TrainerSpells:AddTrans("koKR", "LID_PROFESSION_FINDTRAINER_DESC", "이 전문 기술의 훈련사를 찾을 수 있는 곳.")
 TrainerSpells:AddTrans("koKR", "LID_NOTRAINERDATAFOR", "%s의 훈련사 위치가 아직 알려지지 않았습니다.")
+TrainerSpells:AddTrans("koKR", "LID_YOURPROFESSIONS", "내 전문 기술")
+TrainerSpells:AddTrans("koKR", "LID_OTHERPROFESSIONS", "기타 전문 기술")

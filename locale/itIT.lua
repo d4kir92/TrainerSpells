@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("itIT", "LID_PROFESSION_OTHERRECIPES_DESC", "Ricette da b
 TrainerSpells:AddTrans("itIT", "LID_PROFESSION_FINDTRAINER", "Trova istruttore")
 TrainerSpells:AddTrans("itIT", "LID_PROFESSION_FINDTRAINER_DESC", "Dove trovare un istruttore per questa professione.")
 TrainerSpells:AddTrans("itIT", "LID_NOTRAINERDATAFOR", "Nessuna posizione di istruttore conosciuta per %s.")
+TrainerSpells:AddTrans("itIT", "LID_YOURPROFESSIONS", "Le tue professioni")
+TrainerSpells:AddTrans("itIT", "LID_OTHERPROFESSIONS", "Altre professioni")

@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("frFR", "LID_PROFESSION_OTHERRECIPES_DESC", "Recettes de 
 TrainerSpells:AddTrans("frFR", "LID_PROFESSION_FINDTRAINER", "Trouver un maître")
 TrainerSpells:AddTrans("frFR", "LID_PROFESSION_FINDTRAINER_DESC", "Où trouver un maître pour ce métier.")
 TrainerSpells:AddTrans("frFR", "LID_NOTRAINERDATAFOR", "Aucun emplacement de maître connu pour %s.")
+TrainerSpells:AddTrans("frFR", "LID_YOURPROFESSIONS", "Vos métiers")
+TrainerSpells:AddTrans("frFR", "LID_OTHERPROFESSIONS", "Autres métiers")

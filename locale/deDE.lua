@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("deDE", "LID_PROFESSION_OTHERRECIPES_DESC", "Rezepte aus 
 TrainerSpells:AddTrans("deDE", "LID_PROFESSION_FINDTRAINER", "Lehrer finden")
 TrainerSpells:AddTrans("deDE", "LID_PROFESSION_FINDTRAINER_DESC", "Wo du einen Lehrer für diesen Beruf findest.")
 TrainerSpells:AddTrans("deDE", "LID_NOTRAINERDATAFOR", "Noch keine Lehrer-Standorte für %s bekannt.")
+TrainerSpells:AddTrans("deDE", "LID_YOURPROFESSIONS", "Deine Berufe")
+TrainerSpells:AddTrans("deDE", "LID_OTHERPROFESSIONS", "Andere Berufe")

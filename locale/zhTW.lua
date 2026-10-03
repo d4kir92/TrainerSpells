@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("zhTW", "LID_PROFESSION_OTHERRECIPES_DESC", "來自掉落
 TrainerSpells:AddTrans("zhTW", "LID_PROFESSION_FINDTRAINER", "尋找訓練師")
 TrainerSpells:AddTrans("zhTW", "LID_PROFESSION_FINDTRAINER_DESC", "在哪裡可以找到此專業的訓練師。")
 TrainerSpells:AddTrans("zhTW", "LID_NOTRAINERDATAFOR", "尚無%s的訓練師位置。")
+TrainerSpells:AddTrans("zhTW", "LID_YOURPROFESSIONS", "你的專業")
+TrainerSpells:AddTrans("zhTW", "LID_OTHERPROFESSIONS", "其他專業")

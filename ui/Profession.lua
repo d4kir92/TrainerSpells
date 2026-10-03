@@ -112,14 +112,122 @@ local function MarkProfessionEntries(groups, professionKey, isRecipe)
     end
 end
 
+local professionPicker = {}
+function professionPicker.GetOwned()
+    local owned = {}
+    if not GetProfessions or not GetProfessionInfo then return owned end
+    local professionIndices = {GetProfessions()}
+    for slot = 1, 10 do
+        local professionIndex = professionIndices[slot]
+        if professionIndex then
+            local professionName, icon, rank, maxRank = GetProfessionInfo(professionIndex)
+            local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
+            if professionKey then table.insert(owned, {key = professionKey, name = professionName, icon = icon, rank = rank or 0, maxRank = maxRank or 0, owned = true}) end
+        end
+    end
+    return owned
+end
+
+function professionPicker.GetSources()
+    return {TrainerSpells_ProfessionData, TrainerSpells_RecipeData, TrainerSpellsProfessionTrainers}
+end
+
+function professionPicker.HasData(professionKey)
+    for _, source in ipairs(professionPicker.GetSources()) do
+        local data = source and source[professionKey]
+        if type(data) == "table" and next(data) then return true end
+    end
+    return false
+end
+
+function professionPicker.GetLists()
+    local owned = {}
+    local seen = {}
+    for _, info in ipairs(professionPicker.GetOwned()) do
+        seen[info.key] = true
+        if professionPicker.HasData(info.key) then table.insert(owned, info) end
+    end
+
+    local others = {}
+    for _, source in ipairs(professionPicker.GetSources()) do
+        for professionKey in pairs(source or {}) do
+            local professionName = TrainerSpells:GetProfessionName(professionKey)
+            if professionName and not seen[professionKey] and professionPicker.HasData(professionKey) then
+                seen[professionKey] = true
+                table.insert(others, {key = professionKey, name = professionName, icon = TrainerSpells:GetProfessionIcon(professionKey), rank = 0, maxRank = 0})
+            end
+        end
+    end
+
+    table.sort(others, function(a, b) return a.name < b.name end)
+    return owned, others
+end
+
+function professionPicker.GetInfo(professionKey)
+    for _, info in ipairs(professionPicker.GetOwned()) do
+        if info.key == professionKey then return info end
+    end
+    return {key = professionKey, name = TrainerSpells:GetProfessionName(professionKey) or professionKey, icon = TrainerSpells:GetProfessionIcon(professionKey), rank = 0, maxRank = 0}
+end
+
+function professionPicker.GetLabel(info)
+    local icon = info.icon and ("|T" .. info.icon .. ":16:16|t ") or ""
+    if info.owned then return icon .. info.name .. "  |cffaaaaaa" .. info.rank .. "/" .. info.maxRank .. "|r" end
+    return icon .. "|cff9d9d9d" .. info.name .. "|r"
+end
+
+function professionPicker.GetActive()
+    if not professionPicker.dropdown or not professionPicker.key then
+        local professionKey, skillLineName = GetOpenProfession()
+        return professionKey, skillLineName, GetCurrentProfessionSkill(skillLineName)
+    end
+
+    local info = professionPicker.GetInfo(professionPicker.key)
+    return info.key, info.name, info.rank
+end
+
+function professionPicker.UpdateText()
+    if professionPicker.dropdown and professionPicker.key then professionPicker.dropdown:SetText(professionPicker.GetLabel(professionPicker.GetInfo(professionPicker.key))) end
+end
+
+function professionPicker.Reset()
+    local openKey = GetOpenProfession()
+    local owned = professionPicker.GetLists()
+    professionPicker.key = openKey or (owned[1] and owned[1].key)
+    professionPicker.UpdateText()
+end
+
+function professionPicker.Select(professionKey)
+    professionPicker.key = professionKey
+    TrainerSpells_ProfessionRefresh()
+end
+
+function professionPicker.Create()
+    if professionPicker.dropdown or not (MenuUtil and MenuUtil.CreateRootMenuDescription) then return end
+    local dropdown = CreateFrame("DropdownButton", "TrainerSpellsProfessionPicker", professionFrame, "WowStyle1DropdownTemplate")
+    dropdown:SetSize(180, 26)
+    dropdown:SetupMenu(function(_, rootDescription)
+        for groupIndex, group in ipairs({professionPicker.GetLists()}) do
+            if #group > 0 then
+                rootDescription:CreateTitle(TrainerSpells:Trans(groupIndex == 1 and "LID_YOURPROFESSIONS" or "LID_OTHERPROFESSIONS"))
+                for _, info in ipairs(group) do
+                    local professionKey = info.key
+                    rootDescription:CreateRadio(professionPicker.GetLabel(info), function() return professionPicker.key == professionKey end, function() professionPicker.Select(professionKey) end)
+                end
+            end
+        end
+    end)
+
+    professionPicker.dropdown = dropdown
+end
+
 function TrainerSpells_ProfessionRefresh()
     local searchText = (TrainerSpells_ProfessionSearchText or ""):lower()
-    local professionKey, skillLineName = GetOpenProfession()
+    local professionKey, skillLineName, currentSkill = professionPicker.GetActive()
     local items = {}
     if professionViewMode == PROFESSION_VIEW_RECIPES then
         local data = professionKey and TrainerSpells_RecipeData and TrainerSpells_RecipeData[professionKey]
         if data and next(data) then
-            local currentSkill = GetCurrentProfessionSkill(skillLineName)
             local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true, professionKey)
             MarkProfessionEntries(groups, professionKey, true)
             TrainerSpells:AppendGroupItems(items, groups, "tradeskillrecipe_", nil, TrainerSpells:Trans("LID_SKILL"), nil, nil, "skill")
@@ -133,7 +241,6 @@ function TrainerSpells_ProfessionRefresh()
     else
         local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
         if data and next(data) then
-            local currentSkill = GetCurrentProfessionSkill(skillLineName)
             local groups = TrainerSpells:ClassifyEntries(data, searchText, currentSkill, true, professionKey)
             MarkProfessionEntries(groups, professionKey, false)
             TrainerSpells:AppendGroupItems(items, groups, "tradeskillprofession_", nil, TrainerSpells:Trans("LID_SKILL"), nil, nil, "skill")
@@ -144,6 +251,7 @@ function TrainerSpells_ProfessionRefresh()
 
     TrainerSpells:AddCostColumn(items)
     professionScrollBox:SetDataProvider(CreateDataProvider(items), ScrollBoxConstants.RetainScrollPosition)
+    professionPicker.UpdateText()
 end
 
 local professionSubTabs = {}
@@ -195,7 +303,9 @@ function professionSubTabs.Create()
     professionSubTabs.title = title
     local desc = professionFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     desc:SetJustifyH("LEFT")
-    desc:SetWordWrap(false)
+    desc:SetJustifyV("TOP")
+    desc:SetWordWrap(true)
+    desc:SetMaxLines(2)
     desc:SetTextColor(0.75, 0.75, 0.75)
     professionSubTabs.desc = desc
     professionSubTabs.Update()
@@ -231,12 +341,18 @@ local function PositionProfessionFrame()
     if ProfessionsFrame and ProfessionsFrame:IsShown() then
         local searchTop = -6
         if professionSubTabs.bar then
-            searchTop = -48
+            searchTop = -52
             professionSubTabs.bar:ClearAllPoints()
             professionSubTabs.bar:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, -8)
             professionSubTabs.title:ClearAllPoints()
             professionSubTabs.title:SetPoint("TOPLEFT", professionSubTabs.bar, "TOPRIGHT", 12, -2)
-            professionSubTabs.title:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -10)
+            if professionPicker.dropdown then
+                professionPicker.dropdown:ClearAllPoints()
+                professionPicker.dropdown:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -11)
+                professionSubTabs.title:SetPoint("TOPRIGHT", professionPicker.dropdown, "TOPLEFT", -12, 1)
+            else
+                professionSubTabs.title:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -10)
+            end
             professionSubTabs.desc:ClearAllPoints()
             professionSubTabs.desc:SetPoint("TOPLEFT", professionSubTabs.title, "BOTTOMLEFT", 0, -3)
             professionSubTabs.desc:SetPoint("TOPRIGHT", professionSubTabs.title, "BOTTOMRIGHT", 0, -3)
@@ -566,6 +682,7 @@ local function OpenProfessionsFrameView()
     end
 
     professionViewMode = professionSubTabs.GetSavedView()
+    professionPicker.Reset()
     professionsModeActive = true
     if ProfessionsFrame.Pages then
         for _, page in ipairs(ProfessionsFrame.Pages) do
@@ -640,6 +757,7 @@ local function InstallProfessionsFrameIntegration()
     professionFrame:SetFrameStrata(ProfessionsFrame:GetFrameStrata())
     professionFrame:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 300)
     professionSubTabs.Create()
+    professionPicker.Create()
     if professionsFrameUsesSideTabs then
         CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTab", "TrainerSpells", 133741)
         hooksecurefunc(ProfessionsFrame, "RefreshRightTabs", PositionProfessionsFrameModeTabs)

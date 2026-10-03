@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("ruRU", "LID_PROFESSION_OTHERRECIPES_DESC", "Рецепт
 TrainerSpells:AddTrans("ruRU", "LID_PROFESSION_FINDTRAINER", "Найти учителя")
 TrainerSpells:AddTrans("ruRU", "LID_PROFESSION_FINDTRAINER_DESC", "Где найти учителя этой профессии.")
 TrainerSpells:AddTrans("ruRU", "LID_NOTRAINERDATAFOR", "Местоположения учителей для %s пока неизвестны.")
+TrainerSpells:AddTrans("ruRU", "LID_YOURPROFESSIONS", "Ваши профессии")
+TrainerSpells:AddTrans("ruRU", "LID_OTHERPROFESSIONS", "Другие профессии")

@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("esMX", "LID_PROFESSION_OTHERRECIPES_DESC", "Recetas de b
 TrainerSpells:AddTrans("esMX", "LID_PROFESSION_FINDTRAINER", "Buscar instructor")
 TrainerSpells:AddTrans("esMX", "LID_PROFESSION_FINDTRAINER_DESC", "Dónde encontrar un instructor para esta profesión.")
 TrainerSpells:AddTrans("esMX", "LID_NOTRAINERDATAFOR", "Aún no se conocen ubicaciones de instructores para %s.")
+TrainerSpells:AddTrans("esMX", "LID_YOURPROFESSIONS", "Tus profesiones")
+TrainerSpells:AddTrans("esMX", "LID_OTHERPROFESSIONS", "Otras profesiones")

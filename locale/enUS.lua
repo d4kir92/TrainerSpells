@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("enUS", "LID_PROFESSION_OTHERRECIPES_DESC", "Recipes from
 TrainerSpells:AddTrans("enUS", "LID_PROFESSION_FINDTRAINER", "Find Trainer")
 TrainerSpells:AddTrans("enUS", "LID_PROFESSION_FINDTRAINER_DESC", "Where to find a trainer for this profession.")
 TrainerSpells:AddTrans("enUS", "LID_NOTRAINERDATAFOR", "No trainer locations known for %s yet.")
+TrainerSpells:AddTrans("enUS", "LID_YOURPROFESSIONS", "Your Professions")
+TrainerSpells:AddTrans("enUS", "LID_OTHERPROFESSIONS", "Other Professions")

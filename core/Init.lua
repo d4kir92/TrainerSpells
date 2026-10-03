@@ -99,6 +99,11 @@ function TrainerSpells:GetProfessionKey(name)
     return PROFESSION_NAME_TO_KEY[name]
 end
 
+function TrainerSpells:GetProfessionIcon(key)
+    local spellInfo = PROFESSION_SPELLS[key] and C_Spell.GetSpellInfo(PROFESSION_SPELLS[key])
+    return spellInfo and spellInfo.iconID
+end
+
 function TrainerSpells:DetectTrainerProfession()
     if not GetNumTrainerServices or not GetTrainerServiceSkillLine then return nil end
     for i = 1, GetNumTrainerServices() do

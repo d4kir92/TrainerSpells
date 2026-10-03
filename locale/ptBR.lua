@@ -82,3 +82,5 @@ TrainerSpells:AddTrans("ptBR", "LID_PROFESSION_OTHERRECIPES_DESC", "Receitas de 
 TrainerSpells:AddTrans("ptBR", "LID_PROFESSION_FINDTRAINER", "Encontrar instrutor")
 TrainerSpells:AddTrans("ptBR", "LID_PROFESSION_FINDTRAINER_DESC", "Onde encontrar um instrutor para esta profissão.")
 TrainerSpells:AddTrans("ptBR", "LID_NOTRAINERDATAFOR", "Nenhuma localização de instrutor conhecida para %s.")
+TrainerSpells:AddTrans("ptBR", "LID_YOURPROFESSIONS", "Suas profissões")
+TrainerSpells:AddTrans("ptBR", "LID_OTHERPROFESSIONS", "Outras profissões")
