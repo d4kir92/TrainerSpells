@@ -186,9 +186,9 @@ function professionPicker.GetActive()
     return info.key, info.name, info.rank
 end
 
-function professionPicker.UpdateWidth()
-    local dropdown = professionPicker.dropdown
-    local measure = professionPicker.measure
+function professionPicker.UpdateWidth(dropdown, measure)
+    dropdown = dropdown or professionPicker.dropdown
+    measure = measure or professionPicker.measure
     if not dropdown or not measure or not dropdown.Text then return end
     local font, size, flags = dropdown.Text:GetFont()
     if not font then return end
@@ -1085,12 +1085,19 @@ function TrainerSpells:CreateCompendiumProfessions(host)
             current.professionKey = owned[1] and owned[1].key or others[1] and others[1].key
         end
         local info = current.professionKey and professionPicker.GetInfo(current.professionKey)
-        if current.dropdown then current.dropdown:SetText(info and professionPicker.GetLabel(info) or TrainerSpells:Trans("LID_PROFESSIONS")) end
+        if current.dropdown then
+            current.dropdown:SetText(info and professionPicker.GetLabel(info) or TrainerSpells:Trans("LID_PROFESSIONS"))
+            professionPicker.UpdateWidth(current.dropdown, current.measure)
+            current.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", -current.dropdown:GetWidth() - 10, 17)
+        end
         return TrainerSpells:BuildProfessionViewItems(current.mode, host.searchText, current.professionKey, info and info.name, info and info.rank or 0)
     end
     if MenuUtil and MenuUtil.CreateRootMenuDescription then
         view.dropdown = CreateFrame("DropdownButton", nil, host, "WowStyle1DropdownTemplate")
         view.dropdown:SetSize(180, 26)
+        view.measure = view.dropdown:CreateFontString(nil, "ARTWORK")
+        view.measure:SetPoint("TOPLEFT")
+        view.measure:SetAlpha(0)
         view.dropdown:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 2)
         view.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", -190, 17)
         view.dropdown:SetupMenu(function(_, menu) professionPicker.PopulateCompendiumMenu(view, menu) end)
