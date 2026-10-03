@@ -391,7 +391,6 @@ local function PositionPlayerSpellsFrame()
 end
 
 local PLAYER_SPELLS_CONTENT_KEYS = {"PagedSpellsFrame", "SearchBox"}
-local NATIVE_TAB_TEXTURES = {Left = false, Middle = false, Right = false, LeftActive = true, MiddleActive = true, RightActive = true}
 local playerSpellsContentAlpha = {}
 local playerSpellsContentBlocker
 local function GetPlayerSpellsContentBlocker()
@@ -408,14 +407,9 @@ end
 local function SetNativeCategoryTabsVisual(book, showSelection)
     local tabSystem = book and book.CategoryTabSystem
     if not tabSystem or not tabSystem.tabs then return end
+    local selectedTabID = tabSystem.selectedTabID or (book.GetTab and book:GetTab())
     for _, tab in ipairs(tabSystem.tabs) do
-        local isSelected = showSelection and tab.IsSelected and tab:IsSelected() or false
-        for key, activeTexture in pairs(NATIVE_TAB_TEXTURES) do
-            if tab[key] then tab[key]:SetShown(activeTexture == isSelected) end
-        end
-        tab:SetNormalFontObject(isSelected and (tab.selectedFontObject or GameFontHighlightSmall) or (tab.unselectedFontObject or GameFontNormalSmall))
-        tab:SetEnabled(not isSelected and not (tab.IsForceDisabled and tab:IsForceDisabled()))
-        if tab.Text and tab.GetTextYOffset then tab.Text:SetPoint("CENTER", tab, "CENTER", 0, tab:GetTextYOffset(isSelected)) end
+        if tab.SetTabSelected then tab:SetTabSelected(showSelection and tab:GetTabID() == selectedTabID or false) end
     end
 end
 

@@ -300,6 +300,45 @@ local function ApplyModernTemplate(win)
     win.leftInset = MODERN_LEFT_INSET
 end
 
+local function ApplyWindowTitle(win, tab)
+    local title = UI:Text(tab.title) or ""
+    local name, version = title:match("^(.-)%s+(v%d[%w%.%-%_+]*)%s*$")
+    if name then
+        title = name:match("^(.-)%s+by%s+") or name
+    end
+
+    if win.TitleText then win.TitleText:Hide() end
+    local bar = CreateFrame("Frame", nil, win)
+    bar:SetPoint("TOPLEFT", win, "TOPLEFT", 0, 0)
+    bar:SetPoint("TOPRIGHT", win, "TOPRIGHT", 0, 0)
+    bar:SetHeight(28)
+    bar:SetFrameLevel(win:GetFrameLevel() + 510)
+    bar:EnableMouse(false)
+    win.titleBar = bar
+    bar.Title = bar:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    bar.Title:SetPoint("CENTER", bar, "CENTER", 0, 0)
+    bar.Title:SetJustifyH("CENTER")
+    bar.Title:SetText(title)
+    bar.Version = bar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    bar.Version:SetTextColor(0.6, 0.6, 0.6)
+    bar.Version:SetJustifyH("RIGHT")
+    bar.Version:SetText(version or "")
+    if win.CloseButton then
+        bar.Version:SetPoint("RIGHT", win.CloseButton, "LEFT", -4, 0)
+    else
+        bar.Version:SetPoint("RIGHT", bar, "RIGHT", -8, 0)
+    end
+
+    local function UpdateTitleWidth()
+        local reserve = bar.Version:GetStringWidth() + 12
+        if win.CloseButton then reserve = reserve + win.CloseButton:GetWidth() end
+        bar.Title:SetWidth(math.max(1, win:GetWidth() - reserve * 2))
+    end
+
+    win:HookScript("OnSizeChanged", UpdateTitleWidth)
+    UpdateTitleWidth()
+end
+
 function D4:CreateUIWindow(tab)
     tab = tab or {}
     windows = windows + 1
@@ -335,7 +374,7 @@ function D4:CreateUIWindow(tab)
     end
 
     D4:SetClampedToScreen(win, true)
-    if win.TitleText then win.TitleText:SetText(UI:Text(tab.title)) end
+    ApplyWindowTitle(win, tab)
     if tab.onClose and win.CloseButton then win.CloseButton:SetScript("OnClick", function() tab.onClose(win) end) end
     UI:ApplyWindow(win)
     win.headerHeight = 0
