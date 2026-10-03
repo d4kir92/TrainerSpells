@@ -29,6 +29,7 @@ local function GetSearchLeftOffset(defaultOffset, topOffset)
 end
 
 local function PositionFrame()
+    if classFrame.compendiumHost then TrainerSpells:PositionCompendiumClass(); return end
     classFrame:ClearAllPoints()
     if TrainerSpells:IsDragonflightUIEnabled() and DragonflightUISpellBookBG and DragonflightUISpellBookBG:IsShown() then
         listBg:SetPoint("CENTER", classFrame, "CENTER", 0, 0)
@@ -193,6 +194,7 @@ local function HideClassicModeTabGlows()
 end
 
 local function OpenFrame(view)
+    if classFrame.compendiumHost then TrainerSpells:SetClassView(view); return end
     TrainerSpells:SetClassView(view)
     PositionFrame()
     classFrame:Show()
@@ -251,6 +253,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     end)
 
     SpellBookFrame:HookScript("OnHide", function()
+        if classFrame.compendiumHost then return end
         for _, tab in pairs(classicModeTabs) do
             tab:Hide()
         end
@@ -261,6 +264,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     end)
 
     local function OnNativeTabClicked()
+        if classFrame.compendiumHost then return end
         if classFrame:IsShown() then
             classFrame:Hide()
             ShowNativeSpellButtons()
@@ -316,6 +320,7 @@ local function GetPlayerSpellsBook()
 end
 
 local function PositionPlayerSpellsFrame()
+    if classFrame.compendiumHost then TrainerSpells:PositionCompendiumClass(); return end
     local book = GetPlayerSpellsBook()
     if not book then return end
     local content = book.PagedSpellsFrame or book
@@ -335,6 +340,10 @@ local function PositionPlayerSpellsFrame()
     local panel = playerSpellsSubTabs.panel
     local anchor, left, right, top = classFrame, 48, -100, -2
     if panel then
+        panel:Show()
+        playerSpellsSubTabs.bar:Show()
+        playerSpellsSubTabs.title:Show()
+        playerSpellsSubTabs.desc:Show()
         anchor, left, right, top = panel, 8, -90, -8
         panel:ClearAllPoints()
         if content.View1 then
@@ -480,6 +489,7 @@ local function ShowPlayerSpellsContent()
 end
 
 local function ClosePlayerSpellsPanel()
+    if classFrame.compendiumHost then return end
     local wasOpen = playerSpellsContentHidden
     classFrame:Hide()
     ShowPlayerSpellsContent()
@@ -491,6 +501,7 @@ local function ClosePlayerSpellsPanel()
 end
 
 local function OpenPlayerSpellsPanel()
+    if classFrame.compendiumHost then TrainerSpells:PositionCompendiumClass(); classFrame:Show(); return end
     local book = GetPlayerSpellsBook()
     if not book then return end
     PositionPlayerSpellsFrame()
@@ -501,6 +512,7 @@ local function OpenPlayerSpellsPanel()
 end
 
 function TrainerSpells:UpdateClassViewTabs()
+    if classFrame.compendiumHost then TrainerSpells:PositionCompendiumClass(); return end
     for view, glow in pairs(classicModeTabGlows) do
         glow:SetShown(classFrame:IsShown() and TrainerSpells.ClassView == view)
     end
@@ -664,42 +676,126 @@ if not SpellBookFrame and TrainerSpells:HasClassTrainers() then
     end
 end
 
-function TrainerSpells:OpenCompendiumView(view)
-    if InCombatLockdown and InCombatLockdown() then return end
-    if SpellBookFrame then
-        if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) end
-        OpenFrame(view)
-        return
+function TrainerSpells:DockCompendiumFrame(frame, host, widgets)
+    local saved = {}
+    for _, widget in ipairs(widgets) do
+        local state = {widget = widget, parent = widget:GetParent(), shown = widget:IsShown(), points = {}}
+        if widget.GetScale then state.scale = widget:GetScale() end
+        if widget.GetFrameStrata then state.strata = widget:GetFrameStrata(); state.level = widget:GetFrameLevel() end
+        for index = 1, widget:GetNumPoints() do state.points[index] = {widget:GetPoint(index)} end
+        table.insert(saved, state)
     end
+    frame.compendiumState = saved
+    frame.compendiumHost = host
+    frame:SetParent(host)
+    frame:SetScale(1)
+    frame:SetFrameStrata(host:GetFrameStrata())
+    frame:SetFrameLevel(host:GetFrameLevel() + 2)
+    frame:ClearAllPoints()
+    frame:SetAllPoints(host)
+end
 
-    if not PlayerSpellsFrame then
-        if C_AddOns and C_AddOns.LoadAddOn then
-            C_AddOns.LoadAddOn("Blizzard_PlayerSpells")
-        elseif LoadAddOn then
-            LoadAddOn("Blizzard_PlayerSpells")
+function TrainerSpells:UndockCompendiumFrame(frame)
+    if not frame.compendiumHost then return end
+    frame:Hide()
+    frame.compendiumHost = nil
+    for _, state in ipairs(frame.compendiumState) do
+        local widget = state.widget
+        widget:SetParent(state.parent)
+        if state.scale then widget:SetScale(state.scale) end
+        if state.strata then widget:SetFrameStrata(state.strata); widget:SetFrameLevel(state.level) end
+        widget:ClearAllPoints()
+        for _, point in ipairs(state.points) do widget:SetPoint(unpack(point)) end
+        widget:SetShown(state.shown)
+    end
+    frame.compendiumState = nil
+    frame:Hide()
+end
+
+function TrainerSpells:PositionCompendiumClass()
+    local panel = playerSpellsSubTabs.panel
+    panel:ClearAllPoints()
+    panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 8, -76)
+    panel:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -8, 8)
+    playerSpellsSubTabs.bar:ClearAllPoints()
+    playerSpellsSubTabs.bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 0, 8)
+    playerSpellsSubTabs.title:ClearAllPoints()
+    playerSpellsSubTabs.title:SetPoint("TOPLEFT", playerSpellsSubTabs.bar, "TOPRIGHT", 12, 0)
+    playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -200, 40)
+    playerSpellsSubTabs.desc:ClearAllPoints()
+    playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
+    playerSpellsSubTabs.desc:SetPoint("TOPRIGHT", playerSpellsSubTabs.title, "BOTTOMRIGHT", 0, -3)
+    searchBox:ClearAllPoints()
+    searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 8, -8)
+    searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -200, -8)
+    TrainerSpells.RowHeightSlider:ClearAllPoints()
+    TrainerSpells.RowHeightSlider:SetPoint("LEFT", searchBox, "RIGHT", 16, 0)
+    TrainerSpells.RowHeightSlider:SetWidth(168 / TrainerSpells.RowHeightSlider:GetScale())
+    local offset = -4
+    for _, entry in ipairs({{TrainerSpells.ClassTrainerControls, "trainers", -48}, {TrainerSpells.WeaponControls, "weapons", -40}}) do
+        local controls = entry[1]
+        if controls then
+            controls:ClearAllPoints()
+            controls:SetPoint("TOPLEFT", panel, "TOPLEFT", 4, -4)
+            controls:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -4, -4)
+            controls:SetShown(TrainerSpells.ClassView == entry[2])
+            if TrainerSpells.ClassView == entry[2] then offset = entry[3] end
         end
     end
+    TrainerSpells.ClassScrollBox:ClearAllPoints()
+    TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", panel, "TOPLEFT", 0, offset)
+    TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -22, 0)
+    local scrollBar = _G.TrainerSpellsScrollBar
+    scrollBar:ClearAllPoints()
+    scrollBar:SetPoint("TOPLEFT", TrainerSpells.ClassScrollBox, "TOPRIGHT", 4, -2)
+    scrollBar:SetPoint("BOTTOMLEFT", panel, "BOTTOMRIGHT", -18, 8)
+    listBg:Hide()
+    if playerSpellsModeDivider then playerSpellsModeDivider:Hide() end
+    panel:Show()
+    playerSpellsSubTabs.bar:Show()
+    playerSpellsSubTabs.title:Show()
+    playerSpellsSubTabs.desc:Show()
+    playerSpellsSubTabs.Update()
+end
 
-    if not PlayerSpellsFrame then return end
-    ShowUIPanel(PlayerSpellsFrame)
-    local book = GetPlayerSpellsBook()
-    if not book then return end
-    if PlayerSpellsFrame.SetTab and PlayerSpellsFrame.spellBookTabID then PlayerSpellsFrame:SetTab(PlayerSpellsFrame.spellBookTabID) end
-    TrainerSpells:SetClassView(view)
-    OpenPlayerSpellsPanel()
+function TrainerSpells:CreateCompendiumClass(host)
+    playerSpellsSubTabs.Create()
+    if not playerSpellsModeTabContainer then
+        playerSpellsSubTabs.panel:Hide()
+        playerSpellsSubTabs.bar:Hide()
+        playerSpellsSubTabs.title:Hide()
+        playerSpellsSubTabs.desc:Hide()
+    end
+    host:SetScript("OnShow", function()
+        ClosePlayerSpellsPanel()
+        ShowNativeSpellButtons()
+        HideClassicModeTabGlows()
+        local widgets = {classFrame, listBg, searchBox, TrainerSpells.RowHeightSlider, TrainerSpells.ClassScrollBox, _G.TrainerSpellsScrollBar, playerSpellsSubTabs.panel, playerSpellsSubTabs.bar, playerSpellsSubTabs.title, playerSpellsSubTabs.desc}
+        if TrainerSpells.ClassTrainerControls then table.insert(widgets, TrainerSpells.ClassTrainerControls) end
+        if TrainerSpells.WeaponControls then table.insert(widgets, TrainerSpells.WeaponControls) end
+        if playerSpellsModeDivider then table.insert(widgets, playerSpellsModeDivider) end
+        TrainerSpells:DockCompendiumFrame(classFrame, host, widgets)
+        TrainerSpells:SetClassView(playerSpellsSubTabs.GetSavedView())
+        TrainerSpells:PositionCompendiumClass()
+        classFrame:Show()
+    end)
+    host:SetScript("OnHide", function() TrainerSpells:UndockCompendiumFrame(classFrame) end)
 end
 
 function TrainerSpells:RegisterCompendiumTabs()
     local api = _G["AzerothCompendiumAPI"]
-    if type(api) ~= "table" or type(api.RegisterTab) ~= "function" or not self:HasClassTrainers() then return end
-    for _, definition in ipairs({{"class", "LID_CLASSTRAINER", 133743}, {"trainers", "LID_CLASSTRAINERS", 135933}, {"weapons", "LID_WEAPON", 135328}}) do
-        local view, label = definition[1], definition[2]
-        api.RegisterTab("TrainerSpells:" .. view, {
-            label = function() return "TrainerSpells: " .. TrainerSpells:Trans(label) end,
-            icon = definition[3],
-            onClick = function() TrainerSpells:OpenCompendiumView(view) end
-        })
-    end
+    if type(api) ~= "table" or type(api.RegisterTab) ~= "function" then return end
+    api.RegisterTab("TrainerSpells:professions", {
+        label = function() return TrainerSpells:Trans("LID_PROFESSIONS") end,
+        icon = 134708,
+        createPanel = function(host) TrainerSpells:CreateCompendiumProfessions(host) end
+    })
+    if not self:HasClassTrainers() then return end
+    api.RegisterTab("TrainerSpells:class", {
+        label = function() return _G.CLASSES or (GetLocale() == "deDE" and "Klassen") or "Classes" end,
+        icon = 133743,
+        createPanel = function(host) TrainerSpells:CreateCompendiumClass(host) end
+    })
 end
 
 TrainerSpells.CompendiumLoader = CreateFrame("Frame")

@@ -336,7 +336,10 @@ end
 
 local function PositionProfessionFrame()
     professionFrame:ClearAllPoints()
-    if ProfessionsFrame and ProfessionsFrame:IsShown() then
+    if professionFrame.compendiumHost then
+        professionFrame:SetScale(1)
+        professionFrame:SetAllPoints(professionFrame.compendiumHost)
+    elseif ProfessionsFrame and ProfessionsFrame:IsShown() then
         professionFrame:SetScale(1)
         professionFrame:SetPoint("TOPLEFT", ProfessionsFrame, "TOPLEFT", 3, -21)
         professionFrame:SetPoint("BOTTOMRIGHT", ProfessionsFrame, "BOTTOMRIGHT", -3, 3)
@@ -361,9 +364,13 @@ local function PositionProfessionFrame()
 
     professionSearchBox:ClearAllPoints()
     professionScrollBox:ClearAllPoints()
-    if ProfessionsFrame and ProfessionsFrame:IsShown() then
+    if professionFrame.compendiumHost or (ProfessionsFrame and ProfessionsFrame:IsShown()) then
         local panel = professionSubTabs.panel
         if panel then
+            panel:Show()
+            professionSubTabs.bar:Show()
+            professionSubTabs.title:Show()
+            professionSubTabs.desc:Show()
             panel:ClearAllPoints()
             panel:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -52)
             panel:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -8, 8)
@@ -508,6 +515,7 @@ local function ShowNativeTradeSkillWidgets()
 end
 
 local function SetTradeSkillView(mode)
+    if professionFrame.compendiumHost then return end
     if mode == PROFESSION_VIEW_SKILL or mode == PROFESSION_VIEW_RECIPES then
         professionViewMode = mode
         C_Timer.After(TrainerSpells:IsDragonflightUIEnabled() and 0.1 or 0, function()
@@ -590,6 +598,7 @@ local function EnsureTradeSkillHooksInstalled()
     end)
 
     TradeSkillFrame:HookScript("OnHide", function()
+        if professionFrame.compendiumHost then return end
         professionFrame:Hide()
         professionTabGlow:Hide()
         recipeTabGlow:Hide()
@@ -671,6 +680,7 @@ local function SetProfessionsModeTabSelected(tab, selected)
 end
 
 local function CloseProfessionsFrameView()
+    if professionFrame.compendiumHost then return end
     if IsProfessionsCombatLocked() then
         if professionsModeActive or professionFrame:IsShown() then professionsClosePending = true end
         return
@@ -714,6 +724,7 @@ professionsCombatWatcher:SetScript("OnEvent", function(_, event)
 end)
 
 local function OpenProfessionsFrameView()
+    if professionFrame.compendiumHost then return end
     if IsProfessionsCombatLocked() then
         if UIErrorsFrame and ERR_NOT_IN_COMBAT then UIErrorsFrame:AddMessage(ERR_NOT_IN_COMBAT, 1, 0.1, 0.1) end
         return
@@ -787,7 +798,7 @@ local function CreateProfessionsFrameSideTab(name, text, icon)
 end
 
 local function InstallProfessionsFrameIntegration()
-    if professionsFrameHooksInstalled or not ProfessionsFrame then return end
+    if professionsFrameHooksInstalled or not ProfessionsFrame or professionFrame.compendiumHost then return end
     professionsFrameUsesSideTabs = ProfessionsFrame.ProfessionsOverviewTab and ProfessionsFrame.rightProfessionTabs and true or false
     if not professionsFrameUsesSideTabs and not ProfessionsFrame.TabSystem then return end
     professionsFrameHooksInstalled = true
@@ -852,8 +863,38 @@ tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     InstallProfessionsFrameIntegration()
     if (event == "TRADE_SKILL_UPDATE" or event == "TRADE_SKILL_LIST_UPDATE") and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
-        HideNativeTradeSkillWidgets()
+        if not professionFrame.compendiumHost then HideNativeTradeSkillWidgets() end
     elseif event == "PLAYER_MONEY" and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
     end
 end)
+
+function TrainerSpells:CreateCompendiumProfessions(host)
+    professionPicker.Create()
+    professionSubTabs.Create()
+    if not professionsFrameHooksInstalled then
+        professionSubTabs.panel:Hide()
+        professionSubTabs.bar:Hide()
+        professionSubTabs.title:Hide()
+        professionSubTabs.desc:Hide()
+        if professionPicker.dropdown then professionPicker.dropdown:Hide() end
+    end
+    host:SetScript("OnShow", function()
+        RestoreProfessionsFramePage()
+        CloseProfessionsFrameView()
+        ShowNativeTradeSkillWidgets()
+        local widgets = {professionFrame, professionSearchBox, professionRowHeightSlider, professionScrollBox, professionScrollBar, professionListBg, professionSubTabs.panel, professionSubTabs.bar, professionSubTabs.title, professionSubTabs.desc}
+        if professionPicker.dropdown then table.insert(widgets, professionPicker.dropdown) end
+        TrainerSpells:DockCompendiumFrame(professionFrame, host, widgets)
+        professionViewMode = professionSubTabs.GetSavedView()
+        if not professionPicker.key then professionPicker.Reset() end
+        professionPicker.UpdateText()
+        if professionPicker.dropdown then professionPicker.dropdown:Show() end
+        professionSubTabs.Update()
+        PositionProfessionFrame()
+        professionListBg:Hide()
+        professionFrame:Show()
+        TrainerSpells_ProfessionRefresh()
+    end)
+    host:SetScript("OnHide", function() TrainerSpells:UndockCompendiumFrame(professionFrame) end)
+end
