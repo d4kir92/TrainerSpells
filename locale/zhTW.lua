@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("zhTW", "LID_PROFESSION_FINDTRAINER_DESC", "在哪裡可�
 TrainerSpells:AddTrans("zhTW", "LID_NOTRAINERDATAFOR", "尚無%s的訓練師位置。")
 TrainerSpells:AddTrans("zhTW", "LID_YOURPROFESSIONS", "你的專業")
 TrainerSpells:AddTrans("zhTW", "LID_OTHERPROFESSIONS", "其他專業")
+TrainerSpells:AddTrans("zhTW", "LID_CLASSVIEW_DESC", "職業訓練師傳授的法術。")
+TrainerSpells:AddTrans("zhTW", "LID_PETVIEW_DESC", "你的寵物或惡魔可以學習的技能。")
+TrainerSpells:AddTrans("zhTW", "LID_TRAINERSVIEW_DESC", "在哪裡可以找到你的訓練師。")
+TrainerSpells:AddTrans("zhTW", "LID_WEAPONVIEW_DESC", "武器技能以及在哪裡學習。")

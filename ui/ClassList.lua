@@ -117,6 +117,7 @@ function TrainerSpells:SetClassView(view)
     end
 
     TrainerSpells.ClassView = view
+    if TrainerSpells_Character then TrainerSpells_Character.classView = view end
     if TrainerSpells.UpdateClassViewTabs then TrainerSpells:UpdateClassViewTabs() end
     if TrainerSpells_Refresh then TrainerSpells_Refresh() end
 end

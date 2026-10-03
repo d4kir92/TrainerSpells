@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("ruRU", "LID_PROFESSION_FINDTRAINER_DESC", "Где най
 TrainerSpells:AddTrans("ruRU", "LID_NOTRAINERDATAFOR", "Местоположения учителей для %s пока неизвестны.")
 TrainerSpells:AddTrans("ruRU", "LID_YOURPROFESSIONS", "Ваши профессии")
 TrainerSpells:AddTrans("ruRU", "LID_OTHERPROFESSIONS", "Другие профессии")
+TrainerSpells:AddTrans("ruRU", "LID_CLASSVIEW_DESC", "Заклинания, которым обучает учитель вашего класса.")
+TrainerSpells:AddTrans("ruRU", "LID_PETVIEW_DESC", "Способности, которые может выучить ваш питомец или демон.")
+TrainerSpells:AddTrans("ruRU", "LID_TRAINERSVIEW_DESC", "Где найти ваших учителей.")
+TrainerSpells:AddTrans("ruRU", "LID_WEAPONVIEW_DESC", "Навыки владения оружием и где их изучить.")

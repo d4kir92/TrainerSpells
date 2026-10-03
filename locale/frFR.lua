@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("frFR", "LID_PROFESSION_FINDTRAINER_DESC", "Où trouver u
 TrainerSpells:AddTrans("frFR", "LID_NOTRAINERDATAFOR", "Aucun emplacement de maître connu pour %s.")
 TrainerSpells:AddTrans("frFR", "LID_YOURPROFESSIONS", "Vos métiers")
 TrainerSpells:AddTrans("frFR", "LID_OTHERPROFESSIONS", "Autres métiers")
+TrainerSpells:AddTrans("frFR", "LID_CLASSVIEW_DESC", "Sorts enseignés par votre maître de classe.")
+TrainerSpells:AddTrans("frFR", "LID_PETVIEW_DESC", "Techniques que votre familier ou démon peut apprendre.")
+TrainerSpells:AddTrans("frFR", "LID_TRAINERSVIEW_DESC", "Où trouver vos maîtres.")
+TrainerSpells:AddTrans("frFR", "LID_WEAPONVIEW_DESC", "Compétences d’armes et où les apprendre.")

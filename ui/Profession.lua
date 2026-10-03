@@ -186,8 +186,27 @@ function professionPicker.GetActive()
     return info.key, info.name, info.rank
 end
 
+function professionPicker.UpdateWidth()
+    local dropdown = professionPicker.dropdown
+    local measure = professionPicker.measure
+    if not dropdown or not measure or not dropdown.Text then return end
+    local font, size, flags = dropdown.Text:GetFont()
+    if not font then return end
+    measure:SetFont(font, size, flags)
+    local widest = 0
+    for _, group in ipairs({professionPicker.GetLists()}) do
+        for _, info in ipairs(group) do
+            measure:SetText(professionPicker.GetLabel(info))
+            widest = math.max(widest, measure:GetUnboundedStringWidth())
+        end
+    end
+
+    dropdown:SetWidth(math.max(180, math.ceil(widest) + 50))
+end
+
 function professionPicker.UpdateText()
     if professionPicker.dropdown and professionPicker.key then professionPicker.dropdown:SetText(professionPicker.GetLabel(professionPicker.GetInfo(professionPicker.key))) end
+    professionPicker.UpdateWidth()
 end
 
 function professionPicker.Reset()
@@ -219,6 +238,9 @@ function professionPicker.Create()
     end)
 
     professionPicker.dropdown = dropdown
+    professionPicker.measure = dropdown:CreateFontString(nil, "ARTWORK")
+    professionPicker.measure:SetPoint("TOPLEFT")
+    professionPicker.measure:SetAlpha(0)
 end
 
 function TrainerSpells_ProfessionRefresh()
@@ -293,19 +315,20 @@ function professionSubTabs.Create()
 
     for index, view in ipairs(PROFESSION_SUB_VIEWS) do
         bar:AddTab(nil, view.icon)
-        bar:GetTabButton(index):SetTooltipText(TrainerSpells:Trans(view.title))
+        bar:GetTabButton(index):SetTooltipText(TrainerSpells:Trans(view.title) .. "\n|cffffffff" .. TrainerSpells:Trans(view.desc) .. "|r")
     end
 
     bar:Layout()
+    local panel = CreateFrame("Frame", nil, professionFrame)
+    TrainerSpells:AddContentBorder(panel, professionFrame)
+    professionSubTabs.panel = panel
     local title = professionFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     title:SetJustifyH("LEFT")
     title:SetWordWrap(false)
     professionSubTabs.title = title
     local desc = professionFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     desc:SetJustifyH("LEFT")
-    desc:SetJustifyV("TOP")
-    desc:SetWordWrap(true)
-    desc:SetMaxLines(2)
+    desc:SetWordWrap(false)
     desc:SetTextColor(0.75, 0.75, 0.75)
     professionSubTabs.desc = desc
     professionSubTabs.Update()
@@ -339,32 +362,47 @@ local function PositionProfessionFrame()
     professionSearchBox:ClearAllPoints()
     professionScrollBox:ClearAllPoints()
     if ProfessionsFrame and ProfessionsFrame:IsShown() then
-        local searchTop = -6
-        if professionSubTabs.bar then
-            searchTop = -52
+        local panel = professionSubTabs.panel
+        if panel then
+            panel:ClearAllPoints()
+            panel:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -52)
+            panel:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -8, 8)
             professionSubTabs.bar:ClearAllPoints()
-            professionSubTabs.bar:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, -8)
+            professionSubTabs.bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 56, -2)
             professionSubTabs.title:ClearAllPoints()
-            professionSubTabs.title:SetPoint("TOPLEFT", professionSubTabs.bar, "TOPRIGHT", 12, -2)
+            professionSubTabs.title:SetPoint("TOPLEFT", professionSubTabs.bar, "TOPRIGHT", 12, 6)
             if professionPicker.dropdown then
                 professionPicker.dropdown:ClearAllPoints()
-                professionPicker.dropdown:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -11)
+                professionPicker.dropdown:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", -2, 9)
                 professionSubTabs.title:SetPoint("TOPRIGHT", professionPicker.dropdown, "TOPLEFT", -12, 1)
             else
-                professionSubTabs.title:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -10)
+                professionSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -2, 36)
             end
             professionSubTabs.desc:ClearAllPoints()
             professionSubTabs.desc:SetPoint("TOPLEFT", professionSubTabs.title, "BOTTOMLEFT", 0, -3)
             professionSubTabs.desc:SetPoint("TOPRIGHT", professionSubTabs.title, "BOTTOMRIGHT", 0, -3)
+            local sliderScale = professionRowHeightSlider:GetScale()
+            professionSearchBox:SetPoint("TOPLEFT", panel, "TOPLEFT", 14, -8)
+            professionSearchBox:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -180, -8)
+            professionRowHeightSlider:ClearAllPoints()
+            professionRowHeightSlider:SetPoint("LEFT", professionSearchBox, "RIGHT", 12 / sliderScale, 0)
+            professionRowHeightSlider:SetPoint("RIGHT", panel, "TOPRIGHT", -30 / sliderScale, -18 / sliderScale)
+            professionScrollBox:SetPoint("TOPLEFT", panel, "TOPLEFT", 0, -34)
+            professionScrollBox:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -20, 0)
+            professionScrollBar:ClearAllPoints()
+            professionScrollBar:SetPoint("TOPLEFT", panel, "TOPRIGHT", -16, -36)
+            professionScrollBar:SetPoint("BOTTOMLEFT", panel, "BOTTOMRIGHT", -16, 8)
+            panel.borderFrame:SetFrameLevel(professionScrollBox:GetFrameLevel() + 20)
+            professionScrollBar:SetFrameLevel(panel.borderFrame:GetFrameLevel() + 1)
+        else
+            professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, -6)
+            professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -6)
+            professionRowHeightSlider:ClearAllPoints()
+            professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT", 0, -9)
+            professionRowHeightSlider:SetPoint("TOPRIGHT", professionSearchBox, "BOTTOMRIGHT", -24, -14)
+            professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -54)
+            professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
         end
-
-        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, searchTop)
-        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, searchTop)
-        professionRowHeightSlider:ClearAllPoints()
-        professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT", 0, -9)
-        professionRowHeightSlider:SetPoint("TOPRIGHT", professionSearchBox, "BOTTOMRIGHT", -24, -14)
-        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, searchTop - 48)
-        professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
     elseif TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
         professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 80, 0)
         professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, 0)
@@ -693,7 +731,7 @@ local function OpenProfessionsFrameView()
         if ProfessionsFrame.CraftingPage then ProfessionsFrame.CraftingPage:Hide() end
     end
 
-    if professionsFrameUsesSideTabs then
+    if professionsFrameUsesSideTabs or professionSubTabs.panel then
         professionListBg:Hide()
     else
         professionListBg:ClearAllPoints()

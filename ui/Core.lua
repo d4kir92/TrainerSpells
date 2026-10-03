@@ -63,6 +63,21 @@ function TrainerSpells:IsLeatrixWideProfessionEnabled()
     return TrainerSpells:IsAddonLoaded("Leatrix_Plus") and LeaPlusDB and LeaPlusDB["EnhanceProfessions"] == "On"
 end
 
+function TrainerSpells:AddContentBorder(frame, owner)
+    owner = owner or frame
+    frame.contentBackground = owner:CreateTexture(nil, "BACKGROUND", nil, -8)
+    frame.contentBackground:SetAtlas("collections-background-tile")
+    frame.contentBackground:SetHorizTile(true)
+    frame.contentBackground:SetVertTile(true)
+    frame.contentBackground:SetAllPoints(frame)
+    frame.borderFrame = CreateFrame("Frame", nil, owner)
+    frame.borderFrame:SetAllPoints(frame)
+    frame.border = frame.borderFrame:CreateTexture(nil, "OVERLAY")
+    frame.border:SetAtlas("common-insideframe")
+    frame.border:SetPoint("TOPLEFT", frame, "TOPLEFT", -4, 4)
+    frame.border:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 4, -4)
+end
+
 function TrainerSpells:IsGroupCollapsed(groupKey)
     return groupKey and TrainerSpells_Character and TrainerSpells_Character.collapsedGroups[groupKey] or false
 end

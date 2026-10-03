@@ -286,6 +286,26 @@ local playerSpellsModeTabContainer
 local playerSpellsModeDivider
 local playerSpellsModeLastTab
 local playerSpellsContentHidden = false
+local playerSpellsSubTabs = {}
+function playerSpellsSubTabs.GetSavedView()
+    local saved = TrainerSpells_Character and TrainerSpells_Character.classView
+    for _, entry in ipairs(playerSpellsSubTabs.views or {}) do
+        if entry.view == saved then return saved end
+    end
+    return "class"
+end
+
+function playerSpellsSubTabs.Update()
+    if not playerSpellsSubTabs.bar then return end
+    for index, entry in ipairs(playerSpellsSubTabs.views) do
+        if entry.view == TrainerSpells.ClassView then
+            playerSpellsSubTabs.bar:SetTabVisuallySelected(index)
+            playerSpellsSubTabs.title:SetText(entry.title)
+            playerSpellsSubTabs.desc:SetText(TrainerSpells:Trans(entry.desc))
+        end
+    end
+end
+
 local function GetPlayerSpellsBook()
     return PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
 end
@@ -307,30 +327,57 @@ local function PositionPlayerSpellsFrame()
     listBg:Hide()
     local showWeaponControls = TrainerSpells.ClassView == "weapons" and TrainerSpells.WeaponControls
     local showClassTrainerControls = TrainerSpells.ClassView == "trainers" and TrainerSpells.ClassTrainerControls
-    if TrainerSpells.WeaponControls then
-        TrainerSpells.WeaponControls:ClearAllPoints()
-        TrainerSpells.WeaponControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 48, -2)
-        TrainerSpells.WeaponControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -100, -2)
-        TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false)
-    end
-    if TrainerSpells.ClassTrainerControls then
-        TrainerSpells.ClassTrainerControls:ClearAllPoints()
-        TrainerSpells.ClassTrainerControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 48, -2)
-        TrainerSpells.ClassTrainerControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -100, -2)
-        TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false)
+    local panel = playerSpellsSubTabs.panel
+    local anchor, left, right, top = classFrame, 48, -100, -2
+    if panel then
+        anchor, left, right, top = panel, 8, -34, -8
+        panel:ClearAllPoints()
+        panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 44, -48)
+        panel:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -66, 24)
+        playerSpellsSubTabs.bar:ClearAllPoints()
+        playerSpellsSubTabs.bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 0, 6)
+        playerSpellsSubTabs.title:ClearAllPoints()
+        playerSpellsSubTabs.title:SetPoint("TOPLEFT", playerSpellsSubTabs.bar, "TOPRIGHT", 12, -2)
+        playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -4, 36)
+        playerSpellsSubTabs.desc:ClearAllPoints()
+        playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
+        playerSpellsSubTabs.desc:SetPoint("TOPRIGHT", playerSpellsSubTabs.title, "BOTTOMRIGHT", 0, -3)
     end
 
-    local dividerOffset = showClassTrainerControls and -43 or showWeaponControls and -35 or -1
+    for _, controls in ipairs({TrainerSpells.WeaponControls or false, TrainerSpells.ClassTrainerControls or false}) do
+        if controls then
+            controls:ClearAllPoints()
+            controls:SetPoint("TOPLEFT", anchor, "TOPLEFT", left, top)
+            controls:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", right, top)
+        end
+    end
+    if TrainerSpells.WeaponControls then TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false) end
+    if TrainerSpells.ClassTrainerControls then TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false) end
+    local dividerOffset = top + 1 + (showClassTrainerControls and -42 or showWeaponControls and -34 or 0)
     if playerSpellsModeDivider then
         playerSpellsModeDivider:ClearAllPoints()
-        playerSpellsModeDivider:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 48, dividerOffset)
-        playerSpellsModeDivider:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -100, dividerOffset)
+        playerSpellsModeDivider:SetPoint("TOPLEFT", anchor, "TOPLEFT", left, dividerOffset)
+        playerSpellsModeDivider:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", right, dividerOffset)
+        playerSpellsModeDivider:SetShown((not panel or showWeaponControls or showClassTrainerControls) and true or false)
     end
 
     if TrainerSpells.ClassScrollBox and playerSpellsModeDivider then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
-        TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", playerSpellsModeDivider, "BOTTOMLEFT", 0, -2)
-        TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -84, 30)
+        if panel then
+            local scrollBar = _G.TrainerSpellsScrollBar
+            TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", playerSpellsModeDivider, "BOTTOMLEFT", -left, -2)
+            TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -22, 0)
+            panel.borderFrame:SetFrameLevel(TrainerSpells.ClassScrollBox:GetFrameLevel() + 20)
+            if scrollBar then
+                scrollBar:ClearAllPoints()
+                scrollBar:SetPoint("TOPLEFT", TrainerSpells.ClassScrollBox, "TOPRIGHT", 4, -2)
+                scrollBar:SetPoint("BOTTOMLEFT", panel, "BOTTOMRIGHT", -18, 8)
+                scrollBar:SetFrameLevel(panel.borderFrame:GetFrameLevel() + 1)
+            end
+        else
+            TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", playerSpellsModeDivider, "BOTTOMLEFT", 0, -2)
+            TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -84, 30)
+        end
     end
 
     searchBox:ClearAllPoints()
@@ -428,55 +475,84 @@ function TrainerSpells:UpdateClassViewTabs()
     for view, glow in pairs(classicModeTabGlows) do
         glow:SetShown(classFrame:IsShown() and TrainerSpells.ClassView == view)
     end
-    for view, tab in pairs(playerSpellsModeTabs) do
-        tab:SetTabSelected(TrainerSpells.ClassView == view)
+    if playerSpellsModeTabs.addon then playerSpellsModeTabs.addon:SetTabSelected(classFrame:IsShown()) end
+    playerSpellsSubTabs.Update()
+end
+
+function playerSpellsSubTabs.SetClassIcon(icon, classToken)
+    local classAtlas = GetClassAtlas and GetClassAtlas(classToken)
+    if icon and classAtlas then
+        icon:SetAtlas(classAtlas)
+    elseif icon and CLASS_ICON_TCOORDS and CLASS_ICON_TCOORDS[classToken] then
+        local coords = CLASS_ICON_TCOORDS[classToken]
+        icon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
+        icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
     end
 end
 
-local function CreatePlayerSpellsModeTab(container, tabSystem, tabID, view, icon, tooltip, previousTab)
-    local tab = CreateFrame("Button", nil, container, "TabSystemButtonTemplate")
-    tab.GetTabSystem = function() return tabSystem end
-    tab:Init(tabID, nil, icon)
-    tab:SetTooltipText(tooltip)
-    if previousTab then
-        tab:SetPoint("LEFT", previousTab, "RIGHT", 1, 0)
-    else
-        tab:SetPoint("LEFT", container, "LEFT", 0, 0)
+function playerSpellsSubTabs.Create()
+    if playerSpellsSubTabs.bar then return end
+    local className, classToken = UnitClass("player")
+    local views = {{view = "class", icon = 133741, title = className, desc = "LID_CLASSVIEW_DESC", classToken = classToken}}
+    if TrainerSpells:HasPetClassData(classToken) then table.insert(views, {view = "pet", icon = "Interface\\Icons\\Ability_Hunter_BeastCall", title = TrainerSpells:Trans("LID_PETTRAINING"), desc = "LID_PETVIEW_DESC"}) end
+    table.insert(views, {view = "trainers", icon = 134269, title = TrainerSpells:Trans("LID_CLASSTRAINERS"), desc = "LID_TRAINERSVIEW_DESC"})
+    table.insert(views, {view = "weapons", icon = "Interface\\Icons\\INV_Sword_04", title = _G.WEAPON_SKILLS or "Weapon Skills", desc = "LID_WEAPONVIEW_DESC"})
+    playerSpellsSubTabs.views = views
+    local bar = CreateFrame("Frame", "TrainerSpellsPlayerSpellsSubTabs", classFrame, "TabSystemTemplate")
+    bar:SetTabSelectedCallback(function(tabID)
+        local entry = views[tabID]
+        if entry then
+            TrainerSpells:SetClassView(entry.view)
+            OpenPlayerSpellsPanel()
+        end
+        return true
+    end)
+
+    for index, entry in ipairs(views) do
+        bar:AddTab(nil, entry.icon)
+        local button = bar:GetTabButton(index)
+        button:SetTooltipText(entry.title .. "\n|cffffffff" .. TrainerSpells:Trans(entry.desc) .. "|r")
+        if entry.classToken then playerSpellsSubTabs.SetClassIcon(button.Icon, entry.classToken) end
     end
 
-    tab:SetScript("OnClick", function()
-        TrainerSpells:SetClassView(view)
-        OpenPlayerSpellsPanel()
-    end)
-    playerSpellsModeTabs[view] = tab
-    return tab
+    bar:Layout()
+    local panel = CreateFrame("Frame", nil, classFrame)
+    TrainerSpells:AddContentBorder(panel, classFrame)
+    playerSpellsSubTabs.panel = panel
+    local title = classFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    title:SetJustifyH("LEFT")
+    title:SetWordWrap(false)
+    local desc = classFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    desc:SetJustifyH("LEFT")
+    desc:SetWordWrap(false)
+    desc:SetTextColor(0.75, 0.75, 0.75)
+    playerSpellsSubTabs.title = title
+    playerSpellsSubTabs.desc = desc
+    playerSpellsSubTabs.bar = bar
+    playerSpellsSubTabs.Update()
 end
 
 local function CreatePlayerSpellsModeTabs(book, tabSystem)
-    local className, classToken = UnitClass("player")
     local container = CreateFrame("Frame", "TrainerSpellsPlayerSpellsModeTabs", book)
     playerSpellsModeTabContainer = container
-    container:SetSize(120, 32)
+    container:SetSize(48, 32)
     container:SetPoint("LEFT", tabSystem, "RIGHT", 8, 0)
     local divider = classFrame:CreateTexture(nil, "ARTWORK")
     playerSpellsModeDivider = divider
     divider:SetAtlas("spellbook-divider")
     divider:SetHeight(11)
-    local classTab = CreatePlayerSpellsModeTab(container, tabSystem, 1, "class", 133741, className, nil)
-    local classIcon = classTab.Icon or classTab.icon
-    local classAtlas = GetClassAtlas and GetClassAtlas(classToken)
-    if classIcon and classAtlas then
-        classIcon:SetAtlas(classAtlas)
-    elseif classIcon and CLASS_ICON_TCOORDS and CLASS_ICON_TCOORDS[classToken] then
-        local coords = CLASS_ICON_TCOORDS[classToken]
-        classIcon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
-        classIcon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
-    end
-
-    local previousTab = classTab
-    if TrainerSpells:HasPetClassData(classToken) then previousTab = CreatePlayerSpellsModeTab(container, tabSystem, 2, "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab) end
-    previousTab = CreatePlayerSpellsModeTab(container, tabSystem, 3, "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS"), previousTab)
-    playerSpellsModeLastTab = CreatePlayerSpellsModeTab(container, tabSystem, 4, "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab)
+    local tab = CreateFrame("Button", nil, container, "TabSystemButtonTemplate")
+    tab.GetTabSystem = function() return tabSystem end
+    tab:Init(1, nil, 133741)
+    tab:SetTooltipText("TrainerSpells")
+    tab:SetPoint("LEFT", container, "LEFT", 0, 0)
+    tab:SetScript("OnClick", function()
+        TrainerSpells:SetClassView(playerSpellsSubTabs.GetSavedView())
+        OpenPlayerSpellsPanel()
+    end)
+    playerSpellsModeTabs.addon = tab
+    playerSpellsModeLastTab = tab
+    playerSpellsSubTabs.Create()
 end
 
 local function FitNativeSearchBox()

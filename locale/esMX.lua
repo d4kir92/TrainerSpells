@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("esMX", "LID_PROFESSION_FINDTRAINER_DESC", "Dónde encont
 TrainerSpells:AddTrans("esMX", "LID_NOTRAINERDATAFOR", "Aún no se conocen ubicaciones de instructores para %s.")
 TrainerSpells:AddTrans("esMX", "LID_YOURPROFESSIONS", "Tus profesiones")
 TrainerSpells:AddTrans("esMX", "LID_OTHERPROFESSIONS", "Otras profesiones")
+TrainerSpells:AddTrans("esMX", "LID_CLASSVIEW_DESC", "Hechizos que enseña tu instructor de clase.")
+TrainerSpells:AddTrans("esMX", "LID_PETVIEW_DESC", "Habilidades que puede aprender tu mascota o demonio.")
+TrainerSpells:AddTrans("esMX", "LID_TRAINERSVIEW_DESC", "Dónde encontrar a tus instructores.")
+TrainerSpells:AddTrans("esMX", "LID_WEAPONVIEW_DESC", "Habilidades con armas y dónde aprenderlas.")

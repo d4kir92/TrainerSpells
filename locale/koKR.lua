@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("koKR", "LID_PROFESSION_FINDTRAINER_DESC", "이 전문 �
 TrainerSpells:AddTrans("koKR", "LID_NOTRAINERDATAFOR", "%s의 훈련사 위치가 아직 알려지지 않았습니다.")
 TrainerSpells:AddTrans("koKR", "LID_YOURPROFESSIONS", "내 전문 기술")
 TrainerSpells:AddTrans("koKR", "LID_OTHERPROFESSIONS", "기타 전문 기술")
+TrainerSpells:AddTrans("koKR", "LID_CLASSVIEW_DESC", "직업 훈련사가 가르치는 주문.")
+TrainerSpells:AddTrans("koKR", "LID_PETVIEW_DESC", "소환수나 악마가 배울 수 있는 기술.")
+TrainerSpells:AddTrans("koKR", "LID_TRAINERSVIEW_DESC", "훈련사를 찾을 수 있는 곳.")
+TrainerSpells:AddTrans("koKR", "LID_WEAPONVIEW_DESC", "무기 숙련과 배울 수 있는 곳.")

@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("itIT", "LID_PROFESSION_FINDTRAINER_DESC", "Dove trovare 
 TrainerSpells:AddTrans("itIT", "LID_NOTRAINERDATAFOR", "Nessuna posizione di istruttore conosciuta per %s.")
 TrainerSpells:AddTrans("itIT", "LID_YOURPROFESSIONS", "Le tue professioni")
 TrainerSpells:AddTrans("itIT", "LID_OTHERPROFESSIONS", "Altre professioni")
+TrainerSpells:AddTrans("itIT", "LID_CLASSVIEW_DESC", "Incantesimi insegnati dal tuo istruttore di classe.")
+TrainerSpells:AddTrans("itIT", "LID_PETVIEW_DESC", "Abilità che il tuo famiglio o demone può imparare.")
+TrainerSpells:AddTrans("itIT", "LID_TRAINERSVIEW_DESC", "Dove trovare i tuoi istruttori.")
+TrainerSpells:AddTrans("itIT", "LID_WEAPONVIEW_DESC", "Abilità con le armi e dove impararle.")

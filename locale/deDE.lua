@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("deDE", "LID_PROFESSION_FINDTRAINER_DESC", "Wo du einen L
 TrainerSpells:AddTrans("deDE", "LID_NOTRAINERDATAFOR", "Noch keine Lehrer-Standorte für %s bekannt.")
 TrainerSpells:AddTrans("deDE", "LID_YOURPROFESSIONS", "Deine Berufe")
 TrainerSpells:AddTrans("deDE", "LID_OTHERPROFESSIONS", "Andere Berufe")
+TrainerSpells:AddTrans("deDE", "LID_CLASSVIEW_DESC", "Zauber, die dein Klassenlehrer beibringt.")
+TrainerSpells:AddTrans("deDE", "LID_PETVIEW_DESC", "Fähigkeiten, die dein Begleiter lernen kann.")
+TrainerSpells:AddTrans("deDE", "LID_TRAINERSVIEW_DESC", "Wo du deine Lehrer findest.")
+TrainerSpells:AddTrans("deDE", "LID_WEAPONVIEW_DESC", "Waffenfertigkeiten und wo du sie lernst.")

@@ -84,3 +84,7 @@ TrainerSpells:AddTrans("enUS", "LID_PROFESSION_FINDTRAINER_DESC", "Where to find
 TrainerSpells:AddTrans("enUS", "LID_NOTRAINERDATAFOR", "No trainer locations known for %s yet.")
 TrainerSpells:AddTrans("enUS", "LID_YOURPROFESSIONS", "Your Professions")
 TrainerSpells:AddTrans("enUS", "LID_OTHERPROFESSIONS", "Other Professions")
+TrainerSpells:AddTrans("enUS", "LID_CLASSVIEW_DESC", "Spells your class trainer teaches.")
+TrainerSpells:AddTrans("enUS", "LID_PETVIEW_DESC", "Abilities your pet or demon can learn.")
+TrainerSpells:AddTrans("enUS", "LID_TRAINERSVIEW_DESC", "Where to find your trainers.")
+TrainerSpells:AddTrans("enUS", "LID_WEAPONVIEW_DESC", "Weapon skills and where to learn them.")
