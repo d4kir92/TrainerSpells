@@ -207,6 +207,50 @@ end
 function professionPicker.UpdateText()
     if professionPicker.dropdown and professionPicker.key then professionPicker.dropdown:SetText(professionPicker.GetLabel(professionPicker.GetInfo(professionPicker.key))) end
     professionPicker.UpdateWidth()
+    professionPicker.UpdateHeader()
+end
+
+function professionPicker.GetNativeHeader()
+    if not ProfessionsFrame or not ProfessionsFrame.GetTitleText or not ProfessionsFrame.GetPortrait then return nil, nil end
+    return ProfessionsFrame:GetTitleText(), ProfessionsFrame:GetPortrait()
+end
+
+function professionPicker.SetHeaderActive(active)
+    local nativeTitle, nativePortrait = professionPicker.GetNativeHeader()
+    if not nativeTitle or not nativePortrait then return end
+    local header = professionPicker.header
+    if not header then
+        if not active then return end
+        header = CreateFrame("Frame", nil, ProfessionsFrame)
+        header:SetAllPoints(ProfessionsFrame)
+        header:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 400)
+        header.portrait = header:CreateTexture(nil, "OVERLAY")
+        header.portrait:SetAllPoints(nativePortrait)
+        header.title = header:CreateFontString(nil, "OVERLAY")
+        header.title:SetAllPoints(nativeTitle)
+        header.title:SetFontObject(nativeTitle:GetFontObject() or GameFontNormal)
+        header.title:SetJustifyH(nativeTitle:GetJustifyH())
+        header.title:SetJustifyV(nativeTitle:GetJustifyV())
+        professionPicker.header = header
+    end
+
+    professionPicker.headerActive = active
+    nativeTitle:SetAlpha(active and 0 or 1)
+    nativePortrait:SetAlpha(active and 0 or 1)
+    header:SetShown(active)
+    if active then professionPicker.UpdateHeader() end
+end
+
+function professionPicker.UpdateHeader()
+    local header = professionPicker.header
+    if not header or not professionPicker.headerActive or not professionPicker.key then return end
+    local info = professionPicker.GetInfo(professionPicker.key)
+    header.title:SetText(TRADE_SKILL_TITLE and TRADE_SKILL_TITLE:format(info.name) or info.name)
+    if info.icon and SetPortraitToTexture then
+        SetPortraitToTexture(header.portrait, info.icon)
+    else
+        header.portrait:SetTexture(info.icon)
+    end
 end
 
 function professionPicker.Reset()
@@ -688,6 +732,7 @@ local function CloseProfessionsFrameView()
 
     professionsClosePending = false
     professionsModeActive = false
+    professionPicker.SetHeaderActive(false)
     professionFrame:Hide()
     for _, tab in pairs(professionsModeTabs) do
         SetProfessionsModeTabSelected(tab, false)
@@ -766,6 +811,7 @@ local function OpenProfessionsFrameView()
         ProfessionsFrame.TabSystem:SetTabVisuallySelected(0)
     end
 
+    professionPicker.SetHeaderActive(true)
     professionSubTabs.Update()
     TrainerSpells_ProfessionRefresh()
 end
