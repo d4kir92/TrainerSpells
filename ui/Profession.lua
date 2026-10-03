@@ -92,6 +92,12 @@ end
 
 local PROFESSION_VIEW_SKILL = "skill"
 local PROFESSION_VIEW_RECIPES = "recipes"
+local PROFESSION_VIEW_TRAINERS = "trainers"
+local PROFESSION_SUB_VIEWS = {
+    {mode = PROFESSION_VIEW_SKILL, icon = "Interface\\Icons\\INV_Misc_Book_09", title = "LID_PROFESSION_FROMTRAINER", desc = "LID_PROFESSION_FROMTRAINER_DESC"},
+    {mode = PROFESSION_VIEW_RECIPES, icon = "Interface\\Icons\\INV_Scroll_03", title = "LID_PROFESSION_OTHERRECIPES", desc = "LID_PROFESSION_OTHERRECIPES_DESC"},
+    {mode = PROFESSION_VIEW_TRAINERS, icon = 134269, title = "LID_PROFESSION_FINDTRAINER", desc = "LID_PROFESSION_FINDTRAINER_DESC"},
+}
 local professionViewMode = PROFESSION_VIEW_SKILL
 function TrainerSpells:IsProfessionRecipeViewActive()
     return professionViewMode == PROFESSION_VIEW_RECIPES
@@ -120,6 +126,10 @@ function TrainerSpells_ProfessionRefresh()
         end
 
         if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NORECIPEDATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
+    elseif professionViewMode == PROFESSION_VIEW_TRAINERS then
+        local trainers = professionKey and TrainerSpellsProfessionTrainers and TrainerSpellsProfessionTrainers[professionKey]
+        if trainers and TrainerSpells.AddTrainerLocationItems then TrainerSpells:AddTrainerLocationItems(items, TrainerSpells:GetTrainerLocationEntries(trainers, searchText), "profession_trainer_" .. professionKey .. "_") end
+        if #items == 0 then TrainerSpells:AddHeaderItem(items, skillLineName and TrainerSpells:Trans("LID_NOTRAINERDATAFOR"):format(skillLineName) or TrainerSpells:Trans("LID_NOPROFESSIONDETECTED"), "|cffaaaaaa") end
     else
         local data = professionKey and TrainerSpells_ProfessionData and TrainerSpells_ProfessionData[professionKey]
         if data and next(data) then
@@ -134,6 +144,61 @@ function TrainerSpells_ProfessionRefresh()
 
     TrainerSpells:AddCostColumn(items)
     professionScrollBox:SetDataProvider(CreateDataProvider(items), ScrollBoxConstants.RetainScrollPosition)
+end
+
+local professionSubTabs = {}
+function professionSubTabs.GetSavedView()
+    local saved = TrainerSpells_Character and TrainerSpells_Character.professionView
+    for _, view in ipairs(PROFESSION_SUB_VIEWS) do
+        if view.mode == saved then return saved end
+    end
+    return PROFESSION_VIEW_SKILL
+end
+
+function professionSubTabs.Update()
+    if not professionSubTabs.bar then return end
+    for index, view in ipairs(PROFESSION_SUB_VIEWS) do
+        if view.mode == professionViewMode then
+            professionSubTabs.bar:SetTabVisuallySelected(index)
+            professionSubTabs.title:SetText(TrainerSpells:Trans(view.title))
+            professionSubTabs.desc:SetText(TrainerSpells:Trans(view.desc))
+        end
+    end
+end
+
+function professionSubTabs.Select(mode)
+    professionViewMode = mode
+    if TrainerSpells_Character then TrainerSpells_Character.professionView = mode end
+    professionSubTabs.Update()
+    TrainerSpells_ProfessionRefresh()
+end
+
+function professionSubTabs.Create()
+    if professionSubTabs.bar then return end
+    local bar = CreateFrame("Frame", "TrainerSpellsProfessionSubTabs", professionFrame, "TabSystemTemplate")
+    professionSubTabs.bar = bar
+    bar:SetTabSelectedCallback(function(tabID)
+        local view = PROFESSION_SUB_VIEWS[tabID]
+        if view then professionSubTabs.Select(view.mode) end
+        return true
+    end)
+
+    for index, view in ipairs(PROFESSION_SUB_VIEWS) do
+        bar:AddTab(nil, view.icon)
+        bar:GetTabButton(index):SetTooltipText(TrainerSpells:Trans(view.title))
+    end
+
+    bar:Layout()
+    local title = professionFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    title:SetJustifyH("LEFT")
+    title:SetWordWrap(false)
+    professionSubTabs.title = title
+    local desc = professionFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    desc:SetJustifyH("LEFT")
+    desc:SetWordWrap(false)
+    desc:SetTextColor(0.75, 0.75, 0.75)
+    professionSubTabs.desc = desc
+    professionSubTabs.Update()
 end
 
 local function PositionProfessionFrame()
@@ -164,12 +229,25 @@ local function PositionProfessionFrame()
     professionSearchBox:ClearAllPoints()
     professionScrollBox:ClearAllPoints()
     if ProfessionsFrame and ProfessionsFrame:IsShown() then
-        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, -6)
-        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -6)
+        local searchTop = -6
+        if professionSubTabs.bar then
+            searchTop = -48
+            professionSubTabs.bar:ClearAllPoints()
+            professionSubTabs.bar:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, -8)
+            professionSubTabs.title:ClearAllPoints()
+            professionSubTabs.title:SetPoint("TOPLEFT", professionSubTabs.bar, "TOPRIGHT", 12, -2)
+            professionSubTabs.title:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -10)
+            professionSubTabs.desc:ClearAllPoints()
+            professionSubTabs.desc:SetPoint("TOPLEFT", professionSubTabs.title, "BOTTOMLEFT", 0, -3)
+            professionSubTabs.desc:SetPoint("TOPRIGHT", professionSubTabs.title, "BOTTOMRIGHT", 0, -3)
+        end
+
+        professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, searchTop)
+        professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, searchTop)
         professionRowHeightSlider:ClearAllPoints()
         professionRowHeightSlider:SetPoint("TOPLEFT", professionSearchBox, "BOTTOMLEFT", 0, -9)
         professionRowHeightSlider:SetPoint("TOPRIGHT", professionSearchBox, "BOTTOMRIGHT", -24, -14)
-        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -54)
+        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, searchTop - 48)
         professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
     elseif TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
         professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 80, 0)
@@ -413,24 +491,20 @@ end
 
 local function PositionProfessionsFrameModeTabs()
     if not ProfessionsFrame then return end
-    local trainerTab = professionsModeTabs[PROFESSION_VIEW_SKILL]
-    local modernRecipeTab = professionsModeTabs[PROFESSION_VIEW_RECIPES]
-    if not trainerTab or not modernRecipeTab then return end
-    trainerTab:ClearAllPoints()
-    modernRecipeTab:ClearAllPoints()
+    local addonTab = professionsModeTabs.addon
+    if not addonTab then return end
+    addonTab:ClearAllPoints()
     if professionsFrameUsesSideTabs then
         local lastTab = ProfessionsFrame.ProfessionsOverviewTab
         for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
             if tab:IsShown() then lastTab = tab end
         end
 
-        trainerTab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -16)
-        modernRecipeTab:SetPoint("TOPLEFT", trainerTab, "BOTTOMLEFT", 0, -2)
+        addonTab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, -16)
     else
         professionsModeTabContainer:ClearAllPoints()
         professionsModeTabContainer:SetPoint("LEFT", ProfessionsFrame.TabSystem, "RIGHT", 20, 0)
-        trainerTab:SetPoint("LEFT", professionsModeTabContainer, "LEFT", 0, 0)
-        modernRecipeTab:SetPoint("LEFT", trainerTab, "RIGHT", 1, 0)
+        addonTab:SetPoint("LEFT", professionsModeTabContainer, "LEFT", 0, 0)
     end
 end
 
@@ -485,13 +559,13 @@ professionsCombatWatcher:SetScript("OnEvent", function(_, event)
     if professionsClosePending then CloseProfessionsFrameView() end
 end)
 
-local function SetProfessionsFrameView(mode)
+local function OpenProfessionsFrameView()
     if IsProfessionsCombatLocked() then
         if UIErrorsFrame and ERR_NOT_IN_COMBAT then UIErrorsFrame:AddMessage(ERR_NOT_IN_COMBAT, 1, 0.1, 0.1) end
         return
     end
 
-    professionViewMode = mode
+    professionViewMode = professionSubTabs.GetSavedView()
     professionsModeActive = true
     if ProfessionsFrame.Pages then
         for _, page in ipairs(ProfessionsFrame.Pages) do
@@ -513,8 +587,8 @@ local function SetProfessionsFrameView(mode)
 
     PositionProfessionFrame()
     professionFrame:Show()
-    for tabMode, tab in pairs(professionsModeTabs) do
-        SetProfessionsModeTabSelected(tab, tabMode == mode)
+    for _, tab in pairs(professionsModeTabs) do
+        SetProfessionsModeTabSelected(tab, true)
     end
 
     if professionsFrameUsesSideTabs then
@@ -526,21 +600,22 @@ local function SetProfessionsFrameView(mode)
         ProfessionsFrame.TabSystem:SetTabVisuallySelected(0)
     end
 
+    professionSubTabs.Update()
     TrainerSpells_ProfessionRefresh()
 end
 
-local function CreateProfessionsFrameSystemTab(mode, tabID, text, icon)
+local function CreateProfessionsFrameSystemTab(tabID, text, icon)
     local tab = CreateFrame("Button", nil, professionsModeTabContainer, "TabSystemButtonTemplate")
     tab.GetTabSystem = function() return ProfessionsFrame.TabSystem end
     tab:Init(tabID, nil, icon)
     tab:SetTooltipText(text)
-    tab:SetScript("OnClick", function(self) if not self.combatLocked then SetProfessionsFrameView(mode) end end)
+    tab:SetScript("OnClick", function(self) if not self.combatLocked then OpenProfessionsFrameView() end end)
     tab:Show()
-    professionsModeTabs[mode] = tab
+    professionsModeTabs.addon = tab
     return tab
 end
 
-local function CreateProfessionsFrameSideTab(name, mode, text, icon)
+local function CreateProfessionsFrameSideTab(name, text, icon)
     local tab = CreateFrame("Frame", name, ProfessionsFrame, "LargeSideTabButtonTemplate")
     tab:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 200)
     tab:EnableMouse(true)
@@ -550,9 +625,9 @@ local function CreateProfessionsFrameSideTab(name, mode, text, icon)
     tab.tooltipText = text
     tab:SetFillToInterior(true)
     tab:SetChecked(false)
-    tab:SetCustomOnMouseUpHandler(function(self, button, upInside) if button == "LeftButton" and upInside and not self.combatLocked then SetProfessionsFrameView(mode) end end)
+    tab:SetCustomOnMouseUpHandler(function(self, button, upInside) if button == "LeftButton" and upInside and not self.combatLocked then OpenProfessionsFrameView() end end)
     tab:Show()
-    professionsModeTabs[mode] = tab
+    professionsModeTabs.addon = tab
     return tab
 end
 
@@ -564,17 +639,16 @@ local function InstallProfessionsFrameIntegration()
     professionFrame:SetParent(ProfessionsFrame)
     professionFrame:SetFrameStrata(ProfessionsFrame:GetFrameStrata())
     professionFrame:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 300)
+    professionSubTabs.Create()
     if professionsFrameUsesSideTabs then
-        CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTrainerTab", PROFESSION_VIEW_SKILL, TrainerSpells:Trans("LID_TRAINERSPELLS"), 133741)
-        CreateProfessionsFrameSideTab("TrainerSpellsProfessionsRecipeTab", PROFESSION_VIEW_RECIPES, TrainerSpells:Trans("LID_RECIPES"), "Interface\\Icons\\INV_Scroll_03")
+        CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTab", "TrainerSpells", 133741)
         hooksecurefunc(ProfessionsFrame, "RefreshRightTabs", PositionProfessionsFrameModeTabs)
         hooksecurefunc(ProfessionsFrame, "RightTabSelected", CloseProfessionsFrameView)
     else
         professionsModeTabContainer = CreateFrame("Frame", "TrainerSpellsProfessionsModeTabs", ProfessionsFrame)
         professionsModeTabContainer:SetSize(260, math.max(32, ProfessionsFrame.TabSystem:GetHeight()))
         professionsModeTabContainer:SetFrameLevel(ProfessionsFrame.TabSystem:GetFrameLevel() + 200)
-        CreateProfessionsFrameSystemTab(PROFESSION_VIEW_SKILL, 1001, TrainerSpells:Trans("LID_TRAINERSPELLS"), 133741)
-        CreateProfessionsFrameSystemTab(PROFESSION_VIEW_RECIPES, 1002, TrainerSpells:Trans("LID_RECIPES"), "Interface\\Icons\\INV_Scroll_03")
+        CreateProfessionsFrameSystemTab(1001, "TrainerSpells", 133741)
         hooksecurefunc(ProfessionsFrame, "SetTab", CloseProfessionsFrameView)
         if ProfessionsFrame.UpdateTabs then hooksecurefunc(ProfessionsFrame, "UpdateTabs", PositionProfessionsFrameModeTabs) end
     end

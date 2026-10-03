@@ -526,3 +526,53 @@ if not SpellBookFrame and TrainerSpells:HasClassTrainers() then
         end)
     end
 end
+
+function TrainerSpells:OpenCompendiumView(view)
+    if InCombatLockdown and InCombatLockdown() then return end
+    if SpellBookFrame then
+        if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) end
+        OpenFrame(view)
+        return
+    end
+    if not PlayerSpellsFrame then
+        if C_AddOns and C_AddOns.LoadAddOn then
+            C_AddOns.LoadAddOn("Blizzard_PlayerSpells")
+        elseif LoadAddOn then
+            LoadAddOn("Blizzard_PlayerSpells")
+        end
+    end
+    if not PlayerSpellsFrame then return end
+    ShowUIPanel(PlayerSpellsFrame)
+    local book = GetPlayerSpellsBook()
+    if not book then return end
+    if PlayerSpellsFrame.SetTab and PlayerSpellsFrame.spellBookTabID then
+        PlayerSpellsFrame:SetTab(PlayerSpellsFrame.spellBookTabID)
+    end
+    TrainerSpells:SetClassView(view)
+    OpenPlayerSpellsPanel()
+end
+
+function TrainerSpells:RegisterCompendiumTabs()
+    local api = _G["AzerothCompendiumAPI"]
+    if type(api) ~= "table" or type(api.RegisterTab) ~= "function" or not self:HasClassTrainers() then return end
+    for _, definition in ipairs({
+        {"class", "LID_CLASSTRAINER", 133743},
+        {"trainers", "LID_CLASSTRAINERS", 135933},
+        {"weapons", "LID_WEAPON", 135328}
+    }) do
+        local view, label = definition[1], definition[2]
+        api.RegisterTab("TrainerSpells:" .. view, {
+            label = function() return "TrainerSpells: " .. TrainerSpells:Trans(label) end,
+            icon = definition[3],
+            onClick = function() TrainerSpells:OpenCompendiumView(view) end
+        })
+    end
+end
+
+TrainerSpells.CompendiumLoader = CreateFrame("Frame")
+TrainerSpells.CompendiumLoader:RegisterEvent("ADDON_LOADED")
+TrainerSpells.CompendiumLoader:RegisterEvent("PLAYER_LOGIN")
+TrainerSpells.CompendiumLoader:SetScript("OnEvent", function(_, event, name)
+    if event == "PLAYER_LOGIN" or name == "AzerothCompendium" then TrainerSpells:RegisterCompendiumTabs() end
+end)
+TrainerSpells:RegisterCompendiumTabs()

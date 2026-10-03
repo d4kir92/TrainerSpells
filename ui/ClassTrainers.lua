@@ -105,14 +105,17 @@ local function GetPetEntries(searchText, usableOnly)
     return SortEntries(entries)
 end
 
-function TrainerSpells:BuildClassTrainerItems(items, searchText)
-    local entries = GetEntries(searchText, false)
-    for _, entry in ipairs(GetPetEntries(searchText, false)) do table.insert(entries, entry) end
-    SortEntries(entries)
+function TrainerSpells:GetTrainerLocationEntries(trainers, searchText)
+    local entries = {}
+    AddEntries(entries, trainers, searchText, false)
+    return SortEntries(entries)
+end
+
+function TrainerSpells:AddTrainerLocationItems(items, entries, groupPrefix)
     local lastContinentID
     local lastAreaID
     for _, entry in ipairs(entries) do
-        local continentKey = "class_trainer_continent_" .. entry.continentID
+        local continentKey = groupPrefix .. "continent_" .. entry.continentID
         if entry.continentID ~= lastContinentID then
             lastContinentID = entry.continentID
             lastAreaID = nil
@@ -121,13 +124,19 @@ function TrainerSpells:BuildClassTrainerItems(items, searchText)
         if not TrainerSpells:IsGroupCollapsed(continentKey) then
             if entry.location.areaID ~= lastAreaID then
                 lastAreaID = entry.location.areaID
-                TrainerSpells:AddHeaderItem(items, entry.zoneName, "|cffffffff", nil, "class_trainer_" .. lastAreaID, nil, nil, 1)
+                TrainerSpells:AddHeaderItem(items, entry.zoneName, "|cffffffff", nil, groupPrefix .. lastAreaID, nil, nil, 1)
             end
-            if not TrainerSpells:IsGroupCollapsed("class_trainer_" .. lastAreaID) then
+            if not TrainerSpells:IsGroupCollapsed(groupPrefix .. lastAreaID) then
                 table.insert(items, {isClassTrainer = true, entry = entry, rowDepth = 1})
             end
         end
     end
+end
+
+function TrainerSpells:BuildClassTrainerItems(items, searchText)
+    local entries = GetEntries(searchText, false)
+    for _, entry in ipairs(GetPetEntries(searchText, false)) do table.insert(entries, entry) end
+    TrainerSpells:AddTrainerLocationItems(items, SortEntries(entries), "class_trainer_")
 end
 
 local function GetWorldPosition(uiMapID, x, y)
