@@ -300,7 +300,7 @@ function professionPicker.Create()
 end
 
 function TrainerSpells_ProfessionRefresh()
-    local searchText = (TrainerSpells_ProfessionSearchText or ""):lower()
+    local searchText = (professionFrame.compendiumHost and professionFrame.compendiumHost.searchText or TrainerSpells_ProfessionSearchText or ""):lower()
     local professionKey, skillLineName, currentSkill = professionPicker.GetActive()
     local items = {}
     if professionViewMode == PROFESSION_VIEW_RECIPES then
@@ -457,6 +457,18 @@ local function PositionProfessionFrame()
             professionScrollBar:SetPoint("BOTTOMLEFT", panel, "BOTTOMRIGHT", -16, 8)
             panel.borderFrame:SetFrameLevel(professionScrollBox:GetFrameLevel() + 20)
             professionScrollBar:SetFrameLevel(panel.borderFrame:GetFrameLevel() + 1)
+            if professionFrame.compendiumHost then
+                professionSearchBox:Hide()
+                professionRowHeightSlider:ClearAllPoints()
+                professionRowHeightSlider:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -24, -12)
+                professionRowHeightSlider:SetWidth(168 / sliderScale)
+                professionScrollBox:ClearAllPoints()
+                professionScrollBox:SetPoint("TOPLEFT", panel, "TOPLEFT", 0, -4)
+                professionScrollBox:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -20, 0)
+                professionScrollBar:ClearAllPoints()
+                professionScrollBar:SetPoint("TOPLEFT", panel, "TOPRIGHT", -16, -6)
+                professionScrollBar:SetPoint("BOTTOMLEFT", panel, "BOTTOMRIGHT", -16, 8)
+            end
         else
             professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 64, -6)
             professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, -6)
@@ -933,6 +945,7 @@ tradeSkillWatcher:SetScript("OnEvent", function(_, event)
 end)
 
 function TrainerSpells:CreateCompendiumProfessions(host)
+    host.OnSearchChanged = function() TrainerSpells_ProfessionRefresh() end
     professionPicker.Create()
     professionSubTabs.Create()
     if not professionsFrameHooksInstalled then

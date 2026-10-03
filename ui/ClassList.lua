@@ -52,7 +52,7 @@ rowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueCha
 end)
 
 function TrainerSpells_Refresh()
-    local searchText = (TrainerSpells_SearchText or ""):lower()
+    local searchText = (classFrame.compendiumHost and classFrame.compendiumHost.searchText or TrainerSpells_SearchText or ""):lower()
     local selectedLevel = UnitLevel("player") or 1
     local selectedClass = select(2, UnitClass("player"))
     local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]

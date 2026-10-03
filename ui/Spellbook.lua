@@ -726,11 +726,9 @@ function TrainerSpells:PositionCompendiumClass()
         tab:ClearAllPoints()
         tab:SetPoint("TOPLEFT", host, "TOPLEFT", 8 + (index - 1) * (width + 8), -40)
     end
-    searchBox:ClearAllPoints()
-    searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 8, -8)
-    searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -200, -8)
+    searchBox:Hide()
     TrainerSpells.RowHeightSlider:ClearAllPoints()
-    TrainerSpells.RowHeightSlider:SetPoint("LEFT", searchBox, "RIGHT", 16, 0)
+    TrainerSpells.RowHeightSlider:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -24, -12)
     TrainerSpells.RowHeightSlider:SetWidth(168 / TrainerSpells.RowHeightSlider:GetScale())
     local offset = -4
     for _, entry in ipairs({{TrainerSpells.ClassTrainerControls, "trainers", -48}, {TrainerSpells.WeaponControls, "weapons", -40}}) do
@@ -760,6 +758,7 @@ function TrainerSpells:PositionCompendiumClass()
 end
 
 function TrainerSpells:CreateCompendiumClass(host)
+    host.OnSearchChanged = function() TrainerSpells_Refresh() end
     playerSpellsSubTabs.Create()
     host.classTabs = {}
     for _, entry in ipairs(playerSpellsSubTabs.views) do
