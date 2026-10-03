@@ -717,19 +717,13 @@ function TrainerSpells:PositionCompendiumClass()
     if not host then return end
     local panel = playerSpellsSubTabs.panel
     panel:ClearAllPoints()
-    panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 8, -82)
-    panel:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -8, 8)
-    local width = math.max(1, (host:GetWidth() - 16 - (#host.classTabs - 1) * 8) / #host.classTabs)
+    panel:SetAllPoints(classFrame)
     for index, tab in ipairs(host.classTabs) do
-        tab:SetWidth(width)
-        tab:SetEnabled(tab.view ~= TrainerSpells.ClassView)
-        tab:ClearAllPoints()
-        tab:SetPoint("TOPLEFT", host, "TOPLEFT", 8 + (index - 1) * (width + 8), -40)
+        tab:SetTabSelected(tab.view == TrainerSpells.ClassView)
+        AzerothCompendiumAPI.PositionContentTab(tab, host, host.classTabs[index - 1])
     end
     searchBox:Hide()
-    TrainerSpells.RowHeightSlider:ClearAllPoints()
-    TrainerSpells.RowHeightSlider:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -24, -12)
-    TrainerSpells.RowHeightSlider:SetWidth(168 / TrainerSpells.RowHeightSlider:GetScale())
+    AzerothCompendiumAPI.PositionHeaderSlider(TrainerSpells.RowHeightSlider)
     local offset = -4
     for _, entry in ipairs({{TrainerSpells.ClassTrainerControls, "trainers", -48}, {TrainerSpells.WeaponControls, "weapons", -40}}) do
         local controls = entry[1]
@@ -762,20 +756,9 @@ function TrainerSpells:CreateCompendiumClass(host)
     playerSpellsSubTabs.Create()
     host.classTabs = {}
     for _, entry in ipairs(playerSpellsSubTabs.views) do
-        local tab = CreateFrame("Button", nil, host, "UIPanelButtonTemplate")
-        tab:SetHeight(28)
-        tab:SetText(entry.title)
+        local tab = AzerothCompendiumAPI.CreateContentTab(host, entry.title, entry.icon, function() TrainerSpells:SetClassView(entry.view) end)
         tab.view = entry.view
-        tab.Icon = tab:CreateTexture(nil, "ARTWORK")
-        tab.Icon:SetSize(18, 18)
-        tab.Icon:SetPoint("LEFT", tab, "LEFT", 8, 0)
-        tab.Icon:SetTexture(entry.icon)
         if entry.classToken then playerSpellsSubTabs.SetClassIcon(tab.Icon, entry.classToken) end
-        tab:GetFontString():ClearAllPoints()
-        tab:GetFontString():SetPoint("LEFT", tab.Icon, "RIGHT", 6, 0)
-        tab:GetFontString():SetPoint("RIGHT", tab, "RIGHT", -8, 0)
-        tab:GetFontString():SetWordWrap(false)
-        tab:SetScript("OnClick", function() TrainerSpells:SetClassView(entry.view) end)
         tab:SetScript("OnEnter", function(sel)
             GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
             GameTooltip:SetText(entry.title)
@@ -786,8 +769,7 @@ function TrainerSpells:CreateCompendiumClass(host)
         table.insert(host.classTabs, tab)
     end
     host.listPanel = CreateFrame("Frame", nil, host)
-    host.listPanel:SetPoint("TOPLEFT", host, "TOPLEFT", 8, -82)
-    host.listPanel:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -8, 8)
+    host.listPanel:SetAllPoints(host)
     TrainerSpells:AddContentBorder(host.listPanel, host)
     host.listPanel.borderFrame:SetFrameLevel(host:GetFrameLevel() + 20)
     host:SetScript("OnSizeChanged", function()

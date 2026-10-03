@@ -356,6 +356,7 @@ function professionSubTabs.Select(mode)
     professionViewMode = mode
     if TrainerSpells_Character then TrainerSpells_Character.professionView = mode end
     professionSubTabs.Update()
+    if professionFrame.compendiumHost then TrainerSpells:PositionCompendiumProfessions() end
     TrainerSpells_ProfessionRefresh()
 end
 
@@ -390,7 +391,40 @@ function professionSubTabs.Create()
     professionSubTabs.Update()
 end
 
+function TrainerSpells:PositionCompendiumProfessions()
+    local host = professionFrame.compendiumHost
+    if not host then return end
+    local panel = professionSubTabs.panel
+    professionFrame:ClearAllPoints()
+    professionFrame:SetAllPoints(host)
+    panel:ClearAllPoints()
+    panel:SetAllPoints(host)
+    professionSubTabs.bar:Hide()
+    professionSubTabs.title:Hide()
+    professionSubTabs.desc:Hide()
+    for index, tab in ipairs(host.professionTabs) do
+        tab:SetTabSelected(tab.mode == professionViewMode)
+        AzerothCompendiumAPI.PositionContentTab(tab, host, host.professionTabs[index - 1])
+    end
+    if professionPicker.dropdown then
+        professionPicker.dropdown:ClearAllPoints()
+        professionPicker.dropdown:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 2)
+    end
+    professionSearchBox:Hide()
+    AzerothCompendiumAPI.PositionHeaderSlider(professionRowHeightSlider)
+    professionScrollBox:ClearAllPoints()
+    professionScrollBox:SetPoint("TOPLEFT", panel, "TOPLEFT", 0, -4)
+    professionScrollBox:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -20, 0)
+    professionScrollBar:ClearAllPoints()
+    professionScrollBar:SetPoint("TOPLEFT", panel, "TOPRIGHT", -16, -6)
+    professionScrollBar:SetPoint("BOTTOMLEFT", panel, "BOTTOMRIGHT", -16, 8)
+    panel.borderFrame:SetFrameLevel(professionScrollBox:GetFrameLevel() + 20)
+    professionScrollBar:SetFrameLevel(panel.borderFrame:GetFrameLevel() + 1)
+    panel:Show()
+end
+
 local function PositionProfessionFrame()
+    if professionFrame.compendiumHost then TrainerSpells:PositionCompendiumProfessions(); return end
     professionFrame:ClearAllPoints()
     if professionFrame.compendiumHost then
         professionFrame:SetScale(1)
@@ -948,6 +982,15 @@ function TrainerSpells:CreateCompendiumProfessions(host)
     host.OnSearchChanged = function() TrainerSpells_ProfessionRefresh() end
     professionPicker.Create()
     professionSubTabs.Create()
+    host.professionTabs = {}
+    for _, view in ipairs(PROFESSION_SUB_VIEWS) do
+        local tab = AzerothCompendiumAPI.CreateContentTab(host, TrainerSpells:Trans(view.title), view.icon, function() professionSubTabs.Select(view.mode) end)
+        tab.mode = view.mode
+        table.insert(host.professionTabs, tab)
+    end
+    host:SetScript("OnSizeChanged", function()
+        if professionFrame.compendiumHost == host then TrainerSpells:PositionCompendiumProfessions() end
+    end)
     if not professionsFrameHooksInstalled then
         professionSubTabs.panel:Hide()
         professionSubTabs.bar:Hide()
