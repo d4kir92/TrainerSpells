@@ -6432,3 +6432,331 @@ TrainerSpellsProfessionTrainers = {
         },
     },
 }
+
+TrainerSpellsProfessionSpecTrainers = {
+    ["Engineering"] = {
+        {
+            spells = {20219},
+            name = "Gnomish Engineer",
+            trainers = {
+                {
+                    npcID = 5518,
+                    faction = "A",
+                    names = {enUS = "Lilliam Sparkspindle", deDE = "Lilliam Spindelfunks", esES = "Lilliam Chispeje", esMX = "Lilliam Chispeje", frFR = "Lilliam Fusétincelle", koKR = "릴리암 스파크스핀들", ptBR = "Lilo Chispafuso", ruRU = "Лилиам Шпиндель", zhCN = "利廉姆·火轴", zhTW = "利廉姆·火軸"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1519, uiMapID = 84, x = 62.85, y = 31.96},
+                    },
+                },
+                {
+                    npcID = 7406,
+                    faction = "AH",
+                    names = {enUS = "Oglethorpe Obnoticus", deDE = "Glotz Widrikus", frFR = "Orguignard Odipnoticus", koKR = "오글소프 오브노티쿠스", ptBR = "Olhatorto Obnótico", ruRU = "Карлс Пропеллерз", zhCN = "奥格索普·奥布诺提斯", zhTW = "奧格索普·奧布諾提斯"},
+                    tags = {enUS = "Gnomish Engineering Trainer", deDE = "Lehrer für gnomische Ingenieurskunst", esES = "Instructor de ingeniería gnómica", esMX = "Instructor de ingeniería gnómica", frFR = "Maître des ingénieurs gnomes", koKR = "노움 전문 기계공학자", ptBR = "Treinamento de Engenharia Gnômica", ruRU = "Учитель гномского инженерного дела", zhCN = "侏儒工程学训练师", zhTW = "地精工程學訓練師"},
+                    locations = {
+                        {areaID = 5287, uiMapID = 210, x = 43.01, y = 72.22},
+                    },
+                },
+                {
+                    npcID = 7944,
+                    faction = "A",
+                    names = {enUS = "Tinkmaster Overspark", deDE = "Tüftlermeister Oberfunks", esES = "Maestro manitas Sobrechispa", esMX = "Maestro manitas Sobrechispa", frFR = "Maître-bricoleur Suprétincelle", koKR = "수석땜장이 오버스파크", ptBR = "Mestre-faz-tudo Superchispa", ruRU = "Мехмастер Замыкалец", zhCN = "工匠大师欧沃斯巴克", zhTW = "技工大師歐沃斯巴克"},
+                    tags = {enUS = "Gnomish Engineering Trainer", deDE = "Lehrer für gnomische Ingenieurskunst", esES = "Instructor de ingeniería gnómica", esMX = "Instructor de ingeniería gnómica", frFR = "Maître des ingénieurs gnomes", koKR = "노움 전문 기계공학자", ptBR = "Treinamento de Engenharia Gnômica", ruRU = "Учитель гномского инженерного дела", zhCN = "侏儒工程学训练师", zhTW = "地精工程學訓練師"},
+                    locations = {
+                        {areaID = 1537, uiMapID = 87, x = 69.55, y = 50.33},
+                    },
+                },
+                {
+                    npcID = 11017,
+                    faction = "H",
+                    names = {enUS = "Roxxik", koKR = "록시크", ruRU = "Роксик", zhCN = "罗克希克", zhTW = "羅克希克"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 85, x = 56.84, y = 56.56},
+                    },
+                },
+                {
+                    npcID = 11031,
+                    faction = "H",
+                    names = {enUS = "Franklin Lloyd", koKR = "프랭클린 로이드", ptBR = "Hiacinto Olio", ruRU = "Франклин Ллойд", zhCN = "弗兰克林·洛伊德", zhTW = "富蘭克林·洛伊德"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1497, uiMapID = 998, x = 76.12, y = 74.03},
+                    },
+                },
+                {
+                    npcID = 16667,
+                    faction = "H",
+                    names = {enUS = "Danwe", koKR = "단웨", ruRU = "Данве", zhCN = "丹文", zhTW = "丹威"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrerin", esES = "Instructora de ingeniería", esMX = "Instructora de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учительница инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 3487, uiMapID = 110, x = 76.97, y = 41.1},
+                    },
+                },
+                {
+                    npcID = 16726,
+                    faction = "A",
+                    names = {enUS = "Ockil", koKR = "옥킬", ruRU = "Оккиль", zhCN = "奥克基尔", zhTW = "奧克伊歐"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 3557, uiMapID = 103, x = 54.14, y = 92.84},
+                    },
+                },
+                {
+                    npcID = 52636,
+                    faction = "A",
+                    names = {enUS = "Tana Lentner", koKR = "타나 렌트너", ruRU = "Тана Лентнер", zhCN = "塔娜·伦特尼尔", zhTW = "塔納·蘭特納"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurskunstlehrerin", esES = "Instructora de ingeniería", esMX = "Instructora de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1657, uiMapID = 89, x = 49.62, y = 32.38},
+                    },
+                },
+                {
+                    npcID = 52651,
+                    faction = "H",
+                    names = {enUS = "Engineer Palehoof", deDE = "Ingenieur Bleichhuf", esES = "Ingeniero Pezuña Pálida", esMX = "Ingeniero Pezuña Pálida", frFR = "Ingénieur Pâle-Sabot", koKR = "기술자 페일후프", ptBR = "Engenheiro Cascoclaro", ruRU = "Инженер Бледное Копыто", zhCN = "工程师苍蹄", zhTW = "工程師白蹄"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurskunstlehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1638, uiMapID = 88, x = 36.03, y = 59.6},
+                    },
+                },
+            },
+        },
+        {
+            spells = {20222},
+            name = "Goblin Engineer",
+            trainers = {
+                {
+                    npcID = 5174,
+                    faction = "A",
+                    names = {enUS = "Springspindle Fizzlegear", deDE = "Sprungspindel Zischelgang", esES = "Muello Saltarín", esMX = "Muello Saltarín", frFR = "Fuseressort Pannengin", koKR = "스프링스핀들 피즐기어", ptBR = "Carretemola Fungrenagem", ruRU = "Пружиннер Шумотор", zhCN = "宾斯匹德", zhTW = "賓斯匹德"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1537, uiMapID = 87, x = 68.46, y = 43.54},
+                    },
+                },
+                {
+                    npcID = 5518,
+                    faction = "A",
+                    names = {enUS = "Lilliam Sparkspindle", deDE = "Lilliam Spindelfunks", esES = "Lilliam Chispeje", esMX = "Lilliam Chispeje", frFR = "Lilliam Fusétincelle", koKR = "릴리암 스파크스핀들", ptBR = "Lilo Chispafuso", ruRU = "Лилиам Шпиндель", zhCN = "利廉姆·火轴", zhTW = "利廉姆·火軸"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1519, uiMapID = 84, x = 62.85, y = 31.96},
+                    },
+                },
+                {
+                    npcID = 11017,
+                    faction = "H",
+                    names = {enUS = "Roxxik", koKR = "록시크", ruRU = "Роксик", zhCN = "罗克希克", zhTW = "羅克希克"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 85, x = 56.84, y = 56.56},
+                    },
+                },
+                {
+                    npcID = 11031,
+                    faction = "H",
+                    names = {enUS = "Franklin Lloyd", koKR = "프랭클린 로이드", ptBR = "Hiacinto Olio", ruRU = "Франклин Ллойд", zhCN = "弗兰克林·洛伊德", zhTW = "富蘭克林·洛伊德"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1497, uiMapID = 998, x = 76.12, y = 74.03},
+                    },
+                },
+                {
+                    npcID = 16667,
+                    faction = "H",
+                    names = {enUS = "Danwe", koKR = "단웨", ruRU = "Данве", zhCN = "丹文", zhTW = "丹威"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrerin", esES = "Instructora de ingeniería", esMX = "Instructora de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учительница инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 3487, uiMapID = 110, x = 76.97, y = 41.1},
+                    },
+                },
+                {
+                    npcID = 16726,
+                    faction = "A",
+                    names = {enUS = "Ockil", koKR = "옥킬", ruRU = "Оккиль", zhCN = "奥克基尔", zhTW = "奧克伊歐"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurslehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 3557, uiMapID = 103, x = 54.14, y = 92.84},
+                    },
+                },
+                {
+                    npcID = 52636,
+                    faction = "A",
+                    names = {enUS = "Tana Lentner", koKR = "타나 렌트너", ruRU = "Тана Лентнер", zhCN = "塔娜·伦特尼尔", zhTW = "塔納·蘭特納"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurskunstlehrerin", esES = "Instructora de ingeniería", esMX = "Instructora de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1657, uiMapID = 89, x = 49.62, y = 32.38},
+                    },
+                },
+                {
+                    npcID = 52651,
+                    faction = "H",
+                    names = {enUS = "Engineer Palehoof", deDE = "Ingenieur Bleichhuf", esES = "Ingeniero Pezuña Pálida", esMX = "Ingeniero Pezuña Pálida", frFR = "Ingénieur Pâle-Sabot", koKR = "기술자 페일후프", ptBR = "Engenheiro Cascoclaro", ruRU = "Инженер Бледное Копыто", zhCN = "工程师苍蹄", zhTW = "工程師白蹄"},
+                    tags = {enUS = "Engineering Trainer", deDE = "Ingenieurskunstlehrer", esES = "Instructor de ingeniería", esMX = "Instructor de ingeniería", frFR = "Maître des ingénieurs", koKR = "전문 기계공학자", ptBR = "Treinamento de Engenharia", ruRU = "Учитель инженерного дела", zhCN = "工程学训练师", zhTW = "工程學訓練師"},
+                    locations = {
+                        {areaID = 1638, uiMapID = 88, x = 36.03, y = 59.6},
+                    },
+                },
+            },
+        },
+    },
+    ["Alchemy"] = {
+        {
+            spells = {28677},
+            name = "Elixir Master",
+            trainers = {
+                {
+                    npcID = 3009,
+                    faction = "H",
+                    names = {enUS = "Bena Winterhoof", deDE = "Bena Winterhuf", esES = "Bena Pezuña Invernal", esMX = "Bena Pezuña Invernal", frFR = "Bena Sabot-d’Hiver", koKR = "베나 윈터후프", ptBR = "Bena Casco Invernal", ruRU = "Бена Заиндевевшее Копыто", zhCN = "本娜·冰蹄", zhTW = "貝娜·冬蹄"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1638, uiMapID = 88, x = 46.62, y = 33.17},
+                    },
+                },
+                {
+                    npcID = 3347,
+                    faction = "H",
+                    names = {enUS = "Yelmak", koKR = "옐마크", ruRU = "Йелмак", zhCN = "耶尔玛克", zhTW = "耶爾瑪克"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 85, x = 54.87, y = 45.13},
+                    },
+                },
+                {
+                    npcID = 4160,
+                    faction = "A",
+                    names = {enUS = "Ainethil", koKR = "에이네실", ruRU = "Айнетиль", zhCN = "安尼希尔", zhTW = "安尼希爾"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1657, uiMapID = 89, x = 53.91, y = 38.52},
+                    },
+                },
+                {
+                    npcID = 4611,
+                    faction = "H",
+                    names = {enUS = "Doctor Herbert Halsey", deDE = "Doktor Herbert Halsey", frFR = "Docteur Herbert Halsey", koKR = "학자 허버트 핼시", ptBR = "Doutor Herberto Vianna", ruRU = "Доктор Герберт Галси", zhCN = "赫伯特·哈尔希医生", zhTW = "赫伯特·哈爾希醫生"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1497, uiMapID = 998, x = 47.77, y = 73.34},
+                    },
+                },
+                {
+                    npcID = 5177,
+                    faction = "A",
+                    names = {enUS = "Tally Berryfizz", deDE = "Tally Brausefitz", esES = "Tally Burbubaya", esMX = "Tally Burbubaya", frFR = "Tally Baiedesbulles", koKR = "탈리 베리피즈", ptBR = "Altina Frisamora", ruRU = "Талли Гонобобельзз", zhCN = "塔雷·浆泡", zhTW = "塔利·漿泡"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1537, uiMapID = 87, x = 66.62, y = 55.69},
+                    },
+                },
+                {
+                    npcID = 5499,
+                    faction = "A",
+                    names = {enUS = "Lilyssia Nightbreeze", deDE = "Lilyssia Nachtbrise", esES = "Lilyssia Brisa Nocturna", esMX = "Lilyssia Brisa Nocturna", frFR = "Lilyssia Noctebrise", koKR = "릴리시아 나이트브리즈", ptBR = "Lilyssa Umbrísia", ruRU = "Лилиссия Ночной Бриз", zhCN = "莉琳希亚·夜风", zhTW = "莉琳希亞·夜風"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1519, uiMapID = 84, x = 55.66, y = 86.09},
+                    },
+                },
+                {
+                    npcID = 16642,
+                    faction = "H",
+                    names = {enUS = "Camberon", koKR = "캠베론", ruRU = "Камберон", zhCN = "卡博隆", zhTW = "坎伯朗"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 3487, uiMapID = 110, x = 66.73, y = 16.78},
+                    },
+                },
+                {
+                    npcID = 16723,
+                    faction = "A",
+                    names = {enUS = "Lucc", koKR = "루크", ruRU = "Луск", zhCN = "鲁克", zhTW = "路克"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 3557, uiMapID = 103, x = 27.88, y = 60.65},
+                    },
+                },
+            },
+        },
+        {
+            spells = {28672},
+            name = "Transmutation Master",
+            trainers = {
+                {
+                    npcID = 3009,
+                    faction = "H",
+                    names = {enUS = "Bena Winterhoof", deDE = "Bena Winterhuf", esES = "Bena Pezuña Invernal", esMX = "Bena Pezuña Invernal", frFR = "Bena Sabot-d’Hiver", koKR = "베나 윈터후프", ptBR = "Bena Casco Invernal", ruRU = "Бена Заиндевевшее Копыто", zhCN = "本娜·冰蹄", zhTW = "貝娜·冬蹄"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1638, uiMapID = 88, x = 46.62, y = 33.17},
+                    },
+                },
+                {
+                    npcID = 3347,
+                    faction = "H",
+                    names = {enUS = "Yelmak", koKR = "옐마크", ruRU = "Йелмак", zhCN = "耶尔玛克", zhTW = "耶爾瑪克"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 85, x = 54.87, y = 45.13},
+                    },
+                },
+                {
+                    npcID = 4160,
+                    faction = "A",
+                    names = {enUS = "Ainethil", koKR = "에이네실", ruRU = "Айнетиль", zhCN = "安尼希尔", zhTW = "安尼希爾"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1657, uiMapID = 89, x = 53.91, y = 38.52},
+                    },
+                },
+                {
+                    npcID = 4611,
+                    faction = "H",
+                    names = {enUS = "Doctor Herbert Halsey", deDE = "Doktor Herbert Halsey", frFR = "Docteur Herbert Halsey", koKR = "학자 허버트 핼시", ptBR = "Doutor Herberto Vianna", ruRU = "Доктор Герберт Галси", zhCN = "赫伯特·哈尔希医生", zhTW = "赫伯特·哈爾希醫生"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1497, uiMapID = 998, x = 47.77, y = 73.34},
+                    },
+                },
+                {
+                    npcID = 5177,
+                    faction = "A",
+                    names = {enUS = "Tally Berryfizz", deDE = "Tally Brausefitz", esES = "Tally Burbubaya", esMX = "Tally Burbubaya", frFR = "Tally Baiedesbulles", koKR = "탈리 베리피즈", ptBR = "Altina Frisamora", ruRU = "Талли Гонобобельзз", zhCN = "塔雷·浆泡", zhTW = "塔利·漿泡"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1537, uiMapID = 87, x = 66.62, y = 55.69},
+                    },
+                },
+                {
+                    npcID = 5499,
+                    faction = "A",
+                    names = {enUS = "Lilyssia Nightbreeze", deDE = "Lilyssia Nachtbrise", esES = "Lilyssia Brisa Nocturna", esMX = "Lilyssia Brisa Nocturna", frFR = "Lilyssia Noctebrise", koKR = "릴리시아 나이트브리즈", ptBR = "Lilyssa Umbrísia", ruRU = "Лилиссия Ночной Бриз", zhCN = "莉琳希亚·夜风", zhTW = "莉琳希亞·夜風"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrerin", esES = "Instructora de alquimia", esMX = "Instructora de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учительница алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 1519, uiMapID = 84, x = 55.66, y = 86.09},
+                    },
+                },
+                {
+                    npcID = 16642,
+                    faction = "H",
+                    names = {enUS = "Camberon", koKR = "캠베론", ruRU = "Камберон", zhCN = "卡博隆", zhTW = "坎伯朗"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 3487, uiMapID = 110, x = 66.73, y = 16.78},
+                    },
+                },
+                {
+                    npcID = 16723,
+                    faction = "A",
+                    names = {enUS = "Lucc", koKR = "루크", ruRU = "Луск", zhCN = "鲁克", zhTW = "路克"},
+                    tags = {enUS = "Alchemy Trainer", deDE = "Alchemielehrer", esES = "Instructor de alquimia", esMX = "Instructor de alquimia", frFR = "Maître des alchimistes", koKR = "전문 연금술사", ptBR = "Treinamento de Alquimia", ruRU = "Учитель алхимии", zhCN = "炼金术训练师", zhTW = "鍊金術訓練師"},
+                    locations = {
+                        {areaID = 3557, uiMapID = 103, x = 27.88, y = 60.65},
+                    },
+                },
+            },
+        },
+    },
+}

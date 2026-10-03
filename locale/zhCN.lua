@@ -100,3 +100,4 @@ TrainerSpells:AddTrans("zhCN", "LID_PROFTRAINER_RANKHEADER", "%s  ·  技能 %d�
 TrainerSpells:AddTrans("zhCN", "LID_NEARESTPROFTRAINER", "最近的训练师：%s")
 TrainerSpells:AddTrans("zhCN", "LID_NEARESTPROFTRAINER_DESC", "在当前大陆上为教授此等级的最近训练师设置路径点。")
 TrainerSpells:AddTrans("zhCN", "LID_NOPROFTRAINER", "在此大陆上未找到教授此等级的训练师。")
+TrainerSpells:AddTrans("zhCN", "LID_PROFTRAINER_SPECHEADER", "%s  ·  专精")

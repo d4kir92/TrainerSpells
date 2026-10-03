@@ -100,3 +100,4 @@ TrainerSpells:AddTrans("koKR", "LID_PROFTRAINER_RANKHEADER", "%s  ·  숙련도 
 TrainerSpells:AddTrans("koKR", "LID_NEARESTPROFTRAINER", "가장 가까운 전문기술 상급자: %s")
 TrainerSpells:AddTrans("koKR", "LID_NEARESTPROFTRAINER_DESC", "현재 대륙에서 이 등급을 가르치는 가장 가까운 상급자에게 위치 표시를 설정합니다.")
 TrainerSpells:AddTrans("koKR", "LID_NOPROFTRAINER", "이 대륙에서 이 등급의 상급자를 찾을 수 없습니다.")
+TrainerSpells:AddTrans("koKR", "LID_PROFTRAINER_SPECHEADER", "%s  ·  전문화")

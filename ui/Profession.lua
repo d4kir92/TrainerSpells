@@ -335,6 +335,38 @@ function professionPicker.AddTrainerItems(items, professionKey, trainers, search
             end
         end
     end
+    professionPicker.AddSpecTrainerItems(items, professionKey, searchText, professionIcon)
+end
+
+function professionPicker.GetSpecName(spec)
+    for _, spellID in ipairs(spec.spells) do
+        local spellInfo = C_Spell.GetSpellInfo(spellID)
+        if spellInfo and spellInfo.name and spellInfo.name ~= "" then return spellInfo.name end
+    end
+    return spec.name
+end
+
+function professionPicker.AddSpecTrainerItems(items, professionKey, searchText, professionIcon)
+    local specs = TrainerSpellsProfessionSpecTrainers and TrainerSpellsProfessionSpecTrainers[professionKey]
+    if not specs then return end
+    for _, spec in ipairs(specs) do
+        local entries = TrainerSpells:GetTrainerLocationEntries(spec.trainers, searchText)
+        if #entries > 0 then
+            local specName = professionPicker.GetSpecName(spec)
+            local groupPrefix = "profession_trainer_" .. professionKey .. "_spec" .. spec.spells[1] .. "_"
+            TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_PROFTRAINER_SPECHEADER"):format(specName), "|cffff8000", nil, groupPrefix .. "group")
+            if not TrainerSpells:IsGroupCollapsed(groupPrefix .. "group") then
+                local function FindNearest()
+                    return TrainerSpells.TrainerLocations.FindNearest(TrainerSpells:GetTrainerLocationEntries(spec.trainers, "", true))
+                end
+                table.insert(items, {isNearestTrainer = true, rowDepth = 1, rankName = specName, icon = professionIcon, nearest = FindNearest(), findNearest = FindNearest})
+                for _, entry in ipairs(entries) do
+                    if not entry.displayID then entry.icon = professionIcon end
+                end
+                TrainerSpells:AddTrainerLocationItems(items, entries, groupPrefix, 1)
+            end
+        end
+    end
 end
 
 TrainerSpells.TrainerLocations.AddResolveListener(function()

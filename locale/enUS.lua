@@ -100,3 +100,4 @@ TrainerSpells:AddTrans("enUS", "LID_PROFTRAINER_RANKHEADER", "%s  ·  Skill %d�
 TrainerSpells:AddTrans("enUS", "LID_NEARESTPROFTRAINER", "Nearest %s Trainer")
 TrainerSpells:AddTrans("enUS", "LID_NEARESTPROFTRAINER_DESC", "Sets a waypoint to the nearest trainer on your current continent who teaches this rank.")
 TrainerSpells:AddTrans("enUS", "LID_NOPROFTRAINER", "No trainer for this rank found on this continent.")
+TrainerSpells:AddTrans("enUS", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Specialization")

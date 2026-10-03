@@ -2835,3 +2835,360 @@ TrainerSpellsProfessionTrainers = {
         },
     },
 }
+
+TrainerSpellsProfessionSpecTrainers = {
+    ["Leatherworking"] = {
+        {
+            spells = {10656},
+            name = "Dragonscale Leatherworking",
+            trainers = {
+                {
+                    npcID = 7866,
+                    faction = "A",
+                    names = {enUS = "Peter Galen", koKR = "피터 갈렌", ptBR = "Pedro Galho", ruRU = "Питер Гален", zhCN = "彼得·加林", zhTW = "彼得·加林"},
+                    tags = {enUS = "Dragonscale Leatherworking Trainer", deDE = "Drachenlederverarbeitungslehrer", esES = "Instructor de peletería de escamas de dragón", esMX = "Peletero dragontino maestro", frFR = "Maître des travailleurs du cuir d'écailles de dragon", koKR = "전문 용비늘 가죽세공인", ptBR = "Treinamento de Couraria Dragônica", ruRU = "Учитель кожевничества: драконьи шкуры", zhCN = "龙鳞制皮训练师", zhTW = "龍鱗製皮訓練師"},
+                    locations = {
+                        {areaID = 16, uiMapID = 1447, x = 37.59, y = 65.42},
+                    },
+                },
+                {
+                    npcID = 7867,
+                    faction = "H",
+                    names = {enUS = "Thorkaf Dragoneye", deDE = "Thorkaf Drachenaug", esES = "Thorkaf Dragonojo", esMX = "Thorkaf Dragonojo", frFR = "Thorkaf Oeil-de-dragon", koKR = "토르카프 드래곤아이", ptBR = "Thorkaf Olho-de-tigre", ruRU = "Торкаф Око Дракона", zhCN = "索卡夫·龙眼", zhTW = "索卡夫·龍眼"},
+                    tags = {enUS = "Dragonscale Leatherworking Trainer", deDE = "Drachenlederverarbeitungslehrer", esES = "Instructor de peletería de escamas de dragón", esMX = "Maestro Peletero dragontino", frFR = "Maître des travailleurs du cuir d'écailles de dragon", koKR = "전문 용비늘 가죽세공인", ptBR = "Treinamento de Couraria Dragônica", ruRU = "Учитель кожевничества: драконьи шкуры", zhCN = "龙鳞制皮训练师", zhTW = "龍鱗製皮訓練師"},
+                    locations = {
+                        {areaID = 3, uiMapID = 1418, x = 62.7, y = 57.4},
+                    },
+                },
+            },
+        },
+        {
+            spells = {10658},
+            name = "Elemental Leatherworking",
+            trainers = {
+                {
+                    npcID = 7868,
+                    faction = "A",
+                    names = {enUS = "Sarah Tanner", deDE = "Sarah Gerber", esES = "Sarah Peletero", esMX = "Sarah Peletera", koKR = "사라 터너", ptBR = "Sara Correia", ruRU = "Сара Дубильщица", zhCN = "萨拉·坦尼", zhTW = "薩拉·坦尼"},
+                    tags = {enUS = "Elemental Leatherworking Trainer", deDE = "Elementarlederverarbeitungslehrerin", esES = "Instructora de peletería elemental", esMX = "Peletera elemental maestra", frFR = "Maître des travailleurs du cuir élémentaire", koKR = "전문 원소 가죽세공인", ptBR = "Treinamento de Couraria Elemental", ruRU = "Учитель кожевничества: сила стихий", zhCN = "元素制皮训练师", zhTW = "元素製皮訓練師"},
+                    locations = {
+                        {areaID = 51, uiMapID = 1427, x = 63.56, y = 75.97},
+                    },
+                },
+                {
+                    npcID = 7869,
+                    faction = "H",
+                    names = {enUS = "Brumn Winterhoof", deDE = "Brumn Winterhuf", esES = "Brumm Pezuña Invernal", esMX = "Brumm Pezuña Invernal", frFR = "Brumn Sabot-d'hiver", koKR = "부룸 윈터후프", ptBR = "Brum Casco Invernal", ruRU = "Брумн Заиндевевшее Копыто", zhCN = "布鲁姆·白蹄", zhTW = "布魯姆·冰蹄"},
+                    tags = {enUS = "Elemental Leatherworking Trainer", deDE = "Elementarlederverarbeitungslehrer", esES = "Instructor de peletería elemental", esMX = "Peletero elemental maestro", frFR = "Maître des travailleurs du cuir élémentaire", koKR = "전문 원소 가죽세공인", ptBR = "Treinamento de Couraria Elemental", ruRU = "Учитель кожевничества: сила стихий", zhCN = "元素制皮训练师", zhTW = "元素製皮訓練師"},
+                    locations = {
+                        {areaID = 45, uiMapID = 1417, x = 28.27, y = 45.09},
+                    },
+                },
+            },
+        },
+        {
+            spells = {10660},
+            name = "Tribal Leatherworking",
+            trainers = {
+                {
+                    npcID = 7870,
+                    faction = "A",
+                    names = {enUS = "Caryssia Moonhunter", deDE = "Caryssia Jägermond", esES = "Caryssia Cazaluna", esMX = "Caryssia Cazaluna", frFR = "Caryssia Chasselune", koKR = "카리시아 문헌터", ptBR = "Caryssia Caçaluna", ruRU = "Кариссия Лунная Охотница", zhCN = "凯雷希亚·猎月", zhTW = "凱雷希亞·獵月"},
+                    tags = {enUS = "Tribal Leatherworking Trainer", deDE = "Stammeslederverarbeitungslehrerin", esES = "Instructora de peletería tribal", esMX = "Instructor de Peletería tribal", frFR = "Maître des travailleurs du cuir tribal", koKR = "전문 전통 가죽세공인", ptBR = "Treinamento de Couraria Tribal", ruRU = "Учитель кожевничества: традиции предков", zhCN = "部族制皮训练师", zhTW = "部族製皮訓練師"},
+                    locations = {
+                        {areaID = 357, uiMapID = 1444, x = 89.42, y = 46.55},
+                    },
+                },
+                {
+                    npcID = 7871,
+                    faction = "H",
+                    names = {enUS = "Se'Jib", koKR = "세지브", ruRU = "Сех'Джиб", zhCN = "瑟伊布", zhTW = "瑟伊布"},
+                    tags = {enUS = "Tribal Leatherworking Trainer", deDE = "Stammeslederverarbeitungslehrer", esES = "Instructor de peletería tribal", esMX = "Maestro Peletero tribal", frFR = "Maître des travailleurs du cuir tribal", koKR = "전문 전통 가죽세공인", ptBR = "Treinamento de Couraria Tribal", ruRU = "Учитель кожевничества: традиции предков", zhCN = "部族制皮训练师", zhTW = "部族製皮訓練師"},
+                    locations = {
+                        {areaID = 33, uiMapID = 1434, x = 36.55, y = 34.09},
+                    },
+                },
+            },
+        },
+    },
+    ["Blacksmithing"] = {
+        {
+            spells = {9788},
+            name = "Armorsmith",
+            trainers = {
+                {
+                    npcID = 5164,
+                    faction = "A",
+                    names = {enUS = "Grumnus Steelshaper", deDE = "Grumnus Scharfstahl", esES = "Grumnus Forjacero", esMX = "Grumnus Forjacero", frFR = "Grumnus Sculptacier", koKR = "그룸누스 스틸셰이퍼", ptBR = "Grumnus Mold'aço", ruRU = "Грумнус Сталевар", zhCN = "格鲁努斯·削钢", zhTW = "格魯努斯·削鋼"},
+                    tags = {enUS = "Armorsmith Trainer", deDE = "Rüstungsschmiedelehrer", esES = "Instructor forjador de armaduras", esMX = "Artesano armero", frFR = "Maître des fabricants d'armure", koKR = "전문 방어구 제작자", ptBR = "Treinamento de Ferraria de Armadura", ruRU = "Учитель бронников", zhCN = "护甲锻造训练师", zhTW = "護甲鍛造訓練師"},
+                    locations = {
+                        {areaID = 1537, uiMapID = 1455, x = 49.96, y = 42.81},
+                    },
+                },
+                {
+                    npcID = 7230,
+                    faction = "H",
+                    names = {enUS = "Shayis Steelfury", deDE = "Shayis Stahlzorn", esES = "Shayis Furiacerada", esMX = "Shayis Furiacerada", frFR = "Shayis Furie-d'acier", koKR = "샤이스 스틸퓨리", ptBR = "Shayis Furiácero", ruRU = "Шайс Холодная Ярость", zhCN = "莎伊斯·钢怒", zhTW = "莎伊斯·鋼怒"},
+                    tags = {enUS = "Armorsmith Trainer", deDE = "Rüstungsschmiedelehrerin", esES = "Instructora forjadora de armaduras", esMX = "Forjadora de armaduras", frFR = "Maître des fabricants d'armure", koKR = "전문 방어구 제작자", ptBR = "Treinamento de Ferraria de Armadura", ruRU = "Учитель бронников", zhCN = "护甲锻造训练师", zhTW = "護甲鍛造訓練師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 1454, x = 80.24, y = 23.44},
+                    },
+                },
+                {
+                    npcID = 11177,
+                    faction = "H",
+                    names = {enUS = "Okothos Ironrager", deDE = "Okothos Eisenwüter", esES = "Okothos Ferrofurecedor", esMX = "Okothos Ira de Hierro", frFR = "Okothos Ferrenrage", koKR = "오코토스 아이언레이저", ptBR = "Okothos Furiferro", ruRU = "Окофус Жарбулат", zhCN = "奥克索斯·铁怒", zhTW = "奧克索斯·鐵怒"},
+                    tags = {enUS = "Armorsmith", deDE = "Rüstungsschmied", esES = "Forjador de armaduras", esMX = "Forjador de armaduras", frFR = "Fabricant d'armures", koKR = "방어구 제작자", ptBR = "Ferreiro de Armaduras", ruRU = "Бронник", zhCN = "护甲锻造师", zhTW = "護甲鍛造師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 1454, x = 79.8, y = 24.06},
+                    },
+                },
+                {
+                    npcID = 20125,
+                    faction = "AH",
+                    names = {enUS = "Zula Slagfury", deDE = "Zula Schmelzzorn", esES = "Zula Furiascoria", frFR = "Zula Fontefurie", koKR = "줄라 슬래그퓨리", ptBR = "Zula Furiana", ruRU = "Зула Окалина", zhCN = "祖拉·熔怒", zhTW = "祖拉·渣怒"},
+                    tags = {enUS = "Armorsmith Trainer", deDE = "Rüstungsschmiedelehrerin", esES = "Instructora forjadora de armaduras", frFR = "Maître des fabricants d'armure", koKR = "전문 방어구 제작자", ptBR = "Treinamento de Ferraria de Armadura", ruRU = "Учитель бронников", zhCN = "护甲锻造训练师", zhTW = "護甲鍛造訓練師"},
+                    locations = {
+                        {areaID = 3703, uiMapID = 1955, x = 69.82, y = 41.98},
+                    },
+                },
+            },
+        },
+        {
+            spells = {9787},
+            name = "Weaponsmith",
+            trainers = {
+                {
+                    npcID = 7231,
+                    faction = "H",
+                    names = {enUS = "Kelgruk Bloodaxe", deDE = "Kelgruk Blutaxt", esES = "Kelgruk Hacha de Sangre", esMX = "Kelgruk Hacha de Sangre", frFR = "Kelgruk Hache-sanglante", koKR = "켈그룩 블러드액스", ptBR = "Kelgruk Machado Sangrento", ruRU = "Келгрук Кровавый Топор", zhCN = "克尔格鲁克·血斧", zhTW = "克爾格魯克·血斧"},
+                    tags = {enUS = "Weaponsmith Trainer", deDE = "Waffenschmiedelehrer", esES = "Instructor forjador de armas", esMX = "Artesano de armas", frFR = "Maître des fabricants d'armes", koKR = "전문 무기제작자", ptBR = "Treinamento de Armaria", ruRU = "Учитель оружейного дела", zhCN = "武器铸造训练师", zhTW = "武器鍛造訓練師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 1454, x = 81.95, y = 18.02},
+                    },
+                },
+                {
+                    npcID = 7232,
+                    faction = "A",
+                    names = {enUS = "Borgus Steelhand", deDE = "Borgus Stahlhand", esES = "Borgus Mano de Acero", esMX = "Borgus Mano de Acero", frFR = "Borgus Main-d'acier", koKR = "보르구스 스틸핸드", ptBR = "Borgus Manácero", ruRU = "Боргус Сталерук", zhCN = "博古斯·钢拳", zhTW = "博古斯·鋼拳"},
+                    tags = {enUS = "Weaponsmith Trainer", deDE = "Waffenschmiedelehrer", esES = "Instructor forjador de armas", esMX = "Artesano de armas", frFR = "Maître des fabricants d'armes", koKR = "전문 무기제작자", ptBR = "Treinamento de Armaria", ruRU = "Учитель оружейного дела", zhCN = "武器铸造训练师", zhTW = "武器鍛造訓練師"},
+                    locations = {
+                        {areaID = 1519, uiMapID = 1453, x = 51.34, y = 12.7},
+                    },
+                },
+                {
+                    npcID = 11146,
+                    faction = "A",
+                    names = {enUS = "Ironus Coldsteel", deDE = "Ironus Froststahl", esES = "Ironus Acero Frío", esMX = "Ironus Acero Frío", frFR = "Ferronus Acier-froid", koKR = "이로누스 콜드스틸", ptBR = "Ironus Açofrio", ruRU = "Железнус Хладосталь", zhCN = "埃隆努斯·冷钢", zhTW = "埃隆努斯·冷鋼"},
+                    tags = {enUS = "Weaponsmith Trainer", deDE = "Waffenschmiedelehrer", esES = "Instructor forjador de armas", esMX = "Artesano de armas especiales", frFR = "Maître des fabricants d'armes", koKR = "전문 무기제작자", ptBR = "Treinamento de Armaria", ruRU = "Учитель оружейного дела", zhCN = "武器铸造训练师", zhTW = "武器鍛造訓練師"},
+                    locations = {
+                        {areaID = 1537, uiMapID = 1455, x = 50.33, y = 43.56},
+                    },
+                },
+                {
+                    npcID = 11178,
+                    faction = "H",
+                    names = {enUS = "Borgosh Corebender", deDE = "Borgosh Glutformer", esES = "Borgosh Ramagma", esMX = "Borgosh Ramagma", frFR = "Borgosh Tord-noyau", koKR = "보르고쉬 코어벤더", ptBR = "Borgosh Dobranúcleo", ruRU = "Боргош Сгибатель", zhCN = "伯古什", zhTW = "伯古西"},
+                    tags = {enUS = "Weaponsmith", deDE = "Waffenschmied", esES = "Forjador de armas", esMX = "Forjador de armas", frFR = "Fabricant d'armes", koKR = "무기제작자", ptBR = "Forja de Armas", ruRU = "Оружейник", zhCN = "武器锻造师", zhTW = "武器鑄造師"},
+                    locations = {
+                        {areaID = 1637, uiMapID = 1454, x = 79.41, y = 23.74},
+                    },
+                },
+                {
+                    npcID = 20124,
+                    faction = "AH",
+                    names = {enUS = "Kradu Grimblade", deDE = "Kradu Grimmklinge", esES = "Kradu Filosiniestro", frFR = "Kradu Lame-sinistre", koKR = "크라두 그림블레이드", ptBR = "Kradu Laminatroz", ruRU = "Крадью Мрачный Клинок", zhCN = "克拉度·利刃", zhTW = "克拉杜·恐懼之刃"},
+                    tags = {enUS = "Weaponsmith Trainer", deDE = "Waffenschmiedelehrer", esES = "Instructor forjador de armas", frFR = "Maître des fabricants d'armes", koKR = "전문 무기제작자", ptBR = "Treinamento de Armaria", ruRU = "Учитель оружейного дела", zhCN = "武器铸造训练师", zhTW = "武器鍛造訓練師"},
+                    locations = {
+                        {areaID = 3703, uiMapID = 1955, x = 69.31, y = 43.24},
+                    },
+                },
+            },
+        },
+        {
+            spells = {17040, 364167},
+            name = "Master Hammersmith",
+            trainers = {
+                {
+                    npcID = 11191,
+                    faction = "AH",
+                    names = {enUS = "Lilith the Lithe", deDE = "Lilith die Liebliche", esES = "Lilith la Pequeña", esMX = "Lilith la Ágil", frFR = "Lilith l'Agile", koKR = "호리호리한 릴리스", ptBR = "Lilith, a Ligeira", ruRU = "Лилит Гибкая", zhCN = "轻盈的莉莉丝", zhTW = "輕盈的莉莉絲"},
+                    locations = {
+                        {areaID = 618, uiMapID = 1452, x = 61.33, y = 37.13},
+                    },
+                },
+            },
+        },
+        {
+            spells = {17041, 364165},
+            name = "Master Axesmith",
+            trainers = {
+                {
+                    npcID = 11192,
+                    faction = "AH",
+                    names = {enUS = "Kilram", koKR = "킬램", ruRU = "Килрам", zhCN = "基尔拉姆", zhTW = "基爾拉姆"},
+                    locations = {
+                        {areaID = 618, uiMapID = 1452, x = 61.3, y = 37.07},
+                    },
+                },
+            },
+        },
+        {
+            spells = {17039, 364164},
+            name = "Master Swordsmith",
+            trainers = {
+                {
+                    npcID = 11193,
+                    faction = "AH",
+                    names = {enUS = "Seril Scourgebane", deDE = "Seril Geißelbann", esES = "Seril Finiquiplaga", esMX = "Seril Finiquiplaga", frFR = "Seril Plaie-du-Fléau", koKR = "세릴 스컬지베인", ptBR = "Seril Flagelicida", ruRU = "Сирил Плетебой", zhCN = "亡灵杀手瑟里尔", zhTW = "亡靈殺手瑟里爾"},
+                    locations = {
+                        {areaID = 618, uiMapID = 1452, x = 61.33, y = 37.19},
+                    },
+                },
+            },
+        },
+    },
+    ["Engineering"] = {
+        {
+            spells = {20219},
+            name = "Gnomish Engineer",
+            trainers = {
+                {
+                    npcID = 7944,
+                    faction = "A",
+                    names = {enUS = "Tinkmaster Overspark", deDE = "Tüftlermeister Oberfunks", esES = "Maestro manitas Sobrechispa", esMX = "Maestro manitas Sobrechispa", frFR = "Maître-bricoleur Suprétincelle", koKR = "수석땜장이 오버스파크", ptBR = "Mestre-faz-tudo Superchispa", ruRU = "Мехмастер Замыкалец", zhCN = "工匠大师欧沃斯巴克", zhTW = "技工大師歐沃斯巴克"},
+                    tags = {enUS = "Gnomish Engineering Trainer", deDE = "Lehrer für gnomische Ingenieurskunst", esES = "Instructor de ingeniería gnómica", esMX = "Maestro ingeniero gnomo", frFR = "Maître des ingénieurs gnomes", koKR = "노움 기술자 조합장", ptBR = "Treinamento de Engenharia Gnômica", ruRU = "Учитель гномского инженерного дела", zhCN = "侏儒工程学训练师", zhTW = "地精工程學訓練師"},
+                    locations = {
+                        {areaID = 1537, uiMapID = 1455, x = 69.55, y = 50.33},
+                    },
+                },
+                {
+                    npcID = 7406,
+                    faction = "AH",
+                    names = {enUS = "Oglethorpe Obnoticus", deDE = "Glotz Widrikus", frFR = "Orguignard Odipnoticus", koKR = "오글소프 오브노티쿠스", ptBR = "Olhatorto Obnótico", ruRU = "Карлс Пропеллерз", zhCN = "奥格索普·奥布诺提斯", zhTW = "奧格索普·奧布諾提斯"},
+                    tags = {enUS = "Gnomish Engineering Trainer", deDE = "Lehrer für gnomische Ingenieurskunst", esES = "Instructor de ingeniería gnómica", esMX = "Ingeniero gnomo maestro", frFR = "Maître des ingénieurs gnomes", koKR = "노움 기술자 조합장", ptBR = "Treinamento de Engenharia Gnômica", ruRU = "Учитель гномского инженерного дела", zhCN = "侏儒工程学训练师", zhTW = "地精工程學訓練師"},
+                    locations = {
+                        {areaID = 33, uiMapID = 1434, x = 28.36, y = 76.35},
+                    },
+                },
+            },
+        },
+        {
+            spells = {20222},
+            name = "Goblin Engineer",
+            trainers = {
+                {
+                    npcID = 8126,
+                    faction = "AH",
+                    names = {enUS = "Nixx Sprocketspring", deDE = "Nixx Sprossfeder", esES = "Nixx Muellepiñón", esMX = "Nixx Muellepiñón", frFR = "Nixx Elastirouage", koKR = "닉스 스프로켓스프링", ptBR = "Nixx Molapinhão", ruRU = "Никс Шепружин", zhCN = "尼克斯·斯普克斯宾", zhTW = "尼克斯·斯普克斯賓"},
+                    tags = {enUS = "Goblin Engineering Trainer", deDE = "Lehrer für goblinsche Ingenieurskunst", esES = "Instructor de ingeniería goblin", esMX = "Ingeniero goblin maestro", frFR = "Maître des ingénieurs gobelins", koKR = "고블린 기술자 조합장", ptBR = "Treinamento de Engenharia Goblínica", ruRU = "Учитель гоблинского инженерного дела", zhCN = "地精工程学训练师", zhTW = "哥布林工程學訓練師"},
+                    locations = {
+                        {areaID = 440, uiMapID = 1446, x = 52.48, y = 27.33},
+                    },
+                },
+                {
+                    npcID = 8738,
+                    faction = "AH",
+                    names = {enUS = "Vazario Linkgrease", deDE = "Vazario Kuppelschmier", esES = "Vazario Grasenlace", esMX = "Vazario Grasenlace", frFR = "Vazario Grasmaillon", koKR = "바자리오 링크그리즈", ptBR = "Tucho Raspagraxa", ruRU = "Вазарио Цепесмаз", zhCN = "瓦萨里奥·林克格雷斯", zhTW = "瓦薩里奧·林克格雷斯"},
+                    tags = {enUS = "Goblin Engineering Trainer", deDE = "Lehrer für goblinsche Ingenieurskunst", esES = "Instructor de ingeniería goblin", esMX = "Maestro ingeniero goblin", frFR = "Maître des ingénieurs gobelins", koKR = "고블린 기술자 조합장", ptBR = "Treinamento de Engenharia Goblínica", ruRU = "Учитель гоблинского инженерного дела", zhCN = "地精工程学训练师", zhTW = "哥布林工程學訓練師"},
+                    locations = {
+                        {areaID = 17, uiMapID = 1413, x = 62.69, y = 36.25},
+                    },
+                },
+            },
+        },
+    },
+    ["Tailoring"] = {
+        {
+            spells = {26798},
+            name = "Mooncloth Tailoring",
+            trainers = {
+                {
+                    npcID = 22208,
+                    faction = "AH",
+                    names = {enUS = "Nasmara Moonsong", deDE = "Nasmara Mondweise", esES = "Nasmara Canción de Luna", frFR = "Nasmara Lunechant", koKR = "나스마라 문송", ptBR = "Nasmara Lunacanto", ruRU = "Назмара Песнь Луны", zhCN = "纳丝玛拉·月歌", zhTW = "那斯馬拉·月歌"},
+                    tags = {enUS = "Mooncloth Specialist", deDE = "Mondstoffspezialistin", esES = "Especialista en tela lunar", frFR = "Spécialiste de l'étoffe lunaire", koKR = "달빛매듭 전문가", ptBR = "Especialista em Lunatrama", ruRU = "Специалистка по луноткани", zhCN = "月布大师", zhTW = "月布專家"},
+                    locations = {
+                        {areaID = 3703, uiMapID = 1955, x = 66.55, y = 69.33},
+                    },
+                },
+            },
+        },
+        {
+            spells = {26801},
+            name = "Shadoweave Tailoring",
+            trainers = {
+                {
+                    npcID = 22212,
+                    faction = "AH",
+                    names = {enUS = "Andrion Darkspinner", deDE = "Andrion Dunkelweber", esES = "Andrion Giroscuro", frFR = "Andrion Sombrefileur", koKR = "안드리온 다크스피너", ptBR = "Andrion Tecetrevas", ruRU = "Андрион Темнопряд", zhCN = "安迪恩·达克斯宾", zhTW = "安德利恩·暗紋紡織者"},
+                    tags = {enUS = "Shadoweave Specialist", deDE = "Schattenzwirnspezialist", esES = "Especialista en tejido de sombra", frFR = "Spécialiste du tisse-ombre", koKR = "그림자매듭 재봉전문가", ptBR = "Especialista Umbratrama", ruRU = "Специалист по тенеткани", zhCN = "暗纹大师", zhTW = "影紋專家"},
+                    locations = {
+                        {areaID = 3703, uiMapID = 1955, x = 66.81, y = 68.13},
+                    },
+                },
+            },
+        },
+        {
+            spells = {26797},
+            name = "Spellfire Tailoring",
+            trainers = {
+                {
+                    npcID = 22213,
+                    faction = "AH",
+                    names = {enUS = "Gidge Spellweaver", deDE = "Gidge Spruchwirker", esES = "Gidge Tejehechizos", frFR = "Gidge Tisse-sort", koKR = "기지 스펠위버", ptBR = "Gígia Tecencantos", ruRU = "Гиджа Чароплетка", zhCN = "金吉·斯比维尔", zhTW = "蓋吉·術法編織者"},
+                    tags = {enUS = "Spellfire Specialist", deDE = "Zauberfeuerspezialistin", esES = "Especialista en fuego de hechizo", frFR = "Spécialiste du feu-sorcier", koKR = "마법불꽃 전문가", ptBR = "Especialista em Fogo Místico", ruRU = "Специалист по чароткани", zhCN = "魔焰大师", zhTW = "魔焰專家"},
+                    locations = {
+                        {areaID = 3703, uiMapID = 1955, x = 66.82, y = 68.75},
+                    },
+                },
+            },
+        },
+    },
+    ["Alchemy"] = {
+        {
+            spells = {28675},
+            name = "Potion Master",
+            trainers = {
+                {
+                    npcID = 17909,
+                    faction = "AH",
+                    names = {enUS = "Lauranna Thar'well", koKR = "라우란나 사르웰", ptBR = "Laurana Thar'well", ruRU = "Лоранна Тар'велл", zhCN = "劳兰娜·萨维尔", zhTW = "羅安娜·薩威爾"},
+                    tags = {enUS = "Expedition Cataloguer", deDE = "Expeditionskatalogisiererin", esES = "Catalogadora de la expedición", frFR = "Nomenclatrice de l'expédition", koKR = "원정대 분류학자", ptBR = "Catalogadora da Expedição", ruRU = "Каталогизатор Экспедиции", zhCN = "远征队编目者", zhTW = "遠征隊登記員"},
+                    locations = {
+                        {areaID = 3521, uiMapID = 1946, x = 80.32, y = 64.17},
+                    },
+                },
+            },
+        },
+        {
+            spells = {28677},
+            name = "Elixir Master",
+            trainers = {
+                {
+                    npcID = 19052,
+                    faction = "AH",
+                    names = {enUS = "Lorokeem", koKR = "로로킴", ruRU = "Лороким", zhCN = "罗罗基姆", zhTW = "羅洛其恩"},
+                    tags = {enUS = "Master Alchemy Trainer", deDE = "Alchimiemeisterlehrer", esES = "Instructor maestro de alquimia", frFR = "Grand maître des alchimistes", koKR = "연금술의 대가", ptBR = "Mestre Treinador de Alquimia", ruRU = "Мастер алхимии", zhCN = "宗师级炼金术训练师", zhTW = "大師級鍊金術訓練師"},
+                    locations = {
+                        {areaID = 3703, uiMapID = 1955, x = 45.59, y = 21.49},
+                    },
+                },
+            },
+        },
+        {
+            spells = {28672},
+            name = "Transmutation Master",
+            trainers = {
+                {
+                    npcID = 22427,
+                    faction = "AH",
+                    names = {enUS = "Zarevhi", koKR = "자레브히", ruRU = "Заревхи", zhCN = "萨雷维", zhTW = "薩爾菲"},
+                    locations = {
+                        {areaID = 3523, uiMapID = 1953, x = 44.12, y = 36.64},
+                    },
+                },
+            },
+        },
+    },
+}

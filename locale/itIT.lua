@@ -100,3 +100,4 @@ TrainerSpells:AddTrans("itIT", "LID_PROFTRAINER_RANKHEADER", "%s  ·  Abilità %
 TrainerSpells:AddTrans("itIT", "LID_NEARESTPROFTRAINER", "Istruttore più vicino: %s")
 TrainerSpells:AddTrans("itIT", "LID_NEARESTPROFTRAINER_DESC", "Imposta un punto di riferimento verso l'istruttore più vicino del tuo continente che insegna questo grado.")
 TrainerSpells:AddTrans("itIT", "LID_NOPROFTRAINER", "Nessun istruttore per questo grado trovato in questo continente.")
+TrainerSpells:AddTrans("itIT", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Specializzazione")

@@ -100,3 +100,4 @@ TrainerSpells:AddTrans("ruRU", "LID_PROFTRAINER_RANKHEADER", "%s  ·  Навык
 TrainerSpells:AddTrans("ruRU", "LID_NEARESTPROFTRAINER", "Ближайший учитель: %s")
 TrainerSpells:AddTrans("ruRU", "LID_NEARESTPROFTRAINER_DESC", "Ставит метку на ближайшего учителя на текущем континенте, который обучает этому рангу.")
 TrainerSpells:AddTrans("ruRU", "LID_NOPROFTRAINER", "На этом континенте не найден учитель этого ранга.")
+TrainerSpells:AddTrans("ruRU", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Специализация")
