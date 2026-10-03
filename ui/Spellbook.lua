@@ -3,7 +3,9 @@ local classFrame = TrainerSpells.ClassFrame
 local listBg = TrainerSpells.ClassListBackground
 local searchBox = TrainerSpells.SearchBox
 local SPELLBOOK_TAB_NAMES = {"TrainerSpellsSpellbookTab", "TrainerSpellsPetSpellbookTab", "TrainerSpellsClassTrainerMapTab", "TrainerSpellsWeaponSpellbookTab"}
-for i = 1, 8 do table.insert(SPELLBOOK_TAB_NAMES, "SpellBookSkillLineTab" .. i) end
+for i = 1, 8 do
+    table.insert(SPELLBOOK_TAB_NAMES, "SpellBookSkillLineTab" .. i)
+end
 
 local function GetSearchLeftOffset(defaultOffset, topOffset)
     local frameScale = classFrame:GetEffectiveScale()
@@ -20,9 +22,7 @@ local function GetSearchLeftOffset(defaultOffset, topOffset)
             local scale = tab:GetEffectiveScale() / frameScale
             local left, right = tab:GetLeft() * scale, tab:GetRight() * scale
             local top, bottom = tab:GetTop() * scale, tab:GetBottom() * scale
-            if left < frameRight - 4 and bottom < rowTop and top > rowBottom then
-                offset = math.max(offset, right - frameLeft + 8)
-            end
+            if left < frameRight - 4 and bottom < rowTop and top > rowBottom then offset = math.max(offset, right - frameLeft + 8) end
         end
     end
     return offset
@@ -81,12 +81,14 @@ local function PositionFrame()
         TrainerSpells.WeaponControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
         TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false)
     end
+
     if TrainerSpells.ClassTrainerControls then
         TrainerSpells.ClassTrainerControls:ClearAllPoints()
         TrainerSpells.ClassTrainerControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
         TrainerSpells.ClassTrainerControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
         TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false)
     end
+
     if TrainerSpells.ClassScrollBox then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
         local controlsOffset = showClassTrainerControls and -44 or showWeaponControls and -36 or -4
@@ -110,6 +112,7 @@ if SpellBookFrame then
     for _, funcName in ipairs({"SpellBookFrame_Update", "SpellBookFrame_UpdateSkillLineTabs"}) do
         if _G[funcName] then hooksecurefunc(funcName, QueuePositionFrame) end
     end
+
     for i = 1, 8 do
         local tab = _G["SpellBookSkillLineTab" .. i]
         if tab then
@@ -117,12 +120,15 @@ if SpellBookFrame then
             tab:HookScript("OnHide", QueuePositionFrame)
         end
     end
+
     local tabWatcher = CreateFrame("Frame")
     for _, event in ipairs({"SPELLS_CHANGED", "LEARNED_SPELL_IN_TAB", "UNIT_PET"}) do
         TrainerSpells:RegisterEvent(tabWatcher, event)
     end
+
     tabWatcher:SetScript("OnEvent", QueuePositionFrame)
 end
+
 local NATIVE_EXTRA_WIDGETS = {"SpellBookPageNavigationFrame", "SpellBookFrameShowAllSpellRanksCheckbox", "ShowAllSpellRanksCheckbox",}
 local spellButtonsHidden = false
 local hiddenPageRegions = {}
@@ -218,6 +224,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         else
             tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, 0)
         end
+
         tab:Hide()
         tab:SetScript("OnClick", function() OpenFrame(view) end)
         tab:SetScript("OnEnter", function(sel)
@@ -225,6 +232,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
             GameTooltip:SetText(tooltip)
             GameTooltip:Show()
         end)
+
         tab:SetScript("OnLeave", GameTooltip_Hide)
         classicModeTabs[view] = tab
         classicModeTabGlows[view] = glow
@@ -233,23 +241,20 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
 
     local className, classToken = UnitClass("player")
     local previousTab = CreateClassicModeTab("TrainerSpellsSpellbookTab", "class", "Interface\\Icons\\INV_Misc_Book_09", className or TrainerSpells:Trans("LID_CLASSTRAINER"))
-    if TrainerSpells:HasPetClassData(classToken) then
-        previousTab = CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab)
-    end
-    if TrainerSpells.BuildClassTrainerItems then
-        previousTab = CreateClassicModeTab("TrainerSpellsClassTrainerMapTab", "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS"), previousTab)
-    end
+    if TrainerSpells:HasPetClassData(classToken) then previousTab = CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab) end
+    if TrainerSpells.BuildClassTrainerItems then previousTab = CreateClassicModeTab("TrainerSpellsClassTrainerMapTab", "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS"), previousTab) end
     if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab) end
-
     SpellBookFrame:HookScript("OnShow", function()
         for _, tab in pairs(classicModeTabs) do
             tab:Show()
         end
     end)
+
     SpellBookFrame:HookScript("OnHide", function()
         for _, tab in pairs(classicModeTabs) do
             tab:Hide()
         end
+
         classFrame:Hide()
         ShowNativeSpellButtons()
         HideClassicModeTabGlows()
@@ -334,11 +339,12 @@ local function PositionPlayerSpellsFrame()
         panel:ClearAllPoints()
         if content.View1 then
             panel:SetPoint("TOPLEFT", content.View1, "TOPLEFT", -37, -46)
-            panel:SetPoint("BOTTOMRIGHT", content.View1, "BOTTOMRIGHT", 0, 0)
+            panel:SetPoint("BOTTOMRIGHT", content.View1, "BOTTOMRIGHT", 0, 4)
         else
             panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 44, -61)
             panel:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -10, 24)
         end
+
         local bar, slider = playerSpellsSubTabs.bar, TrainerSpells.RowHeightSlider
         bar:ClearAllPoints()
         bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 33, 3)
@@ -361,6 +367,7 @@ local function PositionPlayerSpellsFrame()
             controls:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", right, top)
         end
     end
+
     if TrainerSpells.WeaponControls then TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false) end
     if TrainerSpells.ClassTrainerControls then TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false) end
     local dividerOffset = top + 1 + (showClassTrainerControls and -42 or showWeaponControls and -34 or 0)
@@ -374,6 +381,7 @@ local function PositionPlayerSpellsFrame()
             playerSpellsModeDivider:SetPoint("TOPLEFT", anchor, "TOPLEFT", left, dividerOffset)
             playerSpellsModeDivider:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", right, dividerOffset)
         end
+
         playerSpellsModeDivider:Show()
     end
 
@@ -483,6 +491,7 @@ function TrainerSpells:UpdateClassViewTabs()
     for view, glow in pairs(classicModeTabGlows) do
         glow:SetShown(classFrame:IsShown() and TrainerSpells.ClassView == view)
     end
+
     if playerSpellsModeTabs.addon then playerSpellsModeTabs.addon:SetTabSelected(classFrame:IsShown()) end
     playerSpellsSubTabs.Update()
 end
@@ -501,10 +510,39 @@ end
 function playerSpellsSubTabs.Create()
     if playerSpellsSubTabs.bar then return end
     local className, classToken = UnitClass("player")
-    local views = {{view = "class", icon = 133741, title = className, desc = "LID_CLASSVIEW_DESC", classToken = classToken}}
-    if TrainerSpells:HasPetClassData(classToken) then table.insert(views, {view = "pet", icon = "Interface\\Icons\\Ability_Hunter_BeastCall", title = TrainerSpells:Trans("LID_PETTRAINING"), desc = "LID_PETVIEW_DESC"}) end
-    table.insert(views, {view = "trainers", icon = 134269, title = TrainerSpells:Trans("LID_CLASSTRAINERS"), desc = "LID_TRAINERSVIEW_DESC"})
-    table.insert(views, {view = "weapons", icon = "Interface\\Icons\\INV_Sword_04", title = _G.WEAPON_SKILLS or "Weapon Skills", desc = "LID_WEAPONVIEW_DESC"})
+    local views = {
+        {
+            view = "class",
+            icon = 133741,
+            title = className,
+            desc = "LID_CLASSVIEW_DESC",
+            classToken = classToken
+        }
+    }
+
+    if TrainerSpells:HasPetClassData(classToken) then
+        table.insert(views, {
+            view = "pet",
+            icon = "Interface\\Icons\\Ability_Hunter_BeastCall",
+            title = TrainerSpells:Trans("LID_PETTRAINING"),
+            desc = "LID_PETVIEW_DESC"
+        })
+    end
+
+    table.insert(views, {
+        view = "trainers",
+        icon = 134269,
+        title = TrainerSpells:Trans("LID_CLASSTRAINERS"),
+        desc = "LID_TRAINERSVIEW_DESC"
+    })
+
+    table.insert(views, {
+        view = "weapons",
+        icon = "Interface\\Icons\\INV_Sword_04",
+        title = _G.WEAPON_SKILLS or "Weapon Skills",
+        desc = "LID_WEAPONVIEW_DESC"
+    })
+
     playerSpellsSubTabs.views = views
     local bar = CreateFrame("Frame", "TrainerSpellsPlayerSpellsSubTabs", classFrame, "TabSystemTemplate")
     bar:SetTabSelectedCallback(function(tabID)
@@ -559,6 +597,7 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
         TrainerSpells:SetClassView(playerSpellsSubTabs.GetSavedView())
         OpenPlayerSpellsPanel()
     end)
+
     playerSpellsModeTabs.addon = tab
     playerSpellsModeLastTab = tab
     playerSpellsSubTabs.Create()
@@ -619,6 +658,7 @@ function TrainerSpells:OpenCompendiumView(view)
         OpenFrame(view)
         return
     end
+
     if not PlayerSpellsFrame then
         if C_AddOns and C_AddOns.LoadAddOn then
             C_AddOns.LoadAddOn("Blizzard_PlayerSpells")
@@ -626,13 +666,12 @@ function TrainerSpells:OpenCompendiumView(view)
             LoadAddOn("Blizzard_PlayerSpells")
         end
     end
+
     if not PlayerSpellsFrame then return end
     ShowUIPanel(PlayerSpellsFrame)
     local book = GetPlayerSpellsBook()
     if not book then return end
-    if PlayerSpellsFrame.SetTab and PlayerSpellsFrame.spellBookTabID then
-        PlayerSpellsFrame:SetTab(PlayerSpellsFrame.spellBookTabID)
-    end
+    if PlayerSpellsFrame.SetTab and PlayerSpellsFrame.spellBookTabID then PlayerSpellsFrame:SetTab(PlayerSpellsFrame.spellBookTabID) end
     TrainerSpells:SetClassView(view)
     OpenPlayerSpellsPanel()
 end
@@ -640,11 +679,7 @@ end
 function TrainerSpells:RegisterCompendiumTabs()
     local api = _G["AzerothCompendiumAPI"]
     if type(api) ~= "table" or type(api.RegisterTab) ~= "function" or not self:HasClassTrainers() then return end
-    for _, definition in ipairs({
-        {"class", "LID_CLASSTRAINER", 133743},
-        {"trainers", "LID_CLASSTRAINERS", 135933},
-        {"weapons", "LID_WEAPON", 135328}
-    }) do
+    for _, definition in ipairs({{"class", "LID_CLASSTRAINER", 133743}, {"trainers", "LID_CLASSTRAINERS", 135933}, {"weapons", "LID_WEAPON", 135328}}) do
         local view, label = definition[1], definition[2]
         api.RegisterTab("TrainerSpells:" .. view, {
             label = function() return "TrainerSpells: " .. TrainerSpells:Trans(label) end,
@@ -657,7 +692,5 @@ end
 TrainerSpells.CompendiumLoader = CreateFrame("Frame")
 TrainerSpells.CompendiumLoader:RegisterEvent("ADDON_LOADED")
 TrainerSpells.CompendiumLoader:RegisterEvent("PLAYER_LOGIN")
-TrainerSpells.CompendiumLoader:SetScript("OnEvent", function(_, event, name)
-    if event == "PLAYER_LOGIN" or name == "AzerothCompendium" then TrainerSpells:RegisterCompendiumTabs() end
-end)
+TrainerSpells.CompendiumLoader:SetScript("OnEvent", function(_, event, name) if event == "PLAYER_LOGIN" or name == "AzerothCompendium" then TrainerSpells:RegisterCompendiumTabs() end end)
 TrainerSpells:RegisterCompendiumTabs()
