@@ -8,7 +8,53 @@ local function IsTrainerTaught(profession, name)
     return false
 end
 
+local function MergeProfessionEntry(target, source)
+    for field, value in pairs(source) do
+        if target[field] == nil then target[field] = value end
+    end
+end
+
+local function RelocalizeProfessionData()
+    if not TrainerSpells_ProfessionData then return end
+    for profession, skillLevels in pairs(TrainerSpells_ProfessionData) do
+        local builtinLevels = TrainerSpellsBuiltin_Profession and TrainerSpellsBuiltin_Profession[profession]
+        for skillReq, bucket in pairs(skillLevels) do
+            local renames = {}
+            local builtinIcons = {}
+            local builtin = builtinLevels and builtinLevels[skillReq]
+            if builtin then
+                for spellID, data in pairs(builtin) do
+                    local spellInfo = C_Spell.GetSpellInfo(spellID)
+                    if spellInfo and spellInfo.name and data.icon then builtinIcons[data.icon] = builtinIcons[data.icon] == nil and spellInfo.name or false end
+                end
+            end
+            for name, entry in pairs(bucket) do
+                local localized
+                if type(entry) ~= "table" or entry.rankRow then
+                    localized = nil
+                elseif entry.spellID then
+                    local spellInfo = C_Spell.GetSpellInfo(entry.spellID)
+                    localized = spellInfo and spellInfo.name
+                elseif entry.icon and builtinIcons[entry.icon] and bucket[builtinIcons[entry.icon]] then
+                    localized = builtinIcons[entry.icon]
+                end
+                if localized and localized ~= name then renames[name] = localized end
+            end
+            for oldName, newName in pairs(renames) do
+                local entry = bucket[oldName]
+                bucket[oldName] = nil
+                if bucket[newName] then
+                    MergeProfessionEntry(bucket[newName], entry)
+                else
+                    bucket[newName] = entry
+                end
+            end
+        end
+    end
+end
+
 function TrainerSpells:MergeBuiltinData()
+    RelocalizeProfessionData()
     if TrainerSpellsBuiltin then
         for class, levels in pairs(TrainerSpellsBuiltin) do
             for level, spells in pairs(levels) do
