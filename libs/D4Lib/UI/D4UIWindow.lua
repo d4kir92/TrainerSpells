@@ -9,7 +9,7 @@ local MODERN_TEMPLATE = "ButtonFrameTemplate"
 local CONTENT_TRIM = 56
 local SCROLL_LEFT = 8
 local RIGHT_INSET = 18
-local GRIP_INSET = 24
+local GRIP_INSET = 32
 local HEADER_LIFT = 5
 local HEADER_GROW = 5
 local FOOTER_TRIM = 3
@@ -164,7 +164,7 @@ end
 
 local function CreateGrip(win, name)
     local grip = CreateFrame("Button", name .. "Resize", win)
-    grip:SetSize(16, 16)
+    grip:SetSize(24, 24)
     grip:SetPoint("BOTTOMRIGHT", win, "BOTTOMRIGHT", -4, 4)
     grip:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
     grip:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
@@ -284,6 +284,12 @@ local function CreateLegacyScroll(win, name)
     return content
 end
 
+function D4:CreateUIWindowScroll(win, name)
+    win.contentWidth = win:GetWidth() - (win.contentTrim or 56)
+    if HasModernScroll() then return CreateModernScroll(win, name) end
+    return CreateLegacyScroll(win, name)
+end
+
 local function UseModernTemplate(tab)
     if tab.modern == false or tab.templates then return false end
     if D4:GetWoWBuild() ~= "RETAIL" then return false end
@@ -298,6 +304,14 @@ local function ApplyModernTemplate(win)
     ButtonFrameTemplate_HidePortrait(win)
     if win.TitleText == nil and win.TitleContainer then win.TitleText = win.TitleContainer.TitleText end
     win.leftInset = MODERN_LEFT_INSET
+end
+
+function D4:CreateUIWindowFrame(name, parent, templates)
+    local modern = UseModernTemplate({templates = templates})
+    if modern then templates = MODERN_TEMPLATE end
+    local win = D4:CreateFrame(name, parent or UIParent, templates)
+    if modern then ApplyModernTemplate(win) end
+    return win
 end
 
 local function ApplyWindowTitle(win, tab)
@@ -316,7 +330,7 @@ local function ApplyWindowTitle(win, tab)
     bar:EnableMouse(false)
     win.titleBar = bar
     bar.Title = bar:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    bar.Title:SetPoint("CENTER", bar, "CENTER", 0, 0)
+    bar.Title:SetPoint("CENTER", bar, "TOP", 0, -12)
     bar.Title:SetJustifyH("CENTER")
     bar.Title:SetText(title)
     bar.Version = bar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
