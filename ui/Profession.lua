@@ -221,16 +221,31 @@ function professionPicker.SetHeaderActive(active)
     local header = professionPicker.header
     if not header then
         if not active then return end
+        local titleContainer = ProfessionsFrame.TitleContainer
+        local portraitContainer = ProfessionsFrame.PortraitContainer
         header = CreateFrame("Frame", nil, ProfessionsFrame)
         header:SetAllPoints(ProfessionsFrame)
-        header:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 400)
-        header.portrait = header:CreateTexture(nil, "OVERLAY")
-        header.portrait:SetAllPoints(nativePortrait)
+        header:SetFrameLevel((titleContainer or ProfessionsFrame):GetFrameLevel() + 5)
+        header.portraitFrame = CreateFrame("Frame", nil, ProfessionsFrame)
+        header.portraitFrame:SetAllPoints(nativePortrait)
+        header.portraitFrame:SetFrameLevel((portraitContainer or ProfessionsFrame):GetFrameLevel() + 1)
+        header.portrait = header.portraitFrame:CreateTexture(nil, "ARTWORK")
+        header.portrait:SetAllPoints(header.portraitFrame)
+        header.portraitMask = header.portraitFrame:CreateMaskTexture()
+        header.portraitMask:SetPoint("TOPLEFT", header.portrait, "TOPLEFT", 2, 0)
+        header.portraitMask:SetPoint("BOTTOMRIGHT", header.portrait, "BOTTOMRIGHT", -2, 4)
+        header.portraitMask:SetTexture("Interface\\CharacterFrame\\TempPortraitAlphaMask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+        header.portrait:AddMaskTexture(header.portraitMask)
         header.title = header:CreateFontString(nil, "OVERLAY")
-        header.title:SetAllPoints(nativeTitle)
         header.title:SetFontObject(nativeTitle:GetFontObject() or GameFontNormal)
-        header.title:SetJustifyH(nativeTitle:GetJustifyH())
-        header.title:SetJustifyV(nativeTitle:GetJustifyV())
+        header.title:SetWordWrap(false)
+        if titleContainer then
+            header.title:SetPoint("TOPLEFT", titleContainer, "TOPLEFT", 0, -5)
+            header.title:SetPoint("TOPRIGHT", titleContainer, "TOPRIGHT", 0, -5)
+        else
+            header.title:SetPoint("TOPLEFT", ProfessionsFrame, "TOPLEFT", 58, -6)
+            header.title:SetPoint("TOPRIGHT", ProfessionsFrame, "TOPRIGHT", -24, -6)
+        end
         professionPicker.header = header
     end
 
@@ -238,6 +253,7 @@ function professionPicker.SetHeaderActive(active)
     nativeTitle:SetAlpha(active and 0 or 1)
     nativePortrait:SetAlpha(active and 0 or 1)
     header:SetShown(active)
+    header.portraitFrame:SetShown(active)
     if active then professionPicker.UpdateHeader() end
 end
 
@@ -246,11 +262,7 @@ function professionPicker.UpdateHeader()
     if not header or not professionPicker.headerActive or not professionPicker.key then return end
     local info = professionPicker.GetInfo(professionPicker.key)
     header.title:SetText(TRADE_SKILL_TITLE and TRADE_SKILL_TITLE:format(info.name) or info.name)
-    if info.icon and SetPortraitToTexture then
-        SetPortraitToTexture(header.portrait, info.icon)
-    else
-        header.portrait:SetTexture(info.icon)
-    end
+    header.portrait:SetTexture(info.icon or TrainerSpells:GetProfessionIcon(info.key))
 end
 
 function professionPicker.Reset()
@@ -812,6 +824,11 @@ local function OpenProfessionsFrameView()
     end
 
     professionPicker.SetHeaderActive(true)
+    if professionPicker.dropdown then
+        professionPicker.dropdown:SetFrameLevel(professionFrame:GetFrameLevel() + 50)
+        professionPicker.dropdown:Show()
+    end
+
     professionSubTabs.Update()
     TrainerSpells_ProfessionRefresh()
 end

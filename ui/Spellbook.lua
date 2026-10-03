@@ -713,18 +713,19 @@ function TrainerSpells:UndockCompendiumFrame(frame)
 end
 
 function TrainerSpells:PositionCompendiumClass()
+    local host = classFrame.compendiumHost
+    if not host then return end
     local panel = playerSpellsSubTabs.panel
     panel:ClearAllPoints()
-    panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 8, -76)
+    panel:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 8, -82)
     panel:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -8, 8)
-    playerSpellsSubTabs.bar:ClearAllPoints()
-    playerSpellsSubTabs.bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 0, 8)
-    playerSpellsSubTabs.title:ClearAllPoints()
-    playerSpellsSubTabs.title:SetPoint("TOPLEFT", playerSpellsSubTabs.bar, "TOPRIGHT", 12, 0)
-    playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -200, 40)
-    playerSpellsSubTabs.desc:ClearAllPoints()
-    playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
-    playerSpellsSubTabs.desc:SetPoint("TOPRIGHT", playerSpellsSubTabs.title, "BOTTOMRIGHT", 0, -3)
+    local width = math.max(1, (host:GetWidth() - 16 - (#host.classTabs - 1) * 8) / #host.classTabs)
+    for index, tab in ipairs(host.classTabs) do
+        tab:SetWidth(width)
+        tab:SetEnabled(tab.view ~= TrainerSpells.ClassView)
+        tab:ClearAllPoints()
+        tab:SetPoint("TOPLEFT", host, "TOPLEFT", 8 + (index - 1) * (width + 8), -40)
+    end
     searchBox:ClearAllPoints()
     searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 8, -8)
     searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -200, -8)
@@ -752,14 +753,47 @@ function TrainerSpells:PositionCompendiumClass()
     listBg:Hide()
     if playerSpellsModeDivider then playerSpellsModeDivider:Hide() end
     panel:Show()
-    playerSpellsSubTabs.bar:Show()
-    playerSpellsSubTabs.title:Show()
-    playerSpellsSubTabs.desc:Show()
+    playerSpellsSubTabs.bar:Hide()
+    playerSpellsSubTabs.title:Hide()
+    playerSpellsSubTabs.desc:Hide()
     playerSpellsSubTabs.Update()
 end
 
 function TrainerSpells:CreateCompendiumClass(host)
     playerSpellsSubTabs.Create()
+    host.classTabs = {}
+    for _, entry in ipairs(playerSpellsSubTabs.views) do
+        local tab = CreateFrame("Button", nil, host, "UIPanelButtonTemplate")
+        tab:SetHeight(28)
+        tab:SetText(entry.title)
+        tab.view = entry.view
+        tab.Icon = tab:CreateTexture(nil, "ARTWORK")
+        tab.Icon:SetSize(18, 18)
+        tab.Icon:SetPoint("LEFT", tab, "LEFT", 8, 0)
+        tab.Icon:SetTexture(entry.icon)
+        if entry.classToken then playerSpellsSubTabs.SetClassIcon(tab.Icon, entry.classToken) end
+        tab:GetFontString():ClearAllPoints()
+        tab:GetFontString():SetPoint("LEFT", tab.Icon, "RIGHT", 6, 0)
+        tab:GetFontString():SetPoint("RIGHT", tab, "RIGHT", -8, 0)
+        tab:GetFontString():SetWordWrap(false)
+        tab:SetScript("OnClick", function() TrainerSpells:SetClassView(entry.view) end)
+        tab:SetScript("OnEnter", function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+            GameTooltip:SetText(entry.title)
+            GameTooltip:AddLine(TrainerSpells:Trans(entry.desc), 1, 1, 1, true)
+            GameTooltip:Show()
+        end)
+        tab:SetScript("OnLeave", GameTooltip_Hide)
+        table.insert(host.classTabs, tab)
+    end
+    host.listPanel = CreateFrame("Frame", nil, host)
+    host.listPanel:SetPoint("TOPLEFT", host, "TOPLEFT", 8, -82)
+    host.listPanel:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -8, 8)
+    TrainerSpells:AddContentBorder(host.listPanel, host)
+    host.listPanel.borderFrame:SetFrameLevel(host:GetFrameLevel() + 20)
+    host:SetScript("OnSizeChanged", function()
+        if classFrame.compendiumHost == host then TrainerSpells:PositionCompendiumClass() end
+    end)
     if not playerSpellsModeTabContainer then
         playerSpellsSubTabs.panel:Hide()
         playerSpellsSubTabs.bar:Hide()
@@ -788,12 +822,14 @@ function TrainerSpells:RegisterCompendiumTabs()
     api.RegisterTab("TrainerSpells:professions", {
         label = function() return TrainerSpells:Trans("LID_PROFESSIONS") end,
         icon = 134708,
+        insertBefore = "wishlist",
         createPanel = function(host) TrainerSpells:CreateCompendiumProfessions(host) end
     })
     if not self:HasClassTrainers() then return end
     api.RegisterTab("TrainerSpells:class", {
         label = function() return _G.CLASSES or (GetLocale() == "deDE" and "Klassen") or "Classes" end,
         icon = 133743,
+        insertBefore = "wishlist",
         createPanel = function(host) TrainerSpells:CreateCompendiumClass(host) end
     })
 end
