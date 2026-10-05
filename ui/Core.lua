@@ -302,24 +302,40 @@ function TrainerSpells:SetMapWaypoint(location)
     return false
 end
 
-local ignoreMenuFrame = CreateFrame("Frame", "TrainerSpellsIgnoreMenu", UIParent, "UIDropDownMenuTemplate")
+local ignoreMenuFrame
 local ignoreMenuEntry
-local function IgnoreMenu_Initialize(sel, level)
-    local entry = ignoreMenuEntry
+local function IgnoreMenu_Initialize(sel, level, rootDescription, entry)
+    entry = entry or ignoreMenuEntry
     if not entry then return end
+    local function CreateInfo()
+        return rootDescription and {} or UIDropDownMenu_CreateInfo()
+    end
+
+    local function AddButton(info)
+        if rootDescription then
+            if info.isTitle then
+                rootDescription:CreateTitle(info.text)
+            else
+                rootDescription:CreateButton(info.text, info.func)
+            end
+        else
+            UIDropDownMenu_AddButton(info, level)
+        end
+    end
+
     local professionKey = entry.professionKey
     local isProfessionSpell = professionKey ~= nil
 
     local rankSubtext = GetLocalizedRankText(entry.spellID, entry.rankNum, entry.hasRealRank)
     local rankText = rankSubtext and (" " .. rankSubtext) or ""
-    local info = UIDropDownMenu_CreateInfo()
+    local info = CreateInfo()
     info.text = entry.name .. rankText
     info.isTitle = true
     info.notCheckable = true
-    UIDropDownMenu_AddButton(info, level)
+    AddButton(info)
     if isProfessionSpell then
         local spellIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID, professionKey)
-        info = UIDropDownMenu_CreateInfo()
+        info = CreateInfo()
         local isRecipeView = entry.isProfessionRecipe
         if isRecipeView then
             info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRECIPE") or TrainerSpells:Trans("LID_IGNORINGTHISRECIPE")
@@ -333,11 +349,11 @@ local function IgnoreMenu_Initialize(sel, level)
             TrainerSpells_ProfessionRefresh()
         end
 
-        UIDropDownMenu_AddButton(info, level)
+        AddButton(info)
     else
         local spellIgnored = TrainerSpells_IsSpellIgnored and TrainerSpells_IsSpellIgnored(entry.spellID)
         local nameIgnored = TrainerSpells_IsNameIgnored and TrainerSpells_IsNameIgnored(entry.name)
-        info = UIDropDownMenu_CreateInfo()
+        info = CreateInfo()
         info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
         info.notCheckable = true
         info.func = function()
@@ -345,8 +361,8 @@ local function IgnoreMenu_Initialize(sel, level)
             TrainerSpells_Refresh()
         end
 
-        UIDropDownMenu_AddButton(info, level)
-        info = UIDropDownMenu_CreateInfo()
+        AddButton(info)
+        info = CreateInfo()
         info.text = nameIgnored and TrainerSpells:Trans("LID_STOPIGNOREINGALLRANKS") or TrainerSpells:Trans("LID_IGNOREALLRANKS")
         info.notCheckable = true
         info.func = function()
@@ -354,17 +370,27 @@ local function IgnoreMenu_Initialize(sel, level)
             TrainerSpells_Refresh()
         end
 
-        UIDropDownMenu_AddButton(info, level)
+        AddButton(info)
     end
 
-    info = UIDropDownMenu_CreateInfo()
+    info = CreateInfo()
     info.text = TrainerSpells:Trans("LID_CANCEL")
     info.notCheckable = true
-    UIDropDownMenu_AddButton(info, level)
+    AddButton(info)
 end
 
-UIDropDownMenu_Initialize(ignoreMenuFrame, IgnoreMenu_Initialize, "MENU")
+if not (MenuUtil and MenuUtil.CreateContextMenu) then
+    ignoreMenuFrame = CreateFrame("Frame", "TrainerSpellsIgnoreMenu", UIParent, "UIDropDownMenuTemplate")
+    UIDropDownMenu_Initialize(ignoreMenuFrame, IgnoreMenu_Initialize, "MENU")
+end
 function TrainerSpells:ShowIgnoreMenu(anchor, entry)
+    if MenuUtil and MenuUtil.CreateContextMenu then
+        MenuUtil.CreateContextMenu(anchor, function(owner, rootDescription)
+            IgnoreMenu_Initialize(owner, nil, rootDescription, entry)
+        end)
+        return
+    end
+
     ignoreMenuEntry = entry
     ToggleDropDownMenu(1, nil, ignoreMenuFrame, "cursor", 0, 0)
     if DropDownList1 then
