@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("frFR", "LID_NOPROFTRAINER", "Aucun maître pour ce rang 
 TrainerSpells:AddTrans("frFR", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Spécialisation")
 TrainerSpells:AddTrans("frFR", "LID_SPOILERFREE", "Sans spoiler")
 TrainerSpells:AddTrans("frFR", "LID_SPOILERFREE_DESC", "Masque les sorts qui exigent plus de 2 niveaux au-dessus de votre niveau actuel.")
+TrainerSpells:AddTrans("frFR", "LID_PROFSPOILERFREE_DESC", "Masque les recettes qui exigent plus de 5 points de compétence au-dessus de votre compétence actuelle.")

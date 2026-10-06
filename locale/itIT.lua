@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("itIT", "LID_NOPROFTRAINER", "Nessun istruttore per quest
 TrainerSpells:AddTrans("itIT", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Specializzazione")
 TrainerSpells:AddTrans("itIT", "LID_SPOILERFREE", "Senza spoiler")
 TrainerSpells:AddTrans("itIT", "LID_SPOILERFREE_DESC", "Nasconde gli incantesimi che richiedono più di 2 livelli sopra il tuo livello attuale.")
+TrainerSpells:AddTrans("itIT", "LID_PROFSPOILERFREE_DESC", "Nasconde le ricette che richiedono più di 5 punti abilità sopra la tua abilità attuale.")

@@ -144,12 +144,38 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
     return allEntries, knownMaxRank
 end
 
+function TrainerSpells:CreateSpoilerFreeCheckbox(parent, settingKey, descKey, onToggle)
+    local checkbox = CreateFrame("CheckButton", nil, parent, "UICheckButtonTemplate")
+    checkbox:SetSize(20, 20)
+    checkbox.text = checkbox:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    checkbox.text:SetPoint("LEFT", checkbox, "RIGHT", 2, 0)
+    checkbox.text:SetText(TrainerSpells:Trans("LID_SPOILERFREE"))
+    checkbox:SetScript("OnShow", function(button) button:SetChecked(TrainerSpells_Character[settingKey] and true or false) end)
+    checkbox:SetScript("OnClick", function(button)
+        TrainerSpells_Character[settingKey] = button:GetChecked() and true or false
+        onToggle()
+    end)
+    checkbox:SetScript("OnEnter", function(button)
+        GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+        GameTooltip:SetText(TrainerSpells:Trans("LID_SPOILERFREE"))
+        GameTooltip:AddLine(TrainerSpells:Trans(descKey), 1, 1, 1, true)
+        GameTooltip:Show()
+    end)
+    checkbox:SetScript("OnLeave", GameTooltip_Hide)
+    return checkbox
+end
+
 function TrainerSpells:ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck, professionKey)
     local allEntries, knownMaxRank = TrainerSpells:BuildEntriesFromData(dataTable)
     local talentNames, learnedTalents
     if not skipTalentCheck then talentNames, learnedTalents = TrainerSpells:GetTalentNameSet() end
     local ignored, known, remaining = {}, {}, {}
-    local spoilerLimit = not professionKey and TrainerSpells_Character and TrainerSpells_Character.spoilerFree and selectedLevel + 2
+    local spoilerLimit
+    if professionKey then
+        spoilerLimit = TrainerSpells_Character and TrainerSpells_Character.professionSpoilerFree and selectedLevel + 5
+    else
+        spoilerLimit = TrainerSpells_Character and TrainerSpells_Character.spoilerFree and selectedLevel + 2
+    end
     for _, entry in ipairs(allEntries) do
         if (not spoilerLimit or entry.level <= spoilerLimit) and TrainerSpells:EntryMatchesSearch(entry, searchText) then
             local isIgnored

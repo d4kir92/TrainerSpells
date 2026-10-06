@@ -611,23 +611,7 @@ function playerSpellsSubTabs.Create()
     desc:SetJustifyH("LEFT")
     desc:SetWordWrap(false)
     desc:SetTextColor(0.75, 0.75, 0.75)
-    local spoilerFree = CreateFrame("CheckButton", nil, classFrame, "UICheckButtonTemplate")
-    spoilerFree:SetSize(20, 20)
-    local spoilerFreeText = spoilerFree:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-    spoilerFreeText:SetPoint("LEFT", spoilerFree, "RIGHT", 2, 0)
-    spoilerFreeText:SetText(TrainerSpells:Trans("LID_SPOILERFREE"))
-    spoilerFree:SetScript("OnClick", function(self)
-        TrainerSpells_Character.spoilerFree = self:GetChecked() and true or false
-        TrainerSpells_Refresh()
-    end)
-    spoilerFree:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(TrainerSpells:Trans("LID_SPOILERFREE"))
-        GameTooltip:AddLine(TrainerSpells:Trans("LID_SPOILERFREE_DESC"), 1, 1, 1, true)
-        GameTooltip:Show()
-    end)
-    spoilerFree:SetScript("OnLeave", GameTooltip_Hide)
-    playerSpellsSubTabs.spoilerFree = spoilerFree
+    playerSpellsSubTabs.spoilerFree = TrainerSpells:CreateSpoilerFreeCheckbox(classFrame, "spoilerFree", "LID_SPOILERFREE_DESC", TrainerSpells_Refresh)
     playerSpellsSubTabs.title = title
     playerSpellsSubTabs.desc = desc
     playerSpellsSubTabs.bar = bar
@@ -845,6 +829,10 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
     if view.slider.MinText then view.slider.MinText:Hide() end
     if view.slider.MaxText then view.slider.MaxText:Hide() end
     view.slider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value) view.rowHeight = math.floor(value + 0.5); if view.BuildItems then view:Refresh() end end)
+    function view:AddSpoilerFreeCheckbox(settingKey, descKey)
+        self.spoilerFree = TrainerSpells:CreateSpoilerFreeCheckbox(host, settingKey, descKey, function() self:Refresh() end)
+        self.spoilerFree:SetPoint("LEFT", self.slider, "RIGHT", 30, 0)
+    end
     function view:Refresh()
         for index, tab in ipairs(self.tabs) do
             tab:SetTabSelected(tab.mode == self.mode)
@@ -883,6 +871,7 @@ function TrainerSpells:CreateCompendiumClass(host)
     local view = self:CreateCompendiumListView(host, playerSpellsSubTabs.views, playerSpellsSubTabs.GetSavedView(), self.RowHeight)
     self.CompendiumClassView = view
     view.BuildItems = function(current) return TrainerSpells:BuildClassViewItems(current.mode, host.searchText) end
+    view:AddSpoilerFreeCheckbox("spoilerFree", "LID_SPOILERFREE_DESC")
     view.controls = {}
     for _, entry in ipairs({{self.CreateClassTrainerControls, "trainers", 48}, {self.CreateWeaponControls, "weapons", 40}}) do
         if entry[1] then

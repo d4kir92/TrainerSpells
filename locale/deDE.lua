@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("deDE", "LID_NOPROFTRAINER", "Auf diesem Kontinent wurde 
 TrainerSpells:AddTrans("deDE", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Spezialisierung")
 TrainerSpells:AddTrans("deDE", "LID_SPOILERFREE", "Spoilerfrei")
 TrainerSpells:AddTrans("deDE", "LID_SPOILERFREE_DESC", "Blendet Zauber aus, die mehr als 2 Stufen über deiner aktuellen Stufe liegen.")
+TrainerSpells:AddTrans("deDE", "LID_PROFSPOILERFREE_DESC", "Blendet Rezepte aus, die mehr als 5 Fertigkeitspunkte über deiner aktuellen Fertigkeit liegen.")

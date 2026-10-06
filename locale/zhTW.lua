@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("zhTW", "LID_NOPROFTRAINER", "在此大陸上找不到教
 TrainerSpells:AddTrans("zhTW", "LID_PROFTRAINER_SPECHEADER", "%s  ·  專精")
 TrainerSpells:AddTrans("zhTW", "LID_SPOILERFREE", "防劇透")
 TrainerSpells:AddTrans("zhTW", "LID_SPOILERFREE_DESC", "隱藏需要比你目前等級高2級以上的法術。")
+TrainerSpells:AddTrans("zhTW", "LID_PROFSPOILERFREE_DESC", "隱藏需要比你目前技能高5點以上的配方。")

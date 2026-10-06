@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("ruRU", "LID_NOPROFTRAINER", "На этом контин�
 TrainerSpells:AddTrans("ruRU", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Специализация")
 TrainerSpells:AddTrans("ruRU", "LID_SPOILERFREE", "Без спойлеров")
 TrainerSpells:AddTrans("ruRU", "LID_SPOILERFREE_DESC", "Скрывает заклинания, требующие уровня более чем на 2 выше текущего.")
+TrainerSpells:AddTrans("ruRU", "LID_PROFSPOILERFREE_DESC", "Скрывает рецепты, требующие навыка более чем на 5 очков выше текущего.")

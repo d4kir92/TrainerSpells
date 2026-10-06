@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("zhCN", "LID_NOPROFTRAINER", "在此大陆上未找到教
 TrainerSpells:AddTrans("zhCN", "LID_PROFTRAINER_SPECHEADER", "%s  ·  专精")
 TrainerSpells:AddTrans("zhCN", "LID_SPOILERFREE", "防剧透")
 TrainerSpells:AddTrans("zhCN", "LID_SPOILERFREE_DESC", "隐藏需要比你当前等级高2级以上的法术。")
+TrainerSpells:AddTrans("zhCN", "LID_PROFSPOILERFREE_DESC", "隐藏需要比你当前技能高5点以上的配方。")

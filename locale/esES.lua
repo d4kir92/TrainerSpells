@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("esES", "LID_NOPROFTRAINER", "No se encontró ningún ins
 TrainerSpells:AddTrans("esES", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Especialización")
 TrainerSpells:AddTrans("esES", "LID_SPOILERFREE", "Sin spoilers")
 TrainerSpells:AddTrans("esES", "LID_SPOILERFREE_DESC", "Oculta los hechizos que requieren más de 2 niveles por encima de tu nivel actual.")
+TrainerSpells:AddTrans("esES", "LID_PROFSPOILERFREE_DESC", "Oculta las recetas que requieren más de 5 puntos de habilidad por encima de tu habilidad actual.")

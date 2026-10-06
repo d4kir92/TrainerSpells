@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("ptBR", "LID_NOPROFTRAINER", "Nenhum instrutor desta cate
 TrainerSpells:AddTrans("ptBR", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Especialização")
 TrainerSpells:AddTrans("ptBR", "LID_SPOILERFREE", "Sem spoilers")
 TrainerSpells:AddTrans("ptBR", "LID_SPOILERFREE_DESC", "Oculta feitiços que exigem mais de 2 níveis acima do seu nível atual.")
+TrainerSpells:AddTrans("ptBR", "LID_PROFSPOILERFREE_DESC", "Oculta receitas que exigem mais de 5 pontos de habilidade acima da sua habilidade atual.")

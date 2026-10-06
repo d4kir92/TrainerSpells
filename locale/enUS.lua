@@ -103,3 +103,4 @@ TrainerSpells:AddTrans("enUS", "LID_NOPROFTRAINER", "No trainer for this rank fo
 TrainerSpells:AddTrans("enUS", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Specialization")
 TrainerSpells:AddTrans("enUS", "LID_SPOILERFREE", "Spoiler-free")
 TrainerSpells:AddTrans("enUS", "LID_SPOILERFREE_DESC", "Hides spells that require more than 2 levels above your current level.")
+TrainerSpells:AddTrans("enUS", "LID_PROFSPOILERFREE_DESC", "Hides recipes that require more than 5 skill points above your current skill.")
