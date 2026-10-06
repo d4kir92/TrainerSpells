@@ -319,12 +319,20 @@ local function GetPlayerSpellsBook()
     return PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
 end
 
+local function GetMaxDescendantFrameLevel(frame)
+    local level = frame:GetFrameLevel()
+    for _, child in ipairs({frame:GetChildren()}) do
+        level = math.max(level, GetMaxDescendantFrameLevel(child))
+    end
+    return level
+end
+
 local function PositionPlayerSpellsFrame()
     if classFrame.compendiumHost then TrainerSpells:PositionCompendiumClass(); return end
     local book = GetPlayerSpellsBook()
     if not book then return end
     local content = book.PagedSpellsFrame or book
-    local frameLevel = content:GetFrameLevel()
+    local frameLevel = GetMaxDescendantFrameLevel(content)
     if playerSpellsModeTabContainer then frameLevel = math.max(frameLevel, playerSpellsModeTabContainer:GetFrameLevel()) end
     classFrame:SetParent(book)
     classFrame:SetFrameStrata(book:GetFrameStrata())
@@ -472,6 +480,7 @@ local function HidePlayerSpellsContent()
 
     if book.PagedSpellsFrame then
         local blocker = GetPlayerSpellsContentBlocker()
+        blocker:SetFrameLevel(classFrame:GetFrameLevel())
         blocker:ClearAllPoints()
         blocker:SetAllPoints(book.PagedSpellsFrame)
         blocker:Show()
