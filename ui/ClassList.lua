@@ -27,6 +27,9 @@ if rowHeightSlider.MinText then rowHeightSlider.MinText:Hide() end
 if rowHeightSlider.MaxText then rowHeightSlider.MaxText:Hide() end
 local scrollBox = CreateFrame("Frame", "TrainerSpellsScrollBox", classFrame, "WowScrollBoxList")
 TrainerSpells.ClassScrollBox = scrollBox
+TrainerSpells.ClassScrollTarget = scrollBox.ScrollTarget
+scrollBox.ScrollTarget = nil
+function scrollBox:GetScrollTarget() return TrainerSpells.ClassScrollTarget end
 scrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, -4)
 scrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
 local listBg = classFrame:CreateTexture("TrainerSpellsFrameBackground", "BACKGROUND")
@@ -35,13 +38,17 @@ local scrollBar = CreateFrame("EventFrame", "TrainerSpellsScrollBar", classFrame
 scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -2)
 scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 2)
 local scrollView = CreateScrollBoxListLinearView()
+function scrollView:RefreshSmartNav() end
 scrollView:SetElementExtentCalculator(function(_, elementData)
     if elementData.isHeader then return TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap end
     return TrainerSpells.RowHeight
 end)
 
 scrollView:SetPadding(0, 0, 0, 0, TrainerSpells.RowSpacing)
-scrollView:SetElementInitializer("Frame", function(rowFrame, elementData) TrainerSpells:InitScrollRow(rowFrame, elementData, TrainerSpells.RowHeight) end)
+scrollView:SetElementInitializer("Button", function(rowFrame, elementData)
+    TrainerSpells:InitScrollRow(rowFrame, elementData, TrainerSpells.RowHeight)
+    TrainerSpells:PrepareGamepadNavigation(rowFrame)
+end)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
 rowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
     value = math.floor(value + 0.5)
@@ -90,8 +97,13 @@ function TrainerSpells:BuildClassViewItems(viewMode, searchText)
 end
 
 function TrainerSpells_Refresh()
-    scrollBox:SetDataProvider(CreateDataProvider(TrainerSpells:BuildClassViewItems(TrainerSpells.ClassView, TrainerSpells_SearchText)), ScrollBoxConstants.RetainScrollPosition)
+    TrainerSpells.RunDetached(classFrame, function()
+        scrollBox:SetDataProvider(CreateDataProvider(TrainerSpells:BuildClassViewItems(TrainerSpells.ClassView, TrainerSpells_SearchText)), ScrollBoxConstants.RetainScrollPosition)
+        if ScrollBoxConstants.UpdateImmediately then scrollBox:FullUpdate(ScrollBoxConstants.UpdateImmediately) end
+    end)
+
     if TrainerSpells.CompendiumClassView then TrainerSpells.CompendiumClassView:Refresh() end
+    TrainerSpells.GamepadAction("refresh list")
 end
 
 function TrainerSpells:HasPetClassData(classToken)

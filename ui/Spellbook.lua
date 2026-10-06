@@ -439,7 +439,7 @@ local playerSpellsContentAlpha = {}
 local playerSpellsContentBlocker
 local function GetPlayerSpellsContentBlocker()
     if not playerSpellsContentBlocker then
-        playerSpellsContentBlocker = CreateFrame("Frame", nil, classFrame)
+        playerSpellsContentBlocker = TrainerSpells.CreateDetachedFrame("Frame", classFrame)
         playerSpellsContentBlocker:SetFrameLevel(classFrame:GetFrameLevel())
         playerSpellsContentBlocker:EnableMouse(true)
         playerSpellsContentBlocker:EnableMouseWheel(true)
@@ -464,10 +464,56 @@ local function SetNativeCategoryTabsVisual(book, showSelection)
         end
 
         tab:SetNormalFontObject(isSelected and (tab.selectedFontObject or GameFontHighlightSmall) or (tab.unselectedFontObject or GameFontNormalSmall))
-        tab:SetEnabled(not isSelected and not (tab.IsForceDisabled and tab:IsForceDisabled()))
+        if not (SmartNavigation and SmartNavigation:GetCurrentButton() == tab) then tab:SetEnabled(not isSelected and not (tab.IsForceDisabled and tab:IsForceDisabled())) end
         if tab.Text and tab.GetTextYOffset then tab.Text:SetPoint("CENTER", tab, "CENTER", 0, tab:GetTextYOffset(isSelected)) end
         if tab.Icon and tab.GetIconYOffset then tab.Icon:SetPoint("CENTER", tab, "CENTER", 0, tab:GetIconYOffset(isSelected)) end
     end
+end
+
+playerSpellsSubTabs.detachedNativeButtons = {}
+function playerSpellsSubTabs.DetachNativeButton(button)
+    if not button or not button:IsRectValid() then return end
+    if GameTooltip:IsShown() and GameTooltip:GetOwner() == button then GameTooltip:Hide() end
+    local detached = playerSpellsSubTabs.detachedNativeButtons
+    if not detached[button] then
+        local points = {}
+        for index = 1, button:GetNumPoints() do
+            points[index] = {button:GetPoint(index)}
+        end
+
+        detached[button] = points
+    end
+
+    button:ClearAllPoints()
+end
+
+function playerSpellsSubTabs.DetachNativeButtons(book)
+    local paged = book and book.PagedSpellsFrame
+    if not paged then return end
+    for _, view in ipairs(paged.ViewFrames or {}) do
+        for _, item in ipairs({view:GetChildren()}) do
+            playerSpellsSubTabs.DetachNativeButton(item.Button)
+        end
+    end
+
+    local controls = paged.PagingControls
+    if controls then
+        playerSpellsSubTabs.DetachNativeButton(controls.PrevPageButton)
+        playerSpellsSubTabs.DetachNativeButton(controls.NextPageButton)
+    end
+end
+
+function playerSpellsSubTabs.RestoreNativeButtons()
+    local detached = playerSpellsSubTabs.detachedNativeButtons
+    if not next(detached) then return end
+    for button, points in pairs(detached) do
+        button:ClearAllPoints()
+        for _, point in ipairs(points) do
+            button:SetPoint(unpack(point))
+        end
+    end
+
+    wipe(detached)
 end
 
 local function HidePlayerSpellsContent()
@@ -493,6 +539,7 @@ local function HidePlayerSpellsContent()
 end
 
 local function ShowPlayerSpellsContent()
+    playerSpellsSubTabs.RestoreNativeButtons()
     if not playerSpellsContentHidden then return end
     playerSpellsContentHidden = false
     if playerSpellsContentBlocker then playerSpellsContentBlocker:Hide() end
@@ -513,6 +560,7 @@ local function ClosePlayerSpellsPanel()
     end
 
     if wasOpen then SetNativeCategoryTabsVisual(GetPlayerSpellsBook(), true) end
+    TrainerSpells.GamepadAction("close panel")
 end
 
 local function OpenPlayerSpellsPanel()
@@ -521,9 +569,11 @@ local function OpenPlayerSpellsPanel()
     if not book then return end
     PositionPlayerSpellsFrame()
     HidePlayerSpellsContent()
-    classFrame:Show()
+    TrainerSpells.RunDetached(classFrame, function() classFrame:Show() end)
+    TrainerSpells:PrepareGamepadNavigation(classFrame)
     SetNativeCategoryTabsVisual(book, false)
     TrainerSpells:UpdateClassViewTabs()
+    TrainerSpells.GamepadAction("open panel")
 end
 
 function TrainerSpells:UpdateClassViewTabs()
@@ -534,6 +584,9 @@ function TrainerSpells:UpdateClassViewTabs()
 
     if playerSpellsModeTabs.addon then playerSpellsModeTabs.addon:SetTabSelected(classFrame:IsShown()) end
     playerSpellsSubTabs.Update()
+end
+
+function playerSpellsSubTabs.KeepTabEnabled()
 end
 
 function playerSpellsSubTabs.SetClassIcon(icon, classToken)
@@ -597,6 +650,8 @@ function playerSpellsSubTabs.Create()
     for index, entry in ipairs(views) do
         bar:AddTab(nil, entry.icon)
         local button = bar:GetTabButton(index)
+        button.SetEnabled = playerSpellsSubTabs.KeepTabEnabled
+        button:Enable()
         button:SetTooltipText(entry.title .. "\n|cffffffff" .. TrainerSpells:Trans(entry.desc) .. "|r")
         if entry.classToken then playerSpellsSubTabs.SetClassIcon(button.Icon, entry.classToken) end
     end
@@ -632,6 +687,8 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
     local tab = CreateFrame("Button", nil, container, "TabSystemButtonTemplate")
     tab.GetTabSystem = function() return tabSystem end
     tab:Init(1, nil, 133741)
+    tab.SetEnabled = playerSpellsSubTabs.KeepTabEnabled
+    tab:Enable()
     tab:SetTooltipText("TrainerSpells")
     tab:SetPoint("LEFT", container, "LEFT", 0, 0)
     tab:SetScript("OnClick", function()
@@ -648,11 +705,12 @@ local function FitNativeSearchBox()
     local book = GetPlayerSpellsBook()
     local nativeSearchBox = book and book.SearchBox
     if not nativeSearchBox or not playerSpellsModeLastTab then return end
-    local tabRight = playerSpellsModeLastTab:GetRight()
+    local edge = book.NextCategoryIcon and book.NextCategoryIcon:IsShown() and book.NextCategoryIcon or playerSpellsModeLastTab
+    local tabRight = edge:GetRight()
     local left, right, top = nativeSearchBox:GetLeft(), nativeSearchBox:GetRight(), nativeSearchBox:GetTop()
     local bookLeft, bookRight, bookTop = book:GetLeft(), book:GetRight(), book:GetTop()
     if not tabRight or not left or not right or not top or not bookLeft or not bookRight or not bookTop then return end
-    tabRight = tabRight * playerSpellsModeLastTab:GetEffectiveScale() / book:GetEffectiveScale()
+    tabRight = tabRight * edge:GetEffectiveScale() / book:GetEffectiveScale()
     if left >= tabRight + 8 or right <= tabRight + 60 then return end
     nativeSearchBox:ClearAllPoints()
     nativeSearchBox:SetPoint("TOPLEFT", book, "TOPLEFT", tabRight - bookLeft + 12, top - bookTop)
@@ -664,17 +722,176 @@ local function QueueFitNativeSearchBox()
     C_Timer.After(0, FitNativeSearchBox)
 end
 
+function playerSpellsSubTabs.SelectNextView(forward)
+    for index, entry in ipairs(playerSpellsSubTabs.views or {}) do
+        if entry.view == TrainerSpells.ClassView then
+            local nextEntry = playerSpellsSubTabs.views[index + (forward and 1 or -1)]
+            if nextEntry then
+                TrainerSpells:SetClassView(nextEntry.view)
+                OpenPlayerSpellsPanel()
+            elseif not forward then
+                ClosePlayerSpellsPanel()
+            end
+
+            return
+        end
+    end
+end
+
+SLASH_TRAINERSPELLSGPTIP1 = "/tsgptip"
+SlashCmdList.TRAINERSPELLSGPTIP = function()
+    TrainerSpells.GamepadTooltipsDisabled = not TrainerSpells.GamepadTooltipsDisabled
+    print("TrainerSpells gamepad tooltips:", TrainerSpells.GamepadTooltipsDisabled and "off" or "on")
+end
+
+function playerSpellsSubTabs.InstallGamepadCycling(book)
+    if not book.GetTab or not IsKeyDown or not playerSpellsModeTabContainer then return end
+    local focused, gamepadState, scrolledTo
+    local function UpdateGamepadFocus()
+        local gamepad = TrainerSpells.IsGamepadNavActive()
+        if gamepad ~= gamepadState then
+            gamepadState = gamepad
+            TrainerSpells:PrepareGamepadNavigation(playerSpellsModeTabContainer, gamepad)
+            TrainerSpells:PrepareGamepadNavigation(classFrame, gamepad)
+        end
+
+        if gamepad and classFrame:IsShown() and not classFrame.compendiumHost then
+            playerSpellsSubTabs.DetachNativeButtons(book)
+            TrainerSpells.GamepadAction("detach native buttons")
+        else
+            playerSpellsSubTabs.RestoreNativeButtons()
+            TrainerSpells.GamepadAction("restore native buttons")
+        end
+
+        local current = gamepad and SmartNavigation:GetCurrentButton() or nil
+        if current ~= scrolledTo then
+            scrolledTo = current
+            if current and current.GetElementData and current:GetParent() == TrainerSpells.ClassScrollTarget then
+                TrainerSpells.ClassScrollBox:ScrollToElementData(current:GetElementData(), ScrollBoxConstants.AlignNearest)
+                TrainerSpells.GamepadAction("scroll to row")
+            end
+        end
+
+        if current and not current.tsFocusStripped then current = nil end
+        if current == focused then return end
+        if TrainerSpells.GamepadTooltipsDisabled then
+            focused = current
+            return
+        end
+
+        if focused and focused.tsOnLeave then
+            focused.tsOnLeave(focused)
+            TrainerSpells.GamepadAction("tooltip leave " .. tostring(focused:GetName() or focused:GetObjectType()))
+        end
+
+        focused = current
+        if focused and focused.tsOnEnter then
+            focused.tsOnEnter(focused)
+            TrainerSpells.GamepadAction("tooltip enter " .. tostring(focused:GetName() or focused:GetObjectType()))
+        end
+    end
+
+    local function HandleShoulder(forward, tabBefore)
+        if classFrame.compendiumHost or tabBefore == nil or not book:IsVisible() then return end
+        local tabChanged = tabBefore ~= book:GetTab()
+        if classFrame:IsShown() then
+            if tabChanged then
+                ClosePlayerSpellsPanel()
+            else
+                playerSpellsSubTabs.SelectNextView(forward)
+            end
+        elseif forward and not tabChanged then
+            TrainerSpells:SetClassView(playerSpellsSubTabs.GetSavedView())
+            OpenPlayerSpellsPanel()
+        end
+
+        TrainerSpells.GamepadAction((forward and "RB" or "LB") .. (tabChanged and " native tab changed" or " our view"))
+    end
+
+    local aHeld = false
+    local function CheckAButton()
+        local down = IsKeyDown("PAD1") and true or false
+        if down and not aHeld and TrainerSpells.IsGamepadNavActive() then
+            local current = SmartNavigation:GetCurrentButton()
+            print("|cff55ff55TS A pressed|r", current and (current:GetName() or current:GetObjectType()) or "nil", current and (current.tsGamepadClick and "ours" or "not ours") or "")
+            if current and current.tsGamepadClick and current:IsVisible() and (not current.IsEnabled or current:IsEnabled()) then
+                TrainerSpells.SmartNavClick(current)
+                TrainerSpells.GamepadAction("A click done")
+            end
+        end
+        aHeld = down
+    end
+
+    local held = {}
+    local lastTab
+    local function CheckShoulder(key, forward, tabBefore)
+        local down = IsKeyDown(key) and true or false
+        if down and not held[key] then C_Timer.After(0.05, function() HandleShoulder(forward, tabBefore) end) end
+        held[key] = down
+    end
+
+    playerSpellsModeTabContainer:HookScript("OnHide", function()
+        lastTab = nil
+        wipe(held)
+        if focused and focused.tsOnLeave then focused.tsOnLeave(focused) end
+        focused = nil
+    end)
+
+    playerSpellsModeTabContainer:SetScript("OnUpdate", function()
+        TrainerSpells.GamepadAction("outside TrainerSpells (Blizzard or other code since last frame)")
+        local tabBefore = lastTab
+        lastTab = book:GetTab()
+        if tabBefore and lastTab ~= tabBefore and classFrame:IsShown() and not classFrame.compendiumHost then
+            ClosePlayerSpellsPanel()
+            TrainerSpells.GamepadAction("native category changed")
+        end
+        CheckShoulder("PADRSHOULDER", true, tabBefore)
+        CheckShoulder("PADLSHOULDER", false, tabBefore)
+        CheckAButton()
+        UpdateGamepadFocus()
+        TrainerSpells.GamepadProbe()
+    end)
+
+    local nextIcon = book.NextCategoryIcon
+    if nextIcon and playerSpellsModeTabs.addon then
+        nextIcon:ClearAllPoints()
+        nextIcon:SetPoint("TOPLEFT", playerSpellsModeTabs.addon, "TOPRIGHT", 0, 0)
+        nextIcon:HookScript("OnShow", QueueFitNativeSearchBox)
+        nextIcon:HookScript("OnHide", QueueFitNativeSearchBox)
+    end
+end
+
+function playerSpellsSubTabs.PrewarmRows()
+    if classFrame:IsShown() or classFrame.compendiumHost then return end
+    PositionPlayerSpellsFrame()
+    local rowHeight = TrainerSpells.RowHeight
+    TrainerSpells.RowHeight = TrainerSpells.MinRowHeight
+    TrainerSpells.ClassScrollBox:ClearAllPoints()
+    TrainerSpells.ClassScrollBox:SetAllPoints(classFrame)
+    local savedView = TrainerSpells.ClassView
+    classFrame:Show()
+    for _, entry in ipairs(playerSpellsSubTabs.views or {}) do
+        TrainerSpells.ClassView = entry.view
+        TrainerSpells_Refresh()
+    end
+    classFrame:Hide()
+    TrainerSpells.ClassView = savedView
+    TrainerSpells.RowHeight = rowHeight
+end
+
 local function InstallPlayerSpellsIntegration()
     local book = GetPlayerSpellsBook()
     if playerSpellsModeTabContainer or not book then return end
     local tabSystem = book.CategoryTabSystem
     if not tabSystem then return end
     CreatePlayerSpellsModeTabs(book, tabSystem)
+    playerSpellsSubTabs.PrewarmRows()
     book:HookScript("OnHide", ClosePlayerSpellsPanel)
     hooksecurefunc(tabSystem, "SetTab", ClosePlayerSpellsPanel)
     PlayerSpellsFrame:HookScript("OnHide", ClosePlayerSpellsPanel)
     book:HookScript("OnShow", QueueFitNativeSearchBox)
     book:HookScript("OnSizeChanged", QueueFitNativeSearchBox)
+    playerSpellsSubTabs.InstallGamepadCycling(book)
     if book:IsShown() then QueueFitNativeSearchBox() end
 end
 

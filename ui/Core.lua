@@ -97,7 +97,7 @@ local function UpdateCollapseButton(rowFrame, elementData, anchor)
     end
 
     if not button then
-        button = CreateFrame("Button", nil, rowFrame)
+        button = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
         button:SetSize(COLLAPSE_BUTTON_SIZE, COLLAPSE_BUTTON_SIZE)
         button:SetHighlightTexture(COLLAPSE_HIGHLIGHT, "ADD")
         rowFrame.collapseButton = button
@@ -426,10 +426,132 @@ elseif GameTooltip:HasScript("OnTooltipSetSpell") then
         if AddSpellTooltipExtra(tooltip, TrainerSpells:GetTooltipSpellID(tooltip)) then tooltip:Show() end
     end)
 end
+function TrainerSpells.CreateDetachedFrame(frameType, parent, template)
+    local frame = CreateFrame(frameType, nil, nil, template)
+    frame:SetParent(parent)
+    return frame
+end
+
+function TrainerSpells.RunDetached(frame, func)
+    local parent = frame:GetParent()
+    if not parent or parent == UIParent or frame.compendiumHost then
+        func()
+        return
+    end
+
+    local strata, level = frame:GetFrameStrata(), frame:GetFrameLevel()
+    frame:SetParent(UIParent)
+    func()
+    frame:SetParent(parent)
+    frame:SetFrameStrata(strata)
+    frame:SetFrameLevel(level)
+end
+
+function TrainerSpells.SmartNavClick(frame)
+    print("|cff55ff55TS A click|r", frame:GetName() or frame:GetObjectType(), frame:GetScript("OnMouseUp") and "OnMouseUp" or "", frame:IsObjectType("Button") and "Button" or "")
+    TrainerSpells.GamepadLastAction = "A click " .. tostring(frame:GetName() or frame:GetObjectType())
+    if frame:IsObjectType("EditBox") then
+        frame:SetFocus()
+        return
+    end
+
+    local onMouseDown = frame:GetScript("OnMouseDown")
+    if onMouseDown then onMouseDown(frame, "LeftButton") end
+    if frame:IsObjectType("Button") and frame:GetScript("OnClick") then
+        frame:Click("LeftButton")
+    else
+        local onMouseUp = frame:GetScript("OnMouseUp")
+        if onMouseUp then onMouseUp(frame, "LeftButton") end
+    end
+end
+
+TrainerSpells.GamepadProbeReported = {}
+function TrainerSpells.GamepadAction(action)
+    TrainerSpells.GamepadLastAction = action
+    TrainerSpells.GamepadProbe()
+end
+
+function TrainerSpells.GamepadProbe()
+    if not issecurevariable or not TrainerSpells.IsGamepadNavActive() then return end
+    local reported = TrainerSpells.GamepadProbeReported
+    local function Check(tbl, key, label)
+        if type(tbl) ~= "table" then return end
+        local secure, taintedBy = issecurevariable(tbl, key)
+        if secure then
+            reported[label] = nil
+        elseif not reported[label] then
+            reported[label] = true
+            print(("|cffff5555TS taint|r %s (%s) after: %s"):format(label, tostring(taintedBy), tostring(TrainerSpells.GamepadLastAction)))
+        end
+    end
+
+    local nav = SmartNavigation
+    for _, key in ipairs({"currentButton", "activeInfo", "activePanels", "rightStickScrolling", "bindingActive", "hookedButtons", "currentDirections", "selectButtonSequence"}) do
+        Check(nav, key, "SmartNavigation." .. key)
+    end
+
+    for _, key in ipairs({"buttonGroups", "frame", "currentScrollFrame", "focusedKey", "lastButton", "targetButton"}) do
+        Check(nav.activeInfo, key, "activeInfo." .. key)
+    end
+
+    local manager = GamepadSharedUtility and GamepadSharedUtility.InputBindingManager
+    if manager then
+        Check(manager, "bindingSetStack", "InputBindingManager.bindingSetStack")
+        Check(manager, "currentCoreBindingActive", "InputBindingManager.currentCoreBindingActive")
+        local stack = manager.bindingSetStack
+        if type(stack) == "table" then
+            for index = 1, #stack do
+                Check(stack, index, "bindingSetStack[" .. index .. "]")
+            end
+        end
+    end
+
+    local taintedTooltipKeys = {}
+    for key in pairs(GameTooltip) do
+        if type(key) == "string" and not issecurevariable(GameTooltip, key) then table.insert(taintedTooltipKeys, key) end
+    end
+
+    table.sort(taintedTooltipKeys)
+    local tooltipSummary = table.concat(taintedTooltipKeys, ", ", 1, math.min(#taintedTooltipKeys, 6))
+    if tooltipSummary ~= TrainerSpells.GamepadProbeTooltipSummary then
+        TrainerSpells.GamepadProbeTooltipSummary = tooltipSummary
+        if tooltipSummary ~= "" then print(("|cffff5555TS taint|r GameTooltip fields (%d): %s after: %s"):format(#taintedTooltipKeys, tooltipSummary, tostring(TrainerSpells.GamepadLastAction))) end
+    end
+
+    Check(_G, "ON_BAR_HIGHLIGHT_MARKS", "ON_BAR_HIGHLIGHT_MARKS")
+    Check(_G, "PET_ACTION_HIGHLIGHT_MARKS", "PET_ACTION_HIGHLIGHT_MARKS")
+end
+
+function TrainerSpells.IsGamepadNavActive()
+    return SmartNavigation ~= nil and SmartNavigation.enabled == true
+end
+
+function TrainerSpells:PrepareGamepadNavigation(root, gamepad)
+    if gamepad == nil then gamepad = TrainerSpells.IsGamepadNavActive() end
+    if root:IsObjectType("Button") or root:IsObjectType("EditBox") or root:GetScript("OnMouseUp") or root:GetScript("OnMouseDown") then root.tsGamepadClick = true end
+    local onEnter, onLeave = root:GetScript("OnEnter"), root:GetScript("OnLeave")
+    if gamepad then
+        if onEnter or onLeave then
+            root.tsOnEnter, root.tsOnLeave, root.tsFocusStripped = onEnter, onLeave, true
+            root:SetScript("OnEnter", nil)
+            root:SetScript("OnLeave", nil)
+        end
+    elseif root.tsFocusStripped and not onEnter and not onLeave then
+        root:SetScript("OnEnter", root.tsOnEnter)
+        root:SetScript("OnLeave", root.tsOnLeave)
+        root.tsFocusStripped = nil
+    end
+
+    for _, child in ipairs({root:GetChildren()}) do
+        self:PrepareGamepadNavigation(child, gamepad)
+    end
+end
+
 function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
+    rowFrame.tsFocusStripped, rowFrame.tsOnEnter, rowFrame.tsOnLeave = nil, nil, nil
     local Colors = TrainerSpells.UIColors
     if not rowFrame.icon then
-        local categoryBackground = CreateFrame("Frame", nil, rowFrame, "BackdropTemplate")
+        local categoryBackground = TrainerSpells.CreateDetachedFrame("Frame", rowFrame, "BackdropTemplate")
         categoryBackground:SetAllPoints()
         categoryBackground:SetFrameLevel(math.max(0, rowFrame:GetFrameLevel() - 1))
         categoryBackground:SetBackdrop({
@@ -659,7 +781,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             local locationInfo = location
             local button = rowFrame.locationButtons[index]
             if not button then
-                button = CreateFrame("Button", nil, rowFrame)
+                button = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
                 button.icon = button:CreateTexture(nil, "ARTWORK")
                 button.icon:SetAllPoints()
                 rowFrame.locationButtons[index] = button
@@ -758,7 +880,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
                 local locationInfo = locations[index]
                 local button = rowFrame.locationButtons[index]
                 if not button then
-                    button = CreateFrame("Button", nil, rowFrame)
+                    button = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
                     button.icon = button:CreateTexture(nil, "ARTWORK")
                     button.icon:SetAllPoints()
                     rowFrame.locationButtons[index] = button
