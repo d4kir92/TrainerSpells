@@ -101,3 +101,5 @@ TrainerSpells:AddTrans("frFR", "LID_NEARESTPROFTRAINER", "Maître le plus proche
 TrainerSpells:AddTrans("frFR", "LID_NEARESTPROFTRAINER_DESC", "Place un point de passage vers le maître le plus proche de votre continent qui enseigne ce rang.")
 TrainerSpells:AddTrans("frFR", "LID_NOPROFTRAINER", "Aucun maître pour ce rang trouvé sur ce continent.")
 TrainerSpells:AddTrans("frFR", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Spécialisation")
+TrainerSpells:AddTrans("frFR", "LID_SPOILERFREE", "Sans spoiler")
+TrainerSpells:AddTrans("frFR", "LID_SPOILERFREE_DESC", "Masque les sorts qui exigent plus de 2 niveaux au-dessus de votre niveau actuel.")

@@ -149,8 +149,9 @@ function TrainerSpells:ClassifyEntries(dataTable, searchText, selectedLevel, ski
     local talentNames, learnedTalents
     if not skipTalentCheck then talentNames, learnedTalents = TrainerSpells:GetTalentNameSet() end
     local ignored, known, remaining = {}, {}, {}
+    local spoilerLimit = not professionKey and TrainerSpells_Character and TrainerSpells_Character.spoilerFree and selectedLevel + 2
     for _, entry in ipairs(allEntries) do
-        if TrainerSpells:EntryMatchesSearch(entry, searchText) then
+        if (not spoilerLimit or entry.level <= spoilerLimit) and TrainerSpells:EntryMatchesSearch(entry, searchText) then
             local isIgnored
             if professionKey then
                 isIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID, professionKey)

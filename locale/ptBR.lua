@@ -101,3 +101,5 @@ TrainerSpells:AddTrans("ptBR", "LID_NEARESTPROFTRAINER", "Instrutor mais próxim
 TrainerSpells:AddTrans("ptBR", "LID_NEARESTPROFTRAINER_DESC", "Define um ponto de referência para o instrutor mais próximo no seu continente que ensina esta categoria.")
 TrainerSpells:AddTrans("ptBR", "LID_NOPROFTRAINER", "Nenhum instrutor desta categoria encontrado neste continente.")
 TrainerSpells:AddTrans("ptBR", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Especialização")
+TrainerSpells:AddTrans("ptBR", "LID_SPOILERFREE", "Sem spoilers")
+TrainerSpells:AddTrans("ptBR", "LID_SPOILERFREE_DESC", "Oculta feitiços que exigem mais de 2 níveis acima do seu nível atual.")

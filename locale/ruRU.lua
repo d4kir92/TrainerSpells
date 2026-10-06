@@ -101,3 +101,5 @@ TrainerSpells:AddTrans("ruRU", "LID_NEARESTPROFTRAINER", "Ближайший у�
 TrainerSpells:AddTrans("ruRU", "LID_NEARESTPROFTRAINER_DESC", "Ставит метку на ближайшего учителя на текущем континенте, который обучает этому рангу.")
 TrainerSpells:AddTrans("ruRU", "LID_NOPROFTRAINER", "На этом континенте не найден учитель этого ранга.")
 TrainerSpells:AddTrans("ruRU", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Специализация")
+TrainerSpells:AddTrans("ruRU", "LID_SPOILERFREE", "Без спойлеров")
+TrainerSpells:AddTrans("ruRU", "LID_SPOILERFREE_DESC", "Скрывает заклинания, требующие уровня более чем на 2 выше текущего.")

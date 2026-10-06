@@ -101,3 +101,5 @@ TrainerSpells:AddTrans("esMX", "LID_NEARESTPROFTRAINER", "Instructor más cercan
 TrainerSpells:AddTrans("esMX", "LID_NEARESTPROFTRAINER_DESC", "Coloca un punto de ruta hacia el instructor más cercano de tu continente que enseña este rango.")
 TrainerSpells:AddTrans("esMX", "LID_NOPROFTRAINER", "No se encontró ningún instructor de este rango en este continente.")
 TrainerSpells:AddTrans("esMX", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Especialización")
+TrainerSpells:AddTrans("esMX", "LID_SPOILERFREE", "Sin spoilers")
+TrainerSpells:AddTrans("esMX", "LID_SPOILERFREE_DESC", "Oculta los hechizos que requieren más de 2 niveles por encima de tu nivel actual.")

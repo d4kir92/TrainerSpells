@@ -101,3 +101,5 @@ TrainerSpells:AddTrans("deDE", "LID_NEARESTPROFTRAINER", "Nächster Lehrer (%s)"
 TrainerSpells:AddTrans("deDE", "LID_NEARESTPROFTRAINER_DESC", "Setzt einen Wegpunkt zum nächsten Lehrer auf deinem Kontinent, der diesen Rang beibringt.")
 TrainerSpells:AddTrans("deDE", "LID_NOPROFTRAINER", "Auf diesem Kontinent wurde kein Lehrer für diesen Rang gefunden.")
 TrainerSpells:AddTrans("deDE", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Spezialisierung")
+TrainerSpells:AddTrans("deDE", "LID_SPOILERFREE", "Spoilerfrei")
+TrainerSpells:AddTrans("deDE", "LID_SPOILERFREE_DESC", "Blendet Zauber aus, die mehr als 2 Stufen über deiner aktuellen Stufe liegen.")

@@ -101,3 +101,5 @@ TrainerSpells:AddTrans("koKR", "LID_NEARESTPROFTRAINER", "가장 가까운 전�
 TrainerSpells:AddTrans("koKR", "LID_NEARESTPROFTRAINER_DESC", "현재 대륙에서 이 등급을 가르치는 가장 가까운 상급자에게 위치 표시를 설정합니다.")
 TrainerSpells:AddTrans("koKR", "LID_NOPROFTRAINER", "이 대륙에서 이 등급의 상급자를 찾을 수 없습니다.")
 TrainerSpells:AddTrans("koKR", "LID_PROFTRAINER_SPECHEADER", "%s  ·  전문화")
+TrainerSpells:AddTrans("koKR", "LID_SPOILERFREE", "스포일러 방지")
+TrainerSpells:AddTrans("koKR", "LID_SPOILERFREE_DESC", "현재 레벨보다 2레벨 넘게 높은 주문을 숨깁니다.")

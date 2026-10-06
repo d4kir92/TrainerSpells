@@ -101,3 +101,5 @@ TrainerSpells:AddTrans("zhTW", "LID_NEARESTPROFTRAINER", "最近的訓練師：%
 TrainerSpells:AddTrans("zhTW", "LID_NEARESTPROFTRAINER_DESC", "在目前大陸上為教授此等級的最近訓練師設定路徑點。")
 TrainerSpells:AddTrans("zhTW", "LID_NOPROFTRAINER", "在此大陸上找不到教授此等級的訓練師。")
 TrainerSpells:AddTrans("zhTW", "LID_PROFTRAINER_SPECHEADER", "%s  ·  專精")
+TrainerSpells:AddTrans("zhTW", "LID_SPOILERFREE", "防劇透")
+TrainerSpells:AddTrans("zhTW", "LID_SPOILERFREE_DESC", "隱藏需要比你目前等級高2級以上的法術。")
