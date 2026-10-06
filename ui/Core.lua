@@ -448,8 +448,6 @@ function TrainerSpells.RunDetached(frame, func)
 end
 
 function TrainerSpells.SmartNavClick(frame)
-    print("|cff55ff55TS A click|r", frame:GetName() or frame:GetObjectType(), frame:GetScript("OnMouseUp") and "OnMouseUp" or "", frame:IsObjectType("Button") and "Button" or "")
-    TrainerSpells.GamepadLastAction = "A click " .. tostring(frame:GetName() or frame:GetObjectType())
     if frame:IsObjectType("EditBox") then
         frame:SetFocus()
         return
@@ -463,63 +461,6 @@ function TrainerSpells.SmartNavClick(frame)
         local onMouseUp = frame:GetScript("OnMouseUp")
         if onMouseUp then onMouseUp(frame, "LeftButton") end
     end
-end
-
-TrainerSpells.GamepadProbeReported = {}
-function TrainerSpells.GamepadAction(action)
-    TrainerSpells.GamepadLastAction = action
-    TrainerSpells.GamepadProbe()
-end
-
-function TrainerSpells.GamepadProbe()
-    if not issecurevariable or not TrainerSpells.IsGamepadNavActive() then return end
-    local reported = TrainerSpells.GamepadProbeReported
-    local function Check(tbl, key, label)
-        if type(tbl) ~= "table" then return end
-        local secure, taintedBy = issecurevariable(tbl, key)
-        if secure then
-            reported[label] = nil
-        elseif not reported[label] then
-            reported[label] = true
-            print(("|cffff5555TS taint|r %s (%s) after: %s"):format(label, tostring(taintedBy), tostring(TrainerSpells.GamepadLastAction)))
-        end
-    end
-
-    local nav = SmartNavigation
-    for _, key in ipairs({"currentButton", "activeInfo", "activePanels", "rightStickScrolling", "bindingActive", "hookedButtons", "currentDirections", "selectButtonSequence"}) do
-        Check(nav, key, "SmartNavigation." .. key)
-    end
-
-    for _, key in ipairs({"buttonGroups", "frame", "currentScrollFrame", "focusedKey", "lastButton", "targetButton"}) do
-        Check(nav.activeInfo, key, "activeInfo." .. key)
-    end
-
-    local manager = GamepadSharedUtility and GamepadSharedUtility.InputBindingManager
-    if manager then
-        Check(manager, "bindingSetStack", "InputBindingManager.bindingSetStack")
-        Check(manager, "currentCoreBindingActive", "InputBindingManager.currentCoreBindingActive")
-        local stack = manager.bindingSetStack
-        if type(stack) == "table" then
-            for index = 1, #stack do
-                Check(stack, index, "bindingSetStack[" .. index .. "]")
-            end
-        end
-    end
-
-    local taintedTooltipKeys = {}
-    for key in pairs(GameTooltip) do
-        if type(key) == "string" and not issecurevariable(GameTooltip, key) then table.insert(taintedTooltipKeys, key) end
-    end
-
-    table.sort(taintedTooltipKeys)
-    local tooltipSummary = table.concat(taintedTooltipKeys, ", ", 1, math.min(#taintedTooltipKeys, 6))
-    if tooltipSummary ~= TrainerSpells.GamepadProbeTooltipSummary then
-        TrainerSpells.GamepadProbeTooltipSummary = tooltipSummary
-        if tooltipSummary ~= "" then print(("|cffff5555TS taint|r GameTooltip fields (%d): %s after: %s"):format(#taintedTooltipKeys, tooltipSummary, tostring(TrainerSpells.GamepadLastAction))) end
-    end
-
-    Check(_G, "ON_BAR_HIGHLIGHT_MARKS", "ON_BAR_HIGHLIGHT_MARKS")
-    Check(_G, "PET_ACTION_HIGHLIGHT_MARKS", "PET_ACTION_HIGHLIGHT_MARKS")
 end
 
 function TrainerSpells.IsGamepadNavActive()
@@ -545,6 +486,94 @@ function TrainerSpells:PrepareGamepadNavigation(root, gamepad)
     for _, child in ipairs({root:GetChildren()}) do
         self:PrepareGamepadNavigation(child, gamepad)
     end
+end
+
+TrainerSpells.GamepadRowTargetWidth = 24
+TrainerSpells.GamepadRowInset = 10
+function TrainerSpells:ApplyRowInteraction(rowFrame)
+    local gamepad = TrainerSpells.IsGamepadNavActive()
+    local onEnter, onLeave, onMouseUp = rowFrame:GetScript("OnEnter"), rowFrame:GetScript("OnLeave"), rowFrame:GetScript("OnMouseUp")
+    rowFrame:SetScript("OnEnter", nil)
+    rowFrame:SetScript("OnLeave", nil)
+    rowFrame:SetScript("OnMouseUp", nil)
+    rowFrame:EnableMouse(false)
+    rowFrame.tsStandIns = rowFrame.tsStandIns or {}
+    for _, standIn in pairs(rowFrame.tsStandIns) do
+        standIn:Hide()
+    end
+
+    local locationClick
+    if gamepad then
+        local subButtons = {}
+        if rowFrame.collapseButton then table.insert(subButtons, rowFrame.collapseButton) end
+        for _, button in ipairs(rowFrame.locationButtons or {}) do
+            table.insert(subButtons, button)
+        end
+
+        for _, button in ipairs(subButtons) do
+            if button:IsShown() then
+                if button ~= rowFrame.collapseButton then locationClick = locationClick or button:GetScript("OnClick") end
+                local source = button.icon or button:GetNormalTexture()
+                local standIn = rowFrame.tsStandIns[button]
+                if not standIn then
+                    standIn = rowFrame:CreateTexture(nil, "OVERLAY")
+                    standIn:SetAllPoints(button)
+                    rowFrame.tsStandIns[button] = standIn
+                end
+
+                standIn:SetTexture(source and source:GetTexture())
+                if source then standIn:SetTexCoord(source:GetTexCoord()) end
+                standIn:Show()
+                button:Hide()
+            end
+        end
+
+        if rowFrame.icon:IsShown() then
+            local point, relativeTo, relativePoint, x, y = rowFrame.icon:GetPoint(1)
+            if point then rowFrame.icon:SetPoint(point, relativeTo, relativePoint, x + TrainerSpells.GamepadRowInset, y) end
+        end
+    end
+
+    local hit = rowFrame.hitButton
+    if not (onEnter or onMouseUp or locationClick) then
+        if hit then hit:Hide() end
+        return
+    end
+
+    if not hit then
+        hit = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
+        hit.tsRow = rowFrame
+        local highlight = hit:CreateTexture(nil, "HIGHLIGHT")
+        highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
+        highlight:SetBlendMode("ADD")
+        highlight:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", 0, 0)
+        highlight:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", 0, 0)
+        hit:SetHighlightTexture(highlight)
+        rowFrame.hitButton = hit
+    end
+
+    hit:SetFrameLevel(rowFrame:GetFrameLevel())
+    hit:ClearAllPoints()
+    hit:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", 0, 0)
+    hit:SetPoint("BOTTOMLEFT", rowFrame, "BOTTOMLEFT", 0, 0)
+    if gamepad then
+        hit:SetWidth(TrainerSpells.GamepadRowTargetWidth)
+    else
+        hit:SetPoint("TOPRIGHT", rowFrame, "TOPRIGHT", 0, 0)
+        hit:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", 0, 0)
+    end
+
+    hit:GetHighlightTexture():SetAlpha(gamepad and 1 or 0)
+    hit.tsFocusStripped, hit.tsOnEnter, hit.tsOnLeave = nil, nil, nil
+    hit:SetScript("OnEnter", onEnter and function() onEnter(rowFrame) end or nil)
+    hit:SetScript("OnLeave", onLeave and function() onLeave(rowFrame) end or nil)
+    hit:SetScript("OnMouseUp", function(_, button)
+        if onMouseUp then onMouseUp(rowFrame, button) end
+        if locationClick and button == "LeftButton" then locationClick() end
+    end)
+
+    hit:EnableMouse(true)
+    hit:Show()
 end
 
 function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)

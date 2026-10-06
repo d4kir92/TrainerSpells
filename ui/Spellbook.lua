@@ -346,6 +346,7 @@ local function PositionPlayerSpellsFrame()
     local showWeaponControls = TrainerSpells.ClassView == "weapons" and TrainerSpells.WeaponControls
     local showClassTrainerControls = TrainerSpells.ClassView == "trainers" and TrainerSpells.ClassTrainerControls
     local panel = playerSpellsSubTabs.panel
+    local showSpoilerFree = panel and TrainerSpells.ClassView == "class"
     local anchor, left, right, top = classFrame, 48, -100, -2
     if panel then
         panel:Show()
@@ -371,9 +372,9 @@ local function PositionPlayerSpellsFrame()
         slider:SetWidth(168 / sliderScale)
         local spoilerFree = playerSpellsSubTabs.spoilerFree
         spoilerFree:ClearAllPoints()
-        spoilerFree:SetPoint("BOTTOMLEFT", slider, "TOPLEFT", 0, 2)
+        spoilerFree:SetPoint("TOPLEFT", panel, "TOPLEFT", left, top)
         spoilerFree:SetChecked(TrainerSpells_Character.spoilerFree and true or false)
-        spoilerFree:Show()
+        spoilerFree:SetShown(showSpoilerFree)
         playerSpellsSubTabs.title:ClearAllPoints()
         playerSpellsSubTabs.title:SetPoint("TOPLEFT", bar, "TOPRIGHT", 12, 0)
         playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -266, 35)
@@ -392,7 +393,7 @@ local function PositionPlayerSpellsFrame()
 
     if TrainerSpells.WeaponControls then TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false) end
     if TrainerSpells.ClassTrainerControls then TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false) end
-    local dividerOffset = top + 1 + (showClassTrainerControls and -42 or showWeaponControls and -34 or 0)
+    local dividerOffset = top + 1 + (showClassTrainerControls and -42 or showWeaponControls and -34 or showSpoilerFree and -26 or 0)
     if playerSpellsModeDivider then
         playerSpellsModeDivider:ClearAllPoints()
         if panel then
@@ -560,7 +561,6 @@ local function ClosePlayerSpellsPanel()
     end
 
     if wasOpen then SetNativeCategoryTabsVisual(GetPlayerSpellsBook(), true) end
-    TrainerSpells.GamepadAction("close panel")
 end
 
 local function OpenPlayerSpellsPanel()
@@ -573,7 +573,6 @@ local function OpenPlayerSpellsPanel()
     TrainerSpells:PrepareGamepadNavigation(classFrame)
     SetNativeCategoryTabsVisual(book, false)
     TrainerSpells:UpdateClassViewTabs()
-    TrainerSpells.GamepadAction("open panel")
 end
 
 function TrainerSpells:UpdateClassViewTabs()
@@ -666,6 +665,17 @@ function playerSpellsSubTabs.Create()
     desc:SetJustifyH("LEFT")
     desc:SetWordWrap(false)
     desc:SetTextColor(0.75, 0.75, 0.75)
+    local titleButton = TrainerSpells.CreateDetachedFrame("Button", classFrame)
+    titleButton:SetPoint("TOPLEFT", title, "TOPLEFT", 0, 0)
+    titleButton:SetPoint("BOTTOMRIGHT", desc, "BOTTOMRIGHT", 0, 0)
+    titleButton:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", 0, self:GetHeight())
+        GameTooltip:SetText(title:GetText() or "")
+        GameTooltip:AddLine(desc:GetText() or "", 1, 1, 1, true)
+        GameTooltip:Show()
+    end)
+
+    titleButton:SetScript("OnLeave", GameTooltip_Hide)
     playerSpellsSubTabs.spoilerFree = TrainerSpells:CreateSpoilerFreeCheckbox(classFrame, "spoilerFree", "LID_SPOILERFREE_DESC", TrainerSpells_Refresh)
     playerSpellsSubTabs.title = title
     playerSpellsSubTabs.desc = desc
@@ -738,12 +748,6 @@ function playerSpellsSubTabs.SelectNextView(forward)
     end
 end
 
-SLASH_TRAINERSPELLSGPTIP1 = "/tsgptip"
-SlashCmdList.TRAINERSPELLSGPTIP = function()
-    TrainerSpells.GamepadTooltipsDisabled = not TrainerSpells.GamepadTooltipsDisabled
-    print("TrainerSpells gamepad tooltips:", TrainerSpells.GamepadTooltipsDisabled and "off" or "on")
-end
-
 function playerSpellsSubTabs.InstallGamepadCycling(book)
     if not book.GetTab or not IsKeyDown or not playerSpellsModeTabContainer then return end
     local focused, gamepadState, scrolledTo
@@ -753,41 +757,33 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
             gamepadState = gamepad
             TrainerSpells:PrepareGamepadNavigation(playerSpellsModeTabContainer, gamepad)
             TrainerSpells:PrepareGamepadNavigation(classFrame, gamepad)
+            if TrainerSpells_Refresh then TrainerSpells_Refresh() end
         end
 
         if gamepad and classFrame:IsShown() and not classFrame.compendiumHost then
             playerSpellsSubTabs.DetachNativeButtons(book)
-            TrainerSpells.GamepadAction("detach native buttons")
         else
             playerSpellsSubTabs.RestoreNativeButtons()
-            TrainerSpells.GamepadAction("restore native buttons")
         end
 
         local current = gamepad and SmartNavigation:GetCurrentButton() or nil
         if current ~= scrolledTo then
             scrolledTo = current
-            if current and current.GetElementData and current:GetParent() == TrainerSpells.ClassScrollTarget then
-                TrainerSpells.ClassScrollBox:ScrollToElementData(current:GetElementData(), ScrollBoxConstants.AlignNearest)
-                TrainerSpells.GamepadAction("scroll to row")
+            local row = current and current.tsRow
+            if row and row.GetElementData and row:GetParent() == TrainerSpells.ClassScrollTarget then
+                TrainerSpells.ClassScrollBox:ScrollToElementData(row:GetElementData(), ScrollBoxConstants.AlignNearest)
             end
         end
 
         if current and not current.tsFocusStripped then current = nil end
         if current == focused then return end
-        if TrainerSpells.GamepadTooltipsDisabled then
-            focused = current
-            return
-        end
-
         if focused and focused.tsOnLeave then
             focused.tsOnLeave(focused)
-            TrainerSpells.GamepadAction("tooltip leave " .. tostring(focused:GetName() or focused:GetObjectType()))
         end
 
         focused = current
         if focused and focused.tsOnEnter then
             focused.tsOnEnter(focused)
-            TrainerSpells.GamepadAction("tooltip enter " .. tostring(focused:GetName() or focused:GetObjectType()))
         end
     end
 
@@ -805,7 +801,6 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
             OpenPlayerSpellsPanel()
         end
 
-        TrainerSpells.GamepadAction((forward and "RB" or "LB") .. (tabChanged and " native tab changed" or " our view"))
     end
 
     local aHeld = false
@@ -813,10 +808,8 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
         local down = IsKeyDown("PAD1") and true or false
         if down and not aHeld and TrainerSpells.IsGamepadNavActive() then
             local current = SmartNavigation:GetCurrentButton()
-            print("|cff55ff55TS A pressed|r", current and (current:GetName() or current:GetObjectType()) or "nil", current and (current.tsGamepadClick and "ours" or "not ours") or "")
             if current and current.tsGamepadClick and current:IsVisible() and (not current.IsEnabled or current:IsEnabled()) then
                 TrainerSpells.SmartNavClick(current)
-                TrainerSpells.GamepadAction("A click done")
             end
         end
         aHeld = down
@@ -838,18 +831,15 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
     end)
 
     playerSpellsModeTabContainer:SetScript("OnUpdate", function()
-        TrainerSpells.GamepadAction("outside TrainerSpells (Blizzard or other code since last frame)")
         local tabBefore = lastTab
         lastTab = book:GetTab()
         if tabBefore and lastTab ~= tabBefore and classFrame:IsShown() and not classFrame.compendiumHost then
             ClosePlayerSpellsPanel()
-            TrainerSpells.GamepadAction("native category changed")
         end
         CheckShoulder("PADRSHOULDER", true, tabBefore)
         CheckShoulder("PADLSHOULDER", false, tabBefore)
         CheckAButton()
         UpdateGamepadFocus()
-        TrainerSpells.GamepadProbe()
     end)
 
     local nextIcon = book.NextCategoryIcon
@@ -1046,9 +1036,10 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
     if view.slider.MinText then view.slider.MinText:Hide() end
     if view.slider.MaxText then view.slider.MaxText:Hide() end
     view.slider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value) view.rowHeight = math.floor(value + 0.5); if view.BuildItems then view:Refresh() end end)
-    function view:AddSpoilerFreeCheckbox(settingKey, descKey)
+    function view:AddSpoilerFreeCheckbox(settingKey, descKey, onlyMode)
         self.spoilerFree = TrainerSpells:CreateSpoilerFreeCheckbox(host, settingKey, descKey, function() self:Refresh() end)
         self.spoilerFree:SetPoint("LEFT", self.slider, "RIGHT", 30, 0)
+        self.spoilerFreeMode = onlyMode
     end
     function view:Refresh()
         for index, tab in ipairs(self.tabs) do
@@ -1058,6 +1049,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
                 self.desc:SetText(TrainerSpells:Trans(self.entries[index].desc))
             end
         end
+        if self.spoilerFree and self.spoilerFreeMode then self.spoilerFree:SetShown(self.mode == self.spoilerFreeMode) end
         local offset = -4
         for _, control in ipairs(self.controls or {}) do
             local active = control.mode == self.mode
@@ -1088,7 +1080,7 @@ function TrainerSpells:CreateCompendiumClass(host)
     local view = self:CreateCompendiumListView(host, playerSpellsSubTabs.views, playerSpellsSubTabs.GetSavedView(), self.RowHeight)
     self.CompendiumClassView = view
     view.BuildItems = function(current) return TrainerSpells:BuildClassViewItems(current.mode, host.searchText) end
-    view:AddSpoilerFreeCheckbox("spoilerFree", "LID_SPOILERFREE_DESC")
+    view:AddSpoilerFreeCheckbox("spoilerFree", "LID_SPOILERFREE_DESC", "class")
     view.controls = {}
     for _, entry in ipairs({{self.CreateClassTrainerControls, "trainers", 48}, {self.CreateWeaponControls, "weapons", 40}}) do
         if entry[1] then

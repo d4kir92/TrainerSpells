@@ -45,8 +45,9 @@ scrollView:SetElementExtentCalculator(function(_, elementData)
 end)
 
 scrollView:SetPadding(0, 0, 0, 0, TrainerSpells.RowSpacing)
-scrollView:SetElementInitializer("Button", function(rowFrame, elementData)
+scrollView:SetElementInitializer("Frame", function(rowFrame, elementData)
     TrainerSpells:InitScrollRow(rowFrame, elementData, TrainerSpells.RowHeight)
+    TrainerSpells:ApplyRowInteraction(rowFrame)
     TrainerSpells:PrepareGamepadNavigation(rowFrame)
 end)
 ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
@@ -103,7 +104,6 @@ function TrainerSpells_Refresh()
     end)
 
     if TrainerSpells.CompendiumClassView then TrainerSpells.CompendiumClassView:Refresh() end
-    TrainerSpells.GamepadAction("refresh list")
 end
 
 function TrainerSpells:HasPetClassData(classToken)
