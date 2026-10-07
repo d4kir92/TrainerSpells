@@ -206,8 +206,8 @@ end
 
 if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     local lastTab = _G["SpellBookSkillLineTab5"] or _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
-    local function CreateClassicModeTab(name, view, icon, tooltip, previousTab)
-        if not TrainerSpells:IsTabEnabled("spellbook") or not TrainerSpells:IsTabEnabled(view) then return previousTab end
+    local classicModeTabOrder = {}
+    local function CreateClassicModeTab(name, view, icon, tooltip)
         local tab = CreateFrame("Button", name, SpellBookFrame)
         tab:SetSize(32, 32)
         tab:SetNormalTexture(icon)
@@ -222,12 +222,6 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         glow:SetTexture(130724)
         glow:SetBlendMode("ADD")
         glow:Hide()
-        if previousTab then
-            tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -16)
-        else
-            tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, 0)
-        end
-
         tab:Hide()
         tab:SetScript("OnClick", function() OpenFrame(view) end)
         tab:SetScript("OnEnter", function(sel)
@@ -239,17 +233,50 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         tab:SetScript("OnLeave", GameTooltip_Hide)
         classicModeTabs[view] = tab
         classicModeTabGlows[view] = glow
+        table.insert(classicModeTabOrder, view)
         return tab
     end
 
     local className, classToken = UnitClass("player")
-    local previousTab = CreateClassicModeTab("TrainerSpellsSpellbookTab", "class", "Interface\\Icons\\INV_Misc_Book_09", className or TrainerSpells:Trans("LID_CLASSTRAINER"))
-    if TrainerSpells:HasPetClassData(classToken) then previousTab = CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING"), previousTab) end
-    if TrainerSpells.BuildClassTrainerItems then previousTab = CreateClassicModeTab("TrainerSpellsClassTrainerMapTab", "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS"), previousTab) end
-    if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills", previousTab) end
+    CreateClassicModeTab("TrainerSpellsSpellbookTab", "class", "Interface\\Icons\\INV_Misc_Book_09", className or TrainerSpells:Trans("LID_CLASSTRAINER"))
+    if TrainerSpells:HasPetClassData(classToken) then CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING")) end
+    if TrainerSpells.BuildClassTrainerItems then CreateClassicModeTab("TrainerSpellsClassTrainerMapTab", "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS")) end
+    if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills") end
+    local function IsClassicModeTabEnabled(view)
+        return TrainerSpells:IsTabEnabled("spellbook") and TrainerSpells:IsTabEnabled(view)
+    end
+
+    local function ApplyClassicModeTabs()
+        local previousTab = nil
+        for _, view in ipairs(classicModeTabOrder) do
+            local tab = classicModeTabs[view]
+            local enabled = IsClassicModeTabEnabled(view)
+            tab:ClearAllPoints()
+            if enabled then
+                if previousTab then
+                    tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -16)
+                else
+                    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, 0)
+                end
+
+                previousTab = tab
+            end
+
+            tab:SetShown(enabled and SpellBookFrame:IsShown())
+        end
+
+        if classFrame:IsShown() and not classFrame.compendiumHost and not IsClassicModeTabEnabled(TrainerSpells.ClassView) then
+            classFrame:Hide()
+            ShowNativeSpellButtons()
+            HideClassicModeTabGlows()
+        end
+    end
+
+    ApplyClassicModeTabs()
+    TrainerSpells:OnTabSettingsChanged(ApplyClassicModeTabs)
     SpellBookFrame:HookScript("OnShow", function()
-        for _, tab in pairs(classicModeTabs) do
-            tab:Show()
+        for view, tab in pairs(classicModeTabs) do
+            tab:SetShown(IsClassicModeTabEnabled(view))
         end
     end)
 
@@ -307,7 +334,7 @@ end
 
 function playerSpellsSubTabs.Update()
     if not playerSpellsSubTabs.bar then return end
-    for index, entry in ipairs(playerSpellsSubTabs.views) do
+    for index, entry in ipairs(playerSpellsSubTabs.allViews) do
         if entry.view == TrainerSpells.ClassView then
             playerSpellsSubTabs.bar:SetTabVisuallySelected(index)
             playerSpellsSubTabs.title:SetText(entry.title)
@@ -636,8 +663,8 @@ function playerSpellsSubTabs.Create()
         desc = "LID_WEAPONVIEW_DESC"
     })
 
-    views = TrainerSpells:FilterTabViews(views)
-    playerSpellsSubTabs.views = views
+    playerSpellsSubTabs.allViews = views
+    playerSpellsSubTabs.views = TrainerSpells:FilterTabViews(views)
     local bar = CreateFrame("Frame", "TrainerSpellsPlayerSpellsSubTabs", classFrame, "TabSystemTemplate")
     bar:SetTabSelectedCallback(function(tabID)
         local entry = views[tabID]
@@ -682,8 +709,45 @@ function playerSpellsSubTabs.Create()
     playerSpellsSubTabs.title = title
     playerSpellsSubTabs.desc = desc
     playerSpellsSubTabs.bar = bar
+    playerSpellsSubTabs.ApplySettings()
+end
+
+function playerSpellsSubTabs.ApplySettings()
+    if playerSpellsModeTabContainer then
+        local enabled = TrainerSpells:IsTabEnabled("spellbook") and TrainerSpells:HasSpellbookTabs()
+        playerSpellsModeTabContainer:SetShown(enabled)
+        local nextIcon = playerSpellsSubTabs.nextIcon
+        if nextIcon and playerSpellsSubTabs.nextIconPoints then
+            nextIcon:ClearAllPoints()
+            if enabled then
+                nextIcon:SetPoint("TOPLEFT", playerSpellsModeTabs.addon, "TOPRIGHT", 0, 0)
+            else
+                for _, point in ipairs(playerSpellsSubTabs.nextIconPoints) do nextIcon:SetPoint(unpack(point)) end
+            end
+        end
+        if not enabled and classFrame:IsShown() and not classFrame.compendiumHost then ClosePlayerSpellsPanel() end
+    end
+
+    if not playerSpellsSubTabs.allViews then return end
+    playerSpellsSubTabs.views = TrainerSpells:FilterTabViews(playerSpellsSubTabs.allViews)
+    if playerSpellsSubTabs.bar then
+        for index, entry in ipairs(playerSpellsSubTabs.allViews) do
+            playerSpellsSubTabs.bar:SetTabShown(index, TrainerSpells:IsTabEnabled(entry.view))
+        end
+    end
+
+    local first = playerSpellsSubTabs.views[1]
+    local panelOpen = playerSpellsModeTabContainer and classFrame:IsShown() and not classFrame.compendiumHost
+    if first and not TrainerSpells:IsTabEnabled(TrainerSpells.ClassView or "") then
+        TrainerSpells:SetClassView(first.view)
+        if panelOpen then OpenPlayerSpellsPanel() end
+    elseif not first and panelOpen then
+        ClosePlayerSpellsPanel()
+    end
     playerSpellsSubTabs.Update()
 end
+
+TrainerSpells:OnTabSettingsChanged(playerSpellsSubTabs.ApplySettings)
 
 local function CreatePlayerSpellsModeTabs(book, tabSystem)
     local container = CreateFrame("Frame", "TrainerSpellsPlayerSpellsModeTabs", book)
@@ -846,6 +910,10 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
 
     local nextIcon = book.NextCategoryIcon
     if nextIcon and playerSpellsModeTabs.addon then
+        local points = {}
+        for index = 1, nextIcon:GetNumPoints() do points[index] = {nextIcon:GetPoint(index)} end
+        playerSpellsSubTabs.nextIcon = nextIcon
+        playerSpellsSubTabs.nextIconPoints = points
         nextIcon:ClearAllPoints()
         nextIcon:SetPoint("TOPLEFT", playerSpellsModeTabs.addon, "TOPRIGHT", 0, 0)
         nextIcon:HookScript("OnShow", QueueFitNativeSearchBox)
@@ -873,7 +941,7 @@ end
 
 local function InstallPlayerSpellsIntegration()
     local book = GetPlayerSpellsBook()
-    if playerSpellsModeTabContainer or not book or not TrainerSpells:IsTabEnabled("spellbook") or not TrainerSpells:HasSpellbookTabs() then return end
+    if playerSpellsModeTabContainer or not book then return end
     local tabSystem = book.CategoryTabSystem
     if not tabSystem then return end
     CreatePlayerSpellsModeTabs(book, tabSystem)
@@ -884,6 +952,7 @@ local function InstallPlayerSpellsIntegration()
     book:HookScript("OnShow", QueueFitNativeSearchBox)
     book:HookScript("OnSizeChanged", QueueFitNativeSearchBox)
     playerSpellsSubTabs.InstallGamepadCycling(book)
+    playerSpellsSubTabs.ApplySettings()
     if book:IsShown() then QueueFitNativeSearchBox() end
 end
 
@@ -984,8 +1053,38 @@ function TrainerSpells:PositionCompendiumClass()
     playerSpellsSubTabs.Update()
 end
 
-function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
-    local view = {host = host, mode = mode, rowHeight = rowHeight, tabs = {}, entries = entries}
+function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, isEntryVisible)
+    local view = {host = host, mode = mode, rowHeight = rowHeight, tabs = {}, entries = entries, isEntryVisible = isEntryVisible}
+    function view:IsEntryVisible(index)
+        return not self.isEntryVisible or self.isEntryVisible(self.entries[index])
+    end
+    function view:LayoutTabs()
+        local previous = nil
+        for index, tab in ipairs(self.tabs) do
+            local shown = self:IsEntryVisible(index)
+            tab:SetShown(shown)
+            if shown then
+                AzerothCompendiumAPI.PositionContentTab(tab, host, previous)
+                previous = tab
+            end
+        end
+        if previous then self.title:SetPoint("BOTTOMLEFT", previous, "BOTTOMRIGHT", 12, 17) end
+    end
+    function view:EnsureVisibleMode()
+        local first = nil
+        for index, tab in ipairs(self.tabs) do
+            if self:IsEntryVisible(index) then
+                if tab.mode == self.mode then return end
+                first = first or tab.mode
+            end
+        end
+        if first then self.mode = first end
+    end
+    function view:ApplyVisibility()
+        self:LayoutTabs()
+        self:EnsureVisibleMode()
+        if host:IsShown() then self:Refresh() end
+    end
     function view:TranslateTitle(text)
         if type(text) == "string" and text:find("LID_", 1, true) == 1 then return TrainerSpells:Trans(text) end
         return text
@@ -1010,9 +1109,9 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
             GameTooltip:Show()
         end)
         table.insert(view.tabs, tab)
-        AzerothCompendiumAPI.PositionContentTab(tab, host, view.tabs[#view.tabs - 1])
     end
-    view.title:SetPoint("BOTTOMLEFT", view.tabs[#view.tabs], "BOTTOMRIGHT", 12, 17)
+    view:LayoutTabs()
+    view:EnsureVisibleMode()
     view.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 17)
     view.scrollBox = CreateFrame("Frame", nil, host, "WowScrollBoxList")
     view.scrollBox:SetPoint("TOPLEFT", host, "TOPLEFT", 0, -4)
@@ -1044,6 +1143,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
         self.spoilerFreeMode = onlyMode
     end
     function view:Refresh()
+        self:EnsureVisibleMode()
         for index, tab in ipairs(self.tabs) do
             tab:SetTabSelected(tab.mode == self.mode)
             if tab.mode == self.mode then
@@ -1066,7 +1166,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight)
     host.OnSearchChanged = function() view:Refresh() end
     host:SetScript("OnSizeChanged", function()
         AzerothCompendiumAPI.PositionHeaderSlider(view.slider)
-        for index, tab in ipairs(view.tabs) do AzerothCompendiumAPI.PositionContentTab(tab, host, view.tabs[index - 1]) end
+        view:LayoutTabs()
     end)
     AzerothCompendiumAPI.PositionHeaderSlider(view.slider)
     host:RegisterEvent("PLAYER_LEVEL_UP")
@@ -1079,7 +1179,7 @@ end
 
 function TrainerSpells:CreateCompendiumClass(host)
     playerSpellsSubTabs.Create()
-    local view = self:CreateCompendiumListView(host, playerSpellsSubTabs.views, playerSpellsSubTabs.GetSavedView(), self.RowHeight)
+    local view = self:CreateCompendiumListView(host, playerSpellsSubTabs.allViews, playerSpellsSubTabs.GetSavedView(), self.RowHeight, function(entry) return TrainerSpells:IsTabEnabled(entry.view) end)
     self.CompendiumClassView = view
     view.BuildItems = function(current) return TrainerSpells:BuildClassViewItems(current.mode, host.searchText) end
     view:AddSpoilerFreeCheckbox("spoilerFree", "LID_SPOILERFREE_DESC", "class")
@@ -1096,7 +1196,7 @@ function TrainerSpells:CreateCompendiumClass(host)
 end
 function TrainerSpells:RegisterCompendiumTabs()
     local api = _G["AzerothCompendiumAPI"]
-    if type(api) ~= "table" or type(api.RegisterTab) ~= "function" then return end
+    if not self.SettingsReady or type(api) ~= "table" or type(api.RegisterTab) ~= "function" then return end
     if self:IsTabEnabled("compendium_professions") and self:HasProfessionTabs() then
         api.RegisterTab("TrainerSpells:professions", {
             label = function() return TrainerSpells:Trans("LID_PROFESSIONS") end,
@@ -1104,18 +1204,31 @@ function TrainerSpells:RegisterCompendiumTabs()
             insertBefore = "wishlist",
             createPanel = function(host) TrainerSpells:CreateCompendiumProfessions(host) end
         })
+    elseif type(api.UnregisterTab) == "function" then
+        api.UnregisterTab("TrainerSpells:professions")
     end
-    if not self:HasClassTrainers() or not self:IsTabEnabled("compendium_class") or not self:HasSpellbookTabs() then return end
-    api.RegisterTab("TrainerSpells:class", {
-        label = function() return _G.CLASSES or (GetLocale() == "deDE" and "Klassen") or "Classes" end,
-        icon = 133743,
-        insertBefore = "wishlist",
-        createPanel = function(host) TrainerSpells:CreateCompendiumClass(host) end
-    })
+    if self:HasClassTrainers() and self:IsTabEnabled("compendium_class") and self:HasSpellbookTabs() then
+        api.RegisterTab("TrainerSpells:class", {
+            label = function() return _G.CLASSES or (GetLocale() == "deDE" and "Klassen") or "Classes" end,
+            icon = 133743,
+            insertBefore = "wishlist",
+            createPanel = function(host) TrainerSpells:CreateCompendiumClass(host) end
+        })
+    elseif type(api.UnregisterTab) == "function" then
+        api.UnregisterTab("TrainerSpells:class")
+    end
+    if self.CompendiumClassView and self.CompendiumClassView.ApplyVisibility then self.CompendiumClassView:ApplyVisibility() end
+    if self.CompendiumProfessionView and self.CompendiumProfessionView.ApplyVisibility then self.CompendiumProfessionView:ApplyVisibility() end
 end
 
 TrainerSpells.CompendiumLoader = CreateFrame("Frame")
 TrainerSpells.CompendiumLoader:RegisterEvent("ADDON_LOADED")
 TrainerSpells.CompendiumLoader:RegisterEvent("PLAYER_LOGIN")
-TrainerSpells.CompendiumLoader:SetScript("OnEvent", function(_, event, name) if event == "PLAYER_LOGIN" or name == "AzerothCompendium" then TrainerSpells:RegisterCompendiumTabs() end end)
+TrainerSpells.CompendiumLoader:SetScript("OnEvent", function(_, event, name)
+    if event == "PLAYER_LOGIN" then
+        C_Timer.After(0, function() TrainerSpells:RegisterCompendiumTabs() end)
+    elseif name == "AzerothCompendium" then
+        TrainerSpells:RegisterCompendiumTabs()
+    end
+end)
 TrainerSpells:RegisterCompendiumTabs()

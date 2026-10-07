@@ -1,8 +1,46 @@
 local _, TrainerSpells = ...
 TrainerSpells.TabSettings = {}
-for _, key in ipairs({"spellbook", "class", "pet", "trainers", "weapons", "professions", "profession_skill", "profession_recipes", "profession_trainers", "compendium_class", "compendium_professions"}) do
-    TrainerSpells.TabSettings[key] = TrainerSpells_Character[key] ~= false
+TrainerSpells.TabSettingKeys = {"spellbook", "class", "pet", "trainers", "weapons", "professions", "profession_skill", "profession_recipes", "profession_trainers", "compendium_class", "compendium_professions"}
+TrainerSpells.SharedTabSettings = {
+    TRAINERSPELLS_COMPENDIUM_CLASS = "compendium_class",
+    TRAINERSPELLS_COMPENDIUM_PROFESSIONS = "compendium_professions"
+}
+
+function TrainerSpells:LoadTabSettings()
+    for _, key in ipairs(self.TabSettingKeys) do
+        self.TabSettings[key] = TrainerSpells_Character[key] ~= false
+    end
 end
+
+TrainerSpells:LoadTabSettings()
+TrainerSpells.TabSettingListeners = {}
+TrainerSpells.SettingCheckboxes = {}
+function TrainerSpells:OnTabSettingsChanged(listener)
+    table.insert(self.TabSettingListeners, listener)
+end
+
+function TrainerSpells:ApplyTabSettings()
+    if not self.SettingsReady then return end
+    self:LoadTabSettings()
+    for _, listener in ipairs(self.TabSettingListeners) do
+        local ok, err = pcall(listener)
+        if not ok and geterrorhandler then geterrorhandler()(err) end
+    end
+    self:RegisterCompendiumTabs()
+    if self.SettingsWindow and self.SettingsWindow.UpdateDependencies then self.SettingsWindow:UpdateDependencies() end
+end
+
+TrainerSpells:RegisterSharedSettings({
+    keys = {"TRAINERSPELLS_COMPENDIUM_CLASS", "TRAINERSPELLS_COMPENDIUM_PROFESSIONS"},
+    getDB = function() return TrainerSpells_Character end,
+    get = function(key) return TrainerSpells_Character[TrainerSpells.SharedTabSettings[key]] ~= false end,
+    set = function(key, value) TrainerSpells_Character[TrainerSpells.SharedTabSettings[key]] = value end,
+    onChange = function(key, value)
+        local checkbox = TrainerSpells.SettingCheckboxes[TrainerSpells.SharedTabSettings[key]]
+        if checkbox and checkbox.SetChecked then checkbox:SetChecked(value ~= false) end
+        TrainerSpells:ApplyTabSettings()
+    end
+})
 
 function TrainerSpells:IsTabEnabled(key)
     return self.TabSettings[key] ~= false
@@ -55,15 +93,20 @@ function TrainerSpells:ToggleSettings()
         }) do
             win:AddCategory({label = category.label, key = category.key})
             local function AddParent(key, label)
-                return win:AddCheckbox({
+                local checkbox = win:AddCheckbox({
                     label = label,
                     added = "2026-10-07",
                     value = TrainerSpells_Character[key] ~= false,
                     func = function(value)
                         TrainerSpells_Character[key] = value
-                        win:UpdateDependencies()
+                        for sharedKey, setting in pairs(self.SharedTabSettings) do
+                            if setting == key then self:SetSharedSetting(sharedKey, value) end
+                        end
+                        self:ApplyTabSettings()
                     end
                 })
+                self.SettingCheckboxes[key] = checkbox
+                return checkbox
             end
             local addonTab = AddParent(category.key, "LID_SETTINGS_ADDONTAB")
             local children = {}
@@ -73,8 +116,12 @@ function TrainerSpells:ToggleSettings()
                     label = option[2],
                     added = "2026-10-07",
                     value = TrainerSpells_Character[key] ~= false,
-                    func = function(value) TrainerSpells_Character[key] = value end
+                    func = function(value)
+                        TrainerSpells_Character[key] = value
+                        self:ApplyTabSettings()
+                    end
                 })
+                self.SettingCheckboxes[key] = checkbox
                 win:AddDependency(checkbox, function()
                     return TrainerSpells_Character[category.key] ~= false or TrainerSpells_Character[category.compendium] ~= false
                 end)
@@ -88,17 +135,13 @@ function TrainerSpells:ToggleSettings()
         end
         win:UpdateDependencies()
         win:Layout()
-        local footer = win:AddFooter({height = 26})
-        local save = CreateFrame("Button", nil, footer, "UIPanelButtonTemplate")
-        save:SetSize(150, 24)
-        save:SetPoint("RIGHT", footer, "RIGHT", 0, 0)
-        save:SetText("Save & Reload")
-        save:SetScript("OnClick", function() ReloadUI() end)
     end
     self.SettingsWindow:SetShown(not self.SettingsWindow:IsShown())
 end
 
 function TrainerSpells:InitializeSettings()
+    self:LoadTabSettings()
+    self.SettingsReady = true
     if TrainerSpells_Character.showMinimapButton == nil then TrainerSpells_Character.showMinimapButton = true end
     self:CreateMinimapButton({
         name = "TrainerSpells",
@@ -111,4 +154,5 @@ function TrainerSpells:InitializeSettings()
     })
     self:AddSlash("ts", function() self:ToggleSettings() end)
     self:AddSlash("trainerspells", function() self:ToggleSettings() end)
+    self:ApplyTabSettings()
 end

@@ -106,8 +106,12 @@ local PROFESSION_SUB_VIEWS = {
     {mode = PROFESSION_VIEW_RECIPES, icon = "Interface\\Icons\\INV_Scroll_03", title = "LID_PROFESSION_OTHERRECIPES", desc = "LID_PROFESSION_OTHERRECIPES_DESC"},
     {mode = PROFESSION_VIEW_TRAINERS, icon = 134269, title = "LID_PROFESSION_FINDTRAINER", desc = "LID_PROFESSION_FINDTRAINER_DESC"},
 }
-PROFESSION_SUB_VIEWS = TrainerSpells:FilterTabViews(PROFESSION_SUB_VIEWS, "profession_")
+local PROFESSION_ALL_VIEWS = PROFESSION_SUB_VIEWS
+PROFESSION_SUB_VIEWS = TrainerSpells:FilterTabViews(PROFESSION_ALL_VIEWS, "profession_")
 local professionViewMode = PROFESSION_SUB_VIEWS[1] and PROFESSION_SUB_VIEWS[1].mode or PROFESSION_VIEW_SKILL
+local function IsProfessionViewEnabled(mode)
+    return TrainerSpells:IsTabEnabled("profession_" .. mode)
+end
 function TrainerSpells:IsProfessionRecipeViewActive()
     return professionViewMode == PROFESSION_VIEW_RECIPES
 end
@@ -466,7 +470,7 @@ end
 
 function professionSubTabs.Update()
     if not professionSubTabs.bar then return end
-    for index, view in ipairs(PROFESSION_SUB_VIEWS) do
+    for index, view in ipairs(PROFESSION_ALL_VIEWS) do
         if view.mode == professionViewMode then
             professionSubTabs.bar:SetTabVisuallySelected(index)
             professionSubTabs.title:SetText(TrainerSpells:Trans(view.title))
@@ -488,14 +492,15 @@ function professionSubTabs.Create()
     local bar = CreateFrame("Frame", "TrainerSpellsProfessionSubTabs", professionFrame, "TabSystemTemplate")
     professionSubTabs.bar = bar
     bar:SetTabSelectedCallback(function(tabID)
-        local view = PROFESSION_SUB_VIEWS[tabID]
+        local view = PROFESSION_ALL_VIEWS[tabID]
         if view then professionSubTabs.Select(view.mode) end
         return true
     end)
 
-    for index, view in ipairs(PROFESSION_SUB_VIEWS) do
+    for index, view in ipairs(PROFESSION_ALL_VIEWS) do
         bar:AddTab(nil, view.icon)
         bar:GetTabButton(index):SetTooltipText(TrainerSpells:Trans(view.title) .. "\n|cffffffff" .. TrainerSpells:Trans(view.desc) .. "|r")
+        bar:SetTabShown(index, IsProfessionViewEnabled(view.mode))
     end
 
     bar:Layout()
@@ -896,14 +901,13 @@ end)
 recipeTab:SetScript("OnLeave", GameTooltip_Hide)
 local tradeSkillHooksInstalled = false
 local function EnsureTradeSkillHooksInstalled()
-    if tradeSkillHooksInstalled or not TrainerSpells:IsTabEnabled("professions") or not (TrainerSpells:IsTabEnabled("profession_skill") or TrainerSpells:IsTabEnabled("profession_recipes")) then return end
-    if not TradeSkillFrame then return end
+    if tradeSkillHooksInstalled or not TradeSkillFrame then return end
     tradeSkillHooksInstalled = true
     TradeSkillFrame:HookScript("OnShow", function()
         PositionTradeSkillTabs()
-        nativeTab:Show()
-        professionTab:SetShown(TrainerSpells:IsTabEnabled("profession_skill"))
-        recipeTab:SetShown(TrainerSpells:IsTabEnabled("profession_recipes"))
+        nativeTab:SetShown(TrainerSpells:IsTabEnabled("professions") and (TrainerSpells:IsTabEnabled("profession_skill") or TrainerSpells:IsTabEnabled("profession_recipes")))
+        professionTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_skill"))
+        recipeTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_recipes"))
         SetTradeSkillView("native")
     end)
 
@@ -926,9 +930,9 @@ local function EnsureTradeSkillHooksInstalled()
 
     if TradeSkillFrame:IsShown() then
         PositionTradeSkillTabs()
-        nativeTab:Show()
-        professionTab:SetShown(TrainerSpells:IsTabEnabled("profession_skill"))
-        recipeTab:SetShown(TrainerSpells:IsTabEnabled("profession_recipes"))
+        nativeTab:SetShown(TrainerSpells:IsTabEnabled("professions") and (TrainerSpells:IsTabEnabled("profession_skill") or TrainerSpells:IsTabEnabled("profession_recipes")))
+        professionTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_skill"))
+        recipeTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_recipes"))
         SetTradeSkillView("native")
     end
 
@@ -1087,6 +1091,57 @@ local function OpenProfessionsFrameView()
     TrainerSpells_ProfessionRefresh()
 end
 
+local function IsTradeSkillAddonEnabled()
+    return TrainerSpells:IsTabEnabled("professions") and (IsProfessionViewEnabled(PROFESSION_VIEW_SKILL) or IsProfessionViewEnabled(PROFESSION_VIEW_RECIPES))
+end
+
+local function IsProfessionsFrameAddonEnabled()
+    return TrainerSpells:IsTabEnabled("professions") and TrainerSpells:HasProfessionTabs()
+end
+
+local function ShowTradeSkillTabs()
+    local enabled = IsTradeSkillAddonEnabled()
+    nativeTab:SetShown(enabled)
+    professionTab:SetShown(enabled and IsProfessionViewEnabled(PROFESSION_VIEW_SKILL))
+    recipeTab:SetShown(enabled and IsProfessionViewEnabled(PROFESSION_VIEW_RECIPES))
+end
+
+local function ApplyProfessionTabSettings()
+    PROFESSION_SUB_VIEWS = TrainerSpells:FilterTabViews(PROFESSION_ALL_VIEWS, "profession_")
+    if professionSubTabs.bar then
+        for index, view in ipairs(PROFESSION_ALL_VIEWS) do
+            professionSubTabs.bar:SetTabShown(index, IsProfessionViewEnabled(view.mode))
+        end
+    end
+
+    local modeEnabled = IsProfessionViewEnabled(professionViewMode)
+    if not modeEnabled and PROFESSION_SUB_VIEWS[1] then professionViewMode = PROFESSION_SUB_VIEWS[1].mode end
+    if TradeSkillFrame and TradeSkillFrame:IsShown() then
+        PositionTradeSkillTabs()
+        ShowTradeSkillTabs()
+        if professionFrame:IsShown() and not professionFrame.compendiumHost and (not IsTradeSkillAddonEnabled() or not modeEnabled) then SetTradeSkillView("native") end
+    end
+
+    local professionsEnabled = IsProfessionsFrameAddonEnabled()
+    for _, tab in pairs(professionsModeTabs) do
+        tab:SetShown(professionsEnabled and ProfessionsFrame ~= nil and ProfessionsFrame:IsShown())
+    end
+
+    if professionsModeActive then
+        if not professionsEnabled then
+            RestoreProfessionsFramePage()
+            CloseProfessionsFrameView()
+        elseif not modeEnabled then
+            professionSubTabs.Update()
+            TrainerSpells_ProfessionRefresh()
+        end
+    end
+
+    if ProfessionsFrame and professionsFrameHooksInstalled then PositionProfessionsFrameModeTabs() end
+    professionSubTabs.Update()
+end
+
+TrainerSpells:OnTabSettingsChanged(ApplyProfessionTabSettings)
 local function CreateProfessionsFrameSystemTab(tabID, text, icon)
     local tab = CreateFrame("Button", nil, professionsModeTabContainer, "TabSystemButtonTemplate")
     tab.GetTabSystem = function() return ProfessionsFrame.TabSystem end
@@ -1183,7 +1238,7 @@ local function InstallProfessionsFrameShoulderTabs()
 end
 
 local function InstallProfessionsFrameIntegration()
-    if professionsFrameHooksInstalled or not ProfessionsFrame or professionFrame.compendiumHost or not TrainerSpells:IsTabEnabled("professions") or not TrainerSpells:HasProfessionTabs() then return end
+    if professionsFrameHooksInstalled or not ProfessionsFrame or professionFrame.compendiumHost then return end
     professionsFrameUsesSideTabs = ProfessionsFrame.ProfessionsOverviewTab and ProfessionsFrame.rightProfessionTabs and true or false
     if not professionsFrameUsesSideTabs and not ProfessionsFrame.TabSystem then return end
     professionsFrameHooksInstalled = true
@@ -1216,7 +1271,7 @@ local function InstallProfessionsFrameIntegration()
         RestoreProfessionsFramePage()
         PositionProfessionsFrameModeTabs()
         for _, tab in pairs(professionsModeTabs) do
-            tab:Show()
+            tab:SetShown(IsProfessionsFrameAddonEnabled())
         end
 
         CloseProfessionsFrameView()
@@ -1229,6 +1284,7 @@ local function InstallProfessionsFrameIntegration()
     end)
 
     hooksecurefunc(ProfessionsFrame, "SetScale", function() if professionFrame:IsShown() then PositionProfessionFrame() end end)
+    ApplyProfessionTabSettings()
 end
 
 if ProfessionsFrame then
@@ -1272,7 +1328,7 @@ function professionPicker.PopulateCompendiumMenu(view, menu)
 end
 
 function TrainerSpells:CreateCompendiumProfessions(host)
-    local view = self:CreateCompendiumListView(host, PROFESSION_SUB_VIEWS, professionSubTabs.GetSavedView(), self.ProfessionRowHeight)
+    local view = self:CreateCompendiumListView(host, PROFESSION_ALL_VIEWS, professionSubTabs.GetSavedView(), self.ProfessionRowHeight, function(entry) return IsProfessionViewEnabled(entry.mode) end)
     self.CompendiumProfessionView = view
     view:AddSpoilerFreeCheckbox("professionSpoilerFree", "LID_PROFSPOILERFREE_DESC")
     view.BuildItems = function(current)
