@@ -60,6 +60,7 @@ end
 
 function TrainerSpells.Pricing.Text(baseCost, cost, estimated, color)
     if baseCost == nil then return GetMoneyString(cost or 0, true) end
+    if baseCost == (cost or 0) then return (estimated and "~" or "") .. GetMoneyString(baseCost, true) end
     return "|cffaaaaaa" .. (estimated and "~" or "") .. GetMoneyString(baseCost, true) .. "|r / " .. (color or "|cffffffff") .. (estimated and "~" or "") .. GetMoneyString(cost or 0, true) .. "|r"
 end
 
@@ -69,8 +70,12 @@ function TrainerSpells.Pricing.AddTooltip(tooltip, entry)
         tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_UNVERIFIED"), 1, 0.82, 0, true)
         return
     end
-    tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_BASE") .. ": " .. (entry.baseCostEstimated and "~" or "") .. GetMoneyString(entry.baseCost, true), 0.8, 0.8, 0.8)
     local color = (GetMoney() or 0) >= (entry.cost or 0) and "|cffffffff" or "|cffff3333"
+    if entry.baseCost == (entry.cost or 0) then
+        tooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. color .. (entry.baseCostEstimated and "~" or "") .. GetMoneyString(entry.baseCost, true) .. "|r", 1, 1, 1)
+        return
+    end
+    tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_BASE") .. ": " .. (entry.baseCostEstimated and "~" or "") .. GetMoneyString(entry.baseCost, true), 0.8, 0.8, 0.8)
     tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_BEST") .. ": " .. color .. (entry.baseCostEstimated and "~" or "") .. GetMoneyString(entry.cost or 0, true) .. "|r", 1, 1, 1)
     if entry.priceFaction then tooltip:AddLine(entry.priceFaction .. " (" .. entry.priceDiscount .. "%)", 0.8, 0.8, 0.8) end
     tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_COMPARE"), 0.8, 0.8, 0.8, true)

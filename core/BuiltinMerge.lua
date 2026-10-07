@@ -72,6 +72,10 @@ function TrainerSpells:MergeBuiltinData()
                         if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
                         if data.race and bucket[spellID].race == nil then bucket[spellID].race = data.race end
                     end
+                    if data.cost and data.cost > 0 then
+                        bucket[spellID].baseCost = data.cost
+                        bucket[spellID].baseCostEstimated = nil
+                    end
                 end
             end
         end

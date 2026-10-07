@@ -8,770 +8,770 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
     },
     [4] = {
         [8042] = {
-            cost = 95,
+            cost = 100,
             rank = 1
         },
     },
     [6] = {
         [332] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             requires = {547}
         },
         [2484] = {
-            cost = 95
+            cost = 100
         },
     },
     [8] = {
         [324] = {
-            cost = 95,
+            cost = 100,
             rank = 1
         },
         [529] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             requires = {548}
         },
         [5730] = {
-            cost = 95,
+            cost = 100,
             rank = 1
         },
         [8018] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             requires = {8019}
         },
         [8044] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             requires = {8045}
         },
     },
     [10] = {
         [8024] = {
-            cost = 380,
+            cost = 400,
             rank = 1
         },
         [8050] = {
-            cost = 380,
+            cost = 400,
             rank = 1
         },
         [8075] = {
-            cost = 380,
+            cost = 400,
             rank = 1
         },
     },
     [12] = {
         [370] = {
-            cost = 760,
+            cost = 800,
             rank = 1
         },
         [547] = {
-            cost = 760,
+            cost = 800,
             rank = 3,
             requires = {547}
         },
         [2008] = {
-            cost = 760,
+            cost = 800,
             rank = 1
         },
         [408341] = {
-            cost = 760,
+            cost = 800,
             rank = 1
         },
     },
     [14] = {
         [548] = {
-            cost = 855,
+            cost = 900,
             rank = 3,
             requires = {548}
         },
         [8045] = {
-            cost = 855,
+            cost = 900,
             rank = 3,
             requires = {8045}
         },
         [8154] = {
-            cost = 855,
+            cost = 900,
             rank = 2,
             requires = {8154}
         },
     },
     [16] = {
         [325] = {
-            cost = 1710,
+            cost = 1800,
             rank = 2,
             requires = {325}
         },
         [526] = {
-            cost = 1710
+            cost = 1800
         },
         [8019] = {
-            cost = 1710,
+            cost = 1800,
             rank = 3,
             requires = {8019}
         },
     },
     [18] = {
         [913] = {
-            cost = 1900,
+            cost = 2000,
             rank = 4,
             requires = {547}
         },
         [6390] = {
-            cost = 1900,
+            cost = 2000,
             rank = 2,
             requires = {5730}
         },
         [8027] = {
-            cost = 1900,
+            cost = 2000,
             rank = 2,
             requires = {8024}
         },
         [8052] = {
-            cost = 1900,
+            cost = 2000,
             rank = 2,
             requires = {8050}
         },
         [8143] = {
-            cost = 1900
+            cost = 2000
         },
     },
     [20] = {
         [915] = {
-            cost = 2090,
+            cost = 2200,
             rank = 4,
             requires = {548}
         },
         [2645] = {
-            cost = 2090
+            cost = 2200
         },
         [6363] = {
-            cost = 2090,
+            cost = 2200,
             rank = 2,
             requires = {3599}
         },
         [8004] = {
-            cost = 2090,
+            cost = 2200,
             rank = 1
         },
         [8033] = {
-            cost = 2090,
+            cost = 2200,
             rank = 1
         },
         [8056] = {
-            cost = 2090,
+            cost = 2200,
             rank = 1
         },
         [36936] = {
-            cost = 6650
+            cost = 7000
         },
         [66842] = {
-            cost = 6650
+            cost = 7000
         },
     },
     [22] = {
         [131] = {
-            cost = 2850
+            cost = 3000
         },
         [2870] = {
-            cost = 2850
+            cost = 3000
         },
         [8166] = {
-            cost = 2850
+            cost = 3000
         },
         [408342] = {
-            cost = 2850,
+            cost = 3000,
             rank = 2,
             requires = {408341}
         },
         [437009] = {
-            cost = 2850
+            cost = 3000
         },
     },
     [24] = {
         [905] = {
-            cost = 3325,
+            cost = 3500,
             rank = 3,
             requires = {325}
         },
         [939] = {
-            cost = 3325,
+            cost = 3500,
             rank = 5,
             requires = {547}
         },
         [8046] = {
-            cost = 3325,
+            cost = 3500,
             rank = 4,
             requires = {8045}
         },
         [8155] = {
-            cost = 3325,
+            cost = 3500,
             rank = 3,
             requires = {8154}
         },
         [8160] = {
-            cost = 3325,
+            cost = 3500,
             rank = 2,
             requires = {8075}
         },
         [8181] = {
-            cost = 3325,
+            cost = 3500,
             rank = 1
         },
         [10399] = {
-            cost = 3325,
+            cost = 3500,
             rank = 4,
             requires = {8019}
         },
         [20609] = {
-            cost = 3325,
+            cost = 3500,
             rank = 2,
             requires = {2008}
         },
     },
     [26] = {
         [943] = {
-            cost = 3800,
+            cost = 4000,
             rank = 5,
             requires = {548}
         },
         [5675] = {
-            cost = 3800,
+            cost = 4000,
             rank = 1
         },
         [6196] = {
-            cost = 3800
+            cost = 4000
         },
         [8030] = {
-            cost = 3800,
+            cost = 4000,
             rank = 3,
             requires = {8024}
         },
         [8190] = {
-            cost = 3800,
+            cost = 4000,
             rank = 1
         },
     },
     [28] = {
         [546] = {
-            cost = 5700
+            cost = 6000
         },
         [6391] = {
-            cost = 5700,
+            cost = 6000,
             rank = 3,
             requires = {5730}
         },
         [8008] = {
-            cost = 5700,
+            cost = 6000,
             rank = 2
         },
         [8038] = {
-            cost = 5700,
+            cost = 6000,
             rank = 2
         },
         [8053] = {
-            cost = 5700,
+            cost = 6000,
             rank = 3,
             requires = {8050}
         },
         [8184] = {
-            cost = 5700,
+            cost = 6000,
             rank = 1
         },
         [8227] = {
-            cost = 5700,
+            cost = 6000,
             rank = 1
         },
     },
     [30] = {
         [556] = {
-            cost = 6650
+            cost = 7000
         },
         [6364] = {
-            cost = 6650,
+            cost = 7000,
             rank = 3,
             requires = {3599}
         },
         [6375] = {
-            cost = 6650,
+            cost = 7000,
             rank = 2
         },
         [8177] = {
-            cost = 6650
+            cost = 7000
         },
         [8232] = {
-            cost = 6650,
+            cost = 7000,
             rank = 1
         },
         [10595] = {
-            cost = 6650,
+            cost = 7000,
             rank = 1
         },
         [20608] = {
-            cost = 6650
+            cost = 7000
         },
         [66843] = {
-            cost = 6650
+            cost = 7000
         },
     },
     [32] = {
         [421] = {
-            cost = 7600,
+            cost = 8000,
             rank = 1
         },
         [945] = {
-            cost = 7600,
+            cost = 8000,
             rank = 4,
             requires = {325}
         },
         [959] = {
-            cost = 7600,
+            cost = 8000,
             rank = 6,
             requires = {547}
         },
         [6041] = {
-            cost = 7600,
+            cost = 8000,
             rank = 6,
             requires = {548}
         },
         [8012] = {
-            cost = 7600,
+            cost = 8000,
             rank = 2,
             requires = {370}
         },
         [8512] = {
-            cost = 7600,
+            cost = 8000,
             rank = 1
         },
         [408343] = {
-            cost = 7600,
+            cost = 8000,
             rank = 3,
             requires = {408341}
         },
     },
     [34] = {
         [6495] = {
-            cost = 8550
+            cost = 9000
         },
         [8058] = {
-            cost = 8550,
+            cost = 9000,
             rank = 2
         },
         [10406] = {
-            cost = 8550,
+            cost = 9000,
             rank = 4,
             requires = {8154}
         },
         [16314] = {
-            cost = 8550,
+            cost = 9000,
             rank = 5,
             requires = {8019}
         },
     },
     [36] = {
         [8010] = {
-            cost = 9500,
+            cost = 10000,
             rank = 3
         },
         [10412] = {
-            cost = 9500,
+            cost = 10000,
             rank = 5,
             requires = {8045}
         },
         [10495] = {
-            cost = 9500,
+            cost = 10000,
             rank = 2
         },
         [10585] = {
-            cost = 9500,
+            cost = 10000,
             rank = 2
         },
         [15107] = {
-            cost = 9500,
+            cost = 10000,
             rank = 1
         },
         [16339] = {
-            cost = 9500,
+            cost = 10000,
             rank = 4,
             requires = {8024}
         },
         [20610] = {
-            cost = 9500,
+            cost = 10000,
             rank = 3,
             requires = {2008}
         },
     },
     [38] = {
         [6392] = {
-            cost = 10450,
+            cost = 11000,
             rank = 4,
             requires = {5730}
         },
         [8161] = {
-            cost = 10450,
+            cost = 11000,
             rank = 3,
             requires = {8075}
         },
         [8170] = {
-            cost = 10450
+            cost = 11000
         },
         [8249] = {
-            cost = 10450,
+            cost = 11000,
             rank = 2
         },
         [10391] = {
-            cost = 10450,
+            cost = 11000,
             rank = 7,
             requires = {548}
         },
         [10456] = {
-            cost = 10450,
+            cost = 11000,
             rank = 3
         },
         [10478] = {
-            cost = 10450,
+            cost = 11000,
             rank = 2
         },
     },
     [40] = {
         [930] = {
-            cost = 11400,
+            cost = 12000,
             rank = 2
         },
         [1064] = {
-            cost = 11400,
+            cost = 12000,
             rank = 1
         },
         [6365] = {
-            cost = 11400,
+            cost = 12000,
             rank = 4,
             requires = {3599}
         },
         [6377] = {
-            cost = 11400,
+            cost = 12000,
             rank = 3
         },
         [8005] = {
-            cost = 11400,
+            cost = 12000,
             rank = 7,
             requires = {547}
         },
         [8134] = {
-            cost = 11400,
+            cost = 12000,
             rank = 5,
             requires = {325}
         },
         [8235] = {
-            cost = 11400,
+            cost = 12000,
             rank = 2
         },
         [8737] = {
-            cost = 11400
+            cost = 12000
         },
         [10447] = {
-            cost = 11400,
+            cost = 12000,
             rank = 4,
             requires = {8050}
         },
         [66844] = {
-            cost = 6650
+            cost = 7000
         },
     },
     [42] = {
         [8835] = {
-            cost = 15200,
+            cost = 16000,
             rank = 1
         },
         [10537] = {
-            cost = 15200,
+            cost = 16000,
             rank = 2
         },
         [10613] = {
-            cost = 15200,
+            cost = 16000,
             rank = 2
         },
         [408344] = {
-            cost = 15200,
+            cost = 16000,
             rank = 4,
             requires = {408341}
         },
     },
     [44] = {
         [10392] = {
-            cost = 17100,
+            cost = 18000,
             rank = 8,
             requires = {548}
         },
         [10407] = {
-            cost = 17100,
+            cost = 18000,
             rank = 5,
             requires = {8154}
         },
         [10466] = {
-            cost = 17100,
+            cost = 18000,
             rank = 4
         },
         [10600] = {
-            cost = 17100,
+            cost = 18000,
             rank = 2
         },
         [16315] = {
-            cost = 17100,
+            cost = 18000,
             rank = 6,
             requires = {8019}
         },
     },
     [46] = {
         [10472] = {
-            cost = 19000,
+            cost = 20000,
             rank = 3
         },
         [10496] = {
-            cost = 19000,
+            cost = 20000,
             rank = 3
         },
         [10586] = {
-            cost = 19000,
+            cost = 20000,
             rank = 3
         },
         [10622] = {
-            cost = 19000,
+            cost = 20000,
             rank = 2
         },
         [15111] = {
-            cost = 19000,
+            cost = 20000,
             rank = 2
         },
         [16341] = {
-            cost = 19000,
+            cost = 20000,
             rank = 5,
             requires = {8024}
         },
     },
     [48] = {
         [2860] = {
-            cost = 20900,
+            cost = 22000,
             rank = 3
         },
         [10395] = {
-            cost = 20900,
+            cost = 22000,
             rank = 8,
             requires = {547}
         },
         [10413] = {
-            cost = 20900,
+            cost = 22000,
             rank = 6,
             requires = {8045}
         },
         [10427] = {
-            cost = 20900,
+            cost = 22000,
             rank = 5,
             requires = {5730}
         },
         [10431] = {
-            cost = 20900,
+            cost = 22000,
             rank = 6,
             requires = {325}
         },
         [10526] = {
-            cost = 20900,
+            cost = 22000,
             rank = 3
         },
         [16355] = {
-            cost = 20900,
+            cost = 22000,
             rank = 4
         },
         [17354] = {
-            cost = 760,
+            cost = 800,
             rank = 2
         },
         [20776] = {
-            cost = 20900,
+            cost = 22000,
             rank = 4,
             requires = {2008}
         },
     },
     [50] = {
         [10437] = {
-            cost = 22800,
+            cost = 24000,
             rank = 5,
             requires = {3599}
         },
         [10462] = {
-            cost = 22800,
+            cost = 24000,
             rank = 4
         },
         [10486] = {
-            cost = 22800,
+            cost = 24000,
             rank = 3
         },
         [15207] = {
-            cost = 22800,
+            cost = 24000,
             rank = 9,
             requires = {548}
         },
         [1238299] = {
-            cost = 22800,
+            cost = 24000,
             rank = 2
         },
         [1239242] = {
-            cost = 760,
+            cost = 800,
             rank = 2
         },
     },
     [52] = {
         [10442] = {
-            cost = 25650,
+            cost = 27000,
             rank = 4,
             requires = {8075}
         },
         [10448] = {
-            cost = 25650,
+            cost = 27000,
             rank = 5,
             requires = {8050}
         },
         [10467] = {
-            cost = 25650,
+            cost = 27000,
             rank = 5
         },
         [10614] = {
-            cost = 25650,
+            cost = 27000,
             rank = 3
         },
         [408345] = {
-            cost = 25650,
+            cost = 27000,
             rank = 5,
             requires = {408341}
         },
     },
     [54] = {
         [10408] = {
-            cost = 27550,
+            cost = 29000,
             rank = 6,
             requires = {8154}
         },
         [10479] = {
-            cost = 27550,
+            cost = 29000,
             rank = 3
         },
         [10623] = {
-            cost = 27550,
+            cost = 29000,
             rank = 3
         },
         [16316] = {
-            cost = 27550,
+            cost = 29000,
             rank = 7,
             requires = {8019}
         },
     },
     [56] = {
         [10396] = {
-            cost = 28500,
+            cost = 30000,
             rank = 9,
             requires = {547}
         },
         [10432] = {
-            cost = 28500,
+            cost = 30000,
             rank = 7,
             requires = {325}
         },
         [10497] = {
-            cost = 28500,
+            cost = 30000,
             rank = 4
         },
         [10587] = {
-            cost = 28500,
+            cost = 30000,
             rank = 4
         },
         [10605] = {
-            cost = 28500,
+            cost = 30000,
             rank = 4
         },
         [10627] = {
-            cost = 28500,
+            cost = 30000,
             rank = 2
         },
         [15112] = {
-            cost = 28500,
+            cost = 30000,
             rank = 3
         },
         [15208] = {
-            cost = 28500,
+            cost = 30000,
             rank = 10,
             requires = {548}
         },
         [16342] = {
-            cost = 28500,
+            cost = 30000,
             rank = 6,
             requires = {8024}
         },
     },
     [58] = {
         [10428] = {
-            cost = 30400,
+            cost = 32000,
             rank = 6,
             requires = {5730}
         },
         [10473] = {
-            cost = 30400,
+            cost = 32000,
             rank = 4
         },
         [10538] = {
-            cost = 30400,
+            cost = 32000,
             rank = 3
         },
         [16356] = {
-            cost = 30400,
+            cost = 32000,
             rank = 5
         },
         [16387] = {
-            cost = 30400,
+            cost = 32000,
             rank = 4
         },
         [17359] = {
-            cost = 1520,
+            cost = 1600,
             rank = 3
         },
     },
     [60] = {
         [10414] = {
-            cost = 32300,
+            cost = 34000,
             rank = 7,
             requires = {8045}
         },
         [10438] = {
-            cost = 32300,
+            cost = 34000,
             rank = 6,
             requires = {3599}
         },
         [10463] = {
-            cost = 32300,
+            cost = 34000,
             rank = 5
         },
         [10468] = {
-            cost = 32300,
+            cost = 34000,
             rank = 6
         },
         [10601] = {
-            cost = 32300,
+            cost = 34000,
             rank = 3
         },
         [16362] = {
-            cost = 32300,
+            cost = 34000,
             rank = 4
         },
         [20777] = {
-            cost = 32300,
+            cost = 34000,
             rank = 5,
             requires = {2008}
         },
         [1238300] = {
-            cost = 32300,
+            cost = 34000,
             rank = 3
         },
         [1239243] = {
-            cost = 1520,
+            cost = 1600,
             rank = 3
         },
     },

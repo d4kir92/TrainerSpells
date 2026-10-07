@@ -8,1089 +8,1089 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
     },
     [4] = {
         [589] = {
-            cost = 95,
+            cost = 100,
             rank = 1
         },
         [2052] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             requires = {2050}
         },
     },
     [6] = {
         [17] = {
-            cost = 95,
+            cost = 100,
             rank = 1
         },
         [591] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             requires = {585}
         },
     },
     [8] = {
         [139] = {
-            cost = 190,
+            cost = 200,
             rank = 1
         },
         [586] = {
-            cost = 190,
+            cost = 200,
             rank = 1
         },
     },
     [10] = {
         [594] = {
-            cost = 285,
+            cost = 300,
             rank = 2
         },
         [2006] = {
-            cost = 285,
+            cost = 300,
             rank = 1
         },
         [2053] = {
-            cost = 285,
+            cost = 300,
             rank = 3,
             requires = {2050}
         },
         [8092] = {
-            cost = 285,
+            cost = 300,
             rank = 1
         },
         [13908] = {
-            cost = 86,
+            cost = 90,
             rank = 1,
             race = {"Dwarf", "Human"}
         },
         [10797] = {
-            cost = 14,
+            cost = 15,
             rank = 1,
             race = "NightElf"
         },
         [2652] = {
-            cost = 14,
+            cost = 15,
             rank = 1,
             race = "Scourge"
         },
         [9035] = {
-            cost = 14,
+            cost = 15,
             rank = 1,
             race = "Troll"
         },
     },
     [12] = {
         [588] = {
-            cost = 760,
+            cost = 800,
             rank = 1
         },
         [592] = {
-            cost = 760,
+            cost = 800,
             rank = 2
         },
         [1244] = {
-            cost = 760,
+            cost = 800,
             rank = 2
         },
     },
     [14] = {
         [528] = {
-            cost = 1140,
+            cost = 1200,
             rank = nil
         },
         [598] = {
-            cost = 1140,
+            cost = 1200,
             rank = 3,
             requires = {585}
         },
         [6074] = {
-            cost = 1140,
+            cost = 1200,
             rank = 2
         },
         [8122] = {
-            cost = 1140,
+            cost = 1200,
             rank = 1
         },
     },
     [16] = {
         [2054] = {
-            cost = 1520,
+            cost = 1600,
             rank = 1
         },
         [8102] = {
-            cost = 1520,
+            cost = 1600,
             rank = 2
         },
     },
     [18] = {
         [527] = {
-            cost = 1900,
+            cost = 2000,
             rank = 1
         },
         [600] = {
-            cost = 1900,
+            cost = 2000,
             rank = 3
         },
         [970] = {
-            cost = 1900,
+            cost = 2000,
             rank = 3
         },
         [19236] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             race = {"Dwarf", "Human"}
         },
         [19296] = {
-            cost = 95,
+            cost = 100,
             rank = 2,
             race = "NightElf"
         },
     },
     [20] = {
         [453] = {
-            cost = 2850,
+            cost = 3000,
             rank = 1
         },
         [2061] = {
-            cost = 2850,
+            cost = 3000,
             rank = 1
         },
         [6075] = {
-            cost = 2850,
+            cost = 3000,
             rank = 3
         },
         [6346] = {
-            cost = 760,
+            cost = 800,
             rank = nil,
             race = "Dwarf"
         },
         [7128] = {
-            cost = 2850,
+            cost = 3000,
             rank = 2
         },
         [9484] = {
-            cost = 2850,
+            cost = 3000,
             rank = 1
         },
         [9578] = {
-            cost = 2850,
+            cost = 3000,
             rank = 2
         },
         [13896] = {
-            cost = 95,
+            cost = 100,
             rank = 1,
             race = "Human"
         },
         [14914] = {
-            cost = 2850,
+            cost = 3000,
             rank = 1
         },
         [2651] = {
-            cost = 143,
+            cost = 150,
             rank = 1,
             race = "NightElf"
         },
         [19261] = {
-            cost = 143,
+            cost = 150,
             rank = 2,
             race = "Scourge"
         },
         [2944] = {
-            cost = 143,
+            cost = 150,
             rank = 1,
             race = "Scourge"
         },
         [19281] = {
-            cost = 143,
+            cost = 150,
             rank = 2,
             race = "Troll"
         },
         [18137] = {
-            cost = 143,
+            cost = 150,
             rank = 1,
             race = "Troll"
         },
     },
     [22] = {
         [984] = {
-            cost = 3800,
+            cost = 4000,
             rank = 4,
             requires = {585}
         },
         [2010] = {
-            cost = 3800,
+            cost = 4000,
             rank = 2
         },
         [2055] = {
-            cost = 3800,
+            cost = 4000,
             rank = 2
         },
         [2096] = {
-            cost = 3800,
+            cost = 4000,
             rank = 1
         },
         [8103] = {
-            cost = 3800,
+            cost = 4000,
             rank = 3
         },
     },
     [24] = {
         [1245] = {
-            cost = 4750,
+            cost = 5000,
             rank = 3
         },
         [3747] = {
-            cost = 4750,
+            cost = 5000,
             rank = 4
         },
         [8129] = {
-            cost = 4750,
+            cost = 5000,
             rank = 1
         },
         [15262] = {
-            cost = 4750,
+            cost = 5000,
             rank = 2
         },
     },
     [26] = {
         [992] = {
-            cost = 5700,
+            cost = 6000,
             rank = 4
         },
         [6076] = {
-            cost = 5700,
+            cost = 6000,
             rank = 4
         },
         [9472] = {
-            cost = 5700,
+            cost = 6000,
             rank = 2
         },
         [19238] = {
-            cost = 285,
+            cost = 300,
             rank = 3,
             race = {"Dwarf", "Human"}
         },
         [19299] = {
-            cost = 285,
+            cost = 300,
             rank = 3,
             race = "NightElf"
         },
     },
     [28] = {
         [6063] = {
-            cost = 7600,
+            cost = 8000,
             rank = 3
         },
         [8104] = {
-            cost = 7600,
+            cost = 8000,
             rank = 4
         },
         [8124] = {
-            cost = 7600,
+            cost = 8000,
             rank = 2
         },
         [15430] = {
-            cost = 380,
+            cost = 400,
             rank = 2,
             requires = {15237}
         },
         [17311] = {
-            cost = 380,
+            cost = 400,
             rank = 2,
             requires = {15407}
         },
         [19276] = {
-            cost = 380,
+            cost = 400,
             rank = 2,
             race = "Scourge"
         },
         [19308] = {
-            cost = 380,
+            cost = 400,
             rank = 2,
             race = "Troll"
         },
     },
     [30] = {
         [596] = {
-            cost = 9500,
+            cost = 10000,
             rank = 1
         },
         [602] = {
-            cost = 9500,
+            cost = 10000,
             rank = 3
         },
         [605] = {
-            cost = 9500,
+            cost = 10000,
             rank = 1
         },
         [976] = {
-            cost = 9500,
+            cost = 10000,
             rank = 1
         },
         [1004] = {
-            cost = 9500,
+            cost = 10000,
             rank = 5,
             requires = {585}
         },
         [6065] = {
-            cost = 9500,
+            cost = 10000,
             rank = 5
         },
         [9579] = {
-            cost = 9500,
+            cost = 10000,
             rank = 3
         },
         [15263] = {
-            cost = 9500,
+            cost = 10000,
             rank = 3
         },
         [19271] = {
-            cost = 475,
+            cost = 500,
             rank = 2,
             race = "Human"
         },
         [19262] = {
-            cost = 475,
+            cost = 500,
             rank = 3,
             race = "Scourge"
         },
         [19282] = {
-            cost = 475,
+            cost = 500,
             rank = 3,
             race = "Troll"
         },
     },
     [32] = {
         [552] = {
-            cost = 10450,
+            cost = 11000,
             rank = nil
         },
         [6077] = {
-            cost = 10450,
+            cost = 11000,
             rank = 5
         },
         [8131] = {
-            cost = 10450,
+            cost = 11000,
             rank = 2
         },
         [9473] = {
-            cost = 10450,
+            cost = 11000,
             rank = 3
         },
     },
     [34] = {
         [1706] = {
-            cost = 11400,
+            cost = 12000,
             rank = nil
         },
         [2767] = {
-            cost = 11400,
+            cost = 12000,
             rank = 5
         },
         [6064] = {
-            cost = 11400,
+            cost = 12000,
             rank = 4
         },
         [8105] = {
-            cost = 11400,
+            cost = 12000,
             rank = 5
         },
         [10880] = {
-            cost = 11400,
+            cost = 12000,
             rank = 3
         },
         [19240] = {
-            cost = 570,
+            cost = 600,
             rank = 4,
             race = {"Dwarf", "Human"}
         },
         [19302] = {
-            cost = 570,
+            cost = 600,
             rank = 4,
             race = "NightElf"
         },
     },
     [36] = {
         [988] = {
-            cost = 13300,
+            cost = 14000,
             rank = 2
         },
         [2791] = {
-            cost = 13300,
+            cost = 14000,
             rank = 4
         },
         [6066] = {
-            cost = 13300,
+            cost = 14000,
             rank = 6
         },
         [8192] = {
-            cost = 13300,
+            cost = 14000,
             rank = 2
         },
         [15264] = {
-            cost = 13300,
+            cost = 14000,
             rank = 4
         },
         [15431] = {
-            cost = 665,
+            cost = 700,
             rank = 3,
             requires = {15237}
         },
         [17312] = {
-            cost = 665,
+            cost = 700,
             rank = 3,
             requires = {15407}
         },
         [19277] = {
-            cost = 665,
+            cost = 700,
             rank = 3,
             race = "Scourge"
         },
         [19309] = {
-            cost = 665,
+            cost = 700,
             rank = 3,
             race = "Troll"
         },
     },
     [38] = {
         [6060] = {
-            cost = 15200,
+            cost = 16000,
             rank = 6,
             requires = {585}
         },
         [6078] = {
-            cost = 15200,
+            cost = 16000,
             rank = 6
         },
         [9474] = {
-            cost = 15200,
+            cost = 16000,
             rank = 4
         },
     },
     [40] = {
         [996] = {
-            cost = 17100,
+            cost = 18000,
             rank = 2
         },
         [1006] = {
-            cost = 17100,
+            cost = 18000,
             rank = 4
         },
         [2060] = {
-            cost = 17100,
+            cost = 18000,
             rank = 1
         },
         [8106] = {
-            cost = 17100,
+            cost = 18000,
             rank = 6
         },
         [9485] = {
-            cost = 17100,
+            cost = 18000,
             rank = 2
         },
         [9592] = {
-            cost = 17100,
+            cost = 18000,
             rank = 4
         },
         [10874] = {
-            cost = 17100,
+            cost = 18000,
             rank = 3
         },
         [14818] = {
-            cost = 855,
+            cost = 900,
             rank = 2,
             requires = {14752}
         },
         [19273] = {
-            cost = 855,
+            cost = 900,
             rank = 3,
             race = "Human"
         },
         [19264] = {
-            cost = 855,
+            cost = 900,
             rank = 4,
             race = "Scourge"
         },
         [19283] = {
-            cost = 855,
+            cost = 900,
             rank = 4,
             race = "Troll"
         },
     },
     [42] = {
         [10888] = {
-            cost = 20900,
+            cost = 22000,
             rank = 3
         },
         [10892] = {
-            cost = 20900,
+            cost = 22000,
             rank = 6
         },
         [10898] = {
-            cost = 20900,
+            cost = 22000,
             rank = 7
         },
         [10957] = {
-            cost = 20900,
+            cost = 22000,
             rank = 2
         },
         [15265] = {
-            cost = 20900,
+            cost = 22000,
             rank = 5
         },
         [19241] = {
-            cost = 1045,
+            cost = 1100,
             rank = 5,
             race = {"Dwarf", "Human"}
         },
         [19303] = {
-            cost = 1045,
+            cost = 1100,
             rank = 5,
             race = "NightElf"
         },
     },
     [44] = {
         [10909] = {
-            cost = 22800,
+            cost = 24000,
             rank = 2
         },
         [10911] = {
-            cost = 22800,
+            cost = 24000,
             rank = 2
         },
         [10915] = {
-            cost = 22800,
+            cost = 24000,
             rank = 5
         },
         [10927] = {
-            cost = 22800,
+            cost = 24000,
             rank = 7
         },
         [17313] = {
-            cost = 1140,
+            cost = 1200,
             rank = 4,
             requires = {15407}
         },
         [27799] = {
-            cost = 1140,
+            cost = 1200,
             rank = 4,
             requires = {15237}
         },
         [19278] = {
-            cost = 1140,
+            cost = 1200,
             rank = 4,
             race = "Scourge"
         },
         [19310] = {
-            cost = 1140,
+            cost = 1200,
             rank = 4,
             race = "Troll"
         },
     },
     [46] = {
         [10881] = {
-            cost = 24700,
+            cost = 26000,
             rank = 4
         },
         [10933] = {
-            cost = 24700,
+            cost = 26000,
             rank = 7,
             requires = {585}
         },
         [10945] = {
-            cost = 24700,
+            cost = 26000,
             rank = 7
         },
         [10963] = {
-            cost = 24700,
+            cost = 26000,
             rank = 2
         },
     },
     [48] = {
         [10875] = {
-            cost = 26600,
+            cost = 28000,
             rank = 4
         },
         [10899] = {
-            cost = 26600,
+            cost = 28000,
             rank = 8
         },
         [10937] = {
-            cost = 26600,
+            cost = 28000,
             rank = 5
         },
         [15266] = {
-            cost = 26600,
+            cost = 28000,
             rank = 6
         },
         [21562] = {
-            cost = 26600,
+            cost = 28000,
             rank = 1
         },
     },
     [50] = {
         [10893] = {
-            cost = 28500,
+            cost = 30000,
             rank = 7
         },
         [10916] = {
-            cost = 28500,
+            cost = 30000,
             rank = 6
         },
         [10928] = {
-            cost = 28500,
+            cost = 30000,
             rank = 8
         },
         [10941] = {
-            cost = 28500,
+            cost = 30000,
             rank = 5
         },
         [10951] = {
-            cost = 28500,
+            cost = 30000,
             rank = 5
         },
         [10960] = {
-            cost = 28500,
+            cost = 30000,
             rank = 3
         },
         [14819] = {
-            cost = 1425,
+            cost = 1500,
             rank = 3,
             requires = {14752}
         },
         [19242] = {
-            cost = 1425,
+            cost = 1500,
             rank = 6,
             race = {"Dwarf", "Human"}
         },
         [19304] = {
-            cost = 1425,
+            cost = 1500,
             rank = 6,
             race = "NightElf"
         },
         [19274] = {
-            cost = 1425,
+            cost = 1500,
             rank = 4,
             race = "Human"
         },
         [19265] = {
-            cost = 1425,
+            cost = 1500,
             rank = 5,
             race = "Scourge"
         },
         [19284] = {
-            cost = 1425,
+            cost = 1500,
             rank = 5,
             race = "Troll"
         },
         [27870] = {
-            cost = 1140,
+            cost = 1200,
             rank = 2,
             requires = {724}
         },
     },
     [52] = {
         [10946] = {
-            cost = 36100,
+            cost = 38000,
             rank = 8
         },
         [10953] = {
-            cost = 36100,
+            cost = 38000,
             rank = 3
         },
         [10964] = {
-            cost = 36100,
+            cost = 38000,
             rank = 3
         },
         [17314] = {
-            cost = 1805,
+            cost = 1900,
             rank = 5,
             requires = {15407}
         },
         [27800] = {
-            cost = 1805,
+            cost = 1900,
             rank = 5,
             requires = {15237}
         },
         [19279] = {
-            cost = 1805,
+            cost = 1900,
             rank = 5,
             race = "Scourge"
         },
         [19311] = {
-            cost = 1805,
+            cost = 1900,
             rank = 5,
             race = "Troll"
         },
     },
     [54] = {
         [10900] = {
-            cost = 38000,
+            cost = 40000,
             rank = 9
         },
         [10934] = {
-            cost = 38000,
+            cost = 40000,
             rank = 8,
             requires = {585}
         },
         [15267] = {
-            cost = 38000,
+            cost = 40000,
             rank = 7
         },
     },
     [56] = {
         [10876] = {
-            cost = 39900,
+            cost = 42000,
             rank = 5
         },
         [10890] = {
-            cost = 39900,
+            cost = 42000,
             rank = 4
         },
         [10917] = {
-            cost = 39900,
+            cost = 42000,
             rank = 7
         },
         [10929] = {
-            cost = 39900,
+            cost = 42000,
             rank = 9
         },
         [10958] = {
-            cost = 39900,
+            cost = 42000,
             rank = 3
         },
         [27683] = {
-            cost = 39900,
+            cost = 42000,
             rank = 1
         },
         [34863] = {
-            cost = 1995,
+            cost = 2100,
             rank = 2,
             requires = {34861}
         },
     },
     [58] = {
         [10894] = {
-            cost = 41800,
+            cost = 44000,
             rank = 8
         },
         [10912] = {
-            cost = 41800,
+            cost = 44000,
             rank = 3
         },
         [10947] = {
-            cost = 41800,
+            cost = 44000,
             rank = 9
         },
         [10965] = {
-            cost = 41800,
+            cost = 44000,
             rank = 4
         },
         [19243] = {
-            cost = 2090,
+            cost = 2200,
             rank = 7,
             race = {"Dwarf", "Human"}
         },
         [19305] = {
-            cost = 2090,
+            cost = 2200,
             rank = 7,
             race = "NightElf"
         },
         [20770] = {
-            cost = 41800,
+            cost = 44000,
             rank = 5
         },
     },
     [60] = {
         [10901] = {
-            cost = 43700,
+            cost = 46000,
             rank = 10
         },
         [10938] = {
-            cost = 43700,
+            cost = 46000,
             rank = 6
         },
         [10942] = {
-            cost = 43700,
+            cost = 46000,
             rank = 6
         },
         [10952] = {
-            cost = 43700,
+            cost = 46000,
             rank = 6
         },
         [10955] = {
-            cost = 43700,
+            cost = 46000,
             rank = 3
         },
         [10961] = {
-            cost = 43700,
+            cost = 46000,
             rank = 4
         },
         [15261] = {
-            cost = 43700,
+            cost = 46000,
             rank = 8
         },
         [18807] = {
-            cost = 2185,
+            cost = 2300,
             rank = 6,
             requires = {15407}
         },
         [19275] = {
-            cost = 2185,
+            cost = 2300,
             rank = 5,
             race = "Human"
         },
         [19266] = {
-            cost = 2185,
+            cost = 2300,
             rank = 6,
             race = "Scourge"
         },
         [19280] = {
-            cost = 2185,
+            cost = 2300,
             rank = 6,
             race = "Scourge"
         },
         [19285] = {
-            cost = 2185,
+            cost = 2300,
             rank = 6,
             race = "Troll"
         },
         [19312] = {
-            cost = 2185,
+            cost = 2300,
             rank = 6,
             race = "Troll"
         },
         [21564] = {
-            cost = 43700,
+            cost = 46000,
             rank = 2
         },
         [25314] = {
-            cost = 61750,
+            cost = 65000,
             rank = 5
         },
         [25315] = {
-            cost = 6175,
+            cost = 6500,
             rank = 10
         },
         [25316] = {
-            cost = 6175,
+            cost = 6500,
             rank = 5
         },
         [27681] = {
-            cost = 2185,
+            cost = 2300,
             rank = 1,
             requires = {14752}
         },
         [27801] = {
-            cost = 2185,
+            cost = 2300,
             rank = 6,
             requires = {15237}
         },
         [27841] = {
-            cost = 2185,
+            cost = 2300,
             rank = 4,
             requires = {14752}
         },
         [27871] = {
-            cost = 1425,
+            cost = 1500,
             rank = 3,
             requires = {724}
         },
         [34864] = {
-            cost = 2185,
+            cost = 2300,
             rank = 3,
             requires = {34861}
         },
         [34916] = {
-            cost = 2185,
+            cost = 2300,
             rank = 2,
             requires = {34914}
         },
     },
     [61] = {
         [25233] = {
-            cost = 50350,
+            cost = 53000,
             rank = 8
         },
         [25363] = {
-            cost = 50350,
+            cost = 53000,
             rank = 9,
             requires = {585}
         },
     },
     [62] = {
         [32379] = {
-            cost = 56050,
+            cost = 59000,
             rank = 1
         },
     },
     [63] = {
         [25210] = {
-            cost = 61750,
+            cost = 65000,
             rank = 6
         },
         [25372] = {
-            cost = 61750,
+            cost = 65000,
             rank = 10
         },
         [25379] = {
-            cost = 61750,
+            cost = 65000,
             rank = 6
         },
     },
     [64] = {
         [32546] = {
-            cost = 68400,
+            cost = 72000,
             rank = 1
         },
     },
     [65] = {
         [25217] = {
-            cost = 76000,
+            cost = 80000,
             rank = 11
         },
         [25221] = {
-            cost = 76000,
+            cost = 80000,
             rank = 11
         },
         [25367] = {
-            cost = 76000,
+            cost = 80000,
             rank = 9
         },
         [34865] = {
-            cost = 2185,
+            cost = 2300,
             rank = 4,
             requires = {34861}
         },
     },
     [66] = {
         [25384] = {
-            cost = 61750,
+            cost = 65000,
             rank = 9
         },
         [25429] = {
-            cost = 84550,
+            cost = 89000,
             rank = 7
         },
         [25437] = {
-            cost = 6175,
+            cost = 6500,
             rank = 8
         },
         [34433] = {
-            cost = 84550,
+            cost = 89000,
             rank = 1
         },
     },
     [67] = {
         [25235] = {
-            cost = 94050,
+            cost = 99000,
             rank = 9
         },
         [25596] = {
-            cost = 94050,
+            cost = 99000,
             rank = 4
         },
     },
     [68] = {
         [25213] = {
-            cost = 104500,
+            cost = 110000,
             rank = 7
         },
         [25308] = {
-            cost = 104500,
+            cost = 110000,
             rank = 6
         },
         [25331] = {
-            cost = 3088,
+            cost = 3250,
             rank = 7,
             requires = {15237}
         },
         [25387] = {
-            cost = 6175,
+            cost = 6500,
             rank = 7,
             requires = {15407}
         },
         [25433] = {
-            cost = 104500,
+            cost = 110000,
             rank = 4
         },
         [25435] = {
-            cost = 104500,
+            cost = 110000,
             rank = 6
         },
         [33076] = {
-            cost = 104500,
+            cost = 110000,
             rank = 1
         },
     },
     [69] = {
         [25364] = {
-            cost = 61750,
+            cost = 65000,
             rank = 10,
             requires = {585}
         },
         [25375] = {
-            cost = 61750,
+            cost = 65000,
             rank = 11
         },
         [25431] = {
-            cost = 61750,
+            cost = 65000,
             rank = 7
         },
     },
     [70] = {
         [25218] = {
-            cost = 133000,
+            cost = 140000,
             rank = 12
         },
         [25222] = {
-            cost = 133000,
+            cost = 140000,
             rank = 12
         },
         [25312] = {
-            cost = 2185,
+            cost = 2300,
             rank = 5,
             requires = {14752}
         },
         [25368] = {
-            cost = 133000,
+            cost = 140000,
             rank = 10
         },
         [25380] = {
-            cost = 104500,
+            cost = 110000,
             rank = 7
         },
         [25389] = {
-            cost = 61750,
+            cost = 65000,
             rank = 7
         },
         [25441] = {
-            cost = 6175,
+            cost = 6500,
             rank = 6
         },
         [28275] = {
-            cost = 1425,
+            cost = 1500,
             rank = 4,
             requires = {724}
         },
         [32375] = {
-            cost = 104500,
+            cost = 110000,
             rank = nil
         },
         [32996] = {
-            cost = 104500,
+            cost = 110000,
             rank = 2
         },
         [32999] = {
-            cost = 3230,
+            cost = 3400,
             rank = 2,
             requires = {14752}
         },
         [34866] = {
-            cost = 2185,
+            cost = 2300,
             rank = 5,
             requires = {34861}
         },
         [34917] = {
-            cost = 2185,
+            cost = 2300,
             rank = 3,
             requires = {34914}
         },
