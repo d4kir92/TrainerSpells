@@ -26,6 +26,7 @@ function TrainerSpells:ApplyTabSettings()
         local ok, err = pcall(listener)
         if not ok and geterrorhandler then geterrorhandler()(err) end
     end
+
     self:RegisterCompendiumTabs()
     if self.SettingsWindow and self.SettingsWindow.UpdateDependencies then self.SettingsWindow:UpdateDependencies() end
 end
@@ -69,33 +70,57 @@ end
 
 function TrainerSpells:ToggleSettings()
     if not self.SettingsWindow then
-        local win = self:CreateUIWindow({name = "TrainerSpellsSettings", title = "|T133741:20:20|t TrainerSpells v0.8.8", width = 520, height = 600})
+        local win = self:CreateUIWindow({
+            name = "TrainerSpellsSettings",
+            title = "|T133741:20:20|t TrainerSpells v0.8.9",
+            width = 520,
+            height = 600
+        })
+
         self.SettingsWindow = win
         win:AddSearch()
-        win:AddCategory({label = "LID_GENERAL", key = "general"})
+        win:AddCategory({
+            label = "LID_GENERAL",
+            key = "general"
+        })
+
         win:AddCheckbox({
             label = "LID_SHOWMINIMAPBUTTON",
             added = "2026-10-07",
             value = TrainerSpells_Character.showMinimapButton ~= false,
             func = function(value)
                 TrainerSpells_Character.showMinimapButton = value
-                if value then self:ShowMMBtn("TrainerSpells") else self:HideMMBtn("TrainerSpells") end
+                if value then
+                    self:ShowMMBtn("TrainerSpells")
+                else
+                    self:HideMMBtn("TrainerSpells")
+                end
             end
         })
+
         for _, category in ipairs({
-            {label = "LID_SETTINGS_SPELLBOOK", key = "spellbook", layout = "spellbookLayout", compendium = "compendium_class", compendiumLabel = "LID_SETTINGS_COMPENDIUM_CLASS", options = {
-                {"class", "LID_CLASSTRAINER"},
-                {"pet", "LID_PETTRAINING"},
-                {"trainers", "LID_CLASSTRAINERS"},
-                {"weapons", "LID_SETTINGS_WEAPONS"}
-            }},
-            {label = "LID_PROFESSIONS", key = "professions", layout = "professionLayout", compendium = "compendium_professions", compendiumLabel = "LID_SETTINGS_COMPENDIUM_PROFESSIONS", options = {
-                {"profession_skill", "LID_PROFESSION_FROMTRAINER"},
-                {"profession_recipes", "LID_PROFESSION_OTHERRECIPES"},
-                {"profession_trainers", "LID_PROFESSION_FINDTRAINER"}
-            }}
+            {
+                label = "LID_SETTINGS_SPELLBOOK",
+                key = "spellbook",
+                layout = "spellbookLayout",
+                compendium = "compendium_class",
+                compendiumLabel = "LID_SETTINGS_COMPENDIUM_CLASS",
+                options = {{"class", "LID_CLASSTRAINER"}, {"pet", "LID_PETTRAINING"}, {"trainers", "LID_CLASSTRAINERS"}, {"weapons", "LID_SETTINGS_WEAPONS"}}
+            },
+            {
+                label = "LID_PROFESSIONS",
+                key = "professions",
+                layout = "professionLayout",
+                compendium = "compendium_professions",
+                compendiumLabel = "LID_SETTINGS_COMPENDIUM_PROFESSIONS",
+                options = {{"profession_skill", "LID_PROFESSION_FROMTRAINER"}, {"profession_recipes", "LID_PROFESSION_OTHERRECIPES"}, {"profession_trainers", "LID_PROFESSION_FINDTRAINER"}}
+            }
         }) do
-            win:AddCategory({label = category.label, key = category.key})
+            win:AddCategory({
+                label = category.label,
+                key = category.key
+            })
+
             local function AddParent(key, label)
                 local checkbox = win:AddCheckbox({
                     label = label,
@@ -106,24 +131,34 @@ function TrainerSpells:ToggleSettings()
                         for sharedKey, setting in pairs(self.SharedTabSettings) do
                             if setting == key then self:SetSharedSetting(sharedKey, value) end
                         end
+
                         self:ApplyTabSettings()
                     end
                 })
+
                 self.SettingCheckboxes[key] = checkbox
                 return checkbox
             end
+
             local layout = win:AddDropdown({
                 label = "LID_SETTINGS_LAYOUT",
                 value = self:GetTabLayout(category.layout),
                 choices = {
-                    {value = "combined", label = "LID_SETTINGS_LAYOUT_COMBINED"},
-                    {value = "tabs", label = "LID_SETTINGS_LAYOUT_TABS"}
+                    {
+                        value = "combined",
+                        label = "LID_SETTINGS_LAYOUT_COMBINED"
+                    },
+                    {
+                        value = "tabs",
+                        label = "LID_SETTINGS_LAYOUT_TABS"
+                    }
                 },
                 func = function(value)
                     TrainerSpells_Character[category.layout] = value
                     self:ApplyTabSettings()
                 end
             })
+
             win:AddDependency(layout, function() return TrainerSpells_Character[category.key] ~= false end, 0)
             local addonTab = AddParent(category.key, "LID_SETTINGS_ADDONTAB")
             local children = {}
@@ -138,21 +173,23 @@ function TrainerSpells:ToggleSettings()
                         self:ApplyTabSettings()
                     end
                 })
+
                 self.SettingCheckboxes[key] = checkbox
-                win:AddDependency(checkbox, function()
-                    return TrainerSpells_Character[category.key] ~= false or TrainerSpells_Character[category.compendium] ~= false
-                end)
+                win:AddDependency(checkbox, function() return TrainerSpells_Character[category.key] ~= false or TrainerSpells_Character[category.compendium] ~= false end)
                 table.insert(children, checkbox)
             end
+
             local compendiumTab = AddParent(category.compendium, category.compendiumLabel)
             for _, checkbox in ipairs(children) do
                 win:AddRequirement(checkbox, addonTab)
                 win:AddRequirement(checkbox, compendiumTab)
             end
         end
+
         win:UpdateDependencies()
         win:Layout()
     end
+
     self.SettingsWindow:SetShown(not self.SettingsWindow:IsShown())
 end
 
@@ -169,6 +206,7 @@ function TrainerSpells:InitializeSettings()
         funcL = function() self:ToggleSettings() end,
         funcR = function() self:ToggleSettings() end
     })
+
     self:AddSlash("ts", function() self:ToggleSettings() end)
     self:AddSlash("trainerspells", function() self:ToggleSettings() end)
     self:ApplyTabSettings()
