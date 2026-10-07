@@ -1,5 +1,5 @@
 ## Interface: 40402
-## Version: 0.8.7
+## Version: 0.8.8
 ## Title: TrainerSpells |T133741:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: An add-on that shows you what you can learn at a classtrainer.
 ## Notes-deDE: Ein Add-on das dir alle lernbaren Fähigkeiten von einem Klassenlehrer anzeigt.
@@ -119,6 +119,7 @@ data\cata\FirstAidRecipes.lua
 data\cata\FishingRecipes.lua
 
 core\Init.lua
+core\Settings.lua
 core\PetNames.lua
 core\BuiltinMerge.lua
 core\RecipeKnowledge.lua

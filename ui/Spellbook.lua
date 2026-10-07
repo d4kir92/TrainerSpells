@@ -207,6 +207,7 @@ end
 if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     local lastTab = _G["SpellBookSkillLineTab5"] or _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
     local function CreateClassicModeTab(name, view, icon, tooltip, previousTab)
+        if not TrainerSpells:IsTabEnabled("spellbook") or not TrainerSpells:IsTabEnabled(view) then return previousTab end
         local tab = CreateFrame("Button", name, SpellBookFrame)
         tab:SetSize(32, 32)
         tab:SetNormalTexture(icon)
@@ -301,7 +302,7 @@ function playerSpellsSubTabs.GetSavedView()
     for _, entry in ipairs(playerSpellsSubTabs.views or {}) do
         if entry.view == saved then return saved end
     end
-    return "class"
+    return playerSpellsSubTabs.views and playerSpellsSubTabs.views[1] and playerSpellsSubTabs.views[1].view or "class"
 end
 
 function playerSpellsSubTabs.Update()
@@ -635,6 +636,7 @@ function playerSpellsSubTabs.Create()
         desc = "LID_WEAPONVIEW_DESC"
     })
 
+    views = TrainerSpells:FilterTabViews(views)
     playerSpellsSubTabs.views = views
     local bar = CreateFrame("Frame", "TrainerSpellsPlayerSpellsSubTabs", classFrame, "TabSystemTemplate")
     bar:SetTabSelectedCallback(function(tabID)
@@ -871,7 +873,7 @@ end
 
 local function InstallPlayerSpellsIntegration()
     local book = GetPlayerSpellsBook()
-    if playerSpellsModeTabContainer or not book then return end
+    if playerSpellsModeTabContainer or not book or not TrainerSpells:IsTabEnabled("spellbook") or not TrainerSpells:HasSpellbookTabs() then return end
     local tabSystem = book.CategoryTabSystem
     if not tabSystem then return end
     CreatePlayerSpellsModeTabs(book, tabSystem)
@@ -1095,13 +1097,15 @@ end
 function TrainerSpells:RegisterCompendiumTabs()
     local api = _G["AzerothCompendiumAPI"]
     if type(api) ~= "table" or type(api.RegisterTab) ~= "function" then return end
-    api.RegisterTab("TrainerSpells:professions", {
-        label = function() return TrainerSpells:Trans("LID_PROFESSIONS") end,
-        icon = 134708,
-        insertBefore = "wishlist",
-        createPanel = function(host) TrainerSpells:CreateCompendiumProfessions(host) end
-    })
-    if not self:HasClassTrainers() then return end
+    if self:IsTabEnabled("compendium_professions") and self:HasProfessionTabs() then
+        api.RegisterTab("TrainerSpells:professions", {
+            label = function() return TrainerSpells:Trans("LID_PROFESSIONS") end,
+            icon = 134708,
+            insertBefore = "wishlist",
+            createPanel = function(host) TrainerSpells:CreateCompendiumProfessions(host) end
+        })
+    end
+    if not self:HasClassTrainers() or not self:IsTabEnabled("compendium_class") or not self:HasSpellbookTabs() then return end
     api.RegisterTab("TrainerSpells:class", {
         label = function() return _G.CLASSES or (GetLocale() == "deDE" and "Klassen") or "Classes" end,
         icon = 133743,

@@ -104,3 +104,13 @@ TrainerSpells:AddTrans("deDE", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Spezialisi
 TrainerSpells:AddTrans("deDE", "LID_SPOILERFREE", "Spoilerfrei")
 TrainerSpells:AddTrans("deDE", "LID_SPOILERFREE_DESC", "Blendet Zauber aus, die mehr als 2 Stufen über deiner aktuellen Stufe liegen.")
 TrainerSpells:AddTrans("deDE", "LID_PROFSPOILERFREE_DESC", "Blendet Rezepte aus, die mehr als 5 Fertigkeitspunkte über deiner aktuellen Fertigkeit liegen.")
+
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_ADDONTAB", "TrainerSpells-Tab anzeigen")
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_CLASSES", "Klassen")
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_OPEN", "Klicken, um die Einstellungen zu öffnen")
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_RELOAD", "(nach UI-Neuladen)")
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_SPELLBOOK", "Zauberbuch")
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_WEAPONS", "Waffenfertigkeiten")
+TrainerSpells:AddTrans("deDE", "LID_SHOWMINIMAPBUTTON", "Minimapknopf anzeigen")
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_COMPENDIUM_CLASS", "Klassen-Tab in AzerothCompendium anzeigen")
+TrainerSpells:AddTrans("deDE", "LID_SETTINGS_COMPENDIUM_PROFESSIONS", "Berufe-Tab in AzerothCompendium anzeigen")

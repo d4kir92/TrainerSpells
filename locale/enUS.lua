@@ -104,3 +104,13 @@ TrainerSpells:AddTrans("enUS", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Specializa
 TrainerSpells:AddTrans("enUS", "LID_SPOILERFREE", "Spoiler-free")
 TrainerSpells:AddTrans("enUS", "LID_SPOILERFREE_DESC", "Hides spells that require more than 2 levels above your current level.")
 TrainerSpells:AddTrans("enUS", "LID_PROFSPOILERFREE_DESC", "Hides recipes that require more than 5 skill points above your current skill.")
+
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_ADDONTAB", "Show TrainerSpells tab")
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_CLASSES", "Classes")
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_OPEN", "Click to open settings")
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_RELOAD", "(after UI reload)")
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_SPELLBOOK", "Spellbook")
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_WEAPONS", "Weapon skills")
+TrainerSpells:AddTrans("enUS", "LID_SHOWMINIMAPBUTTON", "Show minimap button")
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_COMPENDIUM_CLASS", "Show classes tab in AzerothCompendium")
+TrainerSpells:AddTrans("enUS", "LID_SETTINGS_COMPENDIUM_PROFESSIONS", "Show professions tab in AzerothCompendium")

@@ -106,7 +106,8 @@ local PROFESSION_SUB_VIEWS = {
     {mode = PROFESSION_VIEW_RECIPES, icon = "Interface\\Icons\\INV_Scroll_03", title = "LID_PROFESSION_OTHERRECIPES", desc = "LID_PROFESSION_OTHERRECIPES_DESC"},
     {mode = PROFESSION_VIEW_TRAINERS, icon = 134269, title = "LID_PROFESSION_FINDTRAINER", desc = "LID_PROFESSION_FINDTRAINER_DESC"},
 }
-local professionViewMode = PROFESSION_VIEW_SKILL
+PROFESSION_SUB_VIEWS = TrainerSpells:FilterTabViews(PROFESSION_SUB_VIEWS, "profession_")
+local professionViewMode = PROFESSION_SUB_VIEWS[1] and PROFESSION_SUB_VIEWS[1].mode or PROFESSION_VIEW_SKILL
 function TrainerSpells:IsProfessionRecipeViewActive()
     return professionViewMode == PROFESSION_VIEW_RECIPES
 end
@@ -460,7 +461,7 @@ function professionSubTabs.GetSavedView()
     for _, view in ipairs(PROFESSION_SUB_VIEWS) do
         if view.mode == saved then return saved end
     end
-    return PROFESSION_VIEW_SKILL
+    return PROFESSION_SUB_VIEWS[1] and PROFESSION_SUB_VIEWS[1].mode or PROFESSION_VIEW_SKILL
 end
 
 function professionSubTabs.Update()
@@ -789,7 +790,7 @@ local function PositionTradeSkillTabs()
             professionTab:ClearAllPoints()
             professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
             recipeTab:ClearAllPoints()
-            recipeTab:SetPoint("TOPLEFT", professionTab, "BOTTOMLEFT", 0, -36)
+            recipeTab:SetPoint("TOPLEFT", TrainerSpells:IsTabEnabled("profession_skill") and professionTab or nativeTab, "BOTTOMLEFT", 0, -36)
         else
             if TradeSkillFrame then
                 local scale = TradeSkillFrame:GetScale()
@@ -801,7 +802,7 @@ local function PositionTradeSkillTabs()
                 professionTab:ClearAllPoints()
                 professionTab:SetPoint("TOPLEFT", nativeTab, "BOTTOMLEFT", 0, -36)
                 recipeTab:ClearAllPoints()
-                recipeTab:SetPoint("TOPLEFT", professionTab, "BOTTOMLEFT", 0, -36)
+                recipeTab:SetPoint("TOPLEFT", TrainerSpells:IsTabEnabled("profession_skill") and professionTab or nativeTab, "BOTTOMLEFT", 0, -36)
             end
         end
     end)
@@ -895,14 +896,14 @@ end)
 recipeTab:SetScript("OnLeave", GameTooltip_Hide)
 local tradeSkillHooksInstalled = false
 local function EnsureTradeSkillHooksInstalled()
-    if tradeSkillHooksInstalled then return end
+    if tradeSkillHooksInstalled or not TrainerSpells:IsTabEnabled("professions") or not (TrainerSpells:IsTabEnabled("profession_skill") or TrainerSpells:IsTabEnabled("profession_recipes")) then return end
     if not TradeSkillFrame then return end
     tradeSkillHooksInstalled = true
     TradeSkillFrame:HookScript("OnShow", function()
         PositionTradeSkillTabs()
         nativeTab:Show()
-        professionTab:Show()
-        recipeTab:Show()
+        professionTab:SetShown(TrainerSpells:IsTabEnabled("profession_skill"))
+        recipeTab:SetShown(TrainerSpells:IsTabEnabled("profession_recipes"))
         SetTradeSkillView("native")
     end)
 
@@ -926,8 +927,8 @@ local function EnsureTradeSkillHooksInstalled()
     if TradeSkillFrame:IsShown() then
         PositionTradeSkillTabs()
         nativeTab:Show()
-        professionTab:Show()
-        recipeTab:Show()
+        professionTab:SetShown(TrainerSpells:IsTabEnabled("profession_skill"))
+        recipeTab:SetShown(TrainerSpells:IsTabEnabled("profession_recipes"))
         SetTradeSkillView("native")
     end
 
@@ -1182,7 +1183,7 @@ local function InstallProfessionsFrameShoulderTabs()
 end
 
 local function InstallProfessionsFrameIntegration()
-    if professionsFrameHooksInstalled or not ProfessionsFrame or professionFrame.compendiumHost then return end
+    if professionsFrameHooksInstalled or not ProfessionsFrame or professionFrame.compendiumHost or not TrainerSpells:IsTabEnabled("professions") or not TrainerSpells:HasProfessionTabs() then return end
     professionsFrameUsesSideTabs = ProfessionsFrame.ProfessionsOverviewTab and ProfessionsFrame.rightProfessionTabs and true or false
     if not professionsFrameUsesSideTabs and not ProfessionsFrame.TabSystem then return end
     professionsFrameHooksInstalled = true
