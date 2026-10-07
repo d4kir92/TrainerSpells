@@ -59,6 +59,10 @@ function TrainerSpells:HasSpellbookTabs()
     return self:IsTabEnabled("class") or self:IsTabEnabled("trainers") and self.BuildClassTrainerItems ~= nil or self:IsTabEnabled("weapons") and self.BuildWeaponSkillItems ~= nil or self:IsTabEnabled("pet") and self:HasPetClassData(classToken)
 end
 
+function TrainerSpells:GetTabLayout(key)
+    return TrainerSpells_Character and TrainerSpells_Character[key] == "tabs" and "tabs" or "combined"
+end
+
 function TrainerSpells:HasProfessionTabs()
     return self:IsTabEnabled("profession_skill") or self:IsTabEnabled("profession_recipes") or self:IsTabEnabled("profession_trainers")
 end
@@ -79,13 +83,13 @@ function TrainerSpells:ToggleSettings()
             end
         })
         for _, category in ipairs({
-            {label = "LID_SETTINGS_SPELLBOOK", key = "spellbook", compendium = "compendium_class", compendiumLabel = "LID_SETTINGS_COMPENDIUM_CLASS", options = {
+            {label = "LID_SETTINGS_SPELLBOOK", key = "spellbook", layout = "spellbookLayout", compendium = "compendium_class", compendiumLabel = "LID_SETTINGS_COMPENDIUM_CLASS", options = {
                 {"class", "LID_CLASSTRAINER"},
                 {"pet", "LID_PETTRAINING"},
                 {"trainers", "LID_CLASSTRAINERS"},
                 {"weapons", "LID_SETTINGS_WEAPONS"}
             }},
-            {label = "LID_PROFESSIONS", key = "professions", compendium = "compendium_professions", compendiumLabel = "LID_SETTINGS_COMPENDIUM_PROFESSIONS", options = {
+            {label = "LID_PROFESSIONS", key = "professions", layout = "professionLayout", compendium = "compendium_professions", compendiumLabel = "LID_SETTINGS_COMPENDIUM_PROFESSIONS", options = {
                 {"profession_skill", "LID_PROFESSION_FROMTRAINER"},
                 {"profession_recipes", "LID_PROFESSION_OTHERRECIPES"},
                 {"profession_trainers", "LID_PROFESSION_FINDTRAINER"}
@@ -108,6 +112,19 @@ function TrainerSpells:ToggleSettings()
                 self.SettingCheckboxes[key] = checkbox
                 return checkbox
             end
+            local layout = win:AddDropdown({
+                label = "LID_SETTINGS_LAYOUT",
+                value = self:GetTabLayout(category.layout),
+                choices = {
+                    {value = "combined", label = "LID_SETTINGS_LAYOUT_COMBINED"},
+                    {value = "tabs", label = "LID_SETTINGS_LAYOUT_TABS"}
+                },
+                func = function(value)
+                    TrainerSpells_Character[category.layout] = value
+                    self:ApplyTabSettings()
+                end
+            })
+            win:AddDependency(layout, function() return TrainerSpells_Character[category.key] ~= false end, 0)
             local addonTab = AddParent(category.key, "LID_SETTINGS_ADDONTAB")
             local children = {}
             for _, option in ipairs(category.options) do

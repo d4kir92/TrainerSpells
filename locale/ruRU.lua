@@ -104,3 +104,6 @@ TrainerSpells:AddTrans("ruRU", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Специ
 TrainerSpells:AddTrans("ruRU", "LID_SPOILERFREE", "Без спойлеров")
 TrainerSpells:AddTrans("ruRU", "LID_SPOILERFREE_DESC", "Скрывает заклинания, требующие уровня более чем на 2 выше текущего.")
 TrainerSpells:AddTrans("ruRU", "LID_PROFSPOILERFREE_DESC", "Скрывает рецепты, требующие навыка более чем на 5 очков выше текущего.")
+TrainerSpells:AddTrans("ruRU", "LID_SETTINGS_LAYOUT", "Отображение")
+TrainerSpells:AddTrans("ruRU", "LID_SETTINGS_LAYOUT_COMBINED", "Объединённое (по умолчанию)")
+TrainerSpells:AddTrans("ruRU", "LID_SETTINGS_LAYOUT_TABS", "Только вкладки")

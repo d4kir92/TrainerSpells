@@ -104,3 +104,6 @@ TrainerSpells:AddTrans("itIT", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Specializz
 TrainerSpells:AddTrans("itIT", "LID_SPOILERFREE", "Senza spoiler")
 TrainerSpells:AddTrans("itIT", "LID_SPOILERFREE_DESC", "Nasconde gli incantesimi che richiedono più di 2 livelli sopra il tuo livello attuale.")
 TrainerSpells:AddTrans("itIT", "LID_PROFSPOILERFREE_DESC", "Nasconde le ricette che richiedono più di 5 punti abilità sopra la tua abilità attuale.")
+TrainerSpells:AddTrans("itIT", "LID_SETTINGS_LAYOUT", "Visualizzazione")
+TrainerSpells:AddTrans("itIT", "LID_SETTINGS_LAYOUT_COMBINED", "Combinata (predefinita)")
+TrainerSpells:AddTrans("itIT", "LID_SETTINGS_LAYOUT_TABS", "Solo schede")

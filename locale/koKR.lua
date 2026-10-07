@@ -104,3 +104,6 @@ TrainerSpells:AddTrans("koKR", "LID_PROFTRAINER_SPECHEADER", "%s  ·  전문화"
 TrainerSpells:AddTrans("koKR", "LID_SPOILERFREE", "스포일러 방지")
 TrainerSpells:AddTrans("koKR", "LID_SPOILERFREE_DESC", "현재 레벨보다 2레벨 넘게 높은 주문을 숨깁니다.")
 TrainerSpells:AddTrans("koKR", "LID_PROFSPOILERFREE_DESC", "현재 숙련도보다 5포인트 넘게 높은 제조법을 숨깁니다.")
+TrainerSpells:AddTrans("koKR", "LID_SETTINGS_LAYOUT", "표시 방식")
+TrainerSpells:AddTrans("koKR", "LID_SETTINGS_LAYOUT_COMBINED", "통합 (기본값)")
+TrainerSpells:AddTrans("koKR", "LID_SETTINGS_LAYOUT_TABS", "탭만")

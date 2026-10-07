@@ -104,3 +104,6 @@ TrainerSpells:AddTrans("esMX", "LID_PROFTRAINER_SPECHEADER", "%s  ·  Especializ
 TrainerSpells:AddTrans("esMX", "LID_SPOILERFREE", "Sin spoilers")
 TrainerSpells:AddTrans("esMX", "LID_SPOILERFREE_DESC", "Oculta los hechizos que requieren más de 2 niveles por encima de tu nivel actual.")
 TrainerSpells:AddTrans("esMX", "LID_PROFSPOILERFREE_DESC", "Oculta las recetas que requieren más de 5 puntos de habilidad por encima de tu habilidad actual.")
+TrainerSpells:AddTrans("esMX", "LID_SETTINGS_LAYOUT", "Presentación")
+TrainerSpells:AddTrans("esMX", "LID_SETTINGS_LAYOUT_COMBINED", "Combinada (predeterminado)")
+TrainerSpells:AddTrans("esMX", "LID_SETTINGS_LAYOUT_TABS", "Solo pestañas")

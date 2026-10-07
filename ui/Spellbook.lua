@@ -377,8 +377,9 @@ local function PositionPlayerSpellsFrame()
     local showSpoilerFree = panel and TrainerSpells.ClassView == "class"
     local anchor, left, right, top = classFrame, 48, -100, -2
     if panel then
+        local tabsLayout = playerSpellsSubTabs.IsTabsLayout()
         panel:Show()
-        playerSpellsSubTabs.bar:Show()
+        playerSpellsSubTabs.bar:SetShown(not tabsLayout)
         playerSpellsSubTabs.title:Show()
         playerSpellsSubTabs.desc:Show()
         anchor, left, right, top = panel, 8, -90, -8
@@ -404,7 +405,7 @@ local function PositionPlayerSpellsFrame()
         spoilerFree:SetChecked(TrainerSpells_Character.spoilerFree and true or false)
         spoilerFree:SetShown(showSpoilerFree)
         playerSpellsSubTabs.title:ClearAllPoints()
-        playerSpellsSubTabs.title:SetPoint("TOPLEFT", bar, "TOPRIGHT", 12, 0)
+        playerSpellsSubTabs.title:SetPoint("TOPLEFT", bar, tabsLayout and "TOPLEFT" or "TOPRIGHT", tabsLayout and 0 or 12, 0)
         playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -266, 35)
         playerSpellsSubTabs.desc:ClearAllPoints()
         playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
@@ -588,6 +589,10 @@ local function ClosePlayerSpellsPanel()
         tab:SetTabSelected(false)
     end
 
+    for _, tab in ipairs(playerSpellsSubTabs.viewTabs or {}) do
+        tab:SetTabSelected(false)
+    end
+
     if wasOpen then SetNativeCategoryTabsVisual(GetPlayerSpellsBook(), true) end
 end
 
@@ -610,6 +615,10 @@ function TrainerSpells:UpdateClassViewTabs()
     end
 
     if playerSpellsModeTabs.addon then playerSpellsModeTabs.addon:SetTabSelected(classFrame:IsShown()) end
+    for _, tab in ipairs(playerSpellsSubTabs.viewTabs or {}) do
+        tab:SetTabSelected(classFrame:IsShown() and TrainerSpells.ClassView == tab.view)
+    end
+
     playerSpellsSubTabs.Update()
 end
 
@@ -717,14 +726,13 @@ function playerSpellsSubTabs.ApplySettings()
         local enabled = TrainerSpells:IsTabEnabled("spellbook") and TrainerSpells:HasSpellbookTabs()
         playerSpellsModeTabContainer:SetShown(enabled)
         local nextIcon = playerSpellsSubTabs.nextIcon
-        if nextIcon and playerSpellsSubTabs.nextIconPoints then
+        if enabled then
+            playerSpellsSubTabs.LayoutModeTabs()
+        elseif nextIcon and playerSpellsSubTabs.nextIconPoints then
             nextIcon:ClearAllPoints()
-            if enabled then
-                nextIcon:SetPoint("TOPLEFT", playerSpellsModeTabs.addon, "TOPRIGHT", 0, 0)
-            else
-                for _, point in ipairs(playerSpellsSubTabs.nextIconPoints) do nextIcon:SetPoint(unpack(point)) end
-            end
+            for _, point in ipairs(playerSpellsSubTabs.nextIconPoints) do nextIcon:SetPoint(unpack(point)) end
         end
+        if playerSpellsSubTabs.QueueFit then playerSpellsSubTabs.QueueFit() end
         if not enabled and classFrame:IsShown() and not classFrame.compendiumHost then ClosePlayerSpellsPanel() end
     end
 
@@ -744,7 +752,8 @@ function playerSpellsSubTabs.ApplySettings()
     elseif not first and panelOpen then
         ClosePlayerSpellsPanel()
     end
-    playerSpellsSubTabs.Update()
+    if playerSpellsModeTabContainer and classFrame:IsShown() and not classFrame.compendiumHost then PositionPlayerSpellsFrame() end
+    TrainerSpells:UpdateClassViewTabs()
 end
 
 TrainerSpells:OnTabSettingsChanged(playerSpellsSubTabs.ApplySettings)
@@ -775,12 +784,79 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
     playerSpellsModeTabs.addon = tab
     playerSpellsModeLastTab = tab
     playerSpellsSubTabs.Create()
+    playerSpellsSubTabs.viewTabs = {}
+    for index, entry in ipairs(playerSpellsSubTabs.allViews) do
+        local viewTab = CreateFrame("Button", nil, container, "TabSystemButtonTemplate")
+        viewTab.GetTabSystem = function() return tabSystem end
+        viewTab:Init(100 + index, nil, entry.icon)
+        viewTab.SetEnabled = playerSpellsSubTabs.KeepTabEnabled
+        viewTab:Enable()
+        viewTab:SetTooltipText(entry.title)
+        if entry.classToken then playerSpellsSubTabs.SetClassIcon(viewTab.Icon, entry.classToken) end
+        viewTab.view = entry.view
+        viewTab:SetScript("OnClick", function()
+            TrainerSpells:SetClassView(entry.view)
+            OpenPlayerSpellsPanel()
+        end)
+        viewTab:Hide()
+        table.insert(playerSpellsSubTabs.viewTabs, viewTab)
+    end
+end
+
+function playerSpellsSubTabs.IsTabsLayout()
+    return TrainerSpells:GetTabLayout("spellbookLayout") == "tabs"
+end
+
+function playerSpellsSubTabs.LayoutModeTabs()
+    local container = playerSpellsModeTabContainer
+    if not container or not playerSpellsModeTabs.addon then return end
+    local tabsLayout = playerSpellsSubTabs.IsTabsLayout()
+    local last, width = nil, 0
+    playerSpellsModeTabs.addon:SetShown(not tabsLayout)
+    if not tabsLayout then
+        last, width = playerSpellsModeTabs.addon, playerSpellsModeTabs.addon:GetWidth()
+    end
+    for _, viewTab in ipairs(playerSpellsSubTabs.viewTabs or {}) do
+        local shown = tabsLayout and TrainerSpells:IsTabEnabled(viewTab.view)
+        viewTab:SetShown(shown)
+        viewTab:ClearAllPoints()
+        if shown then
+            if last then
+                viewTab:SetPoint("LEFT", last, "RIGHT", 1, 0)
+                width = width + 1
+            else
+                viewTab:SetPoint("LEFT", container, "LEFT", 0, 0)
+            end
+            width = width + viewTab:GetWidth()
+            last = viewTab
+        end
+    end
+    container:SetWidth(math.max(1, width))
+    playerSpellsModeLastTab = last or playerSpellsModeTabs.addon
+    local nextIcon = playerSpellsSubTabs.nextIcon
+    if nextIcon and playerSpellsSubTabs.nextIconPoints and container:IsShown() then
+        nextIcon:ClearAllPoints()
+        nextIcon:SetPoint("TOPLEFT", playerSpellsModeLastTab, "TOPRIGHT", 0, 0)
+    end
+    if playerSpellsSubTabs.QueueFit then playerSpellsSubTabs.QueueFit() end
 end
 
 local function FitNativeSearchBox()
     local book = GetPlayerSpellsBook()
     local nativeSearchBox = book and book.SearchBox
     if not nativeSearchBox or not playerSpellsModeLastTab then return end
+    if not playerSpellsSubTabs.searchPoints then
+        local points = {}
+        for index = 1, nativeSearchBox:GetNumPoints() do points[index] = {nativeSearchBox:GetPoint(index)} end
+        playerSpellsSubTabs.searchPoints = points
+    else
+        nativeSearchBox:ClearAllPoints()
+        for _, point in ipairs(playerSpellsSubTabs.searchPoints) do nativeSearchBox:SetPoint(unpack(point)) end
+    end
+    if not playerSpellsModeTabContainer or not playerSpellsModeTabContainer:IsShown() then
+        if classFrame:IsShown() then PositionPlayerSpellsFrame() end
+        return
+    end
     local edge = book.NextCategoryIcon and book.NextCategoryIcon:IsShown() and book.NextCategoryIcon or playerSpellsModeLastTab
     local tabRight = edge:GetRight()
     local left, right, top = nativeSearchBox:GetLeft(), nativeSearchBox:GetRight(), nativeSearchBox:GetTop()
@@ -797,6 +873,7 @@ end
 local function QueueFitNativeSearchBox()
     C_Timer.After(0, FitNativeSearchBox)
 end
+playerSpellsSubTabs.QueueFit = QueueFitNativeSearchBox
 
 function playerSpellsSubTabs.SelectNextView(forward)
     for index, entry in ipairs(playerSpellsSubTabs.views or {}) do
@@ -863,7 +940,8 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
                 playerSpellsSubTabs.SelectNextView(forward)
             end
         elseif forward and not tabChanged then
-            TrainerSpells:SetClassView(playerSpellsSubTabs.GetSavedView())
+            local first = playerSpellsSubTabs.IsTabsLayout() and playerSpellsSubTabs.views and playerSpellsSubTabs.views[1]
+            TrainerSpells:SetClassView(first and first.view or playerSpellsSubTabs.GetSavedView())
             OpenPlayerSpellsPanel()
         end
 
@@ -915,7 +993,7 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
         playerSpellsSubTabs.nextIcon = nextIcon
         playerSpellsSubTabs.nextIconPoints = points
         nextIcon:ClearAllPoints()
-        nextIcon:SetPoint("TOPLEFT", playerSpellsModeTabs.addon, "TOPRIGHT", 0, 0)
+        nextIcon:SetPoint("TOPLEFT", playerSpellsModeLastTab or playerSpellsModeTabs.addon, "TOPRIGHT", 0, 0)
         nextIcon:HookScript("OnShow", QueueFitNativeSearchBox)
         nextIcon:HookScript("OnHide", QueueFitNativeSearchBox)
     end
