@@ -1050,6 +1050,74 @@ local function CreateProfessionsFrameSideTab(name, text, icon)
     return tab
 end
 
+local function InstallProfessionsFrameShoulderTabs()
+    local indicators = ProfessionsFrame.TabIndicators
+    if not (indicators and indicators.RightTabButton and IsKeyDown) then return end
+    local driver = TrainerSpells.CreateDetachedFrame("Frame", ProfessionsFrame)
+    local leftButton = CreateFrame("Button", "TrainerSpellsProfessionsShoulderLeft", UIParent)
+    leftButton:SetSize(1, 1)
+    leftButton:SetPoint("BOTTOMRIGHT", UIParent, "TOPLEFT", -10, 10)
+    leftButton:EnableMouse(false)
+    leftButton:RegisterForClicks("AnyDown", "AnyUp")
+    leftButton:SetScript("OnClick", function()
+        if not professionsModeActive or IsProfessionsCombatLocked() then return end
+        local tab = indicators.visibleTabs and indicators.visibleTabs[indicators.currentIndex]
+        if tab and tab == ProfessionsFrame.ProfessionsOverviewTab then
+            if ProfessionsFrame.CraftingPage then ProfessionsFrame.CraftingPage:Hide() end
+            if ProfessionsFrame.BookPage then ProfessionsFrame.BookPage:Show() end
+        else
+            RestoreProfessionsFramePage()
+        end
+
+        CloseProfessionsFrameView()
+        if tab and tab.SetChecked then tab:SetChecked(true) end
+    end)
+
+    local leftBinding = "CLICK TrainerSpellsProfessionsShoulderLeft:LeftButton"
+    local leftBound = false
+    local function UpdateLeftBinding(active)
+        if InCombatLockdown() then return end
+        if active then
+            if GetBindingAction("PADLSHOULDER", true) ~= leftBinding then SetOverrideBindingClick(leftButton, true, "PADLSHOULDER", leftButton:GetName(), "LeftButton") end
+            leftBound = true
+        elseif leftBound then
+            ClearOverrideBindings(leftButton)
+            leftBound = false
+        end
+    end
+
+    driver:SetScript("OnHide", function() UpdateLeftBinding(false) end)
+    local rightHeld, previousIndex = false, nil
+    driver:SetScript("OnShow", function()
+        rightHeld = IsKeyDown("PADRSHOULDER") and true or false
+        previousIndex = nil
+    end)
+
+    driver:SetScript("OnUpdate", function()
+        local down = IsKeyDown("PADRSHOULDER") and true or false
+        local pressed = down and not rightHeld
+        rightHeld = down
+        local indexBefore = previousIndex
+        previousIndex = indicators.currentIndex
+        local addonTab = professionsModeTabs.addon
+        local visible = addonTab and indicators:IsVisible()
+        UpdateLeftBinding(visible and professionsModeActive)
+        if not visible then return end
+        local rightButton = indicators.RightTabButton
+        if addonTab:IsShown() and select(2, rightButton:GetPoint(1)) ~= addonTab then
+            rightButton:ClearAllPoints()
+            rightButton:SetPoint("TOP", addonTab, "BOTTOM", 0, 0)
+        end
+
+        local lastIndex = indicators.visibleTabs and #indicators.visibleTabs or 0
+        if pressed and not professionsModeActive and not indicators.isLocked and lastIndex > 0 and indexBefore == lastIndex and indicators.currentIndex == lastIndex then
+            C_Timer.After(0.05, function()
+                if indicators.currentIndex == indexBefore and not professionsModeActive and ProfessionsFrame:IsVisible() and not addonTab.combatLocked then OpenProfessionsFrameView() end
+            end)
+        end
+    end)
+end
+
 local function InstallProfessionsFrameIntegration()
     if professionsFrameHooksInstalled or not ProfessionsFrame or professionFrame.compendiumHost then return end
     professionsFrameUsesSideTabs = ProfessionsFrame.ProfessionsOverviewTab and ProfessionsFrame.rightProfessionTabs and true or false
@@ -1064,6 +1132,7 @@ local function InstallProfessionsFrameIntegration()
         CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTab", "TrainerSpells", 133741)
         hooksecurefunc(ProfessionsFrame, "RefreshRightTabs", PositionProfessionsFrameModeTabs)
         hooksecurefunc(ProfessionsFrame, "RightTabSelected", CloseProfessionsFrameView)
+        InstallProfessionsFrameShoulderTabs()
     else
         professionsModeTabContainer = CreateFrame("Frame", "TrainerSpellsProfessionsModeTabs", ProfessionsFrame)
         professionsModeTabContainer:SetSize(260, math.max(32, ProfessionsFrame.TabSystem:GetHeight()))

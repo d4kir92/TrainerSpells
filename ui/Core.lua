@@ -89,20 +89,55 @@ local function ToggleGroup(groupKey)
     if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
 end
 
-local function UpdateCollapseButton(rowFrame, elementData, anchor)
-    local button = rowFrame.collapseButton
-    if not elementData.groupKey then
-        if button then button:Hide() end
-        return nil
+local function GetRowHitButton(rowFrame)
+    local hit = rowFrame.hitButton
+    if not hit then
+        hit = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
+        hit.tsRow = rowFrame
+        local highlight = hit:CreateTexture(nil, "HIGHLIGHT")
+        highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
+        highlight:SetBlendMode("ADD")
+        highlight:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", 0, 0)
+        highlight:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", 0, 0)
+        hit:SetHighlightTexture(highlight)
+        hit:Hide()
+        rowFrame.hitButton = hit
     end
+    return hit
+end
 
+local function GetRowCollapseButton(rowFrame)
+    local button = rowFrame.collapseButton
     if not button then
         button = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
         button:SetSize(COLLAPSE_BUTTON_SIZE, COLLAPSE_BUTTON_SIZE)
         button:SetHighlightTexture(COLLAPSE_HIGHLIGHT, "ADD")
+        button:Hide()
         rowFrame.collapseButton = button
     end
+    return button
+end
 
+local function GetRowLocationButton(rowFrame, index)
+    rowFrame.locationButtons = rowFrame.locationButtons or {}
+    for i = #rowFrame.locationButtons + 1, index do
+        local button = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
+        button.icon = button:CreateTexture(nil, "ARTWORK")
+        button.icon:SetAllPoints()
+        button.tsRow = rowFrame
+        button:Hide()
+        rowFrame.locationButtons[i] = button
+    end
+    return rowFrame.locationButtons[index]
+end
+
+local function UpdateCollapseButton(rowFrame, elementData, anchor)
+    if not elementData.groupKey then
+        if rowFrame.collapseButton then rowFrame.collapseButton:Hide() end
+        return nil
+    end
+
+    local button = GetRowCollapseButton(rowFrame)
     button:ClearAllPoints()
     button:SetPoint("RIGHT", anchor, "LEFT", -2, 0)
     button:SetNormalTexture(elementData.collapsed and COLLAPSED_UP or EXPANDED_UP)
@@ -504,28 +539,24 @@ function TrainerSpells:ApplyRowInteraction(rowFrame)
 
     local locationClick
     if gamepad then
-        local subButtons = {}
-        if rowFrame.collapseButton then table.insert(subButtons, rowFrame.collapseButton) end
         for _, button in ipairs(rowFrame.locationButtons or {}) do
-            table.insert(subButtons, button)
+            if button:IsShown() then locationClick = locationClick or button:GetScript("OnClick") end
         end
 
-        for _, button in ipairs(subButtons) do
-            if button:IsShown() then
-                if button ~= rowFrame.collapseButton then locationClick = locationClick or button:GetScript("OnClick") end
-                local source = button.icon or button:GetNormalTexture()
-                local standIn = rowFrame.tsStandIns[button]
-                if not standIn then
-                    standIn = rowFrame:CreateTexture(nil, "OVERLAY")
-                    standIn:SetAllPoints(button)
-                    rowFrame.tsStandIns[button] = standIn
-                end
-
-                standIn:SetTexture(source and source:GetTexture())
-                if source then standIn:SetTexCoord(source:GetTexCoord()) end
-                standIn:Show()
-                button:Hide()
+        local button = rowFrame.collapseButton
+        if button and button:IsShown() then
+            local source = button:GetNormalTexture()
+            local standIn = rowFrame.tsStandIns[button]
+            if not standIn then
+                standIn = rowFrame:CreateTexture(nil, "OVERLAY")
+                standIn:SetAllPoints(button)
+                rowFrame.tsStandIns[button] = standIn
             end
+
+            standIn:SetTexture(source and source:GetTexture())
+            if source then standIn:SetTexCoord(source:GetTexCoord()) end
+            standIn:Show()
+            button:Hide()
         end
 
         if rowFrame.icon:IsShown() then
@@ -534,24 +565,12 @@ function TrainerSpells:ApplyRowInteraction(rowFrame)
         end
     end
 
-    local hit = rowFrame.hitButton
     if not (onEnter or onMouseUp or locationClick) then
-        if hit then hit:Hide() end
+        if rowFrame.hitButton then rowFrame.hitButton:Hide() end
         return
     end
 
-    if not hit then
-        hit = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
-        hit.tsRow = rowFrame
-        local highlight = hit:CreateTexture(nil, "HIGHLIGHT")
-        highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
-        highlight:SetBlendMode("ADD")
-        highlight:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", 0, 0)
-        highlight:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", 0, 0)
-        hit:SetHighlightTexture(highlight)
-        rowFrame.hitButton = hit
-    end
-
+    local hit = GetRowHitButton(rowFrame)
     hit:SetFrameLevel(rowFrame:GetFrameLevel())
     hit:ClearAllPoints()
     hit:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", 0, 0)
@@ -600,6 +619,9 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         categoryBackground:EnableMouse(false)
         categoryBackground:Hide()
         rowFrame.categoryBackground = categoryBackground
+        GetRowHitButton(rowFrame)
+        GetRowCollapseButton(rowFrame)
+        GetRowLocationButton(rowFrame, 3)
         local icon = rowFrame:CreateTexture(nil, "ARTWORK")
         icon:SetPoint("LEFT", rowFrame, "LEFT", 4, 0)
         icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
@@ -804,18 +826,10 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             levelFS:SetText(levelText)
         end
 
-        rowFrame.locationButtons = rowFrame.locationButtons or {}
         local locationSize = math.max(12, math.min(24, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
         for index, location in ipairs(entry.locations) do
             local locationInfo = location
-            local button = rowFrame.locationButtons[index]
-            if not button then
-                button = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
-                button.icon = button:CreateTexture(nil, "ARTWORK")
-                button.icon:SetAllPoints()
-                rowFrame.locationButtons[index] = button
-            end
-
+            local button = GetRowLocationButton(rowFrame, index)
             button:ClearAllPoints()
             button:SetPoint("LEFT", rowFrame, "CENTER", (index - 1) * (locationSize + 3), 0)
             button:SetSize(locationSize, locationSize)
@@ -902,19 +916,11 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
 
         local locations = entry.isProfessionRecipe and entry.sourceLocations
         if locations and #locations > 0 then
-            rowFrame.locationButtons = rowFrame.locationButtons or {}
             local locationSize = math.max(12, math.min(20, (rowFrame:GetHeight() or TrainerSpells.RowHeight) - 4))
             local shown = math.min(3, #locations)
             for index = 1, shown do
                 local locationInfo = locations[index]
-                local button = rowFrame.locationButtons[index]
-                if not button then
-                    button = TrainerSpells.CreateDetachedFrame("Button", rowFrame)
-                    button.icon = button:CreateTexture(nil, "ARTWORK")
-                    button.icon:SetAllPoints()
-                    rowFrame.locationButtons[index] = button
-                end
-
+                local button = GetRowLocationButton(rowFrame, index)
                 button:ClearAllPoints()
                 button:SetPoint("RIGHT", levelFS, "LEFT", -6 - ((index - 1) * (locationSize + 3)), 0)
                 button:SetSize(locationSize, locationSize)
