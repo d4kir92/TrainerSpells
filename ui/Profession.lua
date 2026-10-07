@@ -46,6 +46,9 @@ professionRowHeightSlider:Init(TrainerSpells.ProfessionRowHeight, TrainerSpells.
 if professionRowHeightSlider.MinText then professionRowHeightSlider.MinText:Hide() end
 if professionRowHeightSlider.MaxText then professionRowHeightSlider.MaxText:Hide() end
 local professionScrollBox = CreateFrame("Frame", "TrainerSpellsProfessionScrollBox", professionFrame, "WowScrollBoxList")
+professionScrollBox.tsScrollTarget = professionScrollBox.ScrollTarget
+professionScrollBox.ScrollTarget = nil
+function professionScrollBox:GetScrollTarget() return self.tsScrollTarget end
 professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
 professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
 local professionListBg = professionFrame:CreateTexture("TrainerSpellsProfessionBackground", "BACKGROUND")
@@ -53,6 +56,7 @@ local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionSc
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
 professionScrollBar:SetPoint("BOTTOMLEFT", professionScrollBox, "BOTTOMRIGHT", 4, 2)
 local professionScrollView = CreateScrollBoxListLinearView()
+function professionScrollView:RefreshSmartNav() end
 professionScrollView:SetElementExtentCalculator(function(_, elementData)
     if elementData.isHeader then return TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap end
     return TrainerSpells.ProfessionRowHeight
@@ -209,7 +213,10 @@ function professionPicker.UpdateWidth(dropdown, measure)
 end
 
 function professionPicker.UpdateText()
-    if professionPicker.dropdown and professionPicker.key then professionPicker.dropdown:SetText(professionPicker.GetLabel(professionPicker.GetInfo(professionPicker.key))) end
+    if professionPicker.dropdown and professionPicker.key then
+        local label = professionPicker.GetLabel(professionPicker.GetInfo(professionPicker.key))
+        professionPicker.dropdown:SetText(label)
+    end
     professionPicker.UpdateWidth()
     professionPicker.UpdateHeader()
 end
@@ -227,10 +234,10 @@ function professionPicker.SetHeaderActive(active)
         if not active then return end
         local titleContainer = ProfessionsFrame.TitleContainer
         local portraitContainer = ProfessionsFrame.PortraitContainer
-        header = CreateFrame("Frame", nil, ProfessionsFrame)
+        header = TrainerSpells.CreateDetachedFrame("Frame", ProfessionsFrame)
         header:SetAllPoints(ProfessionsFrame)
         header:SetFrameLevel((titleContainer or ProfessionsFrame):GetFrameLevel() + 5)
-        header.portraitFrame = CreateFrame("Frame", nil, ProfessionsFrame)
+        header.portraitFrame = TrainerSpells.CreateDetachedFrame("Frame", ProfessionsFrame)
         header.portraitFrame:SetAllPoints(nativePortrait)
         header.portraitFrame:SetFrameLevel((portraitContainer or ProfessionsFrame):GetFrameLevel() + 1)
         header.portrait = header.portraitFrame:CreateTexture(nil, "ARTWORK")
@@ -283,9 +290,10 @@ end
 
 function professionPicker.Create()
     if professionPicker.dropdown or not (MenuUtil and MenuUtil.CreateRootMenuDescription) then return end
-    local dropdown = CreateFrame("DropdownButton", "TrainerSpellsProfessionPicker", professionFrame, "WowStyle1DropdownTemplate")
+    local dropdown = CreateFrame("DropdownButton", "TrainerSpellsProfessionPicker", nil, "WowStyle1DropdownTemplate")
+    dropdown:SetParent(professionFrame)
     dropdown:SetSize(180, 26)
-    dropdown:SetupMenu(function(_, rootDescription)
+    professionPicker.menuGenerator = function(_, rootDescription)
         for groupIndex, group in ipairs({professionPicker.GetLists()}) do
             if #group > 0 then
                 rootDescription:CreateTitle(TrainerSpells:Trans(groupIndex == 1 and "LID_YOURPROFESSIONS" or "LID_OTHERPROFESSIONS"))
@@ -295,12 +303,43 @@ function professionPicker.Create()
                 end
             end
         end
-    end)
+    end
 
+    dropdown:SetupMenu(professionPicker.menuGenerator)
     professionPicker.dropdown = dropdown
     professionPicker.measure = dropdown:CreateFontString(nil, "ARTWORK")
     professionPicker.measure:SetPoint("TOPLEFT")
     professionPicker.measure:SetAlpha(0)
+end
+
+function professionPicker.SelectNext()
+    local owned, others = professionPicker.GetLists()
+    local keys = {}
+    for _, info in ipairs(owned) do table.insert(keys, info.key) end
+    for _, info in ipairs(others) do table.insert(keys, info.key) end
+    if #keys == 0 then return end
+    local current = professionPicker.GetActive()
+    local nextIndex = 1
+    for index, key in ipairs(keys) do
+        if key == current then nextIndex = index % #keys + 1 end
+    end
+
+    professionPicker.Select(keys[nextIndex])
+end
+
+function professionPicker.ApplyInputMode()
+    local dropdown = professionPicker.dropdown
+    if not dropdown then return end
+    dropdown:Show()
+    if TrainerSpells.IsGamepadNavActive() then
+        dropdown:ClearMenuState()
+        dropdown:SetScript("OnMouseDown", professionPicker.SelectNext)
+    else
+        dropdown:SetScript("OnMouseDown", nil)
+        dropdown:SetupMenu(professionPicker.menuGenerator)
+    end
+
+    professionPicker.UpdateText()
 end
 
 function professionPicker.GetRankRange(rank)
@@ -478,7 +517,7 @@ end
 function professionSubTabs.InstallGamepadFocus()
     if not IsKeyDown then return end
     local driver = CreateFrame("Frame", nil, professionFrame)
-    local focused, gamepadState, scrolledTo, aHeld
+    local focused, gamepadState, scrolledTo
     local function SetFocused(current)
         if current == focused then return end
         if focused and focused.tsOnLeave then focused.tsOnLeave(focused) end
@@ -488,7 +527,6 @@ function professionSubTabs.InstallGamepadFocus()
 
     driver:SetScript("OnShow", function()
         gamepadState = TrainerSpells.IsGamepadNavActive()
-        aHeld = IsKeyDown("PAD1") and true or false
         TrainerSpells:PrepareGamepadNavigation(professionFrame, gamepadState)
     end)
 
@@ -502,6 +540,7 @@ function professionSubTabs.InstallGamepadFocus()
         if gamepad ~= gamepadState then
             gamepadState = gamepad
             TrainerSpells:PrepareGamepadNavigation(professionFrame, gamepad)
+            if professionPicker.dropdown and professionPicker.dropdown:IsShown() then professionPicker.ApplyInputMode() end
             TrainerSpells_ProfessionRefresh()
         end
 
@@ -512,14 +551,38 @@ function professionSubTabs.InstallGamepadFocus()
             if row and row.GetElementData and row:GetParent() == professionScrollBox:GetScrollTarget() then professionScrollBox:ScrollToElementData(row:GetElementData(), ScrollBoxConstants.AlignNearest) end
         end
 
-        local down = IsKeyDown("PAD1") and true or false
-        if down and not aHeld and current and current.tsGamepadClick and current:IsVisible() and (not current.IsEnabled or current:IsEnabled()) then TrainerSpells.SmartNavClick(current) end
-        aHeld = down
         SetFocused(current and current.tsFocusStripped and current or nil)
     end)
 end
 
 professionSubTabs.InstallGamepadFocus()
+function professionSubTabs.PrewarmRows()
+    if professionFrame.compendiumHost or professionFrame:IsShown() then return end
+    TrainerSpells.RunDetached(professionFrame, function()
+        local rowHeight = TrainerSpells.ProfessionRowHeight
+        TrainerSpells.ProfessionRowHeight = TrainerSpells.MinRowHeight
+        professionScrollBox:ClearAllPoints()
+        professionScrollBox:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 0, 0)
+        professionScrollBox:SetSize(420, 1200)
+        local items = {}
+        for index = 1, math.ceil(1200 / TrainerSpells.MinRowHeight) + 2 do
+            items[index] = {
+                entry = {
+                    name = ""
+                }
+            }
+        end
+
+        professionFrame:Show()
+        professionScrollBox:SetDataProvider(CreateDataProvider(items))
+        professionFrame:Hide()
+        professionScrollBox:RemoveDataProvider()
+        TrainerSpells.ProfessionRowHeight = rowHeight
+        professionScrollBox:ClearAllPoints()
+        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
+        professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
+    end)
+end
 
 function TrainerSpells:PositionCompendiumProfessions()
     local host = professionFrame.compendiumHost
@@ -1016,7 +1079,7 @@ local function OpenProfessionsFrameView()
     professionPicker.SetHeaderActive(true)
     if professionPicker.dropdown then
         professionPicker.dropdown:SetFrameLevel(professionFrame:GetFrameLevel() + 50)
-        professionPicker.dropdown:Show()
+        professionPicker.ApplyInputMode()
     end
 
     professionSubTabs.Update()
@@ -1126,8 +1189,12 @@ local function InstallProfessionsFrameIntegration()
     professionFrame:SetParent(ProfessionsFrame)
     professionFrame:SetFrameStrata(ProfessionsFrame:GetFrameStrata())
     professionFrame:SetFrameLevel(ProfessionsFrame:GetFrameLevel() + 300)
-    professionSubTabs.Create()
-    professionPicker.Create()
+    TrainerSpells.RunDetached(professionFrame, function()
+        professionSubTabs.Create()
+        professionPicker.Create()
+    end)
+
+    professionSubTabs.PrewarmRows()
     if professionsFrameUsesSideTabs then
         CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTab", "TrainerSpells", 133741)
         hooksecurefunc(ProfessionsFrame, "RefreshRightTabs", PositionProfessionsFrameModeTabs)
@@ -1231,4 +1298,4 @@ function TrainerSpells:CreateCompendiumProfessions(host)
         view.dropdown:SetupMenu(function(_, menu) professionPicker.PopulateCompendiumMenu(view, menu) end)
     end
     host:SetScript("OnShow", function() view:Refresh() end)
-end
+end
