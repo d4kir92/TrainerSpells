@@ -107,3 +107,7 @@ TrainerSpells:AddTrans("koKR", "LID_PROFSPOILERFREE_DESC", "현재 숙련도보�
 TrainerSpells:AddTrans("koKR", "LID_SETTINGS_LAYOUT", "표시 방식")
 TrainerSpells:AddTrans("koKR", "LID_SETTINGS_LAYOUT_COMBINED", "통합 (기본값)")
 TrainerSpells:AddTrans("koKR", "LID_SETTINGS_LAYOUT_TABS", "탭만")
+TrainerSpells:AddTrans("koKR", "LID_PRICE_BASE", "평판 할인 없음")
+TrainerSpells:AddTrans("koKR", "LID_PRICE_BEST", "가장 높은 평판 적용")
+TrainerSpells:AddTrans("koKR", "LID_PRICE_UNVERIFIED", "기본 가격이 확인되지 않았습니다. 상급자를 방문하여 가격을 갱신하세요.")
+TrainerSpells:AddTrans("koKR", "LID_PRICE_COMPARE", "대도시 중 가장 높은 평판을 기준으로 비교합니다. 상급자에 따라 더 비쌀 수 있습니다. ~는 추정 기본 가격입니다.")

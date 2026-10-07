@@ -117,3 +117,7 @@ TrainerSpells:AddTrans("deDE", "LID_SETTINGS_COMPENDIUM_PROFESSIONS", "Berufe-Ta
 TrainerSpells:AddTrans("deDE", "LID_SETTINGS_LAYOUT", "Darstellung")
 TrainerSpells:AddTrans("deDE", "LID_SETTINGS_LAYOUT_COMBINED", "Kombiniert (Standard)")
 TrainerSpells:AddTrans("deDE", "LID_SETTINGS_LAYOUT_TABS", "Nur Tabs")
+TrainerSpells:AddTrans("deDE", "LID_PRICE_BASE", "Ohne Rufrabatt")
+TrainerSpells:AddTrans("deDE", "LID_PRICE_BEST", "Mit bestem Ruf")
+TrainerSpells:AddTrans("deDE", "LID_PRICE_UNVERIFIED", "Grundpreis ungeprüft. Besuche einen Lehrer, um den Preis zu aktualisieren.")
+TrainerSpells:AddTrans("deDE", "LID_PRICE_COMPARE", "Vergleich mit deinem besten Ruf bei den Hauptstädten. Einzelne Lehrer können mehr verlangen. ~ kennzeichnet einen geschätzten Grundpreis.")

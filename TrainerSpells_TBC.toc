@@ -94,6 +94,7 @@ data\tbc\JewelcraftingRecipes.lua
 data\tbc\CookingRecipes.lua
 
 core\Init.lua
+core\Pricing.lua
 core\Settings.lua
 core\PetNames.lua
 core\BuiltinMerge.lua

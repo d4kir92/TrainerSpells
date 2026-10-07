@@ -1379,7 +1379,7 @@ else
 end
 
 local tradeSkillWatcher = CreateFrame("Frame")
-for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_LIST_UPDATE", "PLAYER_MONEY"}) do
+for _, event in ipairs({"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_LIST_UPDATE", "PLAYER_MONEY", "UPDATE_FACTION"}) do
     TrainerSpells:RegisterEvent(tradeSkillWatcher, event)
 end
 
@@ -1389,7 +1389,7 @@ tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     if (event == "TRADE_SKILL_UPDATE" or event == "TRADE_SKILL_LIST_UPDATE") and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
         if not professionFrame.compendiumHost then HideNativeTradeSkillWidgets() end
-    elseif event == "PLAYER_MONEY" and professionFrame:IsShown() then
+    elseif (event == "PLAYER_MONEY" or event == "UPDATE_FACTION") and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
     end
 end)

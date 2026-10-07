@@ -178,6 +178,7 @@ local function CaptureTrainerInner()
                 local skillReq = TrainerSpells:GetSkillReqForService(i)
                 local bucket = TrainerSpells:EnsureProfessionPath(professionKey, skillReq)
                 local existing = bucket[name]
+                local baseCost, baseCostEstimated = TrainerSpells.Pricing.CaptureBaseCost(cost, existing)
                 if existing == nil then neuProf = neuProf + 1 end
                 local requires = existing and existing.requires
                 if readRequirementsFromAPI then requires = ReadRequirementsFromAPI(i) or requires end
@@ -186,6 +187,8 @@ local function CaptureTrainerInner()
                     rankRow = (isProfessionService == true) or (GetTrainerServiceStepIndex and GetTrainerServiceStepIndex() == i) or (existing and existing.rankRow) or nil,
                     icon = icon,
                     cost = cost,
+                    baseCost = baseCost,
+                    baseCostEstimated = baseCostEstimated,
                     rank = rank,
                     status = sType,
                     levelReq = (levelReq and levelReq > 0) and levelReq or nil,
@@ -212,6 +215,8 @@ local function CaptureTrainerInner()
 
                     local bucket = isPetTraining and TrainerSpells:EnsurePetTrainerPath(classToken, levelReq or 0) or TrainerSpells:EnsurePath(classToken, levelReq or 0)
                     local existing = bucket[spellID]
+                    local baseCost, baseCostEstimated
+                    if not isPetTraining then baseCost, baseCostEstimated = TrainerSpells.Pricing.CaptureBaseCost(cost, existing) end
                     if existing == nil then
                         if isPetTraining then
                             neuPet = neuPet + 1
@@ -224,6 +229,8 @@ local function CaptureTrainerInner()
                     if readRequirementsFromAPI then requires = ReadRequirementsFromAPI(i) or requires end
                     bucket[spellID] = {
                         cost = cost,
+                        baseCost = baseCost,
+                        baseCostEstimated = baseCostEstimated,
                         rank = rank,
                         status = sType,
                         requires = requires,

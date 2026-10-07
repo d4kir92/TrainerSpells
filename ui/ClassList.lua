@@ -147,6 +147,7 @@ end)
 classFrame:RegisterEvent("PLAYER_LEVEL_UP")
 classFrame:RegisterEvent("SPELLS_CHANGED")
 classFrame:RegisterEvent("PLAYER_MONEY")
+classFrame:RegisterEvent("UPDATE_FACTION")
 classFrame:HookScript("OnEvent", function(self, event)
-    if event == "PLAYER_LEVEL_UP" or event == "SPELLS_CHANGED" or event == "PLAYER_MONEY" then TrainerSpells_Refresh() end
+    if event == "PLAYER_LEVEL_UP" or event == "SPELLS_CHANGED" or event == "PLAYER_MONEY" or event == "UPDATE_FACTION" then TrainerSpells_Refresh() end
 end)

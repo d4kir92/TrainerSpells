@@ -1,10 +1,17 @@
 local _, TrainerSpells = ...
 function TrainerSpells:AddHeaderItem(items, text, colorCode, totalCost, groupKey, prefixText, spellCount, headerDepth, countKind)
+    local price = type(totalCost) == "table" and totalCost or nil
+    if price then totalCost = price.cost end
     table.insert(items, {
         isHeader = true,
         text = text,
         color = colorCode,
         totalCost = totalCost,
+        baseCost = price and price.baseCost,
+        baseCostEstimated = price and price.baseCostEstimated,
+        priceFaction = price and price.priceFaction,
+        priceDiscount = price and price.priceDiscount,
+        priceEligible = price ~= nil,
         groupKey = groupKey,
         collapsed = TrainerSpells:IsGroupCollapsed(groupKey),
         prefixText = prefixText,
@@ -31,10 +38,17 @@ end
 
 function TrainerSpells:SumCost(list)
     local total = 0
+    local baseCost, estimated, complete, eligible = 0, false, true, false
     for _, entry in ipairs(list) do
         total = total + (entry.cost or 0)
+        baseCost = baseCost + (entry.baseCost or 0)
+        estimated = estimated or entry.baseCostEstimated
+        eligible = eligible or entry.priceEligible
+        if entry.baseCost == nil then complete = false end
     end
-    return total
+    if not eligible then return total end
+    local discount, factionName = TrainerSpells.Pricing.GetBestDiscount()
+    return {cost = total, baseCost = complete and baseCost or nil, baseCostEstimated = estimated, priceFaction = factionName, priceDiscount = discount}
 end
 
 function TrainerSpells:AddCostColumn(items)
@@ -46,7 +60,8 @@ function TrainerSpells:AddCostColumn(items)
     local seen = {}
     for _, item in ipairs(items) do
         local cost = item.entry and item.showCostTooltip and item.entry.cost
-        if cost and cost > 0 and not seen[cost] then
+        if item.entry and item.entry.baseCost ~= nil then cost = TrainerSpells.Pricing.Text(item.entry.baseCost, cost, item.entry.baseCostEstimated) end
+        if cost and (type(cost) == "string" or cost > 0) and not seen[cost] then
             seen[cost] = true
             table.insert(column.costs, cost)
         end
@@ -86,6 +101,12 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
     local knownMaxRank = {}
     local playerFaction = TrainerSpells:GetPlayerFaction()
     local playerRace = TrainerSpells:GetPlayerRace()
+    local discount, factionName = TrainerSpells.Pricing.GetBestDiscount()
+    local classToken = select(2, UnitClass("player"))
+    local priceEligible = TrainerSpells_Data and dataTable == TrainerSpells_Data[classToken]
+    for _, professionData in pairs(TrainerSpells_ProfessionData or {}) do
+        if dataTable == professionData then priceEligible = true; break end
+    end
     for lvl, spells in pairs(dataTable) do
         for key, data in pairs(spells) do
             local cost, rank, status, requires, faction, race, spellID, icon, levelReq
@@ -135,6 +156,8 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
                     source = source,
                     sourceLocations = GetSourceLocations(sourceLocations, playerFaction),
                 }
+
+                if priceEligible then TrainerSpells.Pricing.Apply(entry, data, discount, factionName) end
 
                 table.insert(allEntries, entry)
                 if directlyKnown and hasRealRank then knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum) end

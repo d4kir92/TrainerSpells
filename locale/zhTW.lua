@@ -107,3 +107,7 @@ TrainerSpells:AddTrans("zhTW", "LID_PROFSPOILERFREE_DESC", "隱藏需要比你�
 TrainerSpells:AddTrans("zhTW", "LID_SETTINGS_LAYOUT", "顯示方式")
 TrainerSpells:AddTrans("zhTW", "LID_SETTINGS_LAYOUT_COMBINED", "合併 (預設)")
 TrainerSpells:AddTrans("zhTW", "LID_SETTINGS_LAYOUT_TABS", "僅標籤")
+TrainerSpells:AddTrans("zhTW", "LID_PRICE_BASE", "無聲望折扣")
+TrainerSpells:AddTrans("zhTW", "LID_PRICE_BEST", "使用最高聲望")
+TrainerSpells:AddTrans("zhTW", "LID_PRICE_UNVERIFIED", "基礎價格尚未確認。拜訪訓練師以更新價格。")
+TrainerSpells:AddTrans("zhTW", "LID_PRICE_COMPARE", "按主城中最高的聲望比較。部分訓練師收費可能更高。~表示估算的基礎價格。")

@@ -107,3 +107,7 @@ TrainerSpells:AddTrans("itIT", "LID_PROFSPOILERFREE_DESC", "Nasconde le ricette 
 TrainerSpells:AddTrans("itIT", "LID_SETTINGS_LAYOUT", "Visualizzazione")
 TrainerSpells:AddTrans("itIT", "LID_SETTINGS_LAYOUT_COMBINED", "Combinata (predefinita)")
 TrainerSpells:AddTrans("itIT", "LID_SETTINGS_LAYOUT_TABS", "Solo schede")
+TrainerSpells:AddTrans("itIT", "LID_PRICE_BASE", "Senza sconto reputazione")
+TrainerSpells:AddTrans("itIT", "LID_PRICE_BEST", "Con la reputazione migliore")
+TrainerSpells:AddTrans("itIT", "LID_PRICE_UNVERIFIED", "Prezzo base non verificato. Visita un istruttore per aggiornarlo.")
+TrainerSpells:AddTrans("itIT", "LID_PRICE_COMPARE", "Confronto con la reputazione migliore nelle capitali. Alcuni istruttori possono chiedere di più. ~ indica un prezzo base stimato.")

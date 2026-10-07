@@ -84,6 +84,7 @@ data\classicera\CookingRecipes.lua
 data\classicera\FirstAidRecipes.lua
 
 core\Init.lua
+core\Pricing.lua
 core\Settings.lua
 core\PetNames.lua
 core\BuiltinMerge.lua

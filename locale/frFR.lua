@@ -107,3 +107,7 @@ TrainerSpells:AddTrans("frFR", "LID_PROFSPOILERFREE_DESC", "Masque les recettes 
 TrainerSpells:AddTrans("frFR", "LID_SETTINGS_LAYOUT", "Affichage")
 TrainerSpells:AddTrans("frFR", "LID_SETTINGS_LAYOUT_COMBINED", "Combiné (par défaut)")
 TrainerSpells:AddTrans("frFR", "LID_SETTINGS_LAYOUT_TABS", "Onglets uniquement")
+TrainerSpells:AddTrans("frFR", "LID_PRICE_BASE", "Sans remise de réputation")
+TrainerSpells:AddTrans("frFR", "LID_PRICE_BEST", "Avec la meilleure réputation")
+TrainerSpells:AddTrans("frFR", "LID_PRICE_UNVERIFIED", "Prix de base non vérifié. Consultez un maître pour le mettre à jour.")
+TrainerSpells:AddTrans("frFR", "LID_PRICE_COMPARE", "Comparaison avec votre meilleure réputation auprès des capitales. Certains maîtres peuvent demander plus. ~ indique un prix de base estimé.")

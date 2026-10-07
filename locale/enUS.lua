@@ -117,3 +117,7 @@ TrainerSpells:AddTrans("enUS", "LID_SETTINGS_COMPENDIUM_PROFESSIONS", "Show prof
 TrainerSpells:AddTrans("enUS", "LID_SETTINGS_LAYOUT", "Layout")
 TrainerSpells:AddTrans("enUS", "LID_SETTINGS_LAYOUT_COMBINED", "Combined (default)")
 TrainerSpells:AddTrans("enUS", "LID_SETTINGS_LAYOUT_TABS", "Tabs only")
+TrainerSpells:AddTrans("enUS", "LID_PRICE_BASE", "Without reputation discount")
+TrainerSpells:AddTrans("enUS", "LID_PRICE_BEST", "With best reputation")
+TrainerSpells:AddTrans("enUS", "LID_PRICE_UNVERIFIED", "Base price unverified. Visit a trainer to update the price.")
+TrainerSpells:AddTrans("enUS", "LID_PRICE_COMPARE", "Comparison using your best capital reputation. Individual trainers may charge more. ~ marks an estimated base price.")

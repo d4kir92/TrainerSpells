@@ -107,3 +107,7 @@ TrainerSpells:AddTrans("ruRU", "LID_PROFSPOILERFREE_DESC", "Скрывает р�
 TrainerSpells:AddTrans("ruRU", "LID_SETTINGS_LAYOUT", "Отображение")
 TrainerSpells:AddTrans("ruRU", "LID_SETTINGS_LAYOUT_COMBINED", "Объединённое (по умолчанию)")
 TrainerSpells:AddTrans("ruRU", "LID_SETTINGS_LAYOUT_TABS", "Только вкладки")
+TrainerSpells:AddTrans("ruRU", "LID_PRICE_BASE", "Без скидки за репутацию")
+TrainerSpells:AddTrans("ruRU", "LID_PRICE_BEST", "С лучшей репутацией")
+TrainerSpells:AddTrans("ruRU", "LID_PRICE_UNVERIFIED", "Базовая цена не проверена. Посетите учителя, чтобы обновить цену.")
+TrainerSpells:AddTrans("ruRU", "LID_PRICE_COMPARE", "Сравнение по лучшей репутации со столицами. Некоторые учителя могут брать больше. ~ обозначает приблизительную базовую цену.")

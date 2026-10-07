@@ -253,7 +253,7 @@ local function GetCostColumnWidth(fontString, column, fontSize)
     if width then return width end
     width = 0
     for _, cost in ipairs(column.costs) do
-        fontString:SetText(GetMoneyString(cost, true))
+        fontString:SetText(type(cost) == "string" and cost or GetMoneyString(cost, true))
         width = math.max(width, fontString:GetStringWidth())
     end
 
@@ -443,7 +443,8 @@ local function AddSpellTooltipExtra(tooltip, spellID)
     if extra.showCost then
         local canAfford = not extra.cost or extra.cost == 0 or (GetMoney() or 0) >= extra.cost
         local costColor = canAfford and "|cffffffff" or "|cffff3333"
-        tooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(extra.cost) .. "|r", 1, 1, 1)
+        if not extra.priceEntry or extra.priceEntry.baseCost == nil then tooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(extra.cost) .. "|r", 1, 1, 1) end
+        if extra.priceEntry then TrainerSpells.Pricing.AddTooltip(tooltip, extra.priceEntry) end
         tooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
     end
 
@@ -725,7 +726,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             costFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOP", 60, 0)
             costFS:SetPoint("BOTTOMRIGHT", rowFrame.categoryBackground, "BOTTOMRIGHT", -4, 0)
             costFS:SetJustifyV("MIDDLE")
-            costFS:SetText(costColor .. GetMoneyString(elementData.totalCost, true) .. "|r")
+            costFS:SetText(costColor .. TrainerSpells.Pricing.Text(elementData.baseCost, elementData.totalCost, elementData.baseCostEstimated, costColor) .. "|r")
             costFS:Show()
         end
 
@@ -737,7 +738,8 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
                 GameTooltip:AddLine(elementData.text)
                 local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
                 local costColor = canAfford and "|cffffffff" or "|cffff3333"
-                GameTooltip:AddLine(TrainerSpells:Trans("LID_TOTALCOST") .. ": " .. costColor .. FormatCost(elementData.totalCost) .. "|r", 1, 1, 1)
+                if elementData.baseCost == nil then GameTooltip:AddLine(TrainerSpells:Trans("LID_TOTALCOST") .. ": " .. costColor .. FormatCost(elementData.totalCost) .. "|r", 1, 1, 1) end
+                TrainerSpells.Pricing.AddTooltip(GameTooltip, {cost = elementData.totalCost, baseCost = elementData.baseCost, baseCostEstimated = elementData.baseCostEstimated, priceFaction = elementData.priceFaction, priceDiscount = elementData.priceDiscount, priceEligible = elementData.priceEligible})
                 GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
                 GameTooltip:Show()
             end)
@@ -891,9 +893,9 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             costFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
             costFS:Show()
             costFS:SetWidth(GetCostColumnWidth(costFS, elementData.costColumn, fontSize))
-            if entry.cost and entry.cost > 0 then
+            if entry.baseCost ~= nil or (entry.cost and entry.cost > 0) then
                 local costColor = elementData.dimName and Colors.DIM_NAME or ((GetMoney() or 0) >= entry.cost and "|cffffffff" or "|cffff3333")
-                costFS:SetText(costColor .. GetMoneyString(entry.cost, true) .. "|r")
+                costFS:SetText(costColor .. TrainerSpells.Pricing.Text(entry.baseCost, entry.cost, entry.baseCostEstimated, costColor) .. "|r")
             else
                 costFS:SetText("")
             end
@@ -959,6 +961,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
                     spellID = entry.spellID,
                     showCost = showCost,
                     cost = entry.cost,
+                    priceEntry = entry,
                     source = entry.source,
                 }
 
@@ -969,7 +972,8 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
                 if showCost then
                     local canAfford = not entry.cost or entry.cost == 0 or (GetMoney() or 0) >= entry.cost
                     local costColor = canAfford and "|cffffffff" or "|cffff3333"
-                    GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1)
+                    if entry.baseCost == nil then GameTooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. costColor .. FormatCost(entry.cost) .. "|r", 1, 1, 1) end
+                    TrainerSpells.Pricing.AddTooltip(GameTooltip, entry)
                     GameTooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
                 end
 

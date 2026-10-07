@@ -107,6 +107,7 @@ data\wrath\FirstAidRecipes.lua
 data\wrath\MiningRecipes.lua
 
 core\Init.lua
+core\Pricing.lua
 core\Settings.lua
 core\PetNames.lua
 core\BuiltinMerge.lua
