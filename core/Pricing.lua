@@ -4,18 +4,52 @@ TrainerSpells.Pricing = {
         Alliance = {72, 47, 54, 69, 930, 1134},
         Horde = {76, 68, 81, 530, 911, 1133},
     },
+    sideFactions = {
+        Alliance = {72, 47, 54, 69, 930, 1134, 1094},
+        Horde = {76, 68, 81, 530, 911, 1133, 1124},
+    },
     trainerFactions = {
-        DRUID = {69, 72, 81, 609, 911, 930},
-        HUNTER = {47, 69, 72, 76, 81, 530, 911, 930},
-        MAGE = {47, 54, 68, 72, 76, 530, 911, 930},
-        PALADIN = {47, 72, 911, 930},
-        PRIEST = {47, 68, 69, 72, 76, 530, 911, 930},
-        ROGUE = {21, 47, 54, 68, 69, 72, 76, 530, 911},
-        SHAMAN = {76, 81, 930},
-        WARLOCK = {47, 54, 68, 72, 76, 911},
-        WARRIOR = {47, 54, 68, 69, 72, 76, 81, 930},
+        tbc = {
+            DRUID = {69, 72, 81, 609, 911, 930},
+            HUNTER = {47, 69, 72, 76, 81, 530, 911, 930},
+            MAGE = {47, 54, 68, 72, 76, 530, 911, 930},
+            PALADIN = {47, 72, 911, 930},
+            PRIEST = {47, 68, 69, 72, 76, 530, 911, 930},
+            ROGUE = {21, 47, 54, 68, 69, 72, 76, 530, 911},
+            SHAMAN = {76, 81, 930},
+            WARLOCK = {47, 54, 68, 72, 76, 911},
+            WARRIOR = {47, 54, 68, 69, 72, 76, 81, 930},
+        },
+        wrath = {
+            DRUID = {69, 72, 81, 609, 911, 930},
+            HUNTER = {47, 69, 72, 76, 81, 530, 911, 930},
+            MAGE = {47, 54, 68, 72, 76, 530, 911, 930, 1090},
+            PALADIN = {47, 72, 911, 930},
+            PRIEST = {47, 68, 69, 72, 76, 530, 911, 930},
+            ROGUE = {21, 47, 54, 68, 69, 72, 76, 530, 911},
+            SHAMAN = {76, 81, 930},
+            WARLOCK = {47, 54, 68, 72, 76, 911},
+            WARRIOR = {47, 54, 68, 69, 72, 76, 81, 930},
+        },
+        cata = {
+            DRUID = {69, 72, 76, 81, 530, 609, 911, 930, 942, 1134},
+            HUNTER = {47, 68, 69, 72, 76, 81, 530, 911, 930, 932, 934, 1094, 1124, 1133, 1134},
+            MAGE = {47, 54, 68, 69, 72, 76, 530, 911, 930, 932, 934, 1090, 1133, 1134},
+            PALADIN = {47, 72, 81, 911, 930, 932, 934, 1094, 1124},
+            PRIEST = {47, 54, 68, 69, 72, 76, 81, 530, 911, 930, 932, 934, 1094, 1124, 1133, 1134},
+            ROGUE = {21, 47, 54, 68, 69, 72, 76, 530, 911, 933, 934, 1094, 1124, 1133, 1134},
+            SHAMAN = {47, 72, 76, 81, 530, 911, 930, 932, 1133},
+            WARLOCK = {47, 54, 68, 72, 76, 530, 911, 934, 1094, 1124, 1133, 1134},
+            WARRIOR = {47, 54, 68, 69, 72, 76, 81, 530, 911, 930, 932, 934, 1094, 1124, 1133, 1134},
+        },
     },
 }
+
+function TrainerSpells.Pricing.GetTrainerFactions(classToken)
+    local interface = select(4, GetBuildInfo()) or 0
+    local list = TrainerSpells.Pricing.trainerFactions[interface < 30000 and "tbc" or interface < 40000 and "wrath" or "cata"]
+    return list[classToken]
+end
 
 function TrainerSpells.Pricing.GetFaction(factionID)
     if C_Reputation and C_Reputation.GetFactionDataByID then
@@ -37,7 +71,7 @@ function TrainerSpells.Pricing.GetBestDiscount()
     local Pricing = TrainerSpells.Pricing
     local side = UnitFactionGroup("player")
     local enemy = {}
-    for group, ids in pairs(Pricing.capitals) do
+    for group, ids in pairs(Pricing.sideFactions) do
         if group ~= side then
             for _, id in ipairs(ids) do enemy[id] = true end
         end
@@ -45,7 +79,7 @@ function TrainerSpells.Pricing.GetBestDiscount()
 
     local classToken = select(2, UnitClass("player"))
     local names, bestStanding = {}, 0
-    for _, factionID in ipairs(Pricing.trainerFactions[classToken] or Pricing.capitals[side] or {}) do
+    for _, factionID in ipairs(Pricing.GetTrainerFactions(classToken) or Pricing.capitals[side] or {}) do
         local name, standing = Pricing.GetFaction(factionID)
         if name and not enemy[factionID] and type(standing) == "number" then
             if standing > bestStanding then
