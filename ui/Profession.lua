@@ -59,7 +59,11 @@ professionScrollView:SetElementExtentCalculator(function(_, elementData)
 end)
 
 professionScrollView:SetPadding(0, 0, 0, 0, TrainerSpells.RowSpacing)
-professionScrollView:SetElementInitializer("Frame", function(rowFrame, elementData) TrainerSpells:InitScrollRow(rowFrame, elementData, TrainerSpells.ProfessionRowHeight) end)
+professionScrollView:SetElementInitializer("Frame", function(rowFrame, elementData)
+    TrainerSpells:InitScrollRow(rowFrame, elementData, TrainerSpells.ProfessionRowHeight)
+    TrainerSpells:ApplyRowInteraction(rowFrame)
+    TrainerSpells:PrepareGamepadNavigation(rowFrame)
+end)
 ScrollUtil.InitScrollBoxListWithScrollBar(professionScrollBox, professionScrollBar, professionScrollView)
 professionRowHeightSlider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
     value = math.floor(value + 0.5)
@@ -470,6 +474,52 @@ function professionSubTabs.Create()
     professionSubTabs.spoilerFree = TrainerSpells:CreateSpoilerFreeCheckbox(professionFrame, "professionSpoilerFree", "LID_PROFSPOILERFREE_DESC", TrainerSpells_ProfessionRefresh)
     professionSubTabs.Update()
 end
+
+function professionSubTabs.InstallGamepadFocus()
+    if not IsKeyDown then return end
+    local driver = CreateFrame("Frame", nil, professionFrame)
+    local focused, gamepadState, scrolledTo, aHeld
+    local function SetFocused(current)
+        if current == focused then return end
+        if focused and focused.tsOnLeave then focused.tsOnLeave(focused) end
+        focused = current
+        if focused and focused.tsOnEnter then focused.tsOnEnter(focused) end
+    end
+
+    driver:SetScript("OnShow", function()
+        gamepadState = TrainerSpells.IsGamepadNavActive()
+        aHeld = IsKeyDown("PAD1") and true or false
+        TrainerSpells:PrepareGamepadNavigation(professionFrame, gamepadState)
+    end)
+
+    driver:SetScript("OnHide", function()
+        scrolledTo = nil
+        SetFocused(nil)
+    end)
+
+    driver:SetScript("OnUpdate", function()
+        local gamepad = TrainerSpells.IsGamepadNavActive()
+        if gamepad ~= gamepadState then
+            gamepadState = gamepad
+            TrainerSpells:PrepareGamepadNavigation(professionFrame, gamepad)
+            TrainerSpells_ProfessionRefresh()
+        end
+
+        local current = gamepad and SmartNavigation:GetCurrentButton() or nil
+        if current ~= scrolledTo then
+            scrolledTo = current
+            local row = current and current.tsRow
+            if row and row.GetElementData and row:GetParent() == professionScrollBox:GetScrollTarget() then professionScrollBox:ScrollToElementData(row:GetElementData(), ScrollBoxConstants.AlignNearest) end
+        end
+
+        local down = IsKeyDown("PAD1") and true or false
+        if down and not aHeld and current and current.tsGamepadClick and current:IsVisible() and (not current.IsEnabled or current:IsEnabled()) then TrainerSpells.SmartNavClick(current) end
+        aHeld = down
+        SetFocused(current and current.tsFocusStripped and current or nil)
+    end)
+end
+
+professionSubTabs.InstallGamepadFocus()
 
 function TrainerSpells:PositionCompendiumProfessions()
     local host = professionFrame.compendiumHost
