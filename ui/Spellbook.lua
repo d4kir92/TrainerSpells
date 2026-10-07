@@ -759,7 +759,7 @@ end
 TrainerSpells:OnTabSettingsChanged(playerSpellsSubTabs.ApplySettings)
 
 local function CreatePlayerSpellsModeTabs(book, tabSystem)
-    local container = CreateFrame("Frame", "TrainerSpellsPlayerSpellsModeTabs", book)
+    local container = CreateFrame("Frame", "TrainerSpellsPlayerSpellsModeTabs", UIParent)
     playerSpellsModeTabContainer = container
     container:SetSize(48, 32)
     container:SetPoint("LEFT", tabSystem, "RIGHT", 8, 0)
@@ -801,6 +801,7 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
         viewTab:Hide()
         table.insert(playerSpellsSubTabs.viewTabs, viewTab)
     end
+    container:SetParent(book)
 end
 
 function playerSpellsSubTabs.IsTabsLayout()
@@ -893,6 +894,35 @@ end
 
 function playerSpellsSubTabs.InstallGamepadCycling(book)
     if not book.GetTab or not IsKeyDown or not playerSpellsModeTabContainer then return end
+    local leftButton = CreateFrame("Button", "TrainerSpellsSpellbookShoulderLeft", UIParent)
+    leftButton:SetSize(1, 1)
+    leftButton:SetPoint("BOTTOMRIGHT", UIParent, "TOPLEFT", -10, 10)
+    leftButton:EnableMouse(false)
+    leftButton:RegisterForClicks("AnyDown")
+    local leftBinding = "CLICK TrainerSpellsSpellbookShoulderLeft:LeftButton"
+    local leftBound = false
+    local function UpdateLeftBinding()
+        if InCombatLockdown() then return end
+        local active = book:IsVisible() and playerSpellsModeTabContainer:IsShown() and classFrame:IsShown() and not classFrame.compendiumHost and playerSpellsSubTabs.IsTabsLayout()
+        if active then
+            if GetBindingAction("PADLSHOULDER", true) ~= leftBinding then SetOverrideBindingClick(leftButton, true, "PADLSHOULDER", leftButton:GetName(), "LeftButton") end
+            leftBound = true
+        elseif leftBound then
+            ClearOverrideBindings(leftButton)
+            leftBound = false
+        end
+    end
+
+    leftButton:SetScript("OnClick", function()
+        if book:IsVisible() and classFrame:IsShown() and not classFrame.compendiumHost and playerSpellsSubTabs.IsTabsLayout() then
+            playerSpellsSubTabs.SelectNextView(false)
+        end
+        UpdateLeftBinding()
+    end)
+    classFrame:HookScript("OnShow", UpdateLeftBinding)
+    classFrame:HookScript("OnHide", UpdateLeftBinding)
+    playerSpellsModeTabContainer:RegisterEvent("PLAYER_REGEN_ENABLED")
+    playerSpellsModeTabContainer:HookScript("OnEvent", UpdateLeftBinding)
     local focused, gamepadState, scrolledTo
     local function UpdateGamepadFocus()
         local gamepad = TrainerSpells.IsGamepadNavActive()
@@ -963,11 +993,12 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
     local lastTab
     local function CheckShoulder(key, forward, tabBefore)
         local down = IsKeyDown(key) and true or false
-        if down and not held[key] then C_Timer.After(0.05, function() HandleShoulder(forward, tabBefore) end) end
+        if down and not held[key] and (forward or not leftBound) then C_Timer.After(0.05, function() HandleShoulder(forward, tabBefore) end) end
         held[key] = down
     end
 
     playerSpellsModeTabContainer:HookScript("OnHide", function()
+        UpdateLeftBinding()
         lastTab = nil
         wipe(held)
         if focused and focused.tsOnLeave then focused.tsOnLeave(focused) end
@@ -980,6 +1011,7 @@ function playerSpellsSubTabs.InstallGamepadCycling(book)
         if tabBefore and lastTab ~= tabBefore and classFrame:IsShown() and not classFrame.compendiumHost then
             ClosePlayerSpellsPanel()
         end
+        UpdateLeftBinding()
         CheckShoulder("PADRSHOULDER", true, tabBefore)
         CheckShoulder("PADLSHOULDER", false, tabBefore)
         CheckAButton()
@@ -1007,12 +1039,14 @@ function playerSpellsSubTabs.PrewarmRows()
     TrainerSpells.ClassScrollBox:ClearAllPoints()
     TrainerSpells.ClassScrollBox:SetAllPoints(classFrame)
     local savedView = TrainerSpells.ClassView
-    classFrame:Show()
-    for _, entry in ipairs(playerSpellsSubTabs.views or {}) do
-        TrainerSpells.ClassView = entry.view
-        TrainerSpells_Refresh()
-    end
-    classFrame:Hide()
+    TrainerSpells.RunDetached(classFrame, function()
+        classFrame:Show()
+        for _, entry in ipairs(playerSpellsSubTabs.views or {}) do
+            TrainerSpells.ClassView = entry.view
+            TrainerSpells_Refresh()
+        end
+        classFrame:Hide()
+    end)
     TrainerSpells.ClassView = savedView
     TrainerSpells.RowHeight = rowHeight
 end
@@ -1022,8 +1056,12 @@ local function InstallPlayerSpellsIntegration()
     if playerSpellsModeTabContainer or not book then return end
     local tabSystem = book.CategoryTabSystem
     if not tabSystem then return end
-    CreatePlayerSpellsModeTabs(book, tabSystem)
+    TrainerSpells.RunDetached(classFrame, function()
+        CreatePlayerSpellsModeTabs(book, tabSystem)
+    end)
     playerSpellsSubTabs.PrewarmRows()
+    TrainerSpells:PrepareGamepadNavigation(playerSpellsModeTabContainer)
+    TrainerSpells:PrepareGamepadNavigation(classFrame)
     book:HookScript("OnHide", ClosePlayerSpellsPanel)
     hooksecurefunc(tabSystem, "SetTab", ClosePlayerSpellsPanel)
     PlayerSpellsFrame:HookScript("OnHide", ClosePlayerSpellsPanel)

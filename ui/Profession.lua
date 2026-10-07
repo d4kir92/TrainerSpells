@@ -1231,7 +1231,7 @@ local function InstallProfessionsFrameShoulderTabs()
     leftButton:SetSize(1, 1)
     leftButton:SetPoint("BOTTOMRIGHT", UIParent, "TOPLEFT", -10, 10)
     leftButton:EnableMouse(false)
-    leftButton:RegisterForClicks("AnyDown", "AnyUp")
+    leftButton:RegisterForClicks("AnyDown")
     leftButton:SetScript("OnClick", function()
         if not professionsModeActive or IsProfessionsCombatLocked() then return end
         if IsProfessionsTabsLayout() then
