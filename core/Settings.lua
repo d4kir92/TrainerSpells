@@ -1,4 +1,116 @@
 local _, TrainerSpells = ...
+TrainerSpells.LANGUAGES = {{"English", "enUS"}, {"Deutsch", "deDE"}, {"Español (España)", "esES"}, {"Español (México)", "esMX"}, {"Français", "frFR"}, {"Italiano", "itIT"}, {"한국어", "koKR"}, {"Português (Brasil)", "ptBR"}, {"Русский", "ruRU"}, {"简体中文", "zhCN"}, {"繁體中文", "zhTW"}}
+TrainerSpells.LanguageNames = {}
+for _, info in ipairs(TrainerSpells.LANGUAGES) do
+    TrainerSpells.LanguageNames[info[2]] = info[1]
+end
+
+function TrainerSpells:GetLanguage()
+    local lang = type(TrainerSpells_Global) == "table" and TrainerSpells_Global.language or nil
+    if lang ~= nil and self.LanguageNames[lang] ~= nil then return lang end
+    if self.LanguageNames[GetLocale()] ~= nil then return GetLocale() end
+    return "enUS"
+end
+
+function TrainerSpells:GetLanguageName(lang)
+    lang = lang or self:GetLanguage()
+    return self.LanguageNames[lang] or lang
+end
+
+function TrainerSpells:SetLanguage(lang)
+    if self.LanguageNames[lang] == nil or lang == self:GetLanguage() then return end
+    TrainerSpells_Global = TrainerSpells_Global or {}
+    if lang == GetLocale() then
+        TrainerSpells_Global.language = nil
+    else
+        TrainerSpells_Global.language = lang
+    end
+
+    self:RefreshLanguage()
+end
+
+TrainerSpells.LibTrans = TrainerSpells.Trans
+function TrainerSpells:Trans(key, lang, ...)
+    return TrainerSpells.LibTrans(self, key, lang or TrainerSpells:GetLanguage(), ...)
+end
+
+function TrainerSpells:RefreshLanguage()
+    local win = self.SettingsWindow
+    if win then
+        local shown = win:IsShown()
+        local point = {win:GetPoint(1)}
+        local width, height = win:GetSize()
+        win:Hide()
+        self.SettingsWindow = nil
+        self.SettingCheckboxes = {}
+        if shown then
+            self:ToggleSettings()
+            local newWin = self.SettingsWindow
+            if newWin and point[1] then
+                newWin:ClearAllPoints()
+                newWin:SetPoint(unpack(point))
+                newWin:SetSize(width, height)
+            end
+        end
+    end
+
+    if TrainerSpells_Refresh then TrainerSpells_Refresh() end
+    if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
+end
+
+function TrainerSpells:AddLanguageButton(win)
+    local function LanguageMenu(_, root)
+        root:CreateTitle(self:Trans("LID_LANGUAGE"))
+        for _, info in ipairs(self.LANGUAGES) do
+            local lang = info[2]
+            root:CreateRadio(format("%s (%s)", info[1], lang), function() return self:GetLanguage() == lang end, function() self:SetLanguage(lang) end)
+        end
+    end
+
+    local parent = win.titleBar or win
+    local button
+    if self:GetWoWBuild() == "RETAIL" and self:CheckTemplates("WowStyle1DropdownTemplate") then
+        button = CreateFrame("DropdownButton", nil, parent, "WowStyle1DropdownTemplate")
+        button:SetScale(0.8)
+        button:SetSize(162.5, 25)
+        button:SetPoint("TOPLEFT", parent, "TOPLEFT", 10, -1.25)
+        button:SetSelectionText(function() return self:GetLanguageName() end)
+        button:SetTooltip(function(tooltip) tooltip:SetText(self:Trans("LID_LANGUAGE")) end)
+        button:SetupMenu(LanguageMenu)
+    else
+        button = self:CreateButton(nil, parent)
+        button:SetSize(130, 20)
+        button:SetPoint("TOPLEFT", parent, "TOPLEFT", 7, -2)
+        button.Arrow = button:CreateTexture(nil, "OVERLAY")
+        button.Arrow:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
+        button.Arrow:SetSize(16, 16)
+        button.Arrow:SetPoint("RIGHT", button, "RIGHT", -2, 0)
+        button:SetScript("OnClick", function(sel)
+            if MenuUtil and MenuUtil.CreateContextMenu then
+                MenuUtil.CreateContextMenu(sel, LanguageMenu)
+            else
+                local current = 1
+                for i, info in ipairs(self.LANGUAGES) do
+                    if info[2] == self:GetLanguage() then current = i end
+                end
+
+                self:SetLanguage(self.LANGUAGES[current % #self.LANGUAGES + 1][2])
+            end
+        end)
+
+        button:SetScript("OnEnter", function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+            GameTooltip:SetText(self:Trans("LID_LANGUAGE"))
+            GameTooltip:Show()
+        end)
+
+        button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    end
+
+    button:SetText(self:GetLanguageName())
+    win.Language = button
+end
+
 TrainerSpells.TabSettings = {}
 TrainerSpells.TabSettingKeys = {"spellbook", "class", "pet", "trainers", "weapons", "professions", "profession_skill", "profession_recipes", "profession_trainers", "compendium_class", "compendium_professions"}
 TrainerSpells.SharedTabSettings = {
@@ -78,6 +190,7 @@ function TrainerSpells:ToggleSettings()
         })
 
         self.SettingsWindow = win
+        self:AddLanguageButton(win)
         win:AddSearch()
         win:AddCategory({
             label = "LID_GENERAL",
@@ -95,6 +208,36 @@ function TrainerSpells:ToggleSettings()
                 else
                     self:HideMMBtn("TrainerSpells")
                 end
+            end
+        })
+
+        win:AddCategory({
+            label = "LID_SETTINGS_PRICES",
+            key = "prices"
+        })
+
+        win:AddDropdown({
+            label = "LID_SETTINGS_PRICEDISPLAY",
+            added = "2026-10-07",
+            value = TrainerSpells.Pricing.GetDisplayMode(),
+            choices = {
+                {
+                    value = "both",
+                    label = "LID_SETTINGS_PRICEDISPLAY_BOTH"
+                },
+                {
+                    value = "discounted",
+                    label = "LID_SETTINGS_PRICEDISPLAY_DISCOUNTED"
+                },
+                {
+                    value = "base",
+                    label = "LID_SETTINGS_PRICEDISPLAY_BASE"
+                }
+            },
+            func = function(value)
+                TrainerSpells_Character.priceDisplay = value
+                if TrainerSpells_Refresh then TrainerSpells_Refresh() end
+                if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
             end
         })
 

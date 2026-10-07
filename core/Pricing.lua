@@ -4,6 +4,17 @@ TrainerSpells.Pricing = {
         Alliance = {72, 47, 54, 69, 930, 1134},
         Horde = {76, 68, 81, 530, 911, 1133},
     },
+    trainerFactions = {
+        DRUID = {69, 72, 81, 609, 911, 930},
+        HUNTER = {47, 69, 72, 76, 81, 530, 911, 930},
+        MAGE = {47, 54, 68, 72, 76, 530, 911, 930},
+        PALADIN = {47, 72, 911, 930},
+        PRIEST = {47, 68, 69, 72, 76, 530, 911, 930},
+        ROGUE = {21, 47, 54, 68, 69, 72, 76, 530, 911},
+        SHAMAN = {76, 81, 930},
+        WARLOCK = {47, 54, 68, 72, 76, 911},
+        WARRIOR = {47, 54, 68, 69, 72, 76, 81, 930},
+    },
 }
 
 function TrainerSpells.Pricing.GetFaction(factionID)
@@ -23,13 +34,33 @@ function TrainerSpells.Pricing.GetDiscount(standing)
 end
 
 function TrainerSpells.Pricing.GetBestDiscount()
-    local best, factionName, bestStanding = 0, nil, 0
-    for _, factionID in ipairs(TrainerSpells.Pricing.capitals[UnitFactionGroup("player")] or {}) do
-        local name, standing = TrainerSpells.Pricing.GetFaction(factionID)
-        local discount = TrainerSpells.Pricing.GetDiscount(standing)
-        if type(standing) == "number" and standing > bestStanding then best, factionName, bestStanding = discount, name, standing end
+    local Pricing = TrainerSpells.Pricing
+    local side = UnitFactionGroup("player")
+    local enemy = {}
+    for group, ids in pairs(Pricing.capitals) do
+        if group ~= side then
+            for _, id in ipairs(ids) do enemy[id] = true end
+        end
     end
-    return best, factionName
+
+    local classToken = select(2, UnitClass("player"))
+    local names, bestStanding = {}, 0
+    for _, factionID in ipairs(Pricing.trainerFactions[classToken] or Pricing.capitals[side] or {}) do
+        local name, standing = Pricing.GetFaction(factionID)
+        if name and not enemy[factionID] and type(standing) == "number" then
+            if standing > bestStanding then
+                names, bestStanding = {name}, standing
+            elseif standing == bestStanding then
+                table.insert(names, name)
+            end
+        end
+    end
+
+    local best = Pricing.GetDiscount(bestStanding)
+    if best <= 0 or #names == 0 then return best, nil end
+    table.sort(names)
+    local label = _G["FACTION_STANDING_LABEL" .. bestStanding]
+    return best, table.concat(names, ", ") .. (label and (" (" .. label .. ")") or "")
 end
 
 function TrainerSpells.Pricing.CaptureBaseCost(cost, existing)
@@ -58,10 +89,25 @@ function TrainerSpells.Pricing.Apply(entry, data, discount, factionName)
     entry.priceDiscount = discount
 end
 
+function TrainerSpells.Pricing.GetDisplayMode()
+    local mode = TrainerSpells_Character and TrainerSpells_Character.priceDisplay
+    if mode == "discounted" or mode == "base" then return mode end
+    return "both"
+end
+
 function TrainerSpells.Pricing.Text(baseCost, cost, estimated, color)
     if baseCost == nil then return GetMoneyString(cost or 0, true) end
-    if baseCost == (cost or 0) then return (estimated and "~" or "") .. GetMoneyString(baseCost, true) end
-    return "|cffaaaaaa" .. (estimated and "~" or "") .. GetMoneyString(baseCost, true) .. "|r / " .. (color or "|cffffffff") .. (estimated and "~" or "") .. GetMoneyString(cost or 0, true) .. "|r"
+    local mode = TrainerSpells.Pricing.GetDisplayMode()
+    local prefix = estimated and "~" or ""
+    local function Colored(value)
+        local valueColor = color
+        if valueColor == nil or valueColor == "|cffffffff" or valueColor == "|cffff3333" then valueColor = (GetMoney() or 0) >= value and "|cffffffff" or "|cffff3333" end
+        return valueColor .. prefix .. GetMoneyString(value, true) .. "|r"
+    end
+
+    if mode == "base" then return Colored(baseCost) end
+    if mode == "discounted" or baseCost == (cost or 0) then return Colored(cost or 0) end
+    return Colored(baseCost) .. " / " .. Colored(cost or 0)
 end
 
 function TrainerSpells.Pricing.AddTooltip(tooltip, entry)
@@ -70,13 +116,25 @@ function TrainerSpells.Pricing.AddTooltip(tooltip, entry)
         tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_UNVERIFIED"), 1, 0.82, 0, true)
         return
     end
-    local color = (GetMoney() or 0) >= (entry.cost or 0) and "|cffffffff" or "|cffff3333"
-    if entry.baseCost == (entry.cost or 0) then
-        tooltip:AddLine(TrainerSpells:Trans("LID_COSTS") .. ": " .. color .. (entry.baseCostEstimated and "~" or "") .. GetMoneyString(entry.baseCost, true) .. "|r", 1, 1, 1)
-        return
+    local mode = TrainerSpells.Pricing.GetDisplayMode()
+    local prefix = entry.baseCostEstimated and "~" or ""
+    local money = GetMoney() or 0
+    local function PriceLine(label, value)
+        tooltip:AddLine(TrainerSpells:Trans(label) .. ": " .. (money >= value and "|cffffffff" or "|cffff3333") .. prefix .. GetMoneyString(value, true) .. "|r", 1, 1, 1)
     end
-    tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_BASE") .. ": " .. (entry.baseCostEstimated and "~" or "") .. GetMoneyString(entry.baseCost, true), 0.8, 0.8, 0.8)
-    tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_BEST") .. ": " .. color .. (entry.baseCostEstimated and "~" or "") .. GetMoneyString(entry.cost or 0, true) .. "|r", 1, 1, 1)
-    if entry.priceFaction then tooltip:AddLine(entry.priceFaction .. " (" .. entry.priceDiscount .. "%)", 0.8, 0.8, 0.8) end
-    tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_COMPARE"), 0.8, 0.8, 0.8, true)
+
+    local single = mode ~= "both" or entry.baseCost == (entry.cost or 0)
+    if single then
+        PriceLine("LID_COSTS", mode == "base" and entry.baseCost or (entry.cost or 0))
+    else
+        PriceLine("LID_PRICE_BASE", entry.baseCost)
+        PriceLine("LID_PRICE_BEST", entry.cost or 0)
+    end
+
+    if mode ~= "base" and entry.priceFaction and (entry.priceDiscount or 0) > 0 then
+        tooltip:AddLine(string.format(TrainerSpells:Trans("LID_PRICE_FACTIONS"), entry.priceDiscount) .. ": " .. entry.priceFaction, 0.8, 0.8, 0.8, true)
+        tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_COMPARE"), 0.6, 0.6, 0.6, true)
+    end
+
+    if entry.baseCostEstimated then tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_ESTIMATED"), 0.6, 0.6, 0.6, true) end
 end
