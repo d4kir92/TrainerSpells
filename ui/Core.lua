@@ -306,10 +306,7 @@ end
 
 function TrainerSpells:SetMapWaypoint(location)
     if not location or not location.uiMapID or not location.x or not location.y then return false end
-    if C_Map and C_Map.SetUserWaypoint and UiMapPoint and UiMapPoint.CreateFromCoordinates then
-        local point = UiMapPoint.CreateFromCoordinates(location.uiMapID, location.x / 100, location.y / 100)
-        C_Map.SetUserWaypoint(point)
-        if C_SuperTrack and C_SuperTrack.SetSuperTrackedUserWaypoint then C_SuperTrack.SetSuperTrackedUserWaypoint(true) end
+    if TrainerSpells:HasWaypointSupport() and TrainerSpells:SetTrackedWaypoint(location.uiMapID, location.x / 100, location.y / 100) then
         if InCombatLockdown and InCombatLockdown() then
             return true
         elseif C_Map.OpenWorldMap then
@@ -337,6 +334,7 @@ function TrainerSpells:SetMapWaypoint(location)
     return false
 end
 
+TrainerSpells:EnableWaypointFallback(function() return TrainerSpells_Character end)
 local ignoreMenuFrame
 local ignoreMenuEntry
 local function IgnoreMenu_Initialize(sel, level, rootDescription, entry)
