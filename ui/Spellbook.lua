@@ -636,8 +636,8 @@ function playerSpellsSubTabs.SetClassIcon(icon, classToken)
     end
 end
 
-function playerSpellsSubTabs.Create()
-    if playerSpellsSubTabs.bar then return end
+function playerSpellsSubTabs.BuildViews()
+    if playerSpellsSubTabs.allViews then return playerSpellsSubTabs.allViews end
     local className, classToken = UnitClass("player")
     local views = {
         {
@@ -674,6 +674,12 @@ function playerSpellsSubTabs.Create()
 
     playerSpellsSubTabs.allViews = views
     playerSpellsSubTabs.views = TrainerSpells:FilterTabViews(views)
+    return views
+end
+
+function playerSpellsSubTabs.Create()
+    if playerSpellsSubTabs.bar then return end
+    local views = playerSpellsSubTabs.BuildViews()
     local bar = CreateFrame("Frame", "TrainerSpellsPlayerSpellsSubTabs", classFrame, "TabSystemTemplate")
     bar:SetTabSelectedCallback(function(tabID)
         local entry = views[tabID]
@@ -1294,7 +1300,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, 
 end
 
 function TrainerSpells:CreateCompendiumClass(host)
-    playerSpellsSubTabs.Create()
+    playerSpellsSubTabs.BuildViews()
     local view = self:CreateCompendiumListView(host, playerSpellsSubTabs.allViews, playerSpellsSubTabs.GetSavedView(), self.RowHeight, function(entry) return TrainerSpells:IsTabEnabled(entry.view) end)
     self.CompendiumClassView = view
     view.BuildItems = function(current) return TrainerSpells:BuildClassViewItems(current.mode, host.searchText) end
