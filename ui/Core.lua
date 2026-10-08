@@ -594,6 +594,25 @@ function TrainerSpells:ApplyRowInteraction(rowFrame)
     hit:Show()
 end
 
+function TrainerSpells:ApplyRowStripe(rowFrame, elementData)
+    if not rowFrame.tsStripe then
+        rowFrame.tsStripe = rowFrame:CreateTexture(nil, "BACKGROUND", nil, -8)
+    end
+
+    local index = rowFrame.GetElementDataIndex and rowFrame:GetElementDataIndex()
+    if elementData.isHeader or not index then
+        rowFrame.tsStripe:Hide()
+        return
+    end
+
+    rowFrame.tsStripe:ClearAllPoints()
+    rowFrame.tsStripe:SetPoint("TOPLEFT", rowFrame, "TOPLEFT", (elementData.rowDepth or 0) * 16, 0)
+    rowFrame.tsStripe:SetPoint("BOTTOMRIGHT", rowFrame, "BOTTOMRIGHT", 0, 0)
+
+    rowFrame.tsStripe:SetColorTexture(1, 1, 1, index % 2 == 1 and 0.03 or 0.06)
+    rowFrame.tsStripe:Show()
+end
+
 function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
     rowFrame.tsFocusStripped, rowFrame.tsOnEnter, rowFrame.tsOnLeave = nil, nil, nil
     local Colors = TrainerSpells.UIColors
