@@ -99,6 +99,7 @@ end
 
 function TrainerSpells.Pricing.CaptureBaseCost(cost, existing)
     if type(cost) ~= "number" or cost <= 0 then return cost, false end
+    if existing and existing.baseCost == cost then return cost, false end
     local standing = UnitReaction and UnitReaction("npc", "player")
     if type(standing) ~= "number" then return existing and existing.baseCost, existing and existing.baseCostEstimated end
     local discount = TrainerSpells.Pricing.GetDiscount(standing)
