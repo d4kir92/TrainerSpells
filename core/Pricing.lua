@@ -98,20 +98,16 @@ function TrainerSpells.Pricing.GetBestDiscount()
 end
 
 function TrainerSpells.Pricing.CaptureBaseCost(cost, existing)
+    if not TrainerSpells.DebugTrainerEnabled then return existing and existing.baseCost, existing and existing.baseCostEstimated end
     if type(cost) ~= "number" or cost <= 0 then return cost, false end
-    if existing and existing.baseCost == cost then return cost, false end
+    if existing and existing.baseCost and not existing.baseCostEstimated then return existing.baseCost, false end
     local standing = UnitReaction and UnitReaction("npc", "player")
-    if type(standing) ~= "number" then return existing and existing.baseCost, existing and existing.baseCostEstimated end
-    local discount = TrainerSpells.Pricing.GetDiscount(standing)
+    if type(standing) ~= "number" or TrainerSpells.Pricing.GetDiscount(standing) > 0 then return nil, nil end
     if WOW_PROJECT_CLASSIC and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and GetPVPRankInfo and UnitPVPRank then
         local rank = select(2, GetPVPRankInfo(UnitPVPRank("player"), "player"))
-        if rank and rank >= 3 then return existing and existing.baseCost, existing and existing.baseCostEstimated end
+        if rank and rank >= 3 then return nil, nil end
     end
-    local percent = 100 - discount
-    local low = math.ceil(cost * 100 / percent)
-    local high = math.ceil((cost + 1) * 100 / percent) - 1
-    if existing and existing.baseCost and existing.baseCost >= low and existing.baseCost <= high then return existing.baseCost, (low ~= high and existing.baseCostEstimated) or standing == 5 end
-    return low, low ~= high or standing == 5
+    return cost, false
 end
 
 function TrainerSpells.Pricing.Apply(entry, data, discount, factionName)
