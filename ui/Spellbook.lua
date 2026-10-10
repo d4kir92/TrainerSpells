@@ -216,6 +216,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         border:SetSize(64, 64)
         border:SetPoint("TOPLEFT", tab, "TOPLEFT", -3, 11)
         border:SetTexture(136831)
+        tab.tsBorder = border
         local glow = tab:CreateTexture(nil, "OVERLAY")
         glow:SetSize(32, 32)
         glow:SetPoint("TOPLEFT", tab, "TOPLEFT", 0, 0)
@@ -246,15 +247,75 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         return TrainerSpells:IsTabEnabled("spellbook") and TrainerSpells:IsTabEnabled(view)
     end
 
+    local ownTabs = {}
+    local function IsAnchoredToOwnTabs(frame, depth)
+        if not frame or depth > 10 then return false end
+        if ownTabs[frame] then return true end
+        if not frame.GetNumPoints then return false end
+        for index = 1, frame:GetNumPoints() do
+            local _, relativeTo = frame:GetPoint(index)
+            if relativeTo and relativeTo ~= SpellBookFrame and IsAnchoredToOwnTabs(relativeTo, depth + 1) then return true end
+        end
+        return false
+    end
+
+    local function FindForeignSideTab()
+        local reference = _G["SpellBookSkillLineTab1"]
+        local refLeft = reference and reference:GetLeft()
+        local floor = lastTab ~= SpellBookFrame and lastTab:GetBottom() or reference and reference:GetBottom()
+        if not refLeft or not floor then return nil end
+        local found, foundBottom = nil, floor
+        for _, child in ipairs({SpellBookFrame:GetChildren()}) do
+            if not ownTabs[child] and child:IsShown() and child:IsObjectType("Button") then
+                local left, bottom, width, height = child:GetLeft(), child:GetBottom(), child:GetWidth(), child:GetHeight()
+                if left and bottom and math.abs(left - refLeft) <= 8 and width <= 48 and height <= 48 and bottom < foundBottom and not IsAnchoredToOwnTabs(child, 0) then found, foundBottom = child, bottom end
+            end
+        end
+        return found
+    end
+
+    local function SetTabSide(tab, leftSide)
+        local border = tab.tsBorder
+        border:ClearAllPoints()
+        if leftSide then
+            border:SetPoint("TOPRIGHT", tab, "TOPRIGHT", 3, 11)
+            border:SetTexCoord(1, 0, 0, 1)
+        else
+            border:SetPoint("TOPLEFT", tab, "TOPLEFT", -3, 11)
+            border:SetTexCoord(0, 1, 0, 1)
+        end
+    end
+
+    local function NeedsLeftSide(foreignTab, count)
+        local frameBottom = SpellBookFrame:GetBottom()
+        local startTop = foreignTab and foreignTab:GetBottom() and foreignTab:GetBottom() - 16 or lastTab ~= SpellBookFrame and lastTab:GetBottom()
+        if count == 0 or not frameBottom or not startTop then return false end
+        return startTop - count * 32 - (count - 1) * 16 < frameBottom + 16
+    end
+
     local function ApplyClassicModeTabs()
         local previousTab = nil
+        for _, tab in pairs(classicModeTabs) do ownTabs[tab] = true end
+        local foreignTab = FindForeignSideTab()
+        local count = 0
+        for _, view in ipairs(classicModeTabOrder) do
+            if IsClassicModeTabEnabled(view) then count = count + 1 end
+        end
+        local leftSide = NeedsLeftSide(foreignTab, count)
+        local reference = _G["SpellBookSkillLineTab1"]
+        local leftTop = reference and reference:GetTop() and SpellBookFrame:GetTop() and reference:GetTop() - SpellBookFrame:GetTop() or -65
         for _, view in ipairs(classicModeTabOrder) do
             local tab = classicModeTabs[view]
             local enabled = IsClassicModeTabEnabled(view)
             tab:ClearAllPoints()
+            SetTabSide(tab, leftSide)
             if enabled then
                 if previousTab then
                     tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -16)
+                elseif leftSide then
+                    tab:SetPoint("TOPRIGHT", SpellBookFrame, "TOPLEFT", 0, leftTop)
+                elseif foreignTab then
+                    tab:SetPoint("TOPLEFT", foreignTab, "BOTTOMLEFT", 0, -16)
                 else
                     tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, 0)
                 end
@@ -278,7 +339,10 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         for view, tab in pairs(classicModeTabs) do
             tab:SetShown(IsClassicModeTabEnabled(view))
         end
+        C_Timer.After(0, ApplyClassicModeTabs)
     end)
+
+    if SpellBookFrame_UpdateSkillLineTabs then hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function() C_Timer.After(0, ApplyClassicModeTabs) end) end
 
     SpellBookFrame:HookScript("OnHide", function()
         if classFrame.compendiumHost then return end
