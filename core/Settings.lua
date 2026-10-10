@@ -184,7 +184,7 @@ function TrainerSpells:ToggleSettings()
     if not self.SettingsWindow then
         local win = self:CreateUIWindow({
             name = "TrainerSpellsSettings",
-            title = "|T133741:20:20|t TrainerSpells v0.9.3",
+            title = "|T133741:20:20|t TrainerSpells v0.9.4",
             width = 520,
             height = 600
         })
