@@ -61,6 +61,7 @@ local nearestButton = CreateFrame("Button", nil, controls, "MainMenuFrameButtonT
 nearestButton:SetPoint("LEFT")
 nearestButton:SetSize(200, 36)
 nearestButton:SetText(TrainerSpells:Trans("LID_NEARESTCLASSTRAINER"))
+nearestButton:SetWidth(math.max(200, nearestButton:GetTextWidth() + 40))
 nearestButton:SetScript("OnClick", function()
     SetNearestWaypoint(TrainerSpells:GetNearestClassTrainer(), "LID_NOCLASSTRAINER")
 end)
@@ -116,7 +117,10 @@ controls:SetScript("OnShow", function()
     local texts = petTrainerTexts[GetPlayerClassToken()]
     local showPetButton = texts and petTrainerData[GetPlayerClassToken()] and true or false
     nearestPetButton:SetShown(showPetButton)
-    if showPetButton then nearestPetButton:SetText(TrainerSpells:Trans(texts.nearest)) end
+    if showPetButton then
+        nearestPetButton:SetText(TrainerSpells:Trans(texts.nearest))
+        nearestPetButton:SetWidth(math.max(200, nearestPetButton:GetTextWidth() + 40))
+    end
     hideStarter:ClearAllPoints()
     hideStarter:SetPoint("LEFT", showPetButton and nearestPetButton or nearestButton, "RIGHT", 12, 0)
 end)

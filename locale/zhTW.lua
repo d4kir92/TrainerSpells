@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("zhTW", "LID_CLASSVIEW_DESC", "職業訓練師傳授的�
 TrainerSpells:AddTrans("zhTW", "LID_PETVIEW_DESC", "你的寵物或惡魔可以學習的技能。")
 TrainerSpells:AddTrans("zhTW", "LID_TRAINERSVIEW_DESC", "在哪裡可以找到你的訓練師。")
 TrainerSpells:AddTrans("zhTW", "LID_WEAPONVIEW_DESC", "武器技能以及在哪裡學習。")
+TrainerSpells:AddTrans("zhTW", "LID_WEAPONSKILLS", "武器技能")
 TrainerSpells:AddTrans("zhTW", "LID_PROFRANK_1", "學徒")
 TrainerSpells:AddTrans("zhTW", "LID_PROFRANK_2", "熟練")
 TrainerSpells:AddTrans("zhTW", "LID_PROFRANK_3", "專家")

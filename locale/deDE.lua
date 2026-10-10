@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("deDE", "LID_CLASSVIEW_DESC", "Zauber, die dein Klassenle
 TrainerSpells:AddTrans("deDE", "LID_PETVIEW_DESC", "Fähigkeiten, die dein Begleiter lernen kann.")
 TrainerSpells:AddTrans("deDE", "LID_TRAINERSVIEW_DESC", "Wo du deine Lehrer findest.")
 TrainerSpells:AddTrans("deDE", "LID_WEAPONVIEW_DESC", "Waffenfertigkeiten und wo du sie lernst.")
+TrainerSpells:AddTrans("deDE", "LID_WEAPONSKILLS", "Waffenfertigkeiten")
 TrainerSpells:AddTrans("deDE", "LID_PROFRANK_1", "Lehrling")
 TrainerSpells:AddTrans("deDE", "LID_PROFRANK_2", "Geselle")
 TrainerSpells:AddTrans("deDE", "LID_PROFRANK_3", "Experte")

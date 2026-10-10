@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("itIT", "LID_CLASSVIEW_DESC", "Incantesimi insegnati dal 
 TrainerSpells:AddTrans("itIT", "LID_PETVIEW_DESC", "Abilità che il tuo famiglio o demone può imparare.")
 TrainerSpells:AddTrans("itIT", "LID_TRAINERSVIEW_DESC", "Dove trovare i tuoi istruttori.")
 TrainerSpells:AddTrans("itIT", "LID_WEAPONVIEW_DESC", "Abilità con le armi e dove impararle.")
+TrainerSpells:AddTrans("itIT", "LID_WEAPONSKILLS", "Abilità con le armi")
 TrainerSpells:AddTrans("itIT", "LID_PROFRANK_1", "Apprendista")
 TrainerSpells:AddTrans("itIT", "LID_PROFRANK_2", "Garzone")
 TrainerSpells:AddTrans("itIT", "LID_PROFRANK_3", "Esperto")

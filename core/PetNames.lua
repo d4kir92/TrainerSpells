@@ -43,7 +43,8 @@ local function StripCommonAffixes(names)
     local result = {}
     for i, name in pairs(names) do
         local suffixStart = math.max(prefixLen, #name - suffixLen)
-        result[i] = name:sub(prefixLen + 1, suffixStart)
+        local stripped = name:sub(prefixLen + 1, suffixStart):match("^%s*(.-)%s*$")
+        result[i] = stripped:sub(1, 1):upper() .. stripped:sub(2)
     end
     return result
 end

@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("frFR", "LID_CLASSVIEW_DESC", "Sorts enseignés par votre
 TrainerSpells:AddTrans("frFR", "LID_PETVIEW_DESC", "Techniques que votre familier ou démon peut apprendre.")
 TrainerSpells:AddTrans("frFR", "LID_TRAINERSVIEW_DESC", "Où trouver vos maîtres.")
 TrainerSpells:AddTrans("frFR", "LID_WEAPONVIEW_DESC", "Compétences d’armes et où les apprendre.")
+TrainerSpells:AddTrans("frFR", "LID_WEAPONSKILLS", "Compétences d’armes")
 TrainerSpells:AddTrans("frFR", "LID_PROFRANK_1", "Apprenti")
 TrainerSpells:AddTrans("frFR", "LID_PROFRANK_2", "Compagnon")
 TrainerSpells:AddTrans("frFR", "LID_PROFRANK_3", "Expert")

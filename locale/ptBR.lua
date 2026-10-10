@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("ptBR", "LID_CLASSVIEW_DESC", "Feitiços que seu instruto
 TrainerSpells:AddTrans("ptBR", "LID_PETVIEW_DESC", "Habilidades que seu ajudante ou demônio pode aprender.")
 TrainerSpells:AddTrans("ptBR", "LID_TRAINERSVIEW_DESC", "Onde encontrar seus instrutores.")
 TrainerSpells:AddTrans("ptBR", "LID_WEAPONVIEW_DESC", "Perícias com armas e onde aprendê-las.")
+TrainerSpells:AddTrans("ptBR", "LID_WEAPONSKILLS", "Perícias com armas")
 TrainerSpells:AddTrans("ptBR", "LID_PROFRANK_1", "Aprendiz")
 TrainerSpells:AddTrans("ptBR", "LID_PROFRANK_2", "Oficial")
 TrainerSpells:AddTrans("ptBR", "LID_PROFRANK_3", "Especialista")

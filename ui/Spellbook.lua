@@ -241,7 +241,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     CreateClassicModeTab("TrainerSpellsSpellbookTab", "class", "Interface\\Icons\\INV_Misc_Book_09", className or TrainerSpells:Trans("LID_CLASSTRAINER"))
     if TrainerSpells:HasPetClassData(classToken) then CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING")) end
     if TrainerSpells.BuildClassTrainerItems then CreateClassicModeTab("TrainerSpellsClassTrainerMapTab", "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS")) end
-    if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", _G.WEAPON_SKILLS or "Weapon Skills") end
+    if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", TrainerSpells:Trans("LID_WEAPONSKILLS")) end
     local function IsClassicModeTabEnabled(view)
         return TrainerSpells:IsTabEnabled("spellbook") and TrainerSpells:IsTabEnabled(view)
     end
@@ -668,7 +668,7 @@ function playerSpellsSubTabs.BuildViews()
     table.insert(views, {
         view = "weapons",
         icon = "Interface\\Icons\\INV_Sword_04",
-        title = _G.WEAPON_SKILLS or "Weapon Skills",
+        title = TrainerSpells:Trans("LID_WEAPONSKILLS"),
         desc = "LID_WEAPONVIEW_DESC"
     })
 

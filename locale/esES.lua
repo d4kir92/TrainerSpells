@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("esES", "LID_CLASSVIEW_DESC", "Hechizos que enseña tu in
 TrainerSpells:AddTrans("esES", "LID_PETVIEW_DESC", "Habilidades que puede aprender tu mascota o demonio.")
 TrainerSpells:AddTrans("esES", "LID_TRAINERSVIEW_DESC", "Dónde encontrar a tus instructores.")
 TrainerSpells:AddTrans("esES", "LID_WEAPONVIEW_DESC", "Habilidades con armas y dónde aprenderlas.")
+TrainerSpells:AddTrans("esES", "LID_WEAPONSKILLS", "Habilidades con armas")
 TrainerSpells:AddTrans("esES", "LID_PROFRANK_1", "Aprendiz")
 TrainerSpells:AddTrans("esES", "LID_PROFRANK_2", "Oficial")
 TrainerSpells:AddTrans("esES", "LID_PROFRANK_3", "Experto")

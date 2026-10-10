@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("koKR", "LID_CLASSVIEW_DESC", "직업 훈련사가 가르
 TrainerSpells:AddTrans("koKR", "LID_PETVIEW_DESC", "소환수나 악마가 배울 수 있는 기술.")
 TrainerSpells:AddTrans("koKR", "LID_TRAINERSVIEW_DESC", "훈련사를 찾을 수 있는 곳.")
 TrainerSpells:AddTrans("koKR", "LID_WEAPONVIEW_DESC", "무기 숙련과 배울 수 있는 곳.")
+TrainerSpells:AddTrans("koKR", "LID_WEAPONSKILLS", "무기 숙련")
 TrainerSpells:AddTrans("koKR", "LID_PROFRANK_1", "수습")
 TrainerSpells:AddTrans("koKR", "LID_PROFRANK_2", "숙련")
 TrainerSpells:AddTrans("koKR", "LID_PROFRANK_3", "전문")

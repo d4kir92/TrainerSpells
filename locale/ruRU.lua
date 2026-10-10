@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("ruRU", "LID_CLASSVIEW_DESC", "Заклинания, ко
 TrainerSpells:AddTrans("ruRU", "LID_PETVIEW_DESC", "Способности, которые может выучить ваш питомец или демон.")
 TrainerSpells:AddTrans("ruRU", "LID_TRAINERSVIEW_DESC", "Где найти ваших учителей.")
 TrainerSpells:AddTrans("ruRU", "LID_WEAPONVIEW_DESC", "Навыки владения оружием и где их изучить.")
+TrainerSpells:AddTrans("ruRU", "LID_WEAPONSKILLS", "Владение оружием")
 TrainerSpells:AddTrans("ruRU", "LID_PROFRANK_1", "Ученик")
 TrainerSpells:AddTrans("ruRU", "LID_PROFRANK_2", "Подмастерье")
 TrainerSpells:AddTrans("ruRU", "LID_PROFRANK_3", "Умелец")

@@ -89,6 +89,7 @@ TrainerSpells:AddTrans("enUS", "LID_CLASSVIEW_DESC", "Spells your class trainer 
 TrainerSpells:AddTrans("enUS", "LID_PETVIEW_DESC", "Abilities your pet or demon can learn.")
 TrainerSpells:AddTrans("enUS", "LID_TRAINERSVIEW_DESC", "Where to find your trainers.")
 TrainerSpells:AddTrans("enUS", "LID_WEAPONVIEW_DESC", "Weapon skills and where to learn them.")
+TrainerSpells:AddTrans("enUS", "LID_WEAPONSKILLS", "Weapon Skills")
 TrainerSpells:AddTrans("enUS", "LID_PROFRANK_1", "Apprentice")
 TrainerSpells:AddTrans("enUS", "LID_PROFRANK_2", "Journeyman")
 TrainerSpells:AddTrans("enUS", "LID_PROFRANK_3", "Expert")
