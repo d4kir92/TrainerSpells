@@ -988,6 +988,33 @@ local function UpdateProfessionsTabsCombatState()
     end
 end
 
+function professionSubTabs.IsOwnSideTab(frame, depth)
+    if not frame or depth > 10 then return false end
+    if frame == professionsModeTabs.addon then return true end
+    for _, tab in pairs(professionsViewTabs) do
+        if frame == tab then return true end
+    end
+    if not frame.GetNumPoints then return false end
+    for index = 1, frame:GetNumPoints() do
+        local _, relativeTo = frame:GetPoint(index)
+        if relativeTo and relativeTo ~= ProfessionsFrame and professionSubTabs.IsOwnSideTab(relativeTo, depth + 1) then return true end
+    end
+    return false
+end
+
+function professionSubTabs.FindForeignSideTab(lastTab)
+    local refLeft, floor = lastTab:GetLeft(), lastTab:GetBottom()
+    if not refLeft or not floor then return nil end
+    local found, foundBottom = nil, floor
+    for _, child in ipairs({ProfessionsFrame:GetChildren()}) do
+        if child ~= lastTab and child:IsShown() then
+            local left, bottom, width, height = child:GetLeft(), child:GetBottom(), child:GetWidth(), child:GetHeight()
+            if left and bottom and math.abs(left - refLeft) <= 8 and width <= 64 and height <= 64 and bottom < foundBottom and not professionSubTabs.IsOwnSideTab(child, 0) then found, foundBottom = child, bottom end
+        end
+    end
+    return found
+end
+
 local function PositionProfessionsFrameModeTabs()
     if not ProfessionsFrame then return end
     if not professionsModeTabs.addon then return end
@@ -1001,6 +1028,7 @@ local function PositionProfessionsFrameModeTabs()
             if tab:IsShown() then lastTab = tab end
         end
 
+        lastTab = professionSubTabs.FindForeignSideTab(lastTab) or lastTab
         for _, tab in ipairs(GetProfessionsActiveTabs()) do
             if previous then
                 tab:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -2)
@@ -1333,7 +1361,10 @@ local function InstallProfessionsFrameIntegration()
         for index, view in ipairs(PROFESSION_ALL_VIEWS) do
             CreateProfessionsFrameSideTab("TrainerSpellsProfessionsViewTab" .. index, TrainerSpells:Trans(view.title), view.icon, view.mode)
         end
-        hooksecurefunc(ProfessionsFrame, "RefreshRightTabs", PositionProfessionsFrameModeTabs)
+        hooksecurefunc(ProfessionsFrame, "RefreshRightTabs", function()
+            PositionProfessionsFrameModeTabs()
+            C_Timer.After(0, PositionProfessionsFrameModeTabs)
+        end)
         hooksecurefunc(ProfessionsFrame, "RightTabSelected", CloseProfessionsFrameView)
         InstallProfessionsFrameShoulderTabs()
     else
