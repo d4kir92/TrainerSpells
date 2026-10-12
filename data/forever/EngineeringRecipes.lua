@@ -345,8 +345,8 @@ TrainerSpellsBuiltin_AddProfessionRecipes(
                         npcName = "Darian Singh",
                         uiMapID = 1453,
                         zoneName = "Stormwind City",
-                        x = 29.4,
-                        y = 67.8,
+                        x = 42.4,
+                        y = 76.9,
                     },
                     {
                         faction = "Alliance",
