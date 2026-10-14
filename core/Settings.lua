@@ -184,7 +184,7 @@ function TrainerSpells:ToggleSettings()
     if not self.SettingsWindow then
         local win = self:CreateUIWindow({
             name = "TrainerSpellsSettings",
-            title = "|T133741:20:20|t TrainerSpells v0.9.6",
+            title = format("|T%s:20:20|t TrainerSpells v%s", TrainerSpells:GetAddonIcon(), TrainerSpells:GetAddonVersion()),
             width = 520,
             height = 600
         })
@@ -342,7 +342,7 @@ function TrainerSpells:InitializeSettings()
     if TrainerSpells_Character.showMinimapButton == nil then TrainerSpells_Character.showMinimapButton = true end
     self:CreateMinimapButton({
         name = "TrainerSpells",
-        icon = 133741,
+        icon = TrainerSpells:GetAddonIcon(),
         dbtab = TrainerSpells_Character,
         dbkey = "showMinimapButton",
         vTT = {{"TrainerSpells"}, {self:Trans("LID_SETTINGS_OPEN")}},

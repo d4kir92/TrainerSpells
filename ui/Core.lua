@@ -773,7 +773,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         if entry.displayID and SetPortraitTextureFromCreatureDisplayID then
             SetPortraitTextureFromCreatureDisplayID(icon, entry.displayID)
         else
-            icon:SetTexture(entry.icon or 133741)
+            icon:SetTexture(entry.icon or TrainerSpells:GetAddonIcon())
         end
         local nameColor = entry.starter and "|cffff8c00" or TrainerSpells.UIColors.SPELL_NAME
         local petLabel = entry.petLabel and ("  |cff9d9d9d<" .. entry.petLabel .. ">|r") or ""

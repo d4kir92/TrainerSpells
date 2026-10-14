@@ -28,7 +28,7 @@ TrainerSpells_PetData = TrainerSpells_PetData or {}
 TrainerSpells_PetTrainerData = TrainerSpells_PetTrainerData or {}
 TrainerSpells_ProfessionData = TrainerSpells_ProfessionData or {}
 TrainerSpells_RecipeData = TrainerSpells_RecipeData or {}
-TrainerSpells:SetAddonOutput("TrainerSpells", 133741)
+TrainerSpells:SetAddonOutput()
 local BEAST_TRAINING_SPELL_ID = 5149
 local PET_TRAINER_SKILL_LINE = ""
 local trainingSpellInfo = C_Spell.GetSpellInfo(BEAST_TRAINING_SPELL_ID)

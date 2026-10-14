@@ -706,7 +706,7 @@ function playerSpellsSubTabs.BuildViews()
     local views = {
         {
             view = "class",
-            icon = 133741,
+            icon = TrainerSpells:GetAddonIcon(),
             title = className,
             desc = "LID_CLASSVIEW_DESC",
             classToken = classToken
@@ -841,7 +841,7 @@ local function CreatePlayerSpellsModeTabs(book, tabSystem)
     divider:SetHeight(11)
     local tab = CreateFrame("Button", nil, container, "TabSystemButtonTemplate")
     tab.GetTabSystem = function() return tabSystem end
-    tab:Init(1, nil, 133741)
+    tab:Init(1, nil, TrainerSpells:GetAddonIcon())
     tab.SetEnabled = playerSpellsSubTabs.KeepTabEnabled
     tab:Enable()
     tab:SetTooltipText("TrainerSpells")

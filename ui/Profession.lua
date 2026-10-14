@@ -1357,7 +1357,7 @@ local function InstallProfessionsFrameIntegration()
 
     professionSubTabs.PrewarmRows()
     if professionsFrameUsesSideTabs then
-        CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTab", "TrainerSpells", 133741)
+        CreateProfessionsFrameSideTab("TrainerSpellsProfessionsTab", "TrainerSpells", TrainerSpells:GetAddonIcon())
         for index, view in ipairs(PROFESSION_ALL_VIEWS) do
             CreateProfessionsFrameSideTab("TrainerSpellsProfessionsViewTab" .. index, TrainerSpells:Trans(view.title), view.icon, view.mode)
         end
@@ -1371,7 +1371,7 @@ local function InstallProfessionsFrameIntegration()
         professionsModeTabContainer = CreateFrame("Frame", "TrainerSpellsProfessionsModeTabs", ProfessionsFrame)
         professionsModeTabContainer:SetSize(260, math.max(32, ProfessionsFrame.TabSystem:GetHeight()))
         professionsModeTabContainer:SetFrameLevel(ProfessionsFrame.TabSystem:GetFrameLevel() + 200)
-        CreateProfessionsFrameSystemTab(1001, "TrainerSpells", 133741)
+        CreateProfessionsFrameSystemTab(1001, "TrainerSpells", TrainerSpells:GetAddonIcon())
         for index, view in ipairs(PROFESSION_ALL_VIEWS) do
             CreateProfessionsFrameSystemTab(1001 + index, TrainerSpells:Trans(view.title), view.icon, view.mode)
         end
