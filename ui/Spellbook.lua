@@ -520,8 +520,8 @@ local function PositionPlayerSpellsFrame()
 
     searchBox:ClearAllPoints()
     if book.SearchBox then
-        searchBox:SetPoint("TOPLEFT", book.SearchBox, "TOPLEFT")
-        searchBox:SetPoint("BOTTOMRIGHT", book.SearchBox, "BOTTOMRIGHT")
+        searchBox:SetPoint("LEFT", book.SearchBox, "LEFT")
+        searchBox:SetPoint("RIGHT", book.SearchBox, "RIGHT")
     else
         searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 60, 34)
         searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -10, 34)
