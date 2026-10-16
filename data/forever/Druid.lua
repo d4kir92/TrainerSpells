@@ -400,6 +400,10 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
             cost = 8000,
             rank = 3
         },
+        [1238069] = {
+            cost = 8000,
+            rank = 2
+        },
     },
     [38] = {
         [5196] = {
@@ -610,6 +614,10 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
             cost = 17000,
             rank = 4
         },
+        [1238070] = {
+            cost = 17000,
+            rank = 3
+        },
     },
     [50] = {
         [9862] = {
@@ -817,6 +825,10 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         [1237951] = {
             cost = 24000,
             rank = 5
+        },
+        [1238073] = {
+            cost = 28000,
+            rank = 4
         },
         [1238215] = {
             cost = 24000,

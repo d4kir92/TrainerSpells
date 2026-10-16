@@ -143,9 +143,6 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
             rank = 4,
             requires = {548}
         },
-        [2645] = {
-            cost = 2200
-        },
         [6363] = {
             cost = 2200,
             rank = 2,
@@ -168,6 +165,9 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
         },
         [66842] = {
             cost = 7000
+        },
+        [1238640] = {
+            cost = 2200
         },
     },
     [22] = {
