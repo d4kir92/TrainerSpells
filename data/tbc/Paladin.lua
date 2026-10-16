@@ -81,6 +81,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [20116] = { cost = 11000, rank = 2 },
         [20165] = { cost = 11000, rank = 1 },
         [20915] = { cost = 550, rank = 2, requires = {20375} },
+        [34769] = { cost = 10000, race = "BloodElf" },
     },
     [32] = {
         [19836] = { cost = 12000, rank = 4, requires = {19740} },
@@ -219,6 +220,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
     [64] = {
         [27174] = { cost = 3350, rank = 4, requires = {20473} },
         [31801] = { cost = 67000, rank = 1 },
+        [31892] = { cost = 67000, rank = 1, race = "BloodElf" },
     },
     [65] = {
         [27142] = { cost = 75000, rank = 7 },
@@ -261,5 +263,6 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [32700] = { cost = 2300, rank = 3, requires = {31935} },
         [33072] = { cost = 6500, rank = 5, requires = {20473} },
         [348700] = { cost = 67000, rank = 1 },
+        [348704] = { cost = 67000, rank = 1, race = "BloodElf" },
     },
 }

@@ -24,6 +24,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [9035] = { cost = 15, rank = 1, race = "Troll" },
         [10797] = { cost = 15, rank = 1, race = "NightElf" },
         [13908] = { cost = 90, rank = 1, race = {"Dwarf", "Human"} },
+        [32548] = { cost = 100, race = "Draenei" },
     },
     [12] = {
         [588] = { cost = 800, rank = 1 },
@@ -62,6 +63,8 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [18137] = { cost = 150, rank = 1, race = "Troll" },
         [19261] = { cost = 150, rank = 2, race = "Scourge" },
         [19281] = { cost = 150, rank = 2, race = "Troll" },
+        [32676] = { cost = 100, race = "BloodElf" },
+        [44041] = { cost = 100, rank = 1, race = {"Draenei", "Dwarf"} },
     },
     [22] = {
         [984] = { cost = 4000, rank = 4, requires = {585} },
@@ -104,6 +107,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19262] = { cost = 500, rank = 3, race = "Scourge" },
         [19271] = { cost = 500, rank = 2, race = "Human" },
         [19282] = { cost = 500, rank = 3, race = "Troll" },
+        [44043] = { cost = 500, rank = 2, requires = {44041}, race = {"Draenei", "Dwarf"} },
     },
     [32] = {
         [552] = { cost = 11000 },
@@ -148,6 +152,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19264] = { cost = 900, rank = 4, race = "Scourge" },
         [19273] = { cost = 900, rank = 3, race = "Human" },
         [19283] = { cost = 900, rank = 4, race = "Troll" },
+        [44044] = { cost = 1000, rank = 3, requires = {44043}, race = {"Draenei", "Dwarf"} },
     },
     [42] = {
         [10888] = { cost = 22000, rank = 3 },
@@ -195,6 +200,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19284] = { cost = 1500, rank = 5, race = "Troll" },
         [19304] = { cost = 1500, rank = 6, race = "NightElf" },
         [27870] = { cost = 1200, rank = 2, requires = {724} },
+        [44045] = { cost = 1500, rank = 4, requires = {44044}, race = {"Draenei", "Dwarf"} },
     },
     [52] = {
         [10946] = { cost = 38000, rank = 8 },
@@ -252,6 +258,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [27871] = { cost = 1500, rank = 3, requires = {724} },
         [34864] = { cost = 2300, rank = 3, requires = {34861} },
         [34916] = { cost = 2300, rank = 2, requires = {34914} },
+        [44046] = { cost = 2300, rank = 5, requires = {44045}, race = {"Draenei", "Dwarf"} },
     },
     [61] = {
         [25233] = { cost = 53000, rank = 8 },
@@ -278,6 +285,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [25384] = { cost = 65000, rank = 9 },
         [25429] = { cost = 89000, rank = 7 },
         [25437] = { cost = 6500, rank = 8 },
+        [25446] = { cost = 6500, rank = 8, requires = {19305}, race = "NightElf" },
         [34433] = { cost = 89000, rank = 1 },
     },
     [67] = {
@@ -291,6 +299,8 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [25387] = { cost = 6500, rank = 7, requires = {15407} },
         [25433] = { cost = 110000, rank = 4 },
         [25435] = { cost = 110000, rank = 6 },
+        [25467] = { cost = 6500, rank = 7, requires = {19280}, race = "Scourge" },
+        [25477] = { cost = 6500, rank = 7, requires = {19312}, race = "Troll" },
         [33076] = { cost = 110000, rank = 1 },
     },
     [69] = {
@@ -306,11 +316,14 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [25380] = { cost = 110000, rank = 7 },
         [25389] = { cost = 65000, rank = 7 },
         [25441] = { cost = 6500, rank = 6 },
+        [25461] = { cost = 6500, rank = 7, requires = {19266}, race = {"BloodElf", "Scourge"} },
+        [25470] = { cost = 6500, rank = 7, requires = {19285}, race = "Troll" },
         [28275] = { cost = 1500, rank = 4, requires = {724} },
         [32375] = { cost = 110000 },
         [32996] = { cost = 110000, rank = 2 },
         [32999] = { cost = 3400, rank = 2, requires = {14752} },
         [34866] = { cost = 2300, rank = 5, requires = {34861} },
         [34917] = { cost = 2300, rank = 3, requires = {34914} },
+        [44047] = { cost = 3250, rank = 6, requires = {44046}, race = {"Draenei", "Dwarf"} },
     },
 }

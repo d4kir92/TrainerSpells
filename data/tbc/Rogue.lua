@@ -2,6 +2,7 @@ TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
     [1] = {
         [1784] = { cost = 10, rank = 1 },
+        [1804] = { cost = 1800 },
     },
     [4] = {
         [53] = { cost = 100, rank = 1 },
@@ -32,7 +33,6 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [8647] = { cost = 1200, rank = 1 },
     },
     [16] = {
-        [1804] = { cost = 1800 },
         [1966] = { cost = 1800, rank = 1 },
         [6761] = { cost = 1800, rank = 3, requires = {2098} },
     },

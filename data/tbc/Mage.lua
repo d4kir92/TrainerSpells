@@ -1,7 +1,7 @@
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
     [1] = {
-        [1459] = { cost = 10 },
+        [1459] = { cost = 10, rank = 1 },
     },
     [4] = {
         [116] = { cost = 100, rank = 1 },

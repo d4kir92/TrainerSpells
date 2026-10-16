@@ -1,5 +1,5 @@
 TrainerSpellsBuiltin_HunterPet = TrainerSpellsBuiltin_HunterPet or {
-    [10] = {
+    [1] = {
         [4187] = { cost = 10, rank = 1 },
         [24545] = { cost = 10, rank = 1 },
     },
@@ -44,6 +44,7 @@ TrainerSpellsBuiltin_HunterPet = TrainerSpellsBuiltin_HunterPet or {
         [24500] = { cost = 3600, rank = 3 },
         [24503] = { cost = 3600, rank = 3 },
         [24506] = { cost = 3600, rank = 3 },
+        [24507] = { cost = 7200, rank = 4 },
     },
     [42] = {
         [4193] = { cost = 4800, rank = 7 },
@@ -59,7 +60,6 @@ TrainerSpellsBuiltin_HunterPet = TrainerSpellsBuiltin_HunterPet or {
         [24449] = { cost = 7200, rank = 4 },
         [24501] = { cost = 7200, rank = 4 },
         [24504] = { cost = 7200, rank = 4 },
-        [24507] = { cost = 7200, rank = 4 },
     },
     [54] = {
         [5041] = { cost = 8400, rank = 9 },

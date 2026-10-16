@@ -2,6 +2,7 @@ TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
     [1] = {
         [465] = { cost = 10, rank = 1 },
+        [3127] = { cost = 100 },
     },
     [4] = {
         [19740] = { cost = 100, rank = 1 },
@@ -16,7 +17,6 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
     [8] = {
         [853] = { cost = 100, rank = 1 },
         [1152] = { cost = 100 },
-        [3127] = { cost = 100 },
     },
     [10] = {
         [633] = { cost = 300, rank = 1 },
@@ -83,7 +83,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [2800] = { cost = 11000, rank = 2 },
         [10291] = { cost = 11000, rank = 4, requires = {465} },
         [19752] = { cost = 11000 },
-        [20116] = { cost = 11000, rank = 2 },
+        [20116] = { cost = 200, rank = 2 },
         [20165] = { cost = 11000, rank = 1 },
         [20915] = { cost = 550, rank = 2 },
     },
@@ -121,7 +121,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [20347] = { cost = 20000, rank = 2 },
         [20473] = { cost = 1000, rank = 2 },
         [20918] = { cost = 1000, rank = 3 },
-        [20922] = { cost = 20000, rank = 3 },
+        [20922] = { cost = 1000, rank = 3 },
     },
     [42] = {
         [4987] = { cost = 21000 },
@@ -160,7 +160,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [20348] = { cost = 28000, rank = 3 },
         [20422] = { cost = 28000, rank = 6 },
         [20919] = { cost = 1400, rank = 4 },
-        [20923] = { cost = 28000, rank = 4 },
+        [20923] = { cost = 1400, rank = 4 },
         [20927] = { cost = 1400, rank = 2 },
         [1311590] = { cost = 1400, rank = 2 },
     },
@@ -202,12 +202,12 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [20349] = { cost = 46000, rank = 4 },
         [20773] = { cost = 46000, rank = 5 },
         [20920] = { cost = 2300, rank = 5 },
-        [20924] = { cost = 46000, rank = 5 },
+        [20924] = { cost = 2300, rank = 5 },
         [20928] = { cost = 2300, rank = 3 },
         [24239] = { cost = 46000, rank = 3 },
         [25890] = { cost = 46000, rank = 1 },
         [25895] = { cost = 46000 },
-        [25898] = { cost = 46000 },
+        [25898] = { cost = 2300 },
         [25916] = { cost = 46000, rank = 2, requires = {19740} },
         [25918] = { cost = 46000, rank = 2 },
         [1311595] = { cost = 2300, rank = 3 },

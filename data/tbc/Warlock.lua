@@ -32,7 +32,7 @@ TrainerSpellsBuiltin.WARLOCK = TrainerSpellsBuiltin.WARLOCK or {
         [6222] = { cost = 900, rank = 2 },
     },
     [16] = {
-        [1455] = { cost = 1080, rank = 2 },
+        [1455] = { cost = 1500, rank = 2 },
         [5697] = { cost = 1200 },
     },
     [18] = {
@@ -63,7 +63,7 @@ TrainerSpellsBuiltin.WARLOCK = TrainerSpellsBuiltin.WARLOCK or {
     },
     [26] = {
         [132] = { cost = 4000 },
-        [1456] = { cost = 3600, rank = 3 },
+        [1456] = { cost = 5000, rank = 3 },
         [1714] = { cost = 4000, rank = 1 },
         [17919] = { cost = 4000, rank = 2 },
     },
@@ -102,7 +102,7 @@ TrainerSpellsBuiltin.WARLOCK = TrainerSpellsBuiltin.WARLOCK or {
         [2362] = { cost = 9000, rank = 1 },
         [3700] = { cost = 9000, rank = 4 },
         [7641] = { cost = 9000, rank = 6, requires = {686} },
-        [11687] = { cost = 8100, rank = 4 },
+        [11687] = { cost = 10000, rank = 4 },
         [17951] = { cost = 9000, rank = 2 },
     },
     [38] = {
@@ -135,7 +135,7 @@ TrainerSpellsBuiltin.WARLOCK = TrainerSpellsBuiltin.WARLOCK or {
     },
     [46] = {
         [11677] = { cost = 13000, rank = 3 },
-        [11688] = { cost = 11700, rank = 5 },
+        [11688] = { cost = 13000, rank = 5 },
         [11699] = { cost = 13000, rank = 5 },
         [11721] = { cost = 13000, rank = 2 },
         [11729] = { cost = 13000, rank = 4 },
@@ -176,7 +176,7 @@ TrainerSpellsBuiltin.WARLOCK = TrainerSpellsBuiltin.WARLOCK or {
     },
     [56] = {
         [6215] = { cost = 22000, rank = 3 },
-        [11689] = { cost = 19800, rank = 6 },
+        [11689] = { cost = 22000, rank = 6 },
         [11717] = { cost = 22000, rank = 4 },
         [17924] = { cost = 22000, rank = 2 },
         [17953] = { cost = 22000, rank = 4 },

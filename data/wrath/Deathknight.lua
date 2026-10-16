@@ -25,10 +25,13 @@ TrainerSpellsBuiltin.DEATHKNIGHT = TrainerSpellsBuiltin.DEATHKNIGHT or {
     [59] = {
         [47476] = { cost = 5900 },
         [49926] = { cost = 5900, rank = 2 },
+        [55258] = { cost = 5900, rank = 2 },
     },
     [60] = {
         [43265] = { cost = 6000, rank = 1 },
         [49917] = { cost = 5800, rank = 2 },
+        [51325] = { cost = 300, rank = 2 },
+        [51416] = { cost = 6200, rank = 2 },
         [53331] = { cost = 6000 },
     },
     [61] = {
@@ -48,9 +51,11 @@ TrainerSpellsBuiltin.DEATHKNIGHT = TrainerSpellsBuiltin.DEATHKNIGHT or {
     [64] = {
         [45529] = { cost = 64000 },
         [49927] = { cost = 64000, rank = 3 },
+        [55259] = { cost = 4000, rank = 3, requires = {55258} },
     },
     [65] = {
         [49918] = { cost = 65000, rank = 3 },
+        [51417] = { cost = 3250, rank = 3, requires = {51416} },
         [56222] = { cost = 65000 },
         [57330] = { cost = 65000, rank = 1 },
     },
@@ -62,6 +67,7 @@ TrainerSpellsBuiltin.DEATHKNIGHT = TrainerSpellsBuiltin.DEATHKNIGHT or {
         [49903] = { cost = 67000, rank = 3 },
         [49936] = { cost = 68000, rank = 2 },
         [51423] = { cost = 67000, rank = 2 },
+        [55265] = { cost = 20000, rank = 2 },
         [56815] = { cost = 67000 },
     },
     [68] = {
@@ -70,11 +76,15 @@ TrainerSpellsBuiltin.DEATHKNIGHT = TrainerSpellsBuiltin.DEATHKNIGHT or {
     },
     [69] = {
         [49928] = { cost = 69000, rank = 4 },
+        [55260] = { cost = 3450, rank = 4, requires = {55259} },
     },
     [70] = {
         [45463] = { cost = 63000, rank = 3 },
         [48265] = { cost = 360000 },
         [49919] = { cost = 360000, rank = 4 },
+        [51326] = { cost = 20000, rank = 3, requires = {51325} },
+        [51409] = { cost = 3350, rank = 2 },
+        [51418] = { cost = 20000, rank = 4, requires = {51417} },
         [53344] = { cost = 360000 },
         [62158] = { cost = 360000 },
     },
@@ -86,14 +96,19 @@ TrainerSpellsBuiltin.DEATHKNIGHT = TrainerSpellsBuiltin.DEATHKNIGHT or {
         [49904] = { cost = 360000, rank = 4 },
         [49937] = { cost = 360000, rank = 3 },
         [51424] = { cost = 360000, rank = 3 },
+        [55270] = { cost = 20000, rank = 3, requires = {55265} },
     },
     [74] = {
         [49929] = { cost = 360000, rank = 5 },
+        [55261] = { cost = 20000, rank = 5, requires = {55260} },
     },
     [75] = {
         [47568] = { cost = 360000 },
         [49920] = { cost = 360000, rank = 5 },
         [49923] = { cost = 360000, rank = 4 },
+        [51327] = { cost = 20000, rank = 4, requires = {51326} },
+        [51410] = { cost = 20000, rank = 3, requires = {51409} },
+        [51419] = { cost = 20000, rank = 5, requires = {51418} },
         [57623] = { cost = 360000, rank = 2 },
     },
     [76] = {
@@ -105,6 +120,7 @@ TrainerSpellsBuiltin.DEATHKNIGHT = TrainerSpellsBuiltin.DEATHKNIGHT or {
     },
     [79] = {
         [51425] = { cost = 360000, rank = 4 },
+        [55271] = { cost = 20000, rank = 4, requires = {55270} },
     },
     [80] = {
         [42650] = { cost = 360000 },
@@ -113,5 +129,9 @@ TrainerSpellsBuiltin.DEATHKNIGHT = TrainerSpellsBuiltin.DEATHKNIGHT or {
         [49924] = { cost = 360000, rank = 5 },
         [49930] = { cost = 360000, rank = 6 },
         [49938] = { cost = 360000, rank = 4 },
+        [51328] = { cost = 20000, rank = 5, requires = {51327} },
+        [51411] = { cost = 20000, rank = 4, requires = {51410} },
+        [55262] = { cost = 20000, rank = 6, requires = {55261} },
+        [55268] = { cost = 20000, rank = 6, requires = {51419} },
     },
 }

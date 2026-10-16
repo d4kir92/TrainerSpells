@@ -274,6 +274,7 @@ TrainerSpellsBuiltin.SHAMAN = TrainerSpellsBuiltin.SHAMAN or {
         [33736] = { cost = 79000, rank = 2 },
     },
     [70] = {
+        [2825] = { cost = 110000, rank = 1, race = {"Orc", "Tauren", "Troll"} },
         [25396] = { cost = 88000, rank = 12, requires = {331} },
         [25442] = { cost = 88000, rank = 6 },
         [25457] = { cost = 88000, rank = 7 },
