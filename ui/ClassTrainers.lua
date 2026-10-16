@@ -1,7 +1,9 @@
 local _, TrainerSpells = ...
 local trainerData = TrainerSpellsClassTrainers
 if not trainerData then return end
-local petTrainerData = TrainerSpellsPetTrainers or {}
+local extraTrainerData = {}
+for classToken, trainers in pairs(TrainerSpellsPetTrainers or {}) do extraTrainerData[classToken] = trainers end
+for classToken, trainers in pairs(TrainerSpellsPortalTrainers or {}) do extraTrainerData[classToken] = trainers end
 local TrainerLocations = TrainerSpells.TrainerLocations
 local AddEntries = TrainerLocations.AddEntries
 local SortEntries = TrainerLocations.SortEntries
@@ -12,6 +14,7 @@ local classFrame = TrainerSpells.ClassFrame
 local petTrainerTexts = {
     HUNTER = {label = "LID_PETTRAINER", nearest = "LID_NEARESTPETTRAINER", desc = "LID_NEARESTPETTRAINER_DESC", none = "LID_NOPETTRAINER"},
     WARLOCK = {label = "LID_DEMONTRAINER", nearest = "LID_NEARESTDEMONTRAINER", desc = "LID_NEARESTDEMONTRAINER_DESC", none = "LID_NODEMONTRAINER"},
+    MAGE = {label = "LID_PORTALTRAINER", nearest = "LID_NEARESTPORTALTRAINER", desc = "LID_NEARESTPORTALTRAINER_DESC", none = "LID_NOPORTALTRAINER"},
 }
 
 local function GetPlayerClassToken()
@@ -32,7 +35,7 @@ end
 local function GetPetEntries(searchText, usableOnly)
     local entries = {}
     local classToken = GetPlayerClassToken()
-    AddEntries(entries, petTrainerData[classToken], searchText, usableOnly, GetPetTrainerLabel(classToken))
+    AddEntries(entries, extraTrainerData[classToken], searchText, usableOnly, GetPetTrainerLabel(classToken))
     return SortEntries(entries)
 end
 
@@ -115,7 +118,7 @@ controls:SetScript("OnShow", function()
     UpdateNearestButtons()
     hideStarter:SetChecked(TrainerSpells_Character.hideStarterClassTrainers)
     local texts = petTrainerTexts[GetPlayerClassToken()]
-    local showPetButton = texts and petTrainerData[GetPlayerClassToken()] and true or false
+    local showPetButton = texts and extraTrainerData[GetPlayerClassToken()] and true or false
     nearestPetButton:SetShown(showPetButton)
     if showPetButton then
         nearestPetButton:SetText(TrainerSpells:Trans(texts.nearest))
