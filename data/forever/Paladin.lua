@@ -66,13 +66,11 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [10322] = {cost = 5000, rank = 2},
         [19850] = {cost = 5000, rank = 2},
     },
-    [25] = {
-        [20163] = {cost = 6000, rank = 3},
-    },
     [26] = {
         [1038] = {cost = 6000},
         [10298] = {cost = 6000, rank = 2},
         [19939] = {cost = 6000, rank = 2},
+        [20163] = {cost = 6000, rank = 3},
         [20289] = {cost = 6000, rank = 4, requires = {21084}},
     },
     [28] = {

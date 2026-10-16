@@ -46,6 +46,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [970] = {cost = 2000, rank = 3},
         [19236] = {cost = 100, rank = 2, race = {"Dwarf", "Human"}},
         [19296] = {cost = 100, rank = 2, race = "NightElf"},
+        [1277371] = {cost = 100, rank = 2},
     },
     [20] = {
         [453] = {cost = 3000, rank = 1},
@@ -82,6 +83,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [9472] = {cost = 6000, rank = 2},
         [19238] = {cost = 300, rank = 3, race = {"Dwarf", "Human"}},
         [19299] = {cost = 300, rank = 3, race = "NightElf"},
+        [1277372] = {cost = 300, rank = 3},
     },
     [28] = {
         [6063] = {cost = 8000, rank = 3},
@@ -105,6 +107,9 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19262] = {cost = 500, rank = 3, race = "Scourge"},
         [19271] = {cost = 500, rank = 2, race = "Human"},
         [19282] = {cost = 500, rank = 3, race = "Troll"},
+        [1277325] = {cost = 150, rank = 2},
+        [1277332] = {cost = 150, rank = 2},
+        [1277634] = {cost = 150, rank = 2},
     },
     [32] = {
         [552] = {cost = 11000},
@@ -122,6 +127,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [10880] = {cost = 12000, rank = 3},
         [19240] = {cost = 600, rank = 4, race = {"Dwarf", "Human"}},
         [19302] = {cost = 600, rank = 4, race = "NightElf"},
+        [1277374] = {cost = 600, rank = 4},
     },
     [36] = {
         [988] = {cost = 14000, rank = 2},
@@ -153,6 +159,9 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19273] = {cost = 900, rank = 3, race = "Human"},
         [19283] = {cost = 900, rank = 4, race = "Troll"},
         [1240720] = {cost = 16000, rank = 2},
+        [1277326] = {cost = 500, rank = 3},
+        [1277333] = {cost = 500, rank = 3},
+        [1277638] = {cost = 500, rank = 3},
         [1309633] = {cost = 18000, rank = 2},
     },
     [42] = {
@@ -163,6 +172,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [15265] = {cost = 22000, rank = 5},
         [19241] = {cost = 1100, rank = 5, race = {"Dwarf", "Human"}},
         [19303] = {cost = 1100, rank = 5, race = "NightElf"},
+        [1277376] = {cost = 1100, rank = 5},
     },
     [44] = {
         [10909] = {cost = 24000, rank = 2},
@@ -204,6 +214,10 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [1240721] = {cost = 30000, rank = 3},
         [1240773] = {cost = 30000, rank = 5},
         [1240826] = {cost = 30000, rank = 2},
+        [1277327] = {cost = 900, rank = 4},
+        [1277334] = {cost = 900, rank = 4},
+        [1277377] = {cost = 1500, rank = 6},
+        [1277639] = {cost = 900, rank = 4},
     },
     [52] = {
         [10946] = {cost = 38000, rank = 8},
@@ -236,6 +250,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19243] = {cost = 2200, rank = 7, race = {"Dwarf", "Human"}},
         [19305] = {cost = 2200, rank = 7, race = "NightElf"},
         [20770] = {cost = 44000, rank = 5},
+        [1277378] = {cost = 2200, rank = 7},
     },
     [60] = {
         [10901] = {cost = 46000, rank = 10},
@@ -255,6 +270,9 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [27801] = {cost = 2300, rank = 6},
         [27841] = {cost = 2300, rank = 4},
         [1240827] = {cost = 46000, rank = 3},
+        [1277328] = {cost = 1500, rank = 5},
+        [1277335] = {cost = 1500, rank = 5},
+        [1277640] = {cost = 1500, rank = 5},
         [1316995] = {cost = 46000, rank = 4},
     },
 }
