@@ -1006,10 +1006,12 @@ function professionSubTabs.FindForeignSideTab(lastTab)
     local refLeft, floor = lastTab:GetLeft(), lastTab:GetBottom()
     if not refLeft or not floor then return nil end
     local found, foundBottom = nil, floor
-    for _, child in ipairs({ProfessionsFrame:GetChildren()}) do
-        if child ~= lastTab and child:IsShown() then
-            local left, bottom, width, height = child:GetLeft(), child:GetBottom(), child:GetWidth(), child:GetHeight()
-            if left and bottom and math.abs(left - refLeft) <= 8 and width <= 64 and height <= 64 and bottom < foundBottom and not professionSubTabs.IsOwnSideTab(child, 0) then found, foundBottom = child, bottom end
+    for _, parent in ipairs({ProfessionsFrame, ProfessionsFrameTabSideBar}) do
+        for _, child in ipairs({parent:GetChildren()}) do
+            if child ~= lastTab and child:IsShown() then
+                local left, bottom, width, height = child:GetLeft(), child:GetBottom(), child:GetWidth(), child:GetHeight()
+                if left and bottom and math.abs(left - refLeft) <= 8 and width <= 64 and height <= 64 and bottom < foundBottom and not professionSubTabs.IsOwnSideTab(child, 0) then found, foundBottom = child, bottom end
+            end
         end
     end
     return found
@@ -1418,6 +1420,7 @@ end
 tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     EnsureTradeSkillHooksInstalled()
     InstallProfessionsFrameIntegration()
+    if event == "TRADE_SKILL_SHOW" and professionsFrameHooksInstalled then C_Timer.After(0, PositionProfessionsFrameModeTabs) end
     if (event == "TRADE_SKILL_UPDATE" or event == "TRADE_SKILL_LIST_UPDATE") and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
         if not professionFrame.compendiumHost then HideNativeTradeSkillWidgets() end
