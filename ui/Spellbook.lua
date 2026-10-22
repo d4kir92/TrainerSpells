@@ -1301,9 +1301,9 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, 
     view.title:SetPoint("BOTTOMRIGHT", host, "TOPRIGHT", 0, 17)
     view.scrollBox = CreateFrame("Frame", nil, host, "WowScrollBoxList")
     view.scrollBox:SetPoint("TOPLEFT", host, "TOPLEFT", 0, -4)
-    view.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -22, 0)
+    view.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -24, 0)
     view.scrollBar = CreateFrame("EventFrame", nil, host, "MinimalScrollBar")
-    view.scrollBar:SetPoint("TOPLEFT", view.scrollBox, "TOPRIGHT", 2, -2)
+    view.scrollBar:SetPoint("TOPLEFT", view.scrollBox, "TOPRIGHT", 4, -2)
     view.scrollBar:SetPoint("BOTTOMLEFT", host, "BOTTOMRIGHT", -20, 8)
     local list = CreateScrollBoxListLinearView()
     list:SetElementExtentCalculator(function(_, item) return item.isHeader and TrainerSpells.HeaderHeight + TrainerSpells.HeaderExtraGap or view.rowHeight end)
@@ -1349,7 +1349,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, 
         end
         self.scrollBox:ClearAllPoints()
         self.scrollBox:SetPoint("TOPLEFT", host, "TOPLEFT", 0, offset)
-        self.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -22, 0)
+        self.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -24, 0)
         if self.BuildItems then self.scrollBox:SetDataProvider(CreateDataProvider(self:BuildItems()), ScrollBoxConstants.RetainScrollPosition) end
     end
     host.OnSearchChanged = function() view:Refresh() end
