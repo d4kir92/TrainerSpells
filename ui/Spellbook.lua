@@ -1376,8 +1376,9 @@ function TrainerSpells:CreateCompendiumClass(host)
     for _, entry in ipairs({{self.CreateClassTrainerControls, "trainers", 48}, {self.CreateWeaponControls, "weapons", 40}}) do
         if entry[1] then
             local controls = entry[1](self, host)
-            controls:SetPoint("TOPLEFT", host, "TOPLEFT", 4, -4)
-            controls:SetPoint("TOPRIGHT", host, "TOPRIGHT", -4, -4)
+            local top = -(entry[3] - controls:GetHeight()) / 2 - 4
+            controls:SetPoint("TOPLEFT", host, "TOPLEFT", 4, top)
+            controls:SetPoint("TOPRIGHT", host, "TOPRIGHT", -4, top)
             table.insert(view.controls, {frame = controls, mode = entry[2], height = entry[3]})
         end
     end
