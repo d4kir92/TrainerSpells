@@ -211,6 +211,35 @@ function TrainerSpells:ToggleSettings()
             end
         })
 
+        if self.AutoRanks then
+            local autoRanks = self.AutoRanks.Settings()
+            win:AddCategory({
+                label = "LID_SETTINGS_AUTORANKS",
+                key = "autoranks"
+            })
+
+            local autoRanksBox = win:AddCheckbox({
+                label = "LID_AUTORANKS",
+                added = "2026-11-04",
+                value = autoRanks.autoSpellRanks,
+                func = function(value)
+                    TrainerSpells_Character.autoSpellRanks = value
+                    win:UpdateDependencies()
+                    if value then self.AutoRanks.Schedule(0.2) end
+                end
+            })
+
+            local reportBox = win:AddCheckbox({
+                label = "LID_AUTORANKS_REPORT",
+                added = "2026-11-04",
+                value = autoRanks.autoSpellRanksReport,
+                func = function(value) TrainerSpells_Character.autoSpellRanksReport = value end
+            })
+
+            win:AddDependency(reportBox, function() return TrainerSpells_Character.autoSpellRanks ~= false end)
+            win:AddRequirement(reportBox, autoRanksBox)
+        end
+
         win:AddCategory({
             label = "LID_SETTINGS_PRICES",
             key = "prices"

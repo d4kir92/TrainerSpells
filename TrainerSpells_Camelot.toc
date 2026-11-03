@@ -96,6 +96,7 @@ core\TrainerListUI.lua
 core\Ignore.lua
 core\Export.lua
 core\Events.lua
+core\AutoRanks.lua
 
 ui\Core.lua
 ui\ClassData.lua
