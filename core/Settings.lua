@@ -112,7 +112,7 @@ function TrainerSpells:AddLanguageButton(win)
 end
 
 TrainerSpells.TabSettings = {}
-TrainerSpells.TabSettingKeys = {"spellbook", "class", "pet", "trainers", "weapons", "professions", "profession_skill", "profession_recipes", "profession_trainers", "compendium_class", "compendium_professions"}
+TrainerSpells.TabSettingKeys = {"spellbook", "class", "pet", "beasts", "trainers", "weapons","professions", "profession_skill", "profession_recipes", "profession_trainers", "compendium_class", "compendium_professions"}
 TrainerSpells.SharedTabSettings = {
     TRAINERSPELLS_COMPENDIUM_CLASS = "compendium_class",
     TRAINERSPELLS_COMPENDIUM_PROFESSIONS = "compendium_professions"
@@ -169,7 +169,7 @@ end
 
 function TrainerSpells:HasSpellbookTabs()
     local _, classToken = UnitClass("player")
-    return self:IsTabEnabled("class") or self:IsTabEnabled("trainers") and self.BuildClassTrainerItems ~= nil or self:IsTabEnabled("weapons") and self.BuildWeaponSkillItems ~= nil or self:IsTabEnabled("pet") and self:HasPetClassData(classToken)
+    return self:IsTabEnabled("class") or self:IsTabEnabled("trainers") and self.BuildClassTrainerItems ~= nil or self:IsTabEnabled("weapons") and self.BuildWeaponSkillItems ~= nil or self:IsTabEnabled("pet") and self:HasPetClassData(classToken) or self:IsTabEnabled("beasts") and self.BuildBeastItems ~= nil
 end
 
 function TrainerSpells:GetTabLayout(key)
@@ -248,7 +248,7 @@ function TrainerSpells:ToggleSettings()
                 layout = "spellbookLayout",
                 compendium = "compendium_class",
                 compendiumLabel = "LID_SETTINGS_COMPENDIUM_CLASS",
-                options = {{"class", "LID_CLASSTRAINER"}, {"pet", "LID_PETTRAINING"}, {"trainers", "LID_CLASSTRAINERS"}, {"weapons", "LID_SETTINGS_WEAPONS"}}
+                options = {{"class", "LID_CLASSTRAINER"}, {"pet", "LID_PETTRAINING"}, {"beasts", "LID_BEASTS"}, {"trainers","LID_CLASSTRAINERS"}, {"weapons", "LID_SETTINGS_WEAPONS"}}
             },
             {
                 label = "LID_PROFESSIONS",

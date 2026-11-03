@@ -90,9 +90,17 @@ local function PositionFrame()
         TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false)
     end
 
+    local showBeastControls = TrainerSpells.ClassView == "beasts" and TrainerSpells.BeastControls
+    if TrainerSpells.BeastControls then
+        TrainerSpells.BeastControls:ClearAllPoints()
+        TrainerSpells.BeastControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
+        TrainerSpells.BeastControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
+        TrainerSpells.BeastControls:SetShown(showBeastControls and true or false)
+    end
+
     if TrainerSpells.ClassScrollBox then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
-        local controlsOffset = showClassTrainerControls and -44 or showWeaponControls and -36 or -4
+        local controlsOffset = (showClassTrainerControls or showBeastControls) and -44 or showWeaponControls and -36 or -4
         TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, controlsOffset)
         TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
     end
@@ -241,6 +249,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     local className, classToken = UnitClass("player")
     CreateClassicModeTab("TrainerSpellsSpellbookTab", "class", "Interface\\Icons\\INV_Misc_Book_09", className or TrainerSpells:Trans("LID_CLASSTRAINER"))
     if TrainerSpells:HasPetClassData(classToken) then CreateClassicModeTab("TrainerSpellsPetSpellbookTab", "pet", "Interface\\Icons\\Ability_Hunter_BeastCall", TrainerSpells:Trans("LID_PETTRAINING")) end
+    if TrainerSpells.BuildBeastItems then CreateClassicModeTab("TrainerSpellsBeastSpellbookTab", "beasts", "Interface\\Icons\\Ability_Hunter_BeastTaming", TrainerSpells:Trans("LID_BEASTS")) end
     if TrainerSpells.BuildClassTrainerItems then CreateClassicModeTab("TrainerSpellsClassTrainerMapTab", "trainers", 134269, TrainerSpells:Trans("LID_CLASSTRAINERS")) end
     if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", TrainerSpells:Trans("LID_WEAPONSKILLS")) end
     local function IsClassicModeTabEnabled(view)
@@ -476,7 +485,7 @@ local function PositionPlayerSpellsFrame()
         playerSpellsSubTabs.desc:SetPoint("TOPRIGHT", playerSpellsSubTabs.title, "BOTTOMRIGHT", 0, -3)
     end
 
-    for _, controls in ipairs({TrainerSpells.WeaponControls or false, TrainerSpells.ClassTrainerControls or false}) do
+    for _, controls in ipairs({TrainerSpells.WeaponControls or false, TrainerSpells.ClassTrainerControls or false, TrainerSpells.BeastControls or false}) do
         if controls then
             controls:ClearAllPoints()
             controls:SetPoint("TOPLEFT", anchor, "TOPLEFT", left, top)
@@ -484,9 +493,11 @@ local function PositionPlayerSpellsFrame()
         end
     end
 
+    local showBeastControls = TrainerSpells.ClassView == "beasts" and TrainerSpells.BeastControls
     if TrainerSpells.WeaponControls then TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false) end
     if TrainerSpells.ClassTrainerControls then TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false) end
-    local dividerOffset = top + 1 + (showClassTrainerControls and -42 or showWeaponControls and -34 or showSpoilerFree and -26 or 0)
+    if TrainerSpells.BeastControls then TrainerSpells.BeastControls:SetShown(showBeastControls and true or false) end
+    local dividerOffset = top + 1 + ((showClassTrainerControls or showBeastControls) and -42 or showWeaponControls and -34 or showSpoilerFree and -26 or 0)
     if playerSpellsModeDivider then
         playerSpellsModeDivider:ClearAllPoints()
         if panel then
@@ -719,6 +730,15 @@ function playerSpellsSubTabs.BuildViews()
             icon = "Interface\\Icons\\Ability_Hunter_BeastCall",
             title = TrainerSpells:Trans("LID_PETTRAINING"),
             desc = "LID_PETVIEW_DESC"
+        })
+    end
+
+    if TrainerSpells.BuildBeastItems then
+        table.insert(views, {
+            view = "beasts",
+            icon = "Interface\\Icons\\Ability_Hunter_BeastTaming",
+            title = TrainerSpells:Trans("LID_BEASTS"),
+            desc = "LID_BEASTVIEW_DESC"
         })
     end
 
@@ -1206,7 +1226,7 @@ function TrainerSpells:PositionCompendiumClass()
     searchBox:Hide()
     AzerothCompendiumAPI.PositionHeaderSlider(TrainerSpells.RowHeightSlider)
     local offset = -4
-    for _, entry in ipairs({{TrainerSpells.ClassTrainerControls, "trainers", -48}, {TrainerSpells.WeaponControls, "weapons", -40}}) do
+    for _, entry in ipairs({{TrainerSpells.ClassTrainerControls, "trainers", -48}, {TrainerSpells.BeastControls, "beasts", -48}, {TrainerSpells.WeaponControls, "weapons", -40}}) do
         local controls = entry[1]
         if controls then
             controls:ClearAllPoints()
@@ -1373,7 +1393,7 @@ function TrainerSpells:CreateCompendiumClass(host)
     view.BuildItems = function(current) return TrainerSpells:BuildClassViewItems(current.mode, host.searchText) end
     view:AddSpoilerFreeCheckbox("spoilerFree", "LID_SPOILERFREE_DESC", "class")
     view.controls = {}
-    for _, entry in ipairs({{self.CreateClassTrainerControls, "trainers", 48}, {self.CreateWeaponControls, "weapons", 40}}) do
+    for _, entry in ipairs({{self.CreateClassTrainerControls, "trainers", 48}, {self.CreateBeastControls, "beasts", 48}, {self.CreateWeaponControls, "weapons", 40}}) do
         if entry[1] then
             local controls = entry[1](self, host)
             local top = -(entry[3] - controls:GetHeight()) / 2 - 4

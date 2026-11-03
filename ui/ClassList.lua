@@ -84,8 +84,12 @@ function TrainerSpells:BuildClassViewItems(viewMode, searchText)
         TrainerSpells:BuildClassTrainerItems(items, searchText)
     end
 
+    if viewMode == "beasts" and TrainerSpells.BuildBeastItems then
+        TrainerSpells:BuildBeastItems(items, searchText)
+    end
+
     if #items == 0 then
-        if viewMode == "weapons" or viewMode == "trainers" then
+        if viewMode == "weapons" or viewMode == "trainers" or viewMode == "beasts" then
             TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NOENTRIES"), "|cffaaaaaa")
         elseif not classData then
             TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NODATAFORCLASS"):format(tostring(selectedClass)), "|cffff5555")
@@ -133,6 +137,8 @@ function TrainerSpells:SetClassView(view)
         local classToken = select(2, UnitClass("player"))
         if not TrainerSpells:HasPetClassData(classToken) then view = "class" end
     end
+
+    if view == "beasts" and not TrainerSpells.BuildBeastItems then view = "class" end
 
     TrainerSpells.ClassView = view
     if TrainerSpells_Character then TrainerSpells_Character.classView = view end

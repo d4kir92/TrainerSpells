@@ -1,0 +1,5 @@
+TrainerSpellsHunterBeasts = {
+    families = {},
+    abilities = {},
+    beasts = {},
+}

@@ -764,6 +764,8 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             rowFrame:SetScript("OnLeave", GameTooltip_Hide)
             rowFrame:SetScript("OnMouseUp", function(sel, button) if button == "LeftButton" and elementData.groupKey then ToggleGroup(elementData.groupKey) end end)
         end
+    elseif elementData.initRow then
+        elementData.initRow(rowFrame, elementData, icon, nameFS, levelFS)
     elseif elementData.isClassTrainer then
         local entry = elementData.entry
         if elementData.rowDepth and elementData.rowDepth > 0 then
