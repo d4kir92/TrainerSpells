@@ -23,7 +23,7 @@ end
 
 function Beasts.Settings()
     local settings = TrainerSpells_Character
-    if settings.beastMode ~= "abilities" then settings.beastMode = "pets" end
+    if settings.beastMode ~= "abilities" and settings.beastMode ~= "zones" then settings.beastMode = "pets" end
     local family = settings.beastFamily
     if type(family) ~= "number" or (family ~= -1 and family ~= 0 and not data.families[family]) then settings.beastFamily = 0 end
     return settings
@@ -394,6 +394,73 @@ function Beasts.SortedFamilies()
     return families
 end
 
+function Beasts.SortBeasts(beasts)
+    local names = {}
+    for _, beast in ipairs(beasts) do names[beast] = Beasts.BeastName(beast, true) end
+    table.sort(beasts, function(a, b)
+        if a.maxLevel ~= b.maxLevel then return a.maxLevel < b.maxLevel end
+        if names[a] ~= names[b] then return names[a] < names[b] end
+        return a.id < b.id
+    end)
+end
+
+Beasts.zoneOf = {}
+function Beasts.ZoneOf(uiMapID)
+    if not uiMapID then return nil end
+    local cached = Beasts.zoneOf[uiMapID]
+    if cached then return cached end
+    local zone, info, depth = uiMapID, C_Map.GetMapInfo(uiMapID), 0
+    while info and info.mapType and info.mapType > 3 and info.parentMapID and info.parentMapID > 0 and depth < 5 do
+        zone, info, depth = info.parentMapID, C_Map.GetMapInfo(info.parentMapID), depth + 1
+    end
+    Beasts.zoneOf[uiMapID] = zone
+    return zone
+end
+
+function Beasts.CurrentZone()
+    return Beasts.ZoneOf(C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player"))
+end
+
+function Beasts.BuildZoneItems(items, searchText)
+    local byZone, zoneIDs = {}, {}
+    for _, beast in ipairs(Beasts.FilteredBeasts(searchText)) do
+        local seen = {}
+        for _, spawn in ipairs(beast.spawns or {}) do
+            local zone = Beasts.ZoneOf(spawn[1])
+            if zone and not seen[zone] then
+                seen[zone] = true
+                if not byZone[zone] then
+                    byZone[zone] = {}
+                    table.insert(zoneIDs, zone)
+                end
+                table.insert(byZone[zone], beast)
+            end
+        end
+    end
+    local current = Beasts.CurrentZone()
+    table.sort(zoneIDs, function(a, b)
+        if (a == current) ~= (b == current) then return a == current end
+        return Beasts.MapName(a) < Beasts.MapName(b)
+    end)
+    if current and not byZone[current] then TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_CURRENTZONE_NONE"):format(Beasts.MapName(current)), "|cff9d9d9d") end
+    for _, zone in ipairs(zoneIDs) do
+        local beasts = byZone[zone]
+        Beasts.SortBeasts(beasts)
+        local groupKey = "beast_zone_" .. zone
+        local name = zone == current and TrainerSpells:Trans("LID_CURRENTZONE"):format(Beasts.MapName(zone)) or Beasts.MapName(zone)
+        TrainerSpells:AddHeaderItem(items, name .. "  |cff9d9d9d(" .. #beasts .. ")|r", zone == current and "|cff30d030" or "|cffffd100", nil, groupKey)
+        if not TrainerSpells:IsGroupCollapsed(groupKey) then
+            for _, beast in ipairs(beasts) do table.insert(items, {initRow = Beasts.InitBeastRow, beast = beast, rowDepth = 1}) end
+        end
+    end
+end
+
+local zoneWatcher = CreateFrame("Frame")
+zoneWatcher:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+zoneWatcher:SetScript("OnEvent", function()
+    if Beasts.Settings().beastMode == "zones" and TrainerSpells.BeastControls and TrainerSpells.BeastControls:IsVisible() then TrainerSpells_Refresh() end
+end)
+
 function Beasts.BuildPetItems(items, searchText)
     local byFamily = {}
     for _, beast in ipairs(Beasts.FilteredBeasts(searchText)) do
@@ -403,13 +470,7 @@ function Beasts.BuildPetItems(items, searchText)
     for _, familyID in ipairs(Beasts.SortedFamilies()) do
         local beasts = byFamily[familyID]
         if beasts then
-            local names = {}
-            for _, beast in ipairs(beasts) do names[beast] = Beasts.BeastName(beast, true) end
-            table.sort(beasts, function(a, b)
-                if a.maxLevel ~= b.maxLevel then return a.maxLevel < b.maxLevel end
-                if names[a] ~= names[b] then return names[a] < names[b] end
-                return a.id < b.id
-            end)
+            Beasts.SortBeasts(beasts)
             local groupKey = "beast_family_" .. familyID
             local family = data.families[familyID]
             local header = "|T" .. family.icon .. ":0|t " .. Beasts.FamilyName(familyID) .. "  |cff9d9d9d(" .. #beasts .. ")|r"
@@ -464,15 +525,18 @@ function Beasts.BuildAbilityItems(items, searchText)
 end
 
 function TrainerSpells:BuildBeastItems(items, searchText)
-    if Beasts.Settings().beastMode == "abilities" then
+    local mode = Beasts.Settings().beastMode
+    if mode == "abilities" then
         Beasts.BuildAbilityItems(items, searchText or "")
+    elseif mode == "zones" then
+        Beasts.BuildZoneItems(items, searchText or "")
     else
         Beasts.BuildPetItems(items, searchText or "")
     end
 end
 
 function Beasts.CreateDetailFrame()
-    local frame = CreateFrame("Frame", "TrainerSpellsBeastDetailFrame", UIParent, "BasicFrameTemplateWithInset")
+    local frame = TrainerSpells:CreateUIWindowFrame("TrainerSpellsBeastDetailFrame", UIParent)
     frame:SetSize(640, 460)
     frame:SetPoint("CENTER")
     frame:SetFrameStrata("HIGH")
@@ -485,8 +549,8 @@ function Beasts.CreateDetailFrame()
     frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
     frame:Hide()
     if UISpecialFrames then table.insert(UISpecialFrames, "TrainerSpellsBeastDetailFrame") end
-    frame.title = frame.TitleText or frame.title or frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    if not frame.TitleText then frame.title:SetPoint("TOP", frame, "TOP", 0, -6) end
+    frame.title = frame.TitleText or frame.TitleContainer and frame.TitleContainer.TitleText or frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    if not frame.title:GetPoint() then frame.title:SetPoint("TOP", frame, "TOP", 0, -6) end
     local model = CreateFrame("PlayerModel", nil, frame)
     model:SetPoint("TOPLEFT", frame, "TOPLEFT", 12, -32)
     model:SetSize(240, 340)
@@ -513,12 +577,18 @@ function Beasts.CreateDetailFrame()
     local hint = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
     hint:SetPoint("TOP", model, "BOTTOM", 0, -4)
     hint:SetText(TrainerSpells:Trans("LID_MODEL_HINT"))
-    local scroll = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
+    local scroll = CreateFrame("Frame", nil, frame, "WowScrollBox")
     scroll:SetPoint("TOPLEFT", model, "TOPRIGHT", 14, 0)
-    scroll:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -32, 46)
+    scroll:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 46)
+    local scrollBar = CreateFrame("EventFrame", nil, frame, "MinimalScrollBar")
+    scrollBar:SetPoint("TOPLEFT", scroll, "TOPRIGHT", 8, 0)
+    scrollBar:SetPoint("BOTTOMLEFT", scroll, "BOTTOMRIGHT", 8, 0)
     local content = CreateFrame("Frame", nil, scroll)
+    content.scrollable = true
     content:SetSize(1, 1)
-    scroll:SetScrollChild(content)
+    local view = CreateScrollBoxLinearView()
+    view:SetPanExtent(40)
+    ScrollUtil.InitScrollBoxWithScrollBar(scroll, scrollBar, view)
     frame.scroll, frame.content = scroll, content
     local info = content:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
     info:SetPoint("TOPLEFT", content, "TOPLEFT", 0, 0)
@@ -597,7 +667,8 @@ function Beasts.ShowDetails(beast)
     frame.content:SetWidth(width >= 50 and width or 342)
     frame.info:SetText(table.concat(lines, "\n"))
     frame.content:SetHeight(math.ceil(frame.info:GetStringHeight()) + 8)
-    frame.scroll:SetVerticalScroll(0)
+    frame.scroll:FullUpdate(ScrollBoxConstants.UpdateImmediately)
+    frame.scroll:ScrollToBegin()
     local hasSpawns = beast.spawns and #beast.spawns > 0 or false
     frame.nearest:SetEnabled(hasSpawns)
     frame.map:SetEnabled(hasSpawns)
@@ -649,9 +720,9 @@ function TrainerSpells.CreateBeastControls(addon, parent)
         for _, dropdown in ipairs(dropdowns) do dropdown:UpdateLabel() end
         TrainerSpells_Refresh()
     end
-    local modeText = {pets = "LID_BEASTMODE_PETS", abilities = "LID_BEASTMODE_ABILITIES"}
+    local modeText = {pets = "LID_BEASTMODE_PETS", abilities = "LID_BEASTMODE_ABILITIES", zones = "LID_BEASTMODE_ZONES"}
     local mode = Beasts.CreateDropdown(controls, 150, function() return TrainerSpells:Trans(modeText[Beasts.Settings().beastMode]) end, function(add)
-        for _, value in ipairs({"pets", "abilities"}) do
+        for _, value in ipairs({"pets", "abilities", "zones"}) do
             add(TrainerSpells:Trans(modeText[value]), function() return Beasts.Settings().beastMode == value end, function()
                 Beasts.Settings().beastMode = value
                 Changed()
@@ -686,10 +757,13 @@ function TrainerSpells.CreateBeastControls(addon, parent)
     tameable:SetPoint("LEFT", family, "RIGHT", 8, 0)
     function controls:SetTwoRows(twoRows)
         tameable:ClearAllPoints()
+        mode:ClearAllPoints()
         if twoRows then
-            tameable:SetPoint("TOPLEFT", controls, "TOPLEFT", 12, -34)
+            mode:SetPoint("TOPLEFT", controls, "TOPLEFT", 0, -4)
+            tameable:SetPoint("TOPLEFT", controls, "TOPLEFT", 12, -36)
             controls:SetHeight(62)
         else
+            mode:SetPoint("LEFT", controls, "LEFT", 0, 0)
             tameable:SetPoint("LEFT", family, "RIGHT", 8, 0)
             controls:SetHeight(36)
         end

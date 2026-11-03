@@ -307,11 +307,15 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         end
     end
 
+    local function ClassicTabGap(count)
+        return count >= 4 and 6 or 16
+    end
+
     local function NeedsLeftSide(foreignTab, count)
         local frameBottom = SpellBookFrame:GetBottom()
         local startTop = foreignTab and foreignTab:GetBottom() and foreignTab:GetBottom() - 16 or lastTab ~= SpellBookFrame and lastTab:GetBottom() and lastTab:GetBottom() + lastTabGap
         if count == 0 or not frameBottom or not startTop then return false end
-        return startTop - count * 32 - (count - 1) * 6 < frameBottom + 16
+        return startTop - count * 32 - (count - 1) * ClassicTabGap(count) < frameBottom + 16
     end
 
     local function ApplyClassicModeTabs()
@@ -333,7 +337,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
             SetTabSide(tab, leftSide)
             if enabled then
                 if previousTab then
-                    tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -6)
+                    tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -ClassicTabGap(count))
                 elseif leftSide then
                     tab:SetPoint("TOPRIGHT", SpellBookFrame, "TOPLEFT", 0, leftTop)
                 elseif foreignTab then

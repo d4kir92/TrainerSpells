@@ -726,39 +726,41 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         icon:Hide()
         SetFontSize(nameFS, fontSize)
         local textInset = elementData.groupKey and (COLLAPSE_BUTTON_SIZE + 6) or 4
-        nameFS:ClearAllPoints()
-        nameFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOPLEFT", textInset, 0)
-        nameFS:SetPoint("BOTTOMRIGHT", rowFrame.categoryBackground, "BOTTOM", -60, 0)
-        nameFS:SetJustifyH("LEFT")
-        nameFS:SetJustifyV("MIDDLE")
-        UpdateCollapseButton(rowFrame, elementData, nameFS)
-        local prefix = elementData.prefixText and (Colors.PET_HEADER .. "[" .. elementData.prefixText .. "] |r") or ""
-        nameFS:SetText(prefix .. elementData.color .. elementData.text .. "|r")
+        local rightAnchor, rightPoint, rightGap = rowFrame.categoryBackground, "RIGHT", -4
+        if elementData.totalCost ~= nil then
+            local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
+            local costColor = canAfford and "|cffffffff" or "|cffff3333"
+            SetFontSize(costFS, fontSize)
+            costFS:ClearAllPoints()
+            costFS:SetPoint("RIGHT", rowFrame.categoryBackground, "RIGHT", -4, 0)
+            costFS:SetText(costColor .. TrainerSpells.Pricing.Text(elementData.baseCost, elementData.totalCost, elementData.baseCostEstimated, costColor) .. "|r")
+            costFS:SetWidth(math.ceil(costFS:GetUnboundedStringWidth()) + 2)
+            costFS:Show()
+            rightAnchor, rightPoint, rightGap = costFS, "LEFT", -12
+        end
+
         if elementData.spellCount then
             local singular = elementData.countKind == "skill" and (_G.SKILL or "Skill") or (_G.SPELL or "Spell")
             local plural = elementData.countKind == "skill" and (_G.SKILLS or "Skills") or (_G.SPELLS or "Spells")
             local countLabel = elementData.spellCount == 1 and singular or plural
             SetFontSize(countFS, fontSize)
             countFS:ClearAllPoints()
-            countFS:SetPoint("TOP", rowFrame.categoryBackground, "TOP", 0, 0)
-            countFS:SetPoint("BOTTOM", rowFrame.categoryBackground, "BOTTOM", 0, 0)
-            countFS:SetWidth(112)
-            countFS:SetJustifyV("MIDDLE")
+            countFS:SetPoint("RIGHT", rightAnchor, rightPoint, rightGap, 0)
             countFS:SetText(elementData.color .. elementData.spellCount .. " " .. countLabel .. "|r")
+            countFS:SetWidth(math.ceil(countFS:GetUnboundedStringWidth()) + 2)
             countFS:Show()
+            rightAnchor, rightPoint, rightGap = countFS, "LEFT", -10
         end
 
-        if elementData.totalCost ~= nil then
-            local canAfford = elementData.totalCost == 0 or (GetMoney() or 0) >= elementData.totalCost
-            local costColor = canAfford and "|cffffffff" or "|cffff3333"
-            SetFontSize(costFS, fontSize)
-            costFS:ClearAllPoints()
-            costFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOP", 60, 0)
-            costFS:SetPoint("BOTTOMRIGHT", rowFrame.categoryBackground, "BOTTOMRIGHT", -4, 0)
-            costFS:SetJustifyV("MIDDLE")
-            costFS:SetText(costColor .. TrainerSpells.Pricing.Text(elementData.baseCost, elementData.totalCost, elementData.baseCostEstimated, costColor) .. "|r")
-            costFS:Show()
-        end
+        nameFS:ClearAllPoints()
+        nameFS:SetPoint("TOPLEFT", rowFrame.categoryBackground, "TOPLEFT", textInset, 0)
+        nameFS:SetPoint("BOTTOMLEFT", rowFrame.categoryBackground, "BOTTOMLEFT", textInset, 0)
+        nameFS:SetPoint("RIGHT", rightAnchor, rightPoint, rightGap, 0)
+        nameFS:SetJustifyH("LEFT")
+        nameFS:SetJustifyV("MIDDLE")
+        UpdateCollapseButton(rowFrame, elementData, nameFS)
+        local prefix = elementData.prefixText and (Colors.PET_HEADER .. "[" .. elementData.prefixText .. "] |r") or ""
+        nameFS:SetText(prefix .. elementData.color .. elementData.text .. "|r")
 
         if elementData.totalCost or elementData.groupKey then
             rowFrame:EnableMouse(true)
