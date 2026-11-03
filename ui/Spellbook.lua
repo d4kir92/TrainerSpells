@@ -95,12 +95,13 @@ local function PositionFrame()
         TrainerSpells.BeastControls:ClearAllPoints()
         TrainerSpells.BeastControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
         TrainerSpells.BeastControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
+        TrainerSpells.BeastControls:SetTwoRows(true)
         TrainerSpells.BeastControls:SetShown(showBeastControls and true or false)
     end
 
     if TrainerSpells.ClassScrollBox then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
-        local controlsOffset = (showClassTrainerControls or showBeastControls) and -44 or showWeaponControls and -36 or -4
+        local controlsOffset = showBeastControls and -70 or showClassTrainerControls and -44 or showWeaponControls and -36 or -4
         TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, controlsOffset)
         TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
     end
@@ -310,7 +311,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         local frameBottom = SpellBookFrame:GetBottom()
         local startTop = foreignTab and foreignTab:GetBottom() and foreignTab:GetBottom() - 16 or lastTab ~= SpellBookFrame and lastTab:GetBottom() and lastTab:GetBottom() + lastTabGap
         if count == 0 or not frameBottom or not startTop then return false end
-        return startTop - count * 32 - (count - 1) * 16 < frameBottom + 16
+        return startTop - count * 32 - (count - 1) * 6 < frameBottom + 16
     end
 
     local function ApplyClassicModeTabs()
@@ -332,7 +333,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
             SetTabSide(tab, leftSide)
             if enabled then
                 if previousTab then
-                    tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -16)
+                    tab:SetPoint("TOPLEFT", previousTab, "BOTTOMLEFT", 0, -6)
                 elseif leftSide then
                     tab:SetPoint("TOPRIGHT", SpellBookFrame, "TOPLEFT", 0, leftTop)
                 elseif foreignTab then

@@ -44,6 +44,10 @@ local function ScheduleRetry()
     end)
 end
 
+function TrainerLocations.GetCachedCreatureInfo(npcID)
+    return creatureInfo.cache[npcID]
+end
+
 function TrainerLocations.GetCreatureInfo(npcID)
     if type(npcID) ~= "number" then return nil end
     local cached = creatureInfo.cache[npcID]

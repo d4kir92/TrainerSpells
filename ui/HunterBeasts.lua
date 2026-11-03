@@ -36,12 +36,24 @@ function Beasts.FamilyName(familyID)
     return family.names[locale] or family.names.enUS or tostring(familyID)
 end
 
-function Beasts.BeastName(beast)
+function Beasts.BeastName(beast, cachedOnly)
     if GetLocale() ~= "enUS" and GetLocale() ~= "enGB" then
-        local info = TrainerLocations.GetCreatureInfo(beast.id)
+        local info = cachedOnly and TrainerLocations.GetCachedCreatureInfo(beast.id) or not cachedOnly and TrainerLocations.GetCreatureInfo(beast.id)
         if info and info.name then return info.name end
     end
     return beast.name
+end
+
+Beasts.searchTexts = {}
+function Beasts.SearchText(beast)
+    local text = Beasts.searchTexts[beast.id]
+    if text then return text end
+    local parts = {beast.name, Beasts.FamilyName(beast.family)}
+    for _, zone in ipairs(Beasts.ZoneNames(beast)) do table.insert(parts, zone) end
+    for _, spell in ipairs(beast.spells or {}) do table.insert(parts, Beasts.AbilityLine(spell)) end
+    text = table.concat(parts, " ")
+    Beasts.searchTexts[beast.id] = text
+    return text
 end
 
 function Beasts.SpellName(spellID, fallback)
@@ -140,7 +152,7 @@ end
 
 function Beasts.SpawnEntries(beast)
     local entries = {}
-    local name = Beasts.BeastName(beast)
+    local name = Beasts.BeastName(beast, true)
     for _, spawn in ipairs(beast.spawns or {}) do
         table.insert(entries, {name = name, zoneName = Beasts.MapName(spawn[1]), beast = beast, location = {uiMapID = spawn[1], x = spawn[2], y = spawn[3]}})
     end
@@ -219,11 +231,7 @@ function Beasts.FilteredBeasts(searchText)
         local family = settings.beastFamily
         local matchesFamily = family == 0 or beast.family == family or family == -1 and Beasts.IsFavoriteBeast and Beasts.IsFavoriteBeast(beast.id)
         local visible = matchesFamily and (not settings.beastTameableOnly or Beasts.CanTame(beast))
-        if visible then
-            local abilityText = ""
-            for _, spell in ipairs(beast.spells or {}) do abilityText = abilityText .. " " .. Beasts.AbilityLine(spell) end
-            if Beasts.MatchesSearch(searchText, Beasts.BeastName(beast), beast.name, Beasts.FamilyName(beast.family), table.concat(Beasts.ZoneNames(beast), " "), abilityText) then table.insert(result, beast) end
-        end
+        if visible and (searchText == "" or Beasts.MatchesSearch(searchText, Beasts.BeastName(beast, true), Beasts.SearchText(beast))) then table.insert(result, beast) end
     end
     return result
 end
@@ -395,9 +403,12 @@ function Beasts.BuildPetItems(items, searchText)
     for _, familyID in ipairs(Beasts.SortedFamilies()) do
         local beasts = byFamily[familyID]
         if beasts then
+            local names = {}
+            for _, beast in ipairs(beasts) do names[beast] = Beasts.BeastName(beast, true) end
             table.sort(beasts, function(a, b)
                 if a.maxLevel ~= b.maxLevel then return a.maxLevel < b.maxLevel end
-                return Beasts.BeastName(a) < Beasts.BeastName(b)
+                if names[a] ~= names[b] then return names[a] < names[b] end
+                return a.id < b.id
             end)
             local groupKey = "beast_family_" .. familyID
             local family = data.families[familyID]
@@ -442,6 +453,10 @@ function Beasts.BuildAbilityItems(items, searchText)
                 else
                     visible = settings.beastFamily == 0 or #Beasts.Teachers(rank.spell) > 0 or Beasts.TrainerCost(key, rank) ~= nil
                 end
+                if visible and settings.beastTameableOnly and not Beasts.TrainerCost(key, rank) then
+                    local _, tameable = next(Beasts.Teachers(rank.spell, true))
+                    visible = tameable ~= nil and Beasts.CanTame(tameable)
+                end
                 if visible then table.insert(items, {initRow = Beasts.InitRankRow, abilityKey = key, rank = rank, rowDepth = 1}) end
             end
         end
@@ -458,7 +473,7 @@ end
 
 function Beasts.CreateDetailFrame()
     local frame = CreateFrame("Frame", "TrainerSpellsBeastDetailFrame", UIParent, "BasicFrameTemplateWithInset")
-    frame:SetSize(580, 392)
+    frame:SetSize(640, 460)
     frame:SetPoint("CENTER")
     frame:SetFrameStrata("HIGH")
     frame:SetToplevel(true)
@@ -474,7 +489,7 @@ function Beasts.CreateDetailFrame()
     if not frame.TitleText then frame.title:SetPoint("TOP", frame, "TOP", 0, -6) end
     local model = CreateFrame("PlayerModel", nil, frame)
     model:SetPoint("TOPLEFT", frame, "TOPLEFT", 12, -32)
-    model:SetSize(240, 280)
+    model:SetSize(240, 340)
     model:EnableMouse(true)
     model:EnableMouseWheel(true)
     model.facing = 0
@@ -498,9 +513,16 @@ function Beasts.CreateDetailFrame()
     local hint = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
     hint:SetPoint("TOP", model, "BOTTOM", 0, -4)
     hint:SetText(TrainerSpells:Trans("LID_MODEL_HINT"))
-    local info = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    info:SetPoint("TOPLEFT", model, "TOPRIGHT", 14, 0)
-    info:SetPoint("RIGHT", frame, "RIGHT", -14, 0)
+    local scroll = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
+    scroll:SetPoint("TOPLEFT", model, "TOPRIGHT", 14, 0)
+    scroll:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -32, 46)
+    local content = CreateFrame("Frame", nil, scroll)
+    content:SetSize(1, 1)
+    scroll:SetScrollChild(content)
+    frame.scroll, frame.content = scroll, content
+    local info = content:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    info:SetPoint("TOPLEFT", content, "TOPLEFT", 0, 0)
+    info:SetPoint("TOPRIGHT", content, "TOPRIGHT", 0, 0)
     info:SetJustifyH("LEFT")
     info:SetJustifyV("TOP")
     info:SetSpacing(3)
@@ -571,7 +593,11 @@ function Beasts.ShowDetails(beast)
         table.insert(lines, " ")
         table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_FAMILYABILITIES") .. ":|r " .. table.concat(names, ", "))
     end
+    local width = frame.scroll:GetWidth() or 0
+    frame.content:SetWidth(width >= 50 and width or 342)
     frame.info:SetText(table.concat(lines, "\n"))
+    frame.content:SetHeight(math.ceil(frame.info:GetStringHeight()) + 8)
+    frame.scroll:SetVerticalScroll(0)
     local hasSpawns = beast.spawns and #beast.spawns > 0 or false
     frame.nearest:SetEnabled(hasSpawns)
     frame.map:SetEnabled(hasSpawns)
@@ -598,13 +624,17 @@ function Beasts.CreateDropdown(parent, width, getText, fillMenu)
             fillMenu(function(text, isSelected, onSelect)
                 local info = UIDropDownMenu_CreateInfo()
                 info.text = text
-                info.checked = isSelected()
-                info.func = onSelect
+                info.checked = isSelected
+                info.func = function()
+                    onSelect()
+                    CloseDropDownMenus()
+                    dropdown:UpdateLabel()
+                end
                 UIDropDownMenu_AddButton(info)
             end)
         end)
     end
-    function dropdown:UpdateText()
+    function dropdown:UpdateLabel()
         if modern then self:SetText(getText()) else UIDropDownMenu_SetText(self, getText()) end
     end
     return dropdown
@@ -616,7 +646,7 @@ function TrainerSpells.CreateBeastControls(addon, parent)
     controls:Hide()
     local dropdowns = {}
     local function Changed()
-        for _, dropdown in ipairs(dropdowns) do dropdown:UpdateText() end
+        for _, dropdown in ipairs(dropdowns) do dropdown:UpdateLabel() end
         TrainerSpells_Refresh()
     end
     local modeText = {pets = "LID_BEASTMODE_PETS", abilities = "LID_BEASTMODE_ABILITIES"}
@@ -654,6 +684,16 @@ function TrainerSpells.CreateBeastControls(addon, parent)
     local tameable = CreateFrame("CheckButton", nil, controls, "UICheckButtonTemplate")
     tameable:SetSize(24, 24)
     tameable:SetPoint("LEFT", family, "RIGHT", 8, 0)
+    function controls:SetTwoRows(twoRows)
+        tameable:ClearAllPoints()
+        if twoRows then
+            tameable:SetPoint("TOPLEFT", controls, "TOPLEFT", 12, -34)
+            controls:SetHeight(62)
+        else
+            tameable:SetPoint("LEFT", family, "RIGHT", 8, 0)
+            controls:SetHeight(36)
+        end
+    end
     local tameableText = controls:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     tameableText:SetPoint("LEFT", tameable, "RIGHT", 2, 0)
     tameableText:SetText(TrainerSpells:Trans("LID_BEASTS_TAMEABLEONLY"))
@@ -681,7 +721,7 @@ function TrainerSpells.CreateBeastControls(addon, parent)
     end)
     controls:SetScript("OnShow", function()
         tameable:SetChecked(TrainerSpells_Character.beastTameableOnly and true or false)
-        for _, dropdown in ipairs(dropdowns) do dropdown:UpdateText() end
+        for _, dropdown in ipairs(dropdowns) do dropdown:UpdateLabel() end
     end)
     return controls
 end
