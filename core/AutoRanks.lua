@@ -28,36 +28,50 @@ function AutoRanks.IsActive()
 end
 
 function AutoRanks.SpellName(spellID)
-    local name = C_Spell.GetSpellName and C_Spell.GetSpellName(spellID)
-    if not name then
-        local info = C_Spell.GetSpellInfo(spellID)
-        name = info and info.name
-    end
+    local name = C_Spell and C_Spell.GetSpellName and C_Spell.GetSpellName(spellID)
+    if not name then name = TrainerSpells:GetSpellInfo(spellID) end
     if name == nil or Secret(name) then return nil end
     return name
 end
 
 function AutoRanks.Rank(spellID)
-    local subtext = C_Spell.GetSpellSubtext and C_Spell.GetSpellSubtext(spellID)
+    local subtext = C_Spell and C_Spell.GetSpellSubtext and C_Spell.GetSpellSubtext(spellID) or GetSpellSubtext and GetSpellSubtext(spellID)
     if type(subtext) ~= "string" or Secret(subtext) then return 0 end
     return tonumber(subtext:match("%d+")) or 0
 end
 
+function AutoRanks.Remember(best, name, spellID)
+    if not name or not spellID or Secret(name) then return end
+    local rank = AutoRanks.Rank(spellID)
+    local known = best[name]
+    if rank > 0 and (not known or rank > known.rank) then best[name] = {spellID = spellID, rank = rank} end
+end
+
+function AutoRanks.LegacyHighestRanks()
+    local best = {}
+    if not GetNumSpellTabs or not GetSpellTabInfo or not GetSpellBookItemInfo then return best end
+    local bookType = BOOKTYPE_SPELL or "spell"
+    for tab = 1, GetNumSpellTabs() do
+        local _, _, offset, count = GetSpellTabInfo(tab)
+        for index = (offset or 0) + 1, (offset or 0) + (count or 0) do
+            local itemType, spellID = GetSpellBookItemInfo(index, bookType)
+            if itemType == "SPELL" and spellID and not (IsPassiveSpell and IsPassiveSpell(index, bookType)) then AutoRanks.Remember(best, AutoRanks.SpellName(spellID), spellID) end
+        end
+    end
+    return best
+end
+
 function AutoRanks.HighestRanks()
     local best = {}
-    if not C_SpellBook or not C_SpellBook.GetNumSpellBookSkillLines then return best end
+    if not C_SpellBook or not C_SpellBook.GetNumSpellBookSkillLines or not C_SpellBook.GetSpellBookSkillLineInfo then return AutoRanks.LegacyHighestRanks() end
     local bank = Enum.SpellBookSpellBank and Enum.SpellBookSpellBank.Player or 0
     local spellType = Enum.SpellBookItemType and Enum.SpellBookItemType.Spell or 1
     for line = 1, C_SpellBook.GetNumSpellBookSkillLines() or 0 do
         local lineInfo = C_SpellBook.GetSpellBookSkillLineInfo(line)
-        if lineInfo and not lineInfo.offSpecID then
+        if lineInfo and not lineInfo.offSpecID and lineInfo.itemIndexOffset and lineInfo.numSpellBookItems then
             for index = lineInfo.itemIndexOffset + 1, lineInfo.itemIndexOffset + lineInfo.numSpellBookItems do
                 local item = C_SpellBook.GetSpellBookItemInfo(index, bank)
-                if item and item.itemType == spellType and item.spellID and not item.isOffSpec and not item.isPassive and item.name and not Secret(item.name) then
-                    local rank = AutoRanks.Rank(item.spellID)
-                    local known = best[item.name]
-                    if rank > 0 and (not known or rank > known.rank) then best[item.name] = {spellID = item.spellID, rank = rank} end
-                end
+                if item and item.itemType == spellType and item.spellID and not item.isOffSpec and not item.isPassive then AutoRanks.Remember(best, item.name, item.spellID) end
             end
         end
     end
@@ -66,7 +80,7 @@ end
 
 function AutoRanks.Place(slot, spellID)
     ClearCursor()
-    if C_Spell.PickupSpell then C_Spell.PickupSpell(spellID) else PickupSpell(spellID) end
+    if C_Spell and C_Spell.PickupSpell then C_Spell.PickupSpell(spellID) else PickupSpell(spellID) end
     if GetCursorInfo() ~= "spell" then
         ClearCursor()
         return false

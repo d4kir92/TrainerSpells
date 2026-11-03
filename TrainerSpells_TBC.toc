@@ -105,6 +105,7 @@ core\PetMerchantCapture.lua
 core\TrainerListUI.lua
 core\Ignore.lua
 core\Events.lua
+core\AutoRanks.lua
 
 ui\Core.lua
 ui\ClassData.lua

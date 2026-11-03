@@ -631,8 +631,15 @@ function TrainerSpells:PositionCompendiumProfessions()
     panel:Show()
 end
 
+local tradeSkillViewBar = {buttons = {}}
+local function PlaceTradeSkillList(x, y)
+    local barOffset = tradeSkillViewBar.Update and tradeSkillViewBar.Update(x, y) or 0
+    professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", x, y + barOffset)
+end
+
 local function PositionProfessionFrame()
     if professionFrame.compendiumHost then TrainerSpells:PositionCompendiumProfessions(); return end
+    if tradeSkillViewBar.frame then tradeSkillViewBar.frame:Hide() end
     professionFrame:ClearAllPoints()
     if professionFrame.compendiumHost then
         professionFrame:SetScale(1)
@@ -730,7 +737,7 @@ local function PositionProfessionFrame()
     elseif TrainerSpells:IsDragonflightUIEnabled() and DragonflightUIProfessionFrame and DragonflightUIProfessionFrame:IsShown() then
         professionSearchBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 80, 0)
         professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -10, 0)
-        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -64)
+        PlaceTradeSkillList(8, -64)
         professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
     elseif TrainerSpells:IsLeatrixWideProfessionEnabled() then
         local titleText = TradeSkillFrame and _G["TradeSkillFrameTitleText"]
@@ -743,7 +750,7 @@ local function PositionProfessionFrame()
             professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -30, -10)
         end
 
-        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 0, -4)
+        PlaceTradeSkillList(0, -4)
         professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, -12)
     else
         local titleText = TradeSkillFrame and _G["TradeSkillFrameTitleText"]
@@ -756,7 +763,7 @@ local function PositionProfessionFrame()
             professionSearchBox:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -30, -6)
         end
 
-        professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
+        PlaceTradeSkillList(8, -4)
         professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
     end
 end
@@ -831,6 +838,33 @@ local function ShowNativeTradeSkillWidgets()
     end
 end
 
+local TRADESKILL_VIEWS = {PROFESSION_VIEW_SKILL, PROFESSION_VIEW_RECIPES}
+local function IsTradeSkillCombined()
+    return TrainerSpells:GetTabLayout("professionLayout") ~= "tabs"
+end
+
+local function EnabledTradeSkillViews()
+    local views = {}
+    for _, mode in ipairs(TRADESKILL_VIEWS) do
+        if IsProfessionViewEnabled(mode) then table.insert(views, mode) end
+    end
+    return views
+end
+
+local function ResolveTradeSkillView(mode)
+    if not IsTradeSkillCombined() then return mode end
+    if (professionViewMode == PROFESSION_VIEW_SKILL or professionViewMode == PROFESSION_VIEW_RECIPES) and IsProfessionViewEnabled(professionViewMode) then return professionViewMode end
+    return EnabledTradeSkillViews()[1] or mode
+end
+
+local function UpdateTradeSkillTabs()
+    local enabled = TrainerSpells:IsTabEnabled("professions") and #EnabledTradeSkillViews() > 0
+    local combined = IsTradeSkillCombined()
+    nativeTab:SetShown(enabled)
+    professionTab:SetShown(enabled and (combined or IsProfessionViewEnabled(PROFESSION_VIEW_SKILL)))
+    recipeTab:SetShown(enabled and not combined and IsProfessionViewEnabled(PROFESSION_VIEW_RECIPES))
+end
+
 local function SetTradeSkillView(mode)
     if professionFrame.compendiumHost then TrainerSpells:UndockCompendiumFrame(professionFrame) end
     if mode == PROFESSION_VIEW_SKILL or mode == PROFESSION_VIEW_RECIPES then
@@ -858,7 +892,10 @@ local function SetTradeSkillView(mode)
             PositionProfessionFrame()
             professionFrame:Show()
             nativeTabGlow:Hide()
-            if mode == PROFESSION_VIEW_RECIPES then
+            if IsTradeSkillCombined() then
+                professionTabGlow:Show()
+                recipeTabGlow:Hide()
+            elseif mode == PROFESSION_VIEW_RECIPES then
                 recipeTabGlow:Show()
                 professionTabGlow:Hide()
             else
@@ -886,10 +923,10 @@ nativeTab:SetScript("OnEnter", function(self)
 end)
 
 nativeTab:SetScript("OnLeave", GameTooltip_Hide)
-professionTab:SetScript("OnClick", function() SetTradeSkillView(PROFESSION_VIEW_SKILL) end)
+professionTab:SetScript("OnClick", function() SetTradeSkillView(ResolveTradeSkillView(PROFESSION_VIEW_SKILL)) end)
 professionTab:SetScript("OnEnter", function(self)
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    GameTooltip:SetText(TrainerSpells:Trans("LID_SKILL"))
+    GameTooltip:SetText(IsTradeSkillCombined() and "TrainerSpells" or TrainerSpells:Trans("LID_SKILL"))
     GameTooltip:Show()
 end)
 
@@ -902,15 +939,61 @@ recipeTab:SetScript("OnEnter", function(self)
 end)
 
 recipeTab:SetScript("OnLeave", GameTooltip_Hide)
+local tradeSkillViewIcons = {[PROFESSION_VIEW_SKILL] = "Interface\\Icons\\INV_Misc_Book_09", [PROFESSION_VIEW_RECIPES] = "Interface\\Icons\\INV_Scroll_03"}
+local tradeSkillViewTitles = {[PROFESSION_VIEW_SKILL] = "LID_PROFESSION_FROMTRAINER", [PROFESSION_VIEW_RECIPES] = "LID_PROFESSION_OTHERRECIPES"}
+tradeSkillViewBar.frame = CreateFrame("Frame", nil, professionFrame)
+tradeSkillViewBar.frame:SetHeight(28)
+tradeSkillViewBar.frame:Hide()
+for _, mode in ipairs(TRADESKILL_VIEWS) do
+    local button = CreateFrame("Button", nil, tradeSkillViewBar.frame)
+    button:SetSize(26, 26)
+    button:SetNormalTexture(tradeSkillViewIcons[mode])
+    button:SetHighlightTexture(130718, "ADD")
+    button.selected = button:CreateTexture(nil, "OVERLAY")
+    button.selected:SetAllPoints(button)
+    button.selected:SetTexture(130724)
+    button.selected:SetBlendMode("ADD")
+    button.selected:Hide()
+    button:SetScript("OnClick", function() SetTradeSkillView(mode) end)
+    button:SetScript("OnEnter", function(sel)
+        GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+        GameTooltip:SetText(TrainerSpells:Trans(tradeSkillViewTitles[mode]))
+        GameTooltip:Show()
+    end)
+    button:SetScript("OnLeave", GameTooltip_Hide)
+    tradeSkillViewBar.buttons[mode] = button
+end
+
+function tradeSkillViewBar.Update(x, y)
+    local bar = tradeSkillViewBar.frame
+    local shown = IsTradeSkillCombined() and #EnabledTradeSkillViews() > 1 and TradeSkillFrame ~= nil and TradeSkillFrame:IsShown()
+    bar:SetShown(shown)
+    if not shown then return 0 end
+    bar:ClearAllPoints()
+    bar:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", x, y)
+    bar:SetPoint("TOPRIGHT", professionFrame, "TOPRIGHT", -26, y)
+    local previous
+    for _, mode in ipairs(TRADESKILL_VIEWS) do
+        local button = tradeSkillViewBar.buttons[mode]
+        local enabled = IsProfessionViewEnabled(mode)
+        button:SetShown(enabled)
+        button:ClearAllPoints()
+        if enabled then
+            if previous then button:SetPoint("LEFT", previous, "RIGHT", 4, 0) else button:SetPoint("LEFT", bar, "LEFT", 0, 0) end
+            previous = button
+        end
+        button.selected:SetShown(mode == professionViewMode)
+    end
+    return -32
+end
+
 local tradeSkillHooksInstalled = false
 local function EnsureTradeSkillHooksInstalled()
     if tradeSkillHooksInstalled or not TradeSkillFrame then return end
     tradeSkillHooksInstalled = true
     TradeSkillFrame:HookScript("OnShow", function()
         PositionTradeSkillTabs()
-        nativeTab:SetShown(TrainerSpells:IsTabEnabled("professions") and (TrainerSpells:IsTabEnabled("profession_skill") or TrainerSpells:IsTabEnabled("profession_recipes")))
-        professionTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_skill"))
-        recipeTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_recipes"))
+        UpdateTradeSkillTabs()
         SetTradeSkillView("native")
     end)
 
@@ -933,9 +1016,7 @@ local function EnsureTradeSkillHooksInstalled()
 
     if TradeSkillFrame:IsShown() then
         PositionTradeSkillTabs()
-        nativeTab:SetShown(TrainerSpells:IsTabEnabled("professions") and (TrainerSpells:IsTabEnabled("profession_skill") or TrainerSpells:IsTabEnabled("profession_recipes")))
-        professionTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_skill"))
-        recipeTab:SetShown(nativeTab:IsShown() and TrainerSpells:IsTabEnabled("profession_recipes"))
+        UpdateTradeSkillTabs()
         SetTradeSkillView("native")
     end
 
@@ -1178,10 +1259,7 @@ local function IsProfessionsFrameAddonEnabled()
 end
 
 local function ShowTradeSkillTabs()
-    local enabled = IsTradeSkillAddonEnabled()
-    nativeTab:SetShown(enabled)
-    professionTab:SetShown(enabled and IsProfessionViewEnabled(PROFESSION_VIEW_SKILL))
-    recipeTab:SetShown(enabled and IsProfessionViewEnabled(PROFESSION_VIEW_RECIPES))
+    UpdateTradeSkillTabs()
 end
 
 local function ShowProfessionsModeTabs()
@@ -1206,7 +1284,9 @@ local function ApplyProfessionTabSettings()
     if TradeSkillFrame and TradeSkillFrame:IsShown() then
         PositionTradeSkillTabs()
         ShowTradeSkillTabs()
-        if professionFrame:IsShown() and not professionFrame.compendiumHost and (not IsTradeSkillAddonEnabled() or not modeEnabled) then SetTradeSkillView("native") end
+        if professionFrame:IsShown() and not professionFrame.compendiumHost then
+            if not IsTradeSkillAddonEnabled() or not modeEnabled then SetTradeSkillView("native") else SetTradeSkillView(ResolveTradeSkillView(professionViewMode)) end
+        end
     end
 
     local professionsEnabled = IsProfessionsFrameAddonEnabled()
