@@ -28,6 +28,7 @@ local function GetSearchLeftOffset(defaultOffset, topOffset)
     return offset
 end
 
+local classicViewBar = {buttons = {}}
 local function PositionFrame()
     if classFrame.compendiumHost then TrainerSpells:PositionCompendiumClass(); return end
     classFrame:ClearAllPoints()
@@ -74,27 +75,29 @@ local function PositionFrame()
         searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -30, -6)
     end
 
+    local barOffset = classicViewBar.Update and classicViewBar.Update() or 0
+    local controlsTop = -4 + barOffset
     local showWeaponControls = TrainerSpells.ClassView == "weapons" and TrainerSpells.WeaponControls
     local showClassTrainerControls = TrainerSpells.ClassView == "trainers" and TrainerSpells.ClassTrainerControls
     if TrainerSpells.WeaponControls then
         TrainerSpells.WeaponControls:ClearAllPoints()
-        TrainerSpells.WeaponControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
-        TrainerSpells.WeaponControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
+        TrainerSpells.WeaponControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, controlsTop)
+        TrainerSpells.WeaponControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, controlsTop)
         TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false)
     end
 
     if TrainerSpells.ClassTrainerControls then
         TrainerSpells.ClassTrainerControls:ClearAllPoints()
-        TrainerSpells.ClassTrainerControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
-        TrainerSpells.ClassTrainerControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
+        TrainerSpells.ClassTrainerControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, controlsTop)
+        TrainerSpells.ClassTrainerControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, controlsTop)
         TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false)
     end
 
     local showBeastControls = TrainerSpells.ClassView == "beasts" and TrainerSpells.BeastControls
     if TrainerSpells.BeastControls then
         TrainerSpells.BeastControls:ClearAllPoints()
-        TrainerSpells.BeastControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, -4)
-        TrainerSpells.BeastControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, -4)
+        TrainerSpells.BeastControls:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 4, controlsTop)
+        TrainerSpells.BeastControls:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -4, controlsTop)
         TrainerSpells.BeastControls:SetTwoRows(true)
         TrainerSpells.BeastControls:SetShown(showBeastControls and true or false)
     end
@@ -102,7 +105,7 @@ local function PositionFrame()
     if TrainerSpells.ClassScrollBox then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
         local controlsOffset = showBeastControls and -70 or showClassTrainerControls and -44 or showWeaponControls and -36 or -4
-        TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, controlsOffset)
+        TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, controlsOffset + barOffset)
         TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
     end
 end
@@ -210,7 +213,8 @@ local function OpenFrame(view)
     HideNativeSpellButtons()
     HideNativeSkillTabGlows()
     HideClassicModeTabGlows()
-    if classicModeTabGlows[view] then classicModeTabGlows[view]:Show() end
+    local glowView = classicViewBar.GlowView and classicViewBar.GlowView(view) or view
+    if classicModeTabGlows[glowView] then classicModeTabGlows[glowView]:Show() end
 end
 
 if SpellBookFrame and TrainerSpells:HasClassTrainers() then
@@ -244,14 +248,15 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         glow:SetBlendMode("ADD")
         glow:Hide()
         tab:Hide()
-        tab:SetScript("OnClick", function() OpenFrame(view) end)
+        tab:SetScript("OnClick", function() OpenFrame(classicViewBar.Resolve and classicViewBar.Resolve(view) or view) end)
         tab:SetScript("OnEnter", function(sel)
             GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
-            GameTooltip:SetText(tooltip)
+            GameTooltip:SetText(classicViewBar.IsCombined and classicViewBar.IsCombined() and "TrainerSpells" or tooltip)
             GameTooltip:Show()
         end)
 
         tab:SetScript("OnLeave", GameTooltip_Hide)
+        tab.tsIcon, tab.tsTooltip = icon, tooltip
         classicModeTabs[view] = tab
         classicModeTabGlows[view] = glow
         table.insert(classicModeTabOrder, view)
@@ -266,6 +271,78 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     if TrainerSpells.BuildWeaponSkillItems then CreateClassicModeTab("TrainerSpellsWeaponSpellbookTab", "weapons", "Interface\\Icons\\INV_Sword_04", TrainerSpells:Trans("LID_WEAPONSKILLS")) end
     local function IsClassicModeTabEnabled(view)
         return TrainerSpells:IsTabEnabled("spellbook") and TrainerSpells:IsTabEnabled(view)
+    end
+
+    local function EnabledClassicViews()
+        local views = {}
+        for _, view in ipairs(classicModeTabOrder) do
+            if IsClassicModeTabEnabled(view) then table.insert(views, view) end
+        end
+        return views
+    end
+
+    function classicViewBar.IsCombined()
+        return TrainerSpells:GetTabLayout("spellbookLayout") ~= "tabs"
+    end
+
+    function classicViewBar.GlowView(view)
+        if not classicViewBar.IsCombined() then return view end
+        return EnabledClassicViews()[1] or view
+    end
+
+    function classicViewBar.Resolve(view)
+        if not classicViewBar.IsCombined() then return view end
+        if IsClassicModeTabEnabled(TrainerSpells.ClassView) then return TrainerSpells.ClassView end
+        return EnabledClassicViews()[1] or view
+    end
+
+    local viewBar = CreateFrame("Frame", nil, classFrame)
+    viewBar:SetHeight(28)
+    viewBar:Hide()
+    classicViewBar.frame = viewBar
+    for _, view in ipairs(classicModeTabOrder) do
+        local source = classicModeTabs[view]
+        local button = CreateFrame("Button", nil, viewBar)
+        button:SetSize(26, 26)
+        button:SetNormalTexture(source.tsIcon)
+        button:SetHighlightTexture(130718, "ADD")
+        local selected = button:CreateTexture(nil, "OVERLAY")
+        selected:SetAllPoints(button)
+        selected:SetTexture(130724)
+        selected:SetBlendMode("ADD")
+        selected:Hide()
+        button.selected = selected
+        button:SetScript("OnClick", function() OpenFrame(view) end)
+        button:SetScript("OnEnter", function(sel)
+            GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+            GameTooltip:SetText(source.tsTooltip)
+            GameTooltip:Show()
+        end)
+        button:SetScript("OnLeave", GameTooltip_Hide)
+        classicViewBar.buttons[view] = button
+    end
+
+    function classicViewBar.Update()
+        local views = EnabledClassicViews()
+        local shown = classicViewBar.IsCombined() and #views > 1
+        viewBar:SetShown(shown)
+        if not shown then return 0 end
+        viewBar:ClearAllPoints()
+        viewBar:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, -4)
+        viewBar:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -24, -4)
+        local previous
+        for _, view in ipairs(classicModeTabOrder) do
+            local button = classicViewBar.buttons[view]
+            local enabled = IsClassicModeTabEnabled(view)
+            button:SetShown(enabled)
+            button:ClearAllPoints()
+            if enabled then
+                if previous then button:SetPoint("LEFT", previous, "RIGHT", 4, 0) else button:SetPoint("LEFT", viewBar, "LEFT", 0, 0) end
+                previous = button
+            end
+            button.selected:SetShown(view == TrainerSpells.ClassView)
+        end
+        return -32
     end
 
     local ownTabs = {}
@@ -323,16 +400,17 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         for _, tab in pairs(classicModeTabs) do ownTabs[tab] = true end
         UpdateLastSkillTab()
         local foreignTab = FindForeignSideTab()
+        local combinedView = classicViewBar.IsCombined() and EnabledClassicViews()[1]
         local count = 0
         for _, view in ipairs(classicModeTabOrder) do
-            if IsClassicModeTabEnabled(view) then count = count + 1 end
+            if IsClassicModeTabEnabled(view) and (not combinedView or view == combinedView) then count = count + 1 end
         end
         local leftSide = NeedsLeftSide(foreignTab, count)
         local reference = _G["SpellBookSkillLineTab1"]
         local leftTop = reference and reference:GetTop() and SpellBookFrame:GetTop() and reference:GetTop() - SpellBookFrame:GetTop() or -65
         for _, view in ipairs(classicModeTabOrder) do
             local tab = classicModeTabs[view]
-            local enabled = IsClassicModeTabEnabled(view)
+            local enabled = IsClassicModeTabEnabled(view) and (not combinedView or view == combinedView)
             tab:ClearAllPoints()
             SetTabSide(tab, leftSide)
             if enabled then
@@ -360,11 +438,12 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     end
 
     ApplyClassicModeTabs()
-    TrainerSpells:OnTabSettingsChanged(ApplyClassicModeTabs)
+    TrainerSpells:OnTabSettingsChanged(function()
+        ApplyClassicModeTabs()
+        if classFrame:IsShown() and not classFrame.compendiumHost then OpenFrame(classicViewBar.Resolve(TrainerSpells.ClassView)) end
+    end)
     SpellBookFrame:HookScript("OnShow", function()
-        for view, tab in pairs(classicModeTabs) do
-            tab:SetShown(IsClassicModeTabEnabled(view))
-        end
+        ApplyClassicModeTabs()
         C_Timer.After(0, ApplyClassicModeTabs)
     end)
 

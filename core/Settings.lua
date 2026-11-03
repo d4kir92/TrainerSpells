@@ -215,7 +215,8 @@ function TrainerSpells:ToggleSettings()
             local autoRanks = self.AutoRanks.Settings()
             win:AddCategory({
                 label = "LID_SETTINGS_AUTORANKS",
-                key = "autoranks"
+                key = "autoranks",
+                added = "2026-11-04"
             })
 
             local autoRanksBox = win:AddCheckbox({
