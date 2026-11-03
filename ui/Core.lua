@@ -262,6 +262,17 @@ local function GetCostColumnWidth(fontString, column, fontSize)
     return width
 end
 
+local function FitRowLevel(rowFrame)
+    local full, short = rowFrame.levelFull, rowFrame.levelShort
+    if not full then return end
+    local levelFS, nameFS, costFS = rowFrame.levelFS, rowFrame.nameFS, rowFrame.costFS
+    levelFS:SetText(full)
+    if not short then return end
+    local available = (rowFrame:GetWidth() or 0) - rowFrame.levelNameLeft - 8
+    if costFS:IsShown() then available = available - costFS:GetWidth() - 12 end
+    if nameFS:GetUnboundedStringWidth() + levelFS:GetUnboundedStringWidth() > available then levelFS:SetText(short) end
+end
+
 local function GetLocalizedRankText(spellID, rankNum, hasRealRank)
     local subtext = GetSpellSubtext and spellID and GetSpellSubtext(spellID)
     if subtext and subtext ~= "" then return subtext end
@@ -664,6 +675,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         sourceFS:SetJustifyH("RIGHT")
         sourceFS:SetWordWrap(false)
         rowFrame.sourceFS = sourceFS
+        rowFrame:HookScript("OnSizeChanged", FitRowLevel)
     end
 
     local icon, nameFS, levelFS = rowFrame.icon, rowFrame.nameFS, rowFrame.levelFS
@@ -697,6 +709,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
     levelFS:ClearAllPoints()
     levelFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
     levelFS:SetText("")
+    rowFrame.levelFull, rowFrame.levelShort = nil, nil
     countFS:Hide()
     countFS:SetText("")
     costFS:Hide()
@@ -900,10 +913,12 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         if elementData.showLevel then
             if elementData.levelLabel then
                 local levelPrefix = entry.levelReq and (TrainerSpells:Trans("LID_LVL") .. " " .. entry.levelReq .. " ") or ""
-                levelFS:SetText(Colors.RANK .. levelPrefix .. elementData.levelLabel .. " " .. entry.level .. "|r")
+                rowFrame.levelFull = Colors.RANK .. levelPrefix .. elementData.levelLabel .. " " .. entry.level .. "|r"
             else
-                levelFS:SetText(GetLevelDiffColorCode(entry.level) .. "Level " .. entry.level .. "|r")
+                rowFrame.levelFull = GetLevelDiffColorCode(entry.level) .. "Level " .. entry.level .. "|r"
+                rowFrame.levelShort = GetLevelDiffColorCode(entry.level) .. entry.level .. "|r"
             end
+            levelFS:SetText(rowFrame.levelFull)
         end
 
         if elementData.costColumn then
@@ -970,6 +985,10 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             sourceFS:ClearAllPoints()
             sourceFS:SetPoint("RIGHT", rowFrame.locationButtons[shown], "LEFT", -5, 0)
         end
+
+        if sourceFS:IsShown() then rowFrame.levelShort = nil end
+        rowFrame.levelNameLeft = 4 + (elementData.rowDepth or 0) * 16 + iconSize + 6
+        FitRowLevel(rowFrame)
 
         rowFrame:EnableMouse(true)
         rowFrame:SetScript("OnEnter", function(sel)

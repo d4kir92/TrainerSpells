@@ -2,7 +2,7 @@ local _, TrainerSpells = ...
 local classFrame = TrainerSpells.ClassFrame
 local listBg = TrainerSpells.ClassListBackground
 local searchBox = TrainerSpells.SearchBox
-local SPELLBOOK_TAB_NAMES = {"TrainerSpellsSpellbookTab", "TrainerSpellsPetSpellbookTab", "TrainerSpellsClassTrainerMapTab", "TrainerSpellsWeaponSpellbookTab"}
+local SPELLBOOK_TAB_NAMES = {"TrainerSpellsSpellbookTab", "TrainerSpellsPetSpellbookTab", "TrainerSpellsBeastSpellbookTab", "TrainerSpellsClassTrainerMapTab", "TrainerSpellsWeaponSpellbookTab"}
 for i = 1, 8 do
     table.insert(SPELLBOOK_TAB_NAMES, "SpellBookSkillLineTab" .. i)
 end
@@ -213,7 +213,18 @@ local function OpenFrame(view)
 end
 
 if SpellBookFrame and TrainerSpells:HasClassTrainers() then
-    local lastTab = _G["SpellBookSkillLineTab5"] or _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame
+    local lastTab = SpellBookFrame
+    local lastTabGap = 0
+    local function UpdateLastSkillTab()
+        lastTab, lastTabGap = _G["SpellBookSkillLineTab5"] or _G["SpellBookSkillLineTab4"] or _G["SpellBookSkillLineTab1"] or SpellBookFrame, 0
+        for i = 8, 1, -1 do
+            local skillTab = _G["SpellBookSkillLineTab" .. i]
+            if skillTab and skillTab:IsShown() then
+                lastTab, lastTabGap = skillTab, -17
+                return
+            end
+        end
+    end
     local classicModeTabOrder = {}
     local function CreateClassicModeTab(name, view, icon, tooltip)
         local tab = CreateFrame("Button", name, SpellBookFrame)
@@ -297,7 +308,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
 
     local function NeedsLeftSide(foreignTab, count)
         local frameBottom = SpellBookFrame:GetBottom()
-        local startTop = foreignTab and foreignTab:GetBottom() and foreignTab:GetBottom() - 16 or lastTab ~= SpellBookFrame and lastTab:GetBottom()
+        local startTop = foreignTab and foreignTab:GetBottom() and foreignTab:GetBottom() - 16 or lastTab ~= SpellBookFrame and lastTab:GetBottom() and lastTab:GetBottom() + lastTabGap
         if count == 0 or not frameBottom or not startTop then return false end
         return startTop - count * 32 - (count - 1) * 16 < frameBottom + 16
     end
@@ -305,6 +316,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     local function ApplyClassicModeTabs()
         local previousTab = nil
         for _, tab in pairs(classicModeTabs) do ownTabs[tab] = true end
+        UpdateLastSkillTab()
         local foreignTab = FindForeignSideTab()
         local count = 0
         for _, view in ipairs(classicModeTabOrder) do
@@ -326,7 +338,7 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
                 elseif foreignTab then
                     tab:SetPoint("TOPLEFT", foreignTab, "BOTTOMLEFT", 0, -16)
                 else
-                    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, 0)
+                    tab:SetPoint("TOPLEFT", lastTab, "BOTTOMLEFT", 0, lastTabGap)
                 end
 
                 previousTab = tab
