@@ -105,14 +105,21 @@ function AutoRanks.Scan()
         return
     end
     local best = AutoRanks.HighestRanks()
-    local swapped, order = {}, {}
+    local swapped, order, barRanks = {}, {}, {}
+    for slot = 1, AutoRanks.maxSlot do
+        local actionType, spellID = GetActionInfo(slot)
+        if actionType == "spell" and spellID and not Secret(spellID) then
+            local name = AutoRanks.SpellName(spellID)
+            if name then barRanks[name] = math.max(barRanks[name] or 0, AutoRanks.Rank(spellID)) end
+        end
+    end
     for slot = 1, AutoRanks.maxSlot do
         local actionType, spellID = GetActionInfo(slot)
         if actionType == "spell" and spellID and not Secret(spellID) then
             local name = AutoRanks.SpellName(spellID)
             local target = name and best[name]
             local oldRank = AutoRanks.Rank(spellID)
-            if target and target.spellID ~= spellID and target.rank > oldRank then
+            if target and target.spellID ~= spellID and target.rank > oldRank and oldRank == barRanks[name] then
                 if not AutoRanks.Place(slot, target.spellID) then
                     if AutoRanks.broken then break end
                 else
