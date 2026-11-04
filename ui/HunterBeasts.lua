@@ -625,6 +625,7 @@ function Beasts.BuildAbilityItems(items, searchText)
                 local _, tameable = next(Beasts.Teachers(rank.spell, true))
                 visible = tameable ~= nil and Beasts.CanTame(tameable)
             end
+            if visible and settings.beastHideLearned ~= false and Beasts.IsKnown and Beasts.IsKnown(rank.spell) then visible = false end
             if visible then table.insert(ranks, rank) end
         end
         visibleRanks[key] = ranks
@@ -1135,16 +1136,29 @@ function TrainerSpells.CreateBeastControls(addon, parent)
     local tameable = CreateFrame("CheckButton", nil, controls, "UICheckButtonTemplate")
     tameable:SetSize(24, 24)
     tameable:SetPoint("LEFT", family, "RIGHT", 8, 0)
+    local hideLearned = CreateFrame("CheckButton", nil, controls, "UICheckButtonTemplate")
+    hideLearned:SetSize(24, 24)
+    local hideLearnedText = controls:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    hideLearnedText:SetPoint("LEFT", hideLearned, "RIGHT", 2, 0)
+    hideLearnedText:SetText(TrainerSpells:Trans("LID_HIDELEARNED"))
+    hideLearned:SetScript("OnClick", function(self)
+        TrainerSpells_Character.beastHideLearned = self:GetChecked() and true or false
+        TrainerSpells_Refresh()
+    end)
+    local nearest
     function controls:SetTwoRows(twoRows)
         tameable:ClearAllPoints()
         mode:ClearAllPoints()
+        hideLearned:ClearAllPoints()
         if twoRows then
             mode:SetPoint("TOPLEFT", controls, "TOPLEFT", 0, -4)
             tameable:SetPoint("TOPLEFT", controls, "TOPLEFT", 12, -36)
-            controls:SetHeight(62)
+            hideLearned:SetPoint("TOPLEFT", controls, "TOPLEFT", 12, -62)
+            controls:SetHeight(88)
         else
             mode:SetPoint("LEFT", controls, "LEFT", 0, 0)
             tameable:SetPoint("LEFT", family, "RIGHT", 8, 0)
+            hideLearned:SetPoint("LEFT", nearest, "RIGHT", 12, 0)
             controls:SetHeight(36)
         end
     end
@@ -1155,11 +1169,12 @@ function TrainerSpells.CreateBeastControls(addon, parent)
         TrainerSpells_Character.beastTameableOnly = self:GetChecked() and true or false
         TrainerSpells_Refresh()
     end)
-    local nearest = CreateFrame("Button", nil, controls, "UIPanelButtonTemplate")
+    nearest = CreateFrame("Button", nil, controls, "UIPanelButtonTemplate")
     nearest:SetHeight(24)
     nearest:SetPoint("LEFT", tameableText, "RIGHT", 12, 0)
     nearest:SetText(TrainerSpells:Trans("LID_NEARESTBEAST"))
     nearest:SetWidth(math.max(120, nearest:GetTextWidth() + 30))
+    hideLearned:SetPoint("LEFT", nearest, "RIGHT", 12, 0)
     nearest:SetScript("OnClick", function()
         Beasts.SetNearestWaypoint(Beasts.FilteredBeasts((TrainerSpells_SearchText or ""):lower()))
     end)
@@ -1175,6 +1190,7 @@ function TrainerSpells.CreateBeastControls(addon, parent)
     end)
     controls:SetScript("OnShow", function()
         tameable:SetChecked(TrainerSpells_Character.beastTameableOnly and true or false)
+        hideLearned:SetChecked(TrainerSpells_Character.beastHideLearned ~= false)
         for _, dropdown in ipairs(dropdowns) do dropdown:UpdateLabel() end
     end)
     return controls

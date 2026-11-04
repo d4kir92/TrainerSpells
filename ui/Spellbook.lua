@@ -104,7 +104,7 @@ local function PositionFrame()
 
     if TrainerSpells.ClassScrollBox then
         TrainerSpells.ClassScrollBox:ClearAllPoints()
-        local controlsOffset = showBeastControls and -70 or showClassTrainerControls and -44 or showWeaponControls and -36 or -4
+        local controlsOffset = showBeastControls and -96 or showClassTrainerControls and -44 or showWeaponControls and -36 or -4
         TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, controlsOffset + barOffset)
         TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
     end
