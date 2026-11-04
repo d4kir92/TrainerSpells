@@ -140,15 +140,22 @@ local function UpdateCollapseButton(rowFrame, elementData, anchor)
     local button = GetRowCollapseButton(rowFrame)
     button:ClearAllPoints()
     button:SetPoint("RIGHT", anchor, "LEFT", -2, 0)
-    local atlas = elementData.collapsed and "ui-questtrackerbutton-secondary-expand" or "ui-questtrackerbutton-secondary-collapse"
+    local atlas = elementData.collapsed and "common-button-list-plus" or "common-button-list-minus"
+    local pushedAtlas = atlas
+    if not (C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo(atlas)) then
+        atlas = elementData.collapsed and "ui-questtrackerbutton-secondary-expand" or "ui-questtrackerbutton-secondary-collapse"
+        pushedAtlas = atlas .. "-pressed"
+    end
     if C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo(atlas) and button.SetNormalAtlas then
         button:SetNormalAtlas(atlas)
-        button:SetPushedAtlas(atlas .. "-pressed")
+        button:SetPushedAtlas(pushedAtlas)
         button:SetHighlightAtlas(atlas, "ADD")
         button:GetHighlightTexture():SetAlpha(0.4)
     else
         button:SetNormalTexture(elementData.collapsed and COLLAPSED_UP or EXPANDED_UP)
         button:SetPushedTexture(elementData.collapsed and COLLAPSED_DOWN or EXPANDED_DOWN)
+        button:SetHighlightTexture(COLLAPSE_HIGHLIGHT, "ADD")
+        button:GetHighlightTexture():SetAlpha(1)
     end
     button:SetScript("OnClick", function() ToggleGroup(elementData.groupKey) end)
     button:Show()
