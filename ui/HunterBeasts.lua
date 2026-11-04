@@ -88,7 +88,9 @@ function Beasts.SearchText(beast)
     if text then return text end
     local parts = {beast.name, Beasts.FamilyName(beast.family)}
     for _, zone in ipairs(Beasts.ZoneNames(beast)) do table.insert(parts, zone) end
-    for _, spell in ipairs(beast.spells or {}) do table.insert(parts, Beasts.AbilityLine(spell)) end
+    for _, spell in ipairs(beast.spells or {}) do
+        if not Beasts.IsTrainerSpell(spell) then table.insert(parts, Beasts.AbilityLine(spell)) end
+    end
     text = table.concat(parts, " ")
     Beasts.searchTexts[beast.id] = text
     return text
@@ -261,9 +263,28 @@ function Beasts.AddClickHints(tooltip, leftKey, rightKey)
     tooltip:AddLine(TrainerSpells:Trans("LID_CTRLCLICK_FAVORITE"), 0.2, 1, 0.2)
 end
 
+Beasts.trainerAbilities = {}
+function Beasts.IsTrainerAbility(key)
+    local cached = Beasts.trainerAbilities[key]
+    if cached ~= nil then return cached end
+    local sold = false
+    for _, rank in ipairs(data.abilities[key] and data.abilities[key].ranks or {}) do
+        if Beasts.TrainerCost(key, rank) then sold = true end
+    end
+    Beasts.trainerAbilities[key] = sold
+    return sold
+end
+
+function Beasts.IsTrainerSpell(spellID)
+    local found = Beasts.rankBySpell[spellID]
+    return found ~= nil and Beasts.IsTrainerAbility(found.key)
+end
+
 function Beasts.SortedSpells(beast)
     local spells = {}
-    for _, spell in ipairs(beast.spells or {}) do table.insert(spells, spell) end
+    for _, spell in ipairs(beast.spells or {}) do
+        if not Beasts.IsTrainerSpell(spell) then table.insert(spells, spell) end
+    end
     table.sort(spells, function(a, b) return Beasts.AbilityLine(a) < Beasts.AbilityLine(b) end)
     return spells
 end
@@ -502,14 +523,30 @@ end
 local zoneWatcher = CreateFrame("Frame")
 zoneWatcher:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 zoneWatcher:SetScript("OnEvent", function()
-    if Beasts.Settings().beastMode == "zones" and TrainerSpells.BeastControls and TrainerSpells.BeastControls:IsVisible() then TrainerSpells_Refresh() end
+    if TrainerSpells.BeastControls and TrainerSpells.BeastControls:IsVisible() then TrainerSpells_Refresh() end
 end)
 
 function Beasts.BuildPetItems(items, searchText)
-    local byFamily = {}
+    local byFamily, here, current = {}, {}, Beasts.CurrentZone()
     for _, beast in ipairs(Beasts.FilteredBeasts(searchText)) do
+        for _, spawn in ipairs(beast.spawns or {}) do
+            if current and Beasts.ZoneOf(spawn[1]) == current then
+                table.insert(here, beast)
+                break
+            end
+        end
         byFamily[beast.family] = byFamily[beast.family] or {}
         table.insert(byFamily[beast.family], beast)
+    end
+    if current and #here == 0 then
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_CURRENTZONE_NONE"):format(Beasts.MapName(current)), "|cff9d9d9d")
+    elseif current then
+        Beasts.SortBeasts(here)
+        local groupKey = "beast_family_currentzone"
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_CURRENTZONE"):format(Beasts.MapName(current)) .. "  |cff9d9d9d(" .. #here .. ")|r", "|cff30d030", nil, groupKey)
+        if not TrainerSpells:IsGroupCollapsed(groupKey) then
+            for _, beast in ipairs(here) do table.insert(items, {initRow = Beasts.InitBeastRow, beast = beast, rowDepth = 1}) end
+        end
     end
     for _, familyID in ipairs(Beasts.SortedFamilies()) do
         local beasts = byFamily[familyID]
@@ -523,6 +560,35 @@ function Beasts.BuildPetItems(items, searchText)
                 for _, beast in ipairs(beasts) do table.insert(items, {initRow = Beasts.InitBeastRow, beast = beast, rowDepth = 1}) end
             end
         end
+    end
+end
+
+function Beasts.TeachesInZone(spellID, zone)
+    for _, beast in ipairs(Beasts.Teachers(spellID)) do
+        for _, spawn in ipairs(beast.spawns or {}) do
+            if Beasts.ZoneOf(spawn[1]) == zone then return true end
+        end
+    end
+    return false
+end
+
+function Beasts.AddCurrentZoneAbilities(items, keys, visibleRanks)
+    local current = Beasts.CurrentZone()
+    if not current then return end
+    local rows = {}
+    for _, key in ipairs(keys) do
+        for _, rank in ipairs(visibleRanks[key]) do
+            if Beasts.TeachesInZone(rank.spell, current) then table.insert(rows, {initRow = Beasts.InitRankRow, abilityKey = key, rank = rank, rowDepth = 1}) end
+        end
+    end
+    if #rows == 0 then
+        TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_CURRENTZONE_NONE"):format(Beasts.MapName(current)), "|cff9d9d9d")
+        return
+    end
+    local groupKey = "beast_ability_currentzone"
+    TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_CURRENTZONE"):format(Beasts.MapName(current)), "|cff30d030", nil, groupKey, nil, #rows, nil, "skill")
+    if not TrainerSpells:IsGroupCollapsed(groupKey) then
+        for _, row in ipairs(rows) do table.insert(items, row) end
     end
 end
 
@@ -541,9 +607,10 @@ function Beasts.BuildAbilityItems(items, searchText)
         end
         local familyNames = {}
         for _, familyID in ipairs(ability.families) do table.insert(familyNames, Beasts.FamilyName(familyID)) end
-        if matchesFamily and Beasts.MatchesSearch(searchText, Beasts.AbilityName(key), key, table.concat(familyNames, " ")) then table.insert(keys, key) end
+        if matchesFamily and not Beasts.IsTrainerAbility(key) and Beasts.MatchesSearch(searchText, Beasts.AbilityName(key), key, table.concat(familyNames, " ")) then table.insert(keys, key) end
     end
     table.sort(keys, function(a, b) return Beasts.AbilityName(a) < Beasts.AbilityName(b) end)
+    local visibleRanks = {}
     for _, key in ipairs(keys) do
         local ability = data.abilities[key]
         local ranks = {}
@@ -560,6 +627,11 @@ function Beasts.BuildAbilityItems(items, searchText)
             end
             if visible then table.insert(ranks, rank) end
         end
+        visibleRanks[key] = ranks
+    end
+    Beasts.AddCurrentZoneAbilities(items, keys, visibleRanks)
+    for _, key in ipairs(keys) do
+        local ability, ranks = data.abilities[key], visibleRanks[key]
         if #ranks > 0 then
             local groupKey = "beast_ability_" .. key
             local first = ability.ranks[1]
@@ -708,7 +780,9 @@ function Beasts.ShowDetails(beast)
     end
     if family and family.abilities and #family.abilities > 0 then
         local names = {}
-        for _, key in ipairs(family.abilities) do table.insert(names, Beasts.AbilityName(key)) end
+        for _, key in ipairs(family.abilities) do
+            if not Beasts.IsTrainerAbility(key) then table.insert(names, Beasts.AbilityName(key)) end
+        end
         table.sort(names)
         table.insert(lines, " ")
         table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_FAMILYABILITIES") .. ":|r " .. table.concat(names, ", "))
