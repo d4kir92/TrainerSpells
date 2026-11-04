@@ -200,3 +200,4 @@ TrainerSpells:AddTrans("ruRU", "LID_WEAPONSKILLS", "Владение оружи�
 TrainerSpells:AddTrans("ruRU", "LID_WEAPONVIEW_DESC", "Навыки владения оружием и где их изучить.")
 TrainerSpells:AddTrans("ruRU", "LID_YOURPROFESSIONS", "Ваши профессии")
 TrainerSpells:AddTrans("ruRU", "LID_ZONES", "Встречается в")
+TrainerSpells:AddTrans("ruRU", "LID_ZONE_UNKNOWN", "Неизвестное место")

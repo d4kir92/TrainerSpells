@@ -912,7 +912,7 @@ function Beasts.AbilityRow(frame, index)
     return row
 end
 
-function Beasts.ShowAbility(key, rank)
+function Beasts.ShowAbility(key, rank, keepScroll)
     local frame = Beasts.abilityFrame or Beasts.CreateAbilityFrame()
     frame.abilityKey, frame.rank = key, rank
     local name = Beasts.AbilityName(key) .. " " .. Beasts.RankText(rank)
@@ -940,33 +940,123 @@ function Beasts.ShowAbility(key, rank)
     local width = frame.scroll:GetWidth() or 0
     if width < 50 then width = 476 end
     frame.content:SetWidth(width)
-    for index, beast in ipairs(teachers) do
-        local row = Beasts.AbilityRow(frame, index)
-        row.beast = beast
-        row:ClearAllPoints()
-        row:SetPoint("TOPLEFT", frame.content, "TOPLEFT", 0, -(index - 1) * 22)
-        row:SetPoint("TOPRIGHT", frame.content, "TOPRIGHT", 0, -(index - 1) * 22)
-        if beast.model and beast.model > 0 and SetPortraitTextureFromCreatureDisplayID then
-            SetPortraitTextureFromCreatureDisplayID(row.portrait, beast.model)
+    local entries, rowCount, offset = Beasts.TeacherZoneEntries(teachers), 0, 0
+    for _, label in ipairs(frame.zoneLabels or {}) do label:Hide() end
+    frame.zoneLabels = frame.zoneLabels or {}
+    for _, entry in ipairs(entries) do
+        if entry.header then
+            local label = Beasts.AbilityZoneLabel(frame, entry.index)
+            label:ClearAllPoints()
+            label:SetPoint("TOPLEFT", frame.content, "TOPLEFT", 0, -offset)
+            label:SetPoint("TOPRIGHT", frame.content, "TOPRIGHT", 0, -offset)
+            label.groupKey = entry.groupKey
+            label.text:SetText(entry.header)
+            Beasts.SetCollapseIcon(label.icon, entry.collapsed)
+            label:Show()
+            offset = offset + 22
         else
-            row.portrait:SetTexture(data.families[beast.family] and data.families[beast.family].icon or 132161)
+            rowCount = rowCount + 1
+            Beasts.FillAbilityRow(frame, rowCount, entry.beast, offset)
+            offset = offset + 22
         end
-        local levelColor = Beasts.CanTame(beast) and "|cffffffff" or "|cffff4444"
-        row.text:SetText(Beasts.FavoritePrefix(Beasts.IsFavoriteBeast(beast.id)) .. Beasts.ClassTag(beast) .. TrainerSpells.UIColors.SPELL_NAME .. Beasts.BeastName(beast) .. "|r  " .. levelColor .. TrainerSpells:Trans("LID_LVL") .. " " .. Beasts.LevelText(beast) .. "|r")
-        local zones = Beasts.ZoneNames(beast)
-        row.zone:SetText("|cff9d9d9d" .. (zones[1] or "") .. (#zones > 1 and (" +" .. (#zones - 1)) or "") .. "|r")
-        row:Show()
     end
-    for index = #teachers + 1, #frame.rows do frame.rows[index]:Hide() end
-    frame.content:SetHeight(math.max(1, #teachers * 22))
+    for index = rowCount + 1, #frame.rows do frame.rows[index]:Hide() end
+    frame.content:SetHeight(math.max(1, offset))
     frame.scroll:FullUpdate(ScrollBoxConstants.UpdateImmediately)
-    frame.scroll:ScrollToBegin()
+    if not keepScroll then frame.scroll:ScrollToBegin() end
     local hasTeachers = #teachers > 0
     frame.nearest:SetEnabled(hasTeachers)
     frame.map:SetEnabled(hasTeachers)
     frame.favorite:SetText(TrainerSpells:Trans(isFavorite and "LID_FAVORITE_REMOVE" or "LID_FAVORITE_ADD"))
     frame:Show()
     frame:Raise()
+end
+
+function Beasts.TeacherZoneEntries(teachers)
+    local byZone, zoneIDs, unknown = {}, {}, {}
+    for _, beast in ipairs(teachers) do
+        local seen = {}
+        for _, spawn in ipairs(beast.spawns or {}) do
+            local zone = Beasts.ZoneOf(spawn[1])
+            if zone and not seen[zone] then
+                seen[zone] = true
+                if not byZone[zone] then
+                    byZone[zone] = {}
+                    table.insert(zoneIDs, zone)
+                end
+                table.insert(byZone[zone], beast)
+            end
+        end
+        if not next(seen) then table.insert(unknown, beast) end
+    end
+    local current = Beasts.CurrentZone()
+    table.sort(zoneIDs, function(a, b)
+        if (a == current) ~= (b == current) then return a == current end
+        return Beasts.MapName(a) < Beasts.MapName(b)
+    end)
+    local entries, headers = {}, 0
+    local function addGroup(text, beasts, groupKey)
+        headers = headers + 1
+        local collapsed = TrainerSpells:IsGroupCollapsed(groupKey)
+        table.insert(entries, {header = text .. "  |cff9d9d9d(" .. #beasts .. ")|r", index = headers, groupKey = groupKey, collapsed = collapsed})
+        if not collapsed then
+            for _, beast in ipairs(beasts) do table.insert(entries, {beast = beast}) end
+        end
+    end
+    for _, zone in ipairs(zoneIDs) do
+        local text = zone == current and ("|cff30d030" .. TrainerSpells:Trans("LID_CURRENTZONE"):format(Beasts.MapName(zone)) .. "|r") or ("|cffffd100" .. Beasts.MapName(zone) .. "|r")
+        addGroup(text, byZone[zone], "beast_teacher_zone_" .. zone)
+    end
+    if #unknown > 0 then addGroup("|cff9d9d9d" .. TrainerSpells:Trans("LID_ZONE_UNKNOWN") .. "|r", unknown, "beast_teacher_zone_unknown") end
+    return entries
+end
+
+function Beasts.SetCollapseIcon(texture, collapsed)
+    local atlas = collapsed and "ui-questtrackerbutton-secondary-expand" or "ui-questtrackerbutton-secondary-collapse"
+    if C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo(atlas) then
+        texture:SetAtlas(atlas)
+    else
+        texture:SetTexture(collapsed and "Interface\\Buttons\\UI-PlusButton-Up" or "Interface\\Buttons\\UI-MinusButton-Up")
+    end
+end
+
+function Beasts.AbilityZoneLabel(frame, index)
+    local label = frame.zoneLabels[index]
+    if label then return label end
+    label = CreateFrame("Button", nil, frame.content)
+    label:SetHeight(22)
+    label:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD")
+    label.icon = label:CreateTexture(nil, "ARTWORK")
+    label.icon:SetSize(16, 16)
+    label.icon:SetPoint("LEFT", label, "LEFT", 2, 0)
+    label.text = label:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    label.text:SetPoint("LEFT", label.icon, "RIGHT", 6, 0)
+    label.text:SetJustifyH("LEFT")
+    label:SetScript("OnClick", function(sel)
+        if not sel.groupKey or not TrainerSpells_Character then return end
+        TrainerSpells_Character.collapsedGroups[sel.groupKey] = not TrainerSpells_Character.collapsedGroups[sel.groupKey] or nil
+        if frame.rank then Beasts.ShowAbility(frame.abilityKey, frame.rank, true) end
+    end)
+    frame.zoneLabels[index] = label
+    return label
+end
+
+function Beasts.FillAbilityRow(frame, index, beast, offset)
+    local row = Beasts.AbilityRow(frame, index)
+    row.beast = beast
+    row:ClearAllPoints()
+    row:SetPoint("TOPLEFT", frame.content, "TOPLEFT", 12, -offset)
+    row:SetPoint("TOPRIGHT", frame.content, "TOPRIGHT", 0, -offset)
+    if beast.model and beast.model > 0 and SetPortraitTextureFromCreatureDisplayID then
+        SetPortraitTextureFromCreatureDisplayID(row.portrait, beast.model)
+    else
+        row.portrait:SetTexture(data.families[beast.family] and data.families[beast.family].icon or 132161)
+    end
+    local levelColor = Beasts.CanTame(beast) and "|cffffffff" or "|cffff4444"
+    row.text:SetText(Beasts.FavoritePrefix(Beasts.IsFavoriteBeast(beast.id)) .. Beasts.ClassTag(beast) .. TrainerSpells.UIColors.SPELL_NAME .. Beasts.BeastName(beast) .. "|r  " .. levelColor .. TrainerSpells:Trans("LID_LVL") .. " " .. Beasts.LevelText(beast) .. "|r")
+    local zones = Beasts.ZoneNames(beast)
+    row.zone:SetText("|cff9d9d9d" .. (zones[1] or "") .. (#zones > 1 and (" +" .. (#zones - 1)) or "") .. "|r")
+    row:Show()
 end
 
 function Beasts.CreateDropdown(parent, width, getText, fillMenu)
