@@ -5,7 +5,7 @@ local Beasts = {
     mapNames = {},
     trainerCosts = nil,
     spellBeasts = {},
-    foodKeys = {{1, "LID_FOOD_MEAT"}, {2, "LID_FOOD_FISH"}, {4, "LID_FOOD_CHEESE"}, {8, "LID_FOOD_BREAD"}, {16, "LID_FOOD_FUNGUS"}, {32, "LID_FOOD_FRUIT"}, {64, "LID_FOOD_RAWMEAT"}, {128, "LID_FOOD_RAWFISH"}},
+    foodKeys = {{1, "LID_FOOD_MEAT", "INV_Misc_Food_14"}, {2, "LID_FOOD_FISH", "INV_Misc_Fish_01"}, {4, "LID_FOOD_CHEESE", "INV_Misc_Food_03"}, {8, "LID_FOOD_BREAD", "INV_Misc_Food_11"}, {16, "LID_FOOD_FUNGUS", "INV_Mushroom_01"}, {32, "LID_FOOD_FRUIT", "INV_Misc_Food_19"}, {64, "LID_FOOD_RAWMEAT", "INV_Misc_Food_14"}, {128, "LID_FOOD_RAWFISH", "INV_Misc_Fish_01"}},
     classColors = {[1] = "|cffffd100", [2] = "|cffff8c00", [3] = "|cffff4040", [4] = "|cffb0c8ff"},
     classKeys = {[1] = "LID_ELITE", [2] = "LID_RAREELITE", [3] = "LID_BOSS", [4] = "LID_RARE"},
     maxTooltipTeachers = 10,
@@ -163,19 +163,19 @@ end
 function Beasts.FoodText(mask)
     local names = {}
     for _, food in ipairs(Beasts.foodKeys) do
-        if bit.band(mask or 0, food[1]) ~= 0 then table.insert(names, TrainerSpells:Trans(food[2])) end
+        if bit.band(mask or 0, food[1]) ~= 0 then table.insert(names, "|TInterface\\Icons\\" .. food[3] .. ":0|t " .. TrainerSpells:Trans(food[2])) end
     end
     return table.concat(names, ", ")
 end
 
 function Beasts.ModifierText(modifiers)
     local parts = {}
-    for _, entry in ipairs({{"health", _G.HEALTH or "Health"}, {"armor", _G.ARMOR or "Armor"}, {"damage", _G.DAMAGE or "Damage"}}) do
+    for _, entry in ipairs({{"health", _G.HEALTH or "Health", "Spell_Holy_WordFortitude"}, {"armor", _G.ARMOR or "Armor", "INV_Shield_04"}, {"damage", _G.DAMAGE or "Damage", "INV_Sword_04"}}) do
         local value = modifiers[entry[1]] or 1
         local color = value > 1.001 and "|cff30d030" or value < 0.999 and "|cffff4444" or "|cffffffff"
-        table.insert(parts, entry[2] .. " " .. color .. ("x%.2f"):format(value) .. "|r")
+        table.insert(parts, "|TInterface\\Icons\\" .. entry[3] .. ":0|t " .. entry[2] .. " " .. color .. ("x%.2f"):format(value) .. "|r")
     end
-    return table.concat(parts, "  ")
+    return table.concat(parts, "\n")
 end
 
 function Beasts.TrainerCost(abilityKey, rank)
@@ -765,8 +765,8 @@ function Beasts.ShowDetails(beast)
     local speed = Beasts.SpeedText(beast)
     table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_ATTACKSPEED") .. ":|r " .. (speed and (speed .. "s") or ("|cff9d9d9d" .. TrainerSpells:Trans("LID_ATTACKSPEED_UNKNOWN") .. "|r")))
     if family and family.food and family.food > 0 then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_DIET") .. ":|r " .. Beasts.FoodText(family.food)) end
-    if family and family.role then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_ROLE") .. ":|r " .. TrainerSpells:Trans("LID_ROLE_" .. family.role:upper())) end
-    if family and family.modifiers then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_MODIFIERS") .. ":|r " .. Beasts.ModifierText(family.modifiers)) end
+    if family and family.role then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_ROLE") .. ":|r |TInterface\\Icons\\Ability_Hunter_BeastTaming:0|t " .. TrainerSpells:Trans("LID_ROLE_" .. family.role:upper())) end
+    if family and family.modifiers then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_MODIFIERS") .. ":|r\n" .. Beasts.ModifierText(family.modifiers)) end
     local zones = Beasts.ZoneNames(beast)
     if #zones > 0 then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_ZONES") .. ":|r " .. table.concat(zones, ", ")) end
     local spells = Beasts.SortedSpells(beast)
@@ -782,9 +782,13 @@ function Beasts.ShowDetails(beast)
     if family and family.abilities and #family.abilities > 0 then
         local names = {}
         for _, key in ipairs(family.abilities) do
-            if not Beasts.IsTrainerAbility(key) then table.insert(names, Beasts.AbilityName(key)) end
+            if not Beasts.IsTrainerAbility(key) then table.insert(names, {name = Beasts.AbilityName(key), ability = data.abilities[key]}) end
         end
-        table.sort(names)
+        table.sort(names, function(a, b) return a.name < b.name end)
+        for index, entry in ipairs(names) do
+            local first = entry.ability and entry.ability.ranks[1]
+            names[index] = "|T" .. (first and Beasts.SpellIcon(first.spell) or 132161) .. ":0|t " .. entry.name
+        end
         table.insert(lines, " ")
         table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_FAMILYABILITIES") .. ":|r " .. table.concat(names, ", "))
     end
