@@ -14,8 +14,46 @@ local Beasts = {
 }
 TrainerSpells.HunterBeasts = Beasts
 local TrainerLocations = TrainerSpells.TrainerLocations
+Beasts.rankBySpell = {}
+for key, ability in pairs(data.abilities) do
+    for _, rank in ipairs(ability.ranks) do Beasts.rankBySpell[rank.spell] = {key = key, rank = rank} end
+end
+
+function Beasts.TaughtRanks(beast, listed)
+    local spells, byAbility = {}, {}
+    local knownLevel = beast.maxLevel > 0 and beast.maxLevel < 9999
+    for _, spell in ipairs(listed or {}) do
+        local found = Beasts.rankBySpell[spell]
+        if knownLevel and found then
+            byAbility[found.key] = byAbility[found.key] or {}
+            byAbility[found.key][spell] = true
+        else
+            table.insert(spells, spell)
+        end
+    end
+    local minLevel = beast.minLevel > 0 and beast.minLevel or beast.maxLevel
+    for key, listedSpells in pairs(byAbility) do
+        local ranks, kept, best = data.abilities[key].ranks, 0, nil
+        for index, rank in ipairs(ranks) do
+            local nextRank = ranks[index + 1]
+            if rank.level <= beast.maxLevel and (not nextRank or nextRank.level > minLevel) then
+                best = rank.spell
+                if listedSpells[rank.spell] then
+                    table.insert(spells, rank.spell)
+                    kept = kept + 1
+                end
+            end
+        end
+        if kept == 0 and best then table.insert(spells, best) end
+    end
+    table.sort(spells)
+    return spells
+end
+
 for _, beast in ipairs(data.beasts) do
-    for _, spell in ipairs(beast.spells or {}) do
+    if data.teacherSource ~= "petopia" then beast.spells = Beasts.TaughtRanks(beast, beast.spells) end
+    beast.spells = beast.spells or {}
+    for _, spell in ipairs(beast.spells) do
         Beasts.spellBeasts[spell] = Beasts.spellBeasts[spell] or {}
         table.insert(Beasts.spellBeasts[spell], beast)
     end
@@ -110,10 +148,6 @@ function Beasts.ClassTag(beast)
     return Beasts.classColors[beast.classification] .. "[" .. TrainerSpells:Trans(key) .. "]|r "
 end
 
-Beasts.rankBySpell = {}
-for key, ability in pairs(data.abilities) do
-    for _, rank in ipairs(ability.ranks) do Beasts.rankBySpell[rank.spell] = {key = key, rank = rank} end
-end
 
 function Beasts.FindRank(spellID)
     local found = Beasts.rankBySpell[spellID]
@@ -130,6 +164,16 @@ function Beasts.FoodText(mask)
         if bit.band(mask or 0, food[1]) ~= 0 then table.insert(names, TrainerSpells:Trans(food[2])) end
     end
     return table.concat(names, ", ")
+end
+
+function Beasts.ModifierText(modifiers)
+    local parts = {}
+    for _, entry in ipairs({{"health", _G.HEALTH or "Health"}, {"armor", _G.ARMOR or "Armor"}, {"damage", _G.DAMAGE or "Damage"}}) do
+        local value = modifiers[entry[1]] or 1
+        local color = value > 1.001 and "|cff30d030" or value < 0.999 and "|cffff4444" or "|cffffffff"
+        table.insert(parts, entry[2] .. " " .. color .. ("x%.2f"):format(value) .. "|r")
+    end
+    return table.concat(parts, "  ")
 end
 
 function Beasts.TrainerCost(abilityKey, rank)
@@ -648,6 +692,8 @@ function Beasts.ShowDetails(beast)
     local speed = Beasts.SpeedText(beast)
     table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_ATTACKSPEED") .. ":|r " .. (speed and (speed .. "s") or ("|cff9d9d9d" .. TrainerSpells:Trans("LID_ATTACKSPEED_UNKNOWN") .. "|r")))
     if family and family.food and family.food > 0 then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_DIET") .. ":|r " .. Beasts.FoodText(family.food)) end
+    if family and family.role then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_ROLE") .. ":|r " .. TrainerSpells:Trans("LID_ROLE_" .. family.role:upper())) end
+    if family and family.modifiers then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_MODIFIERS") .. ":|r " .. Beasts.ModifierText(family.modifiers)) end
     local zones = Beasts.ZoneNames(beast)
     if #zones > 0 then table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_ZONES") .. ":|r " .. table.concat(zones, ", ")) end
     local spells = Beasts.SortedSpells(beast)
