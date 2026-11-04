@@ -237,15 +237,19 @@ function Beasts.AddUnitTooltip(tooltip)
         tooltip:AddLine("|T" .. Beasts.SpellIcon(spell) .. ":0|t " .. Beasts.AbilityLineColored(spell), 1, 1, 1)
     end
     tooltip:Show()
+    return true
 end
 
-if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum and Enum.TooltipDataType and Enum.TooltipDataType.Unit then
-    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip)
-        if tooltip == GameTooltip then Beasts.AddUnitTooltip(tooltip) end
-    end)
-elseif GameTooltip:HasScript("OnTooltipSetUnit") then
-    GameTooltip:HookScript("OnTooltipSetUnit", Beasts.AddUnitTooltip)
+function Beasts.AddUnitTooltipOnce(tooltip)
+    if tooltip ~= GameTooltip or tooltip.trainerSpellsBeastShown then return end
+    if Beasts.AddUnitTooltip(tooltip) then tooltip.trainerSpellsBeastShown = true end
 end
+
+GameTooltip:HookScript("OnTooltipCleared", function(tooltip) tooltip.trainerSpellsBeastShown = nil end)
+if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum and Enum.TooltipDataType and Enum.TooltipDataType.Unit then
+    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, Beasts.AddUnitTooltipOnce)
+end
+if GameTooltip:HasScript("OnTooltipSetUnit") then GameTooltip:HookScript("OnTooltipSetUnit", Beasts.AddUnitTooltipOnce) end
 
 function Beasts.IsMapAncestor(ancestorID, uiMapID)
     local info = C_Map.GetMapInfo(uiMapID)
@@ -371,14 +375,7 @@ function Beasts.ShowOnMap(beasts, label)
         for _, entry in ipairs(Beasts.SpawnEntries(beast)) do table.insert(entries, entry) end
     end
     local target = TrainerSpells.TrainerLocations.FindNearest(entries) or entries[1]
-    if not (InCombatLockdown and InCombatLockdown()) then
-        if C_Map.OpenWorldMap then
-            C_Map.OpenWorldMap(target.location.uiMapID)
-        else
-            if not WorldMapFrame:IsShown() then ToggleWorldMap() end
-            WorldMapFrame:SetMapID(target.location.uiMapID)
-        end
-    end
+    if not (InCombatLockdown and InCombatLockdown()) then TrainerSpells:OpenWorldMapAt(target.location.uiMapID) end
     Beasts.UpdatePins()
     TrainerSpells:MSG(TrainerSpells:Trans("LID_PINS_SHOWN"):format(label or "", #list))
 end

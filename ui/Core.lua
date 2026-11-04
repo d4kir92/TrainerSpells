@@ -323,19 +323,26 @@ function TrainerSpells:SortEntries(list)
     end)
 end
 
+function TrainerSpells:OpenWorldMapAt(uiMapID)
+    if not WorldMapFrame then return end
+    if WorldMapFrame.HandleUserActionOpenSelf then
+        if C_Map.OpenWorldMap then
+            C_Map.OpenWorldMap(uiMapID)
+        elseif OpenWorldMap then
+            OpenWorldMap(uiMapID)
+        end
+        return
+    end
+    if not WorldMapFrame:IsShown() then
+        if ToggleWorldMap then ToggleWorldMap() elseif ShowUIPanel then ShowUIPanel(WorldMapFrame) else WorldMapFrame:Show() end
+    end
+    if WorldMapFrame.SetMapID then WorldMapFrame:SetMapID(uiMapID) end
+end
+
 function TrainerSpells:SetMapWaypoint(location)
     if not location or not location.uiMapID or not location.x or not location.y then return false end
     if TrainerSpells:HasWaypointSupport() and TrainerSpells:SetTrackedWaypoint(location.uiMapID, location.x / 100, location.y / 100) then
-        if InCombatLockdown and InCombatLockdown() then
-            return true
-        elseif C_Map.OpenWorldMap then
-            C_Map.OpenWorldMap(location.uiMapID)
-        elseif OpenWorldMap then
-            OpenWorldMap(location.uiMapID)
-        elseif WorldMapFrame then
-            if WorldMapFrame.SetMapID then WorldMapFrame:SetMapID(location.uiMapID) end
-            if ShowUIPanel then ShowUIPanel(WorldMapFrame) else WorldMapFrame:Show() end
-        end
+        if not (InCombatLockdown and InCombatLockdown()) then TrainerSpells:OpenWorldMapAt(location.uiMapID) end
         return true
     end
 
