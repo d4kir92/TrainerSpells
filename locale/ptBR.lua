@@ -1,7 +1,7 @@
 -- ptBR Portuguese Português
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("ptBR", "LID_ABILITY_LEFTCLICK", "Clique esquerdo: ponto de referência até o mascote mais próximo que a ensina")
-TrainerSpells:AddTrans("ptBR", "LID_ABILITY_RIGHTCLICK", "Clique direito: mostrar esse mascote")
+TrainerSpells:AddTrans("ptBR", "LID_ABILITY_LEFTCLICK", "Clique esquerdo: mostrar os mascotes que a ensinam")
+TrainerSpells:AddTrans("ptBR", "LID_ABILITY_RIGHTCLICK", "Clique direito: ponto de referência até o mascote mais próximo que a ensina")
 TrainerSpells:AddTrans("ptBR", "LID_ALLFAMILIES", "Todas as famílias")
 TrainerSpells:AddTrans("ptBR", "LID_ALREADYKNOWN", "Já conhecido")
 TrainerSpells:AddTrans("ptBR", "LID_ALREADYLEARNED", "Já aprendido")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("ptBR", "LID_AUTORANKS_SWAPPED", "%s: patente %d substitu
 TrainerSpells:AddTrans("ptBR", "LID_AVAILABLENOW", "Disponível agora")
 TrainerSpells:AddTrans("ptBR", "LID_BEASTMODE_ABILITIES", "Habilidades")
 TrainerSpells:AddTrans("ptBR", "LID_BEASTMODE_PETS", "Mascotes")
+TrainerSpells:AddTrans("ptBR", "LID_BEASTMODE_RARES", "Mascotes raros")
 TrainerSpells:AddTrans("ptBR", "LID_BEASTMODE_ZONES", "Local")
 TrainerSpells:AddTrans("ptBR", "LID_BEASTS", "Domar Fera")
 TrainerSpells:AddTrans("ptBR", "LID_BEASTS_TAMEABLEONLY", "Domável no meu nível")

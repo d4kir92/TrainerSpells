@@ -1,7 +1,7 @@
 -- esES Spanish Español
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("esES", "LID_ABILITY_LEFTCLICK", "Clic izquierdo: punto de ruta a la mascota más cercana que la enseña")
-TrainerSpells:AddTrans("esES", "LID_ABILITY_RIGHTCLICK", "Clic derecho: mostrar esa mascota")
+TrainerSpells:AddTrans("esES", "LID_ABILITY_LEFTCLICK", "Clic izquierdo: mostrar las mascotas que la enseñan")
+TrainerSpells:AddTrans("esES", "LID_ABILITY_RIGHTCLICK", "Clic derecho: punto de ruta a la mascota más cercana que la enseña")
 TrainerSpells:AddTrans("esES", "LID_ALLFAMILIES", "Todas las familias")
 TrainerSpells:AddTrans("esES", "LID_ALREADYKNOWN", "Ya conocido")
 TrainerSpells:AddTrans("esES", "LID_ALREADYLEARNED", "Ya aprendido")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("esES", "LID_AUTORANKS_SWAPPED", "%s: rango %d sustituido
 TrainerSpells:AddTrans("esES", "LID_AVAILABLENOW", "Disponible ahora")
 TrainerSpells:AddTrans("esES", "LID_BEASTMODE_ABILITIES", "Habilidades")
 TrainerSpells:AddTrans("esES", "LID_BEASTMODE_PETS", "Mascotas")
+TrainerSpells:AddTrans("esES", "LID_BEASTMODE_RARES", "Mascotas raras")
 TrainerSpells:AddTrans("esES", "LID_BEASTMODE_ZONES", "Ubicación")
 TrainerSpells:AddTrans("esES", "LID_BEASTS", "Domesticar")
 TrainerSpells:AddTrans("esES", "LID_BEASTS_TAMEABLEONLY", "Domesticable a mi nivel")

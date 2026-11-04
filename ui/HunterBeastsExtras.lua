@@ -43,6 +43,8 @@ function Beasts.ToggleFavoriteSpell(spellID)
     local favorites = Beasts.Store().beastFavorites.spells
     favorites[spellID] = not favorites[spellID] or nil
     TrainerSpells_Refresh()
+    local frame = Beasts.abilityFrame
+    if frame and frame:IsShown() and frame.rank then Beasts.ShowAbility(frame.abilityKey, frame.rank) end
 end
 
 function Beasts.SpeedStore()

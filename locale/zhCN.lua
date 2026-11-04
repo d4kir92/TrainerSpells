@@ -1,7 +1,7 @@
 -- zhCN Chinese Simplified 简体中文
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("zhCN", "LID_ABILITY_LEFTCLICK", "左键点击：设置路径点到最近的会教授此技能的宠物")
-TrainerSpells:AddTrans("zhCN", "LID_ABILITY_RIGHTCLICK", "右键点击：显示该宠物")
+TrainerSpells:AddTrans("zhCN", "LID_ABILITY_LEFTCLICK", "左键点击：显示会教授此技能的宠物")
+TrainerSpells:AddTrans("zhCN", "LID_ABILITY_RIGHTCLICK", "右键点击：设置路径点到最近的会教授此技能的宠物")
 TrainerSpells:AddTrans("zhCN", "LID_ALLFAMILIES", "所有家族")
 TrainerSpells:AddTrans("zhCN", "LID_ALREADYKNOWN", "已学会")
 TrainerSpells:AddTrans("zhCN", "LID_ALREADYLEARNED", "已学会")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("zhCN", "LID_AUTORANKS_SWAPPED", "%s：动作条上的等
 TrainerSpells:AddTrans("zhCN", "LID_AVAILABLENOW", "现在可学")
 TrainerSpells:AddTrans("zhCN", "LID_BEASTMODE_ABILITIES", "技能")
 TrainerSpells:AddTrans("zhCN", "LID_BEASTMODE_PETS", "宠物")
+TrainerSpells:AddTrans("zhCN", "LID_BEASTMODE_RARES", "稀有宠物")
 TrainerSpells:AddTrans("zhCN", "LID_BEASTMODE_ZONES", "地点")
 TrainerSpells:AddTrans("zhCN", "LID_BEASTS", "驯服野兽")
 TrainerSpells:AddTrans("zhCN", "LID_BEASTS_TAMEABLEONLY", "我的等级可驯服")

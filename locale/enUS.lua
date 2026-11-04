@@ -1,7 +1,7 @@
 -- enUS English
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("enUS", "LID_ABILITY_LEFTCLICK", "Left-click: Waypoint to the nearest pet that teaches it")
-TrainerSpells:AddTrans("enUS", "LID_ABILITY_RIGHTCLICK", "Right-click: Show that pet")
+TrainerSpells:AddTrans("enUS", "LID_ABILITY_LEFTCLICK", "Left-click: Show the pets that teach it")
+TrainerSpells:AddTrans("enUS", "LID_ABILITY_RIGHTCLICK", "Right-click: Waypoint to the nearest pet that teaches it")
 TrainerSpells:AddTrans("enUS", "LID_ALLFAMILIES", "All families")
 TrainerSpells:AddTrans("enUS", "LID_ALREADYKNOWN", "Already Known")
 TrainerSpells:AddTrans("enUS", "LID_ALREADYLEARNED", "Already Learned")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("enUS", "LID_AUTORANKS_SWAPPED", "%s: rank %d replaced wi
 TrainerSpells:AddTrans("enUS", "LID_AVAILABLENOW", "Available Now")
 TrainerSpells:AddTrans("enUS", "LID_BEASTMODE_ABILITIES", "Abilities")
 TrainerSpells:AddTrans("enUS", "LID_BEASTMODE_PETS", "Pets")
+TrainerSpells:AddTrans("enUS", "LID_BEASTMODE_RARES", "Rare pets")
 TrainerSpells:AddTrans("enUS", "LID_BEASTMODE_ZONES", "Location")
 TrainerSpells:AddTrans("enUS", "LID_BEASTS", "Beast Taming")
 TrainerSpells:AddTrans("enUS", "LID_BEASTS_TAMEABLEONLY", "Tameable at my level")

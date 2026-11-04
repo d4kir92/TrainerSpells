@@ -1,7 +1,7 @@
 -- esMX Spanish Mexico Español
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("esMX", "LID_ABILITY_LEFTCLICK", "Clic izquierdo: punto de ruta a la mascota más cercana que la enseña")
-TrainerSpells:AddTrans("esMX", "LID_ABILITY_RIGHTCLICK", "Clic derecho: mostrar esa mascota")
+TrainerSpells:AddTrans("esMX", "LID_ABILITY_LEFTCLICK", "Clic izquierdo: mostrar las mascotas que la enseñan")
+TrainerSpells:AddTrans("esMX", "LID_ABILITY_RIGHTCLICK", "Clic derecho: punto de ruta a la mascota más cercana que la enseña")
 TrainerSpells:AddTrans("esMX", "LID_ALLFAMILIES", "Todas las familias")
 TrainerSpells:AddTrans("esMX", "LID_ALREADYKNOWN", "Ya conocido")
 TrainerSpells:AddTrans("esMX", "LID_ALREADYLEARNED", "Ya aprendido")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("esMX", "LID_AUTORANKS_SWAPPED", "%s: rango %d reemplazad
 TrainerSpells:AddTrans("esMX", "LID_AVAILABLENOW", "Disponible ahora")
 TrainerSpells:AddTrans("esMX", "LID_BEASTMODE_ABILITIES", "Habilidades")
 TrainerSpells:AddTrans("esMX", "LID_BEASTMODE_PETS", "Mascotas")
+TrainerSpells:AddTrans("esMX", "LID_BEASTMODE_RARES", "Mascotas raras")
 TrainerSpells:AddTrans("esMX", "LID_BEASTMODE_ZONES", "Ubicación")
 TrainerSpells:AddTrans("esMX", "LID_BEASTS", "Domesticar")
 TrainerSpells:AddTrans("esMX", "LID_BEASTS_TAMEABLEONLY", "Domesticable a mi nivel")

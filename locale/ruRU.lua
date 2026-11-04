@@ -1,7 +1,7 @@
 -- ruRU Russian
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("ruRU", "LID_ABILITY_LEFTCLICK", "ЛКМ: путевая точка к ближайшему питомцу, который этому учит")
-TrainerSpells:AddTrans("ruRU", "LID_ABILITY_RIGHTCLICK", "ПКМ: показать этого питомца")
+TrainerSpells:AddTrans("ruRU", "LID_ABILITY_LEFTCLICK", "ЛКМ: показать питомцев, которые этому учат")
+TrainerSpells:AddTrans("ruRU", "LID_ABILITY_RIGHTCLICK", "ПКМ: путевая точка к ближайшему питомцу, который этому учит")
 TrainerSpells:AddTrans("ruRU", "LID_ALLFAMILIES", "Все семейства")
 TrainerSpells:AddTrans("ruRU", "LID_ALREADYKNOWN", "Уже изучено")
 TrainerSpells:AddTrans("ruRU", "LID_ALREADYLEARNED", "Уже изучено")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("ruRU", "LID_AUTORANKS_SWAPPED", "%s: ранг %d зам�
 TrainerSpells:AddTrans("ruRU", "LID_AVAILABLENOW", "Доступно сейчас")
 TrainerSpells:AddTrans("ruRU", "LID_BEASTMODE_ABILITIES", "Способности")
 TrainerSpells:AddTrans("ruRU", "LID_BEASTMODE_PETS", "Питомцы")
+TrainerSpells:AddTrans("ruRU", "LID_BEASTMODE_RARES", "Редкие питомцы")
 TrainerSpells:AddTrans("ruRU", "LID_BEASTMODE_ZONES", "Местность")
 TrainerSpells:AddTrans("ruRU", "LID_BEASTS", "Приручение")
 TrainerSpells:AddTrans("ruRU", "LID_BEASTS_TAMEABLEONLY", "Можно приручить на моём уровне")

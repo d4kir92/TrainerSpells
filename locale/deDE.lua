@@ -1,7 +1,7 @@
 -- deDE German Deutsch
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("deDE", "LID_ABILITY_LEFTCLICK", "Linksklick: Wegpunkt zum nächsten Tier, das es beibringt")
-TrainerSpells:AddTrans("deDE", "LID_ABILITY_RIGHTCLICK", "Rechtsklick: Dieses Tier anzeigen")
+TrainerSpells:AddTrans("deDE", "LID_ABILITY_LEFTCLICK", "Linksklick: Tiere anzeigen, die es beibringen")
+TrainerSpells:AddTrans("deDE", "LID_ABILITY_RIGHTCLICK", "Rechtsklick: Wegpunkt zum nächsten Tier, das es beibringt")
 TrainerSpells:AddTrans("deDE", "LID_ALLFAMILIES", "Alle Familien")
 TrainerSpells:AddTrans("deDE", "LID_ALREADYKNOWN", "Bereits bekannt")
 TrainerSpells:AddTrans("deDE", "LID_ALREADYLEARNED", "Bereits erlernt")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("deDE", "LID_AUTORANKS_SWAPPED", "%s: Rang %d durch Rang 
 TrainerSpells:AddTrans("deDE", "LID_AVAILABLENOW", "Derzeit verfügbar")
 TrainerSpells:AddTrans("deDE", "LID_BEASTMODE_ABILITIES", "Fähigkeiten")
 TrainerSpells:AddTrans("deDE", "LID_BEASTMODE_PETS", "Tiere")
+TrainerSpells:AddTrans("deDE", "LID_BEASTMODE_RARES", "Seltene Tiere")
 TrainerSpells:AddTrans("deDE", "LID_BEASTMODE_ZONES", "Ort")
 TrainerSpells:AddTrans("deDE", "LID_BEASTS", "Zähmen")
 TrainerSpells:AddTrans("deDE", "LID_BEASTS_TAMEABLEONLY", "Mit meinem Level zähmbar")

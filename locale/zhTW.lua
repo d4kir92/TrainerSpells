@@ -1,7 +1,7 @@
 -- zhTW Chinese Traditional 繁體中文
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("zhTW", "LID_ABILITY_LEFTCLICK", "左鍵點擊：設定路徑點到最近會教授此技能的寵物")
-TrainerSpells:AddTrans("zhTW", "LID_ABILITY_RIGHTCLICK", "右鍵點擊：顯示該寵物")
+TrainerSpells:AddTrans("zhTW", "LID_ABILITY_LEFTCLICK", "左鍵點擊：顯示會教授此技能的寵物")
+TrainerSpells:AddTrans("zhTW", "LID_ABILITY_RIGHTCLICK", "右鍵點擊：設定路徑點到最近會教授此技能的寵物")
 TrainerSpells:AddTrans("zhTW", "LID_ALLFAMILIES", "所有家族")
 TrainerSpells:AddTrans("zhTW", "LID_ALREADYKNOWN", "已學會")
 TrainerSpells:AddTrans("zhTW", "LID_ALREADYLEARNED", "已學會")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("zhTW", "LID_AUTORANKS_SWAPPED", "%s：快捷列上的等
 TrainerSpells:AddTrans("zhTW", "LID_AVAILABLENOW", "現在可學")
 TrainerSpells:AddTrans("zhTW", "LID_BEASTMODE_ABILITIES", "技能")
 TrainerSpells:AddTrans("zhTW", "LID_BEASTMODE_PETS", "寵物")
+TrainerSpells:AddTrans("zhTW", "LID_BEASTMODE_RARES", "稀有寵物")
 TrainerSpells:AddTrans("zhTW", "LID_BEASTMODE_ZONES", "地點")
 TrainerSpells:AddTrans("zhTW", "LID_BEASTS", "馴服野獸")
 TrainerSpells:AddTrans("zhTW", "LID_BEASTS_TAMEABLEONLY", "我的等級可馴服")

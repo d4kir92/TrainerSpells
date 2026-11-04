@@ -1,7 +1,7 @@
 -- itIT Italian Italiano
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("itIT", "LID_ABILITY_LEFTCLICK", "Clic sinistro: punto di riferimento verso il famiglio più vicino che la insegna")
-TrainerSpells:AddTrans("itIT", "LID_ABILITY_RIGHTCLICK", "Clic destro: mostra quel famiglio")
+TrainerSpells:AddTrans("itIT", "LID_ABILITY_LEFTCLICK", "Clic sinistro: mostra i famigli che la insegnano")
+TrainerSpells:AddTrans("itIT", "LID_ABILITY_RIGHTCLICK", "Clic destro: punto di riferimento verso il famiglio più vicino che la insegna")
 TrainerSpells:AddTrans("itIT", "LID_ALLFAMILIES", "Tutte le famiglie")
 TrainerSpells:AddTrans("itIT", "LID_ALREADYKNOWN", "Già conosciuto")
 TrainerSpells:AddTrans("itIT", "LID_ALREADYLEARNED", "Già appreso")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("itIT", "LID_AUTORANKS_SWAPPED", "%s: grado %d sostituito
 TrainerSpells:AddTrans("itIT", "LID_AVAILABLENOW", "Disponibile ora")
 TrainerSpells:AddTrans("itIT", "LID_BEASTMODE_ABILITIES", "Abilità")
 TrainerSpells:AddTrans("itIT", "LID_BEASTMODE_PETS", "Famigli")
+TrainerSpells:AddTrans("itIT", "LID_BEASTMODE_RARES", "Famigli rari")
 TrainerSpells:AddTrans("itIT", "LID_BEASTMODE_ZONES", "Luogo")
 TrainerSpells:AddTrans("itIT", "LID_BEASTS", "Addomesticamento")
 TrainerSpells:AddTrans("itIT", "LID_BEASTS_TAMEABLEONLY", "Addomesticabile al mio livello")

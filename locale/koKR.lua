@@ -1,7 +1,7 @@
 -- koKR Korean 한국어
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("koKR", "LID_ABILITY_LEFTCLICK", "왼쪽 클릭: 이 기술을 가르치는 가장 가까운 야수로 웨이포인트")
-TrainerSpells:AddTrans("koKR", "LID_ABILITY_RIGHTCLICK", "오른쪽 클릭: 해당 야수 보기")
+TrainerSpells:AddTrans("koKR", "LID_ABILITY_LEFTCLICK", "왼쪽 클릭: 이 기술을 가르치는 야수 보기")
+TrainerSpells:AddTrans("koKR", "LID_ABILITY_RIGHTCLICK", "오른쪽 클릭: 이 기술을 가르치는 가장 가까운 야수로 웨이포인트")
 TrainerSpells:AddTrans("koKR", "LID_ALLFAMILIES", "모든 계열")
 TrainerSpells:AddTrans("koKR", "LID_ALREADYKNOWN", "이미 배움")
 TrainerSpells:AddTrans("koKR", "LID_ALREADYLEARNED", "이미 배움")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("koKR", "LID_AUTORANKS_SWAPPED", "%s: 행동 단축바의
 TrainerSpells:AddTrans("koKR", "LID_AVAILABLENOW", "지금 배울 수 있음")
 TrainerSpells:AddTrans("koKR", "LID_BEASTMODE_ABILITIES", "기술")
 TrainerSpells:AddTrans("koKR", "LID_BEASTMODE_PETS", "야수")
+TrainerSpells:AddTrans("koKR", "LID_BEASTMODE_RARES", "희귀 야수")
 TrainerSpells:AddTrans("koKR", "LID_BEASTMODE_ZONES", "위치")
 TrainerSpells:AddTrans("koKR", "LID_BEASTS", "야수 길들이기")
 TrainerSpells:AddTrans("koKR", "LID_BEASTS_TAMEABLEONLY", "내 레벨에서 길들이기 가능")

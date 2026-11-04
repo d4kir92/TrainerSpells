@@ -1,7 +1,7 @@
 -- frFR French Français
 local _, TrainerSpells = ...
-TrainerSpells:AddTrans("frFR", "LID_ABILITY_LEFTCLICK", "Clic gauche : point de passage vers le familier le plus proche qui l'enseigne")
-TrainerSpells:AddTrans("frFR", "LID_ABILITY_RIGHTCLICK", "Clic droit : afficher ce familier")
+TrainerSpells:AddTrans("frFR", "LID_ABILITY_LEFTCLICK", "Clic gauche : afficher les familiers qui l'enseignent")
+TrainerSpells:AddTrans("frFR", "LID_ABILITY_RIGHTCLICK", "Clic droit : point de passage vers le familier le plus proche qui l'enseigne")
 TrainerSpells:AddTrans("frFR", "LID_ALLFAMILIES", "Toutes les familles")
 TrainerSpells:AddTrans("frFR", "LID_ALREADYKNOWN", "Déjà connu")
 TrainerSpells:AddTrans("frFR", "LID_ALREADYLEARNED", "Déjà appris")
@@ -16,6 +16,7 @@ TrainerSpells:AddTrans("frFR", "LID_AUTORANKS_SWAPPED", "%s : rang %d remplacé 
 TrainerSpells:AddTrans("frFR", "LID_AVAILABLENOW", "Disponible maintenant")
 TrainerSpells:AddTrans("frFR", "LID_BEASTMODE_ABILITIES", "Techniques")
 TrainerSpells:AddTrans("frFR", "LID_BEASTMODE_PETS", "Familiers")
+TrainerSpells:AddTrans("frFR", "LID_BEASTMODE_RARES", "Familiers rares")
 TrainerSpells:AddTrans("frFR", "LID_BEASTMODE_ZONES", "Lieu")
 TrainerSpells:AddTrans("frFR", "LID_BEASTS", "Apprivoisement")
 TrainerSpells:AddTrans("frFR", "LID_BEASTS_TAMEABLEONLY", "Apprivoisable à mon niveau")

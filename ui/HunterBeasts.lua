@@ -23,7 +23,7 @@ end
 
 function Beasts.Settings()
     local settings = TrainerSpells_Character
-    if settings.beastMode ~= "abilities" and settings.beastMode ~= "zones" then settings.beastMode = "pets" end
+    if settings.beastMode ~= "rares" and settings.beastMode ~= "abilities" and settings.beastMode ~= "zones" then settings.beastMode = "pets" end
     local family = settings.beastFamily
     if type(family) ~= "number" or (family ~= -1 and family ~= 0 and not data.families[family]) then settings.beastFamily = 0 end
     return settings
@@ -224,13 +224,17 @@ function Beasts.SortedSpells(beast)
     return spells
 end
 
+function Beasts.IsRare(beast)
+    return beast.classification == 2 or beast.classification == 4
+end
+
 function Beasts.FilteredBeasts(searchText)
     local settings = Beasts.Settings()
     local result = {}
     for _, beast in ipairs(data.beasts) do
         local family = settings.beastFamily
         local matchesFamily = family == 0 or beast.family == family or family == -1 and Beasts.IsFavoriteBeast and Beasts.IsFavoriteBeast(beast.id)
-        local visible = matchesFamily and (not settings.beastTameableOnly or Beasts.CanTame(beast))
+        local visible = matchesFamily and (not settings.beastTameableOnly or Beasts.CanTame(beast)) and (settings.beastMode ~= "rares" or Beasts.IsRare(beast))
         if visible and (searchText == "" or Beasts.MatchesSearch(searchText, Beasts.BeastName(beast, true), Beasts.SearchText(beast))) then table.insert(result, beast) end
     end
     return result
@@ -355,6 +359,7 @@ function Beasts.InitRankRow(rowFrame, elementData, icon, nameFS, levelFS)
             Beasts.AddClickHints(GameTooltip, "LID_ABILITY_LEFTCLICK", "LID_ABILITY_RIGHTCLICK")
         else
             GameTooltip:AddLine(" ")
+            GameTooltip:AddLine(TrainerSpells:Trans("LID_ABILITY_LEFTCLICK"), 0.2, 1, 0.2)
             GameTooltip:AddLine(TrainerSpells:Trans("LID_CTRLCLICK_FAVORITE"), 0.2, 1, 0.2)
         end
         GameTooltip:Show()
@@ -369,20 +374,15 @@ function Beasts.InitRankRow(rowFrame, elementData, icon, nameFS, levelFS)
             Beasts.ShowOnMap(Beasts.Teachers(rank.spell), Beasts.AbilityName(key) .. " " .. rank.rank)
             return
         end
-        local candidates = Beasts.Teachers(rank.spell, true)
-        if #candidates == 0 then
-            TrainerSpells:MSG(TrainerSpells:Trans("LID_NOBEAST"))
-            return
-        end
         if button == "LeftButton" then
-            Beasts.SetNearestWaypoint(candidates)
+            Beasts.ShowAbility(key, rank)
         elseif button == "RightButton" then
-            local entries = {}
-            for _, beast in ipairs(candidates) do
-                for _, entry in ipairs(Beasts.SpawnEntries(beast)) do table.insert(entries, entry) end
+            local candidates = Beasts.Teachers(rank.spell, true)
+            if #candidates == 0 then
+                TrainerSpells:MSG(TrainerSpells:Trans("LID_NOBEAST"))
+                return
             end
-            local nearest = TrainerLocations.FindNearest(entries) or entries[1]
-            Beasts.ShowDetails(nearest and nearest.beast or candidates[1])
+            Beasts.SetNearestWaypoint(candidates)
         end
     end)
 end
@@ -502,23 +502,27 @@ function Beasts.BuildAbilityItems(items, searchText)
     table.sort(keys, function(a, b) return Beasts.AbilityName(a) < Beasts.AbilityName(b) end)
     for _, key in ipairs(keys) do
         local ability = data.abilities[key]
-        local groupKey = "beast_ability_" .. key
-        local first = ability.ranks[1]
-        local header = (first and ("|T" .. Beasts.SpellIcon(first.spell) .. ":0|t ") or "") .. Beasts.AbilityName(key)
-        TrainerSpells:AddHeaderItem(items, header, ability.generic and "|cffffffff" or "|cffffd100", nil, groupKey, nil, #ability.ranks, nil, "skill")
-        if not TrainerSpells:IsGroupCollapsed(groupKey) then
-            for _, rank in ipairs(ability.ranks) do
-                local visible
-                if settings.beastFamily == -1 then
-                    visible = Beasts.IsFavoriteSpell(rank.spell)
-                else
-                    visible = settings.beastFamily == 0 or #Beasts.Teachers(rank.spell) > 0 or Beasts.TrainerCost(key, rank) ~= nil
-                end
-                if visible and settings.beastTameableOnly and not Beasts.TrainerCost(key, rank) then
-                    local _, tameable = next(Beasts.Teachers(rank.spell, true))
-                    visible = tameable ~= nil and Beasts.CanTame(tameable)
-                end
-                if visible then table.insert(items, {initRow = Beasts.InitRankRow, abilityKey = key, rank = rank, rowDepth = 1}) end
+        local ranks = {}
+        for _, rank in ipairs(ability.ranks) do
+            local visible = Beasts.TrainerCost(key, rank) == nil
+            if visible and settings.beastFamily == -1 then
+                visible = Beasts.IsFavoriteSpell(rank.spell)
+            elseif visible then
+                visible = settings.beastFamily == 0 or #Beasts.Teachers(rank.spell) > 0
+            end
+            if visible and settings.beastTameableOnly then
+                local _, tameable = next(Beasts.Teachers(rank.spell, true))
+                visible = tameable ~= nil and Beasts.CanTame(tameable)
+            end
+            if visible then table.insert(ranks, rank) end
+        end
+        if #ranks > 0 then
+            local groupKey = "beast_ability_" .. key
+            local first = ability.ranks[1]
+            local header = (first and ("|T" .. Beasts.SpellIcon(first.spell) .. ":0|t ") or "") .. Beasts.AbilityName(key)
+            TrainerSpells:AddHeaderItem(items, header, ability.generic and "|cffffffff" or "|cffffd100", nil, groupKey, nil, #ranks, nil, "skill")
+            if not TrainerSpells:IsGroupCollapsed(groupKey) then
+                for _, rank in ipairs(ranks) do table.insert(items, {initRow = Beasts.InitRankRow, abilityKey = key, rank = rank, rowDepth = 1}) end
             end
         end
     end
@@ -679,6 +683,172 @@ function Beasts.ShowDetails(beast)
     frame:Raise()
 end
 
+function Beasts.CreateAbilityFrame()
+    local frame = TrainerSpells:CreateUIWindowFrame("TrainerSpellsBeastAbilityFrame", UIParent)
+    frame:SetSize(520, 440)
+    frame:SetPoint("CENTER")
+    frame:SetFrameStrata("HIGH")
+    frame:SetToplevel(true)
+    frame:SetMovable(true)
+    frame:SetClampedToScreen(true)
+    frame:EnableMouse(true)
+    frame:RegisterForDrag("LeftButton")
+    frame:SetScript("OnDragStart", frame.StartMoving)
+    frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+    frame:Hide()
+    if UISpecialFrames then table.insert(UISpecialFrames, "TrainerSpellsBeastAbilityFrame") end
+    frame.title = frame.TitleText or frame.TitleContainer and frame.TitleContainer.TitleText or frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    if not frame.title:GetPoint() then frame.title:SetPoint("TOP", frame, "TOP", 0, -6) end
+    local icon = frame:CreateTexture(nil, "ARTWORK")
+    icon:SetSize(40, 40)
+    icon:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -34)
+    frame.icon = icon
+    local info = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    info:SetPoint("TOPLEFT", icon, "TOPRIGHT", 10, 0)
+    info:SetPoint("RIGHT", frame, "RIGHT", -16, 0)
+    info:SetJustifyH("LEFT")
+    info:SetJustifyV("TOP")
+    info:SetSpacing(3)
+    frame.info = info
+    local header = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    header:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -122)
+    frame.header = header
+    local scroll = CreateFrame("Frame", nil, frame, "WowScrollBox")
+    scroll:SetPoint("TOPLEFT", frame, "TOPLEFT", 14, -142)
+    scroll:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 46)
+    local scrollBar = CreateFrame("EventFrame", nil, frame, "MinimalScrollBar")
+    scrollBar:SetPoint("TOPLEFT", scroll, "TOPRIGHT", 8, 0)
+    scrollBar:SetPoint("BOTTOMLEFT", scroll, "BOTTOMRIGHT", 8, 0)
+    local content = CreateFrame("Frame", nil, scroll)
+    content.scrollable = true
+    content:SetSize(1, 1)
+    local view = CreateScrollBoxLinearView()
+    view:SetPanExtent(40)
+    ScrollUtil.InitScrollBoxWithScrollBar(scroll, scrollBar, view)
+    frame.scroll, frame.content, frame.rows = scroll, content, {}
+    local nearest = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
+    nearest:SetSize(160, 24)
+    nearest:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -14, 12)
+    nearest:SetText(TrainerSpells:Trans("LID_NEARESTBEAST"))
+    nearest:SetScript("OnClick", function()
+        local candidates = frame.rank and Beasts.Teachers(frame.rank.spell, true) or {}
+        if #candidates == 0 then
+            TrainerSpells:MSG(TrainerSpells:Trans("LID_NOBEAST"))
+            return
+        end
+        Beasts.SetNearestWaypoint(candidates)
+    end)
+    frame.nearest = nearest
+    local map = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
+    map:SetSize(140, 24)
+    map:SetPoint("RIGHT", nearest, "LEFT", -6, 0)
+    map:SetText(TrainerSpells:Trans("LID_SHOWONMAP"))
+    map:SetScript("OnClick", function()
+        if frame.rank then Beasts.ShowOnMap(Beasts.Teachers(frame.rank.spell), Beasts.AbilityName(frame.abilityKey) .. " " .. frame.rank.rank) end
+    end)
+    frame.map = map
+    local favorite = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
+    favorite:SetSize(150, 24)
+    favorite:SetPoint("RIGHT", map, "LEFT", -6, 0)
+    favorite:SetScript("OnClick", function()
+        if frame.rank then Beasts.ToggleFavoriteSpell(frame.rank.spell) end
+    end)
+    frame.favorite = favorite
+    Beasts.abilityFrame = frame
+    return frame
+end
+
+function Beasts.AbilityRow(frame, index)
+    local row = frame.rows[index]
+    if row then return row end
+    row = CreateFrame("Button", nil, frame.content)
+    row:SetHeight(22)
+    row:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD")
+    row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    row.portrait = row:CreateTexture(nil, "ARTWORK")
+    row.portrait:SetSize(18, 18)
+    row.portrait:SetPoint("LEFT", row, "LEFT", 2, 0)
+    row.zone = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    row.zone:SetPoint("RIGHT", row, "RIGHT", -4, 0)
+    row.zone:SetJustifyH("RIGHT")
+    row.text = row:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    row.text:SetPoint("LEFT", row.portrait, "RIGHT", 6, 0)
+    row.text:SetPoint("RIGHT", row.zone, "LEFT", -8, 0)
+    row.text:SetJustifyH("LEFT")
+    row.text:SetWordWrap(false)
+    row:SetScript("OnEnter", function(sel)
+        GameTooltip:SetOwner(sel, "ANCHOR_RIGHT")
+        Beasts.AddBeastTooltip(GameTooltip, sel.beast)
+        GameTooltip:AddLine(" ")
+        GameTooltip:AddLine(TrainerSpells:Trans("LID_BEAST_LEFTCLICK"), 0.2, 1, 0.2)
+        GameTooltip:AddLine(TrainerSpells:Trans("LID_BEAST_RIGHTCLICK"), 0.2, 1, 0.2)
+        GameTooltip:Show()
+    end)
+    row:SetScript("OnLeave", GameTooltip_Hide)
+    row:SetScript("OnClick", function(sel, button)
+        if button == "RightButton" then Beasts.SetNearestWaypoint({sel.beast}) else Beasts.ShowDetails(sel.beast) end
+    end)
+    frame.rows[index] = row
+    return row
+end
+
+function Beasts.ShowAbility(key, rank)
+    local frame = Beasts.abilityFrame or Beasts.CreateAbilityFrame()
+    frame.abilityKey, frame.rank = key, rank
+    local name = Beasts.AbilityName(key) .. " " .. Beasts.RankText(rank)
+    local isFavorite = Beasts.IsFavoriteSpell(rank.spell)
+    frame.title:SetText(Beasts.FavoritePrefix(isFavorite) .. name)
+    frame.icon:SetTexture(Beasts.SpellIcon(rank.spell))
+    local lines = {}
+    table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_PETLEVEL") .. ":|r " .. rank.level .. "   |cffffd100" .. TrainerSpells:Trans("LID_TRAININGPOINTS") .. ":|r " .. rank.tp)
+    local trainerCost = Beasts.TrainerCost(key, rank)
+    if trainerCost then table.insert(lines, "|cff4db8ff" .. TrainerSpells:Trans("LID_PETTRAINER") .. (trainerCost > 0 and (": " .. GetMoneyString(trainerCost, true)) or "") .. "|r") end
+    if Beasts.IsKnown and Beasts.IsKnown(rank.spell) then table.insert(lines, Beasts.knownIcon .. " |cff9d9d9d" .. TrainerSpells:Trans("LID_RANKLEARNED") .. "|r") end
+    local families = {}
+    for _, familyID in ipairs(data.abilities[key].families) do table.insert(families, Beasts.FamilyName(familyID)) end
+    table.sort(families)
+    table.insert(lines, "|cffffd100" .. TrainerSpells:Trans("LID_FAMILY") .. ":|r " .. table.concat(families, ", "))
+    frame.info:SetText(table.concat(lines, "\n"))
+    local teachers = {}
+    for _, beast in ipairs(Beasts.Teachers(rank.spell)) do table.insert(teachers, beast) end
+    table.sort(teachers, function(a, b)
+        if Beasts.CanTame(a) ~= Beasts.CanTame(b) then return Beasts.CanTame(a) end
+        if a.maxLevel ~= b.maxLevel then return a.maxLevel < b.maxLevel end
+        return a.id < b.id
+    end)
+    frame.header:SetText(TrainerSpells:Trans("LID_TAUGHTBY") .. " |cff9d9d9d(" .. #teachers .. ")|r")
+    local width = frame.scroll:GetWidth() or 0
+    if width < 50 then width = 476 end
+    frame.content:SetWidth(width)
+    for index, beast in ipairs(teachers) do
+        local row = Beasts.AbilityRow(frame, index)
+        row.beast = beast
+        row:ClearAllPoints()
+        row:SetPoint("TOPLEFT", frame.content, "TOPLEFT", 0, -(index - 1) * 22)
+        row:SetPoint("TOPRIGHT", frame.content, "TOPRIGHT", 0, -(index - 1) * 22)
+        if beast.model and beast.model > 0 and SetPortraitTextureFromCreatureDisplayID then
+            SetPortraitTextureFromCreatureDisplayID(row.portrait, beast.model)
+        else
+            row.portrait:SetTexture(data.families[beast.family] and data.families[beast.family].icon or 132161)
+        end
+        local levelColor = Beasts.CanTame(beast) and "|cffffffff" or "|cffff4444"
+        row.text:SetText(Beasts.FavoritePrefix(Beasts.IsFavoriteBeast(beast.id)) .. Beasts.ClassTag(beast) .. TrainerSpells.UIColors.SPELL_NAME .. Beasts.BeastName(beast) .. "|r  " .. levelColor .. TrainerSpells:Trans("LID_LVL") .. " " .. Beasts.LevelText(beast) .. "|r")
+        local zones = Beasts.ZoneNames(beast)
+        row.zone:SetText("|cff9d9d9d" .. (zones[1] or "") .. (#zones > 1 and (" +" .. (#zones - 1)) or "") .. "|r")
+        row:Show()
+    end
+    for index = #teachers + 1, #frame.rows do frame.rows[index]:Hide() end
+    frame.content:SetHeight(math.max(1, #teachers * 22))
+    frame.scroll:FullUpdate(ScrollBoxConstants.UpdateImmediately)
+    frame.scroll:ScrollToBegin()
+    local hasTeachers = #teachers > 0
+    frame.nearest:SetEnabled(hasTeachers)
+    frame.map:SetEnabled(hasTeachers)
+    frame.favorite:SetText(TrainerSpells:Trans(isFavorite and "LID_FAVORITE_REMOVE" or "LID_FAVORITE_ADD"))
+    frame:Show()
+    frame:Raise()
+end
+
 function Beasts.CreateDropdown(parent, width, getText, fillMenu)
     local modern = MenuUtil and MenuUtil.CreateRootMenuDescription
     local dropdown
@@ -720,9 +890,9 @@ function TrainerSpells.CreateBeastControls(addon, parent)
         for _, dropdown in ipairs(dropdowns) do dropdown:UpdateLabel() end
         TrainerSpells_Refresh()
     end
-    local modeText = {pets = "LID_BEASTMODE_PETS", abilities = "LID_BEASTMODE_ABILITIES", zones = "LID_BEASTMODE_ZONES"}
+    local modeText = {pets = "LID_BEASTMODE_PETS", rares = "LID_BEASTMODE_RARES", abilities = "LID_BEASTMODE_ABILITIES", zones = "LID_BEASTMODE_ZONES"}
     local mode = Beasts.CreateDropdown(controls, 150, function() return TrainerSpells:Trans(modeText[Beasts.Settings().beastMode]) end, function(add)
-        for _, value in ipairs({"pets", "abilities", "zones"}) do
+        for _, value in ipairs({"pets", "rares", "abilities", "zones"}) do
             add(TrainerSpells:Trans(modeText[value]), function() return Beasts.Settings().beastMode == value end, function()
                 Beasts.Settings().beastMode = value
                 Changed()
