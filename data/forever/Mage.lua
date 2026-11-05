@@ -122,7 +122,7 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [12523] = { cost = 650, rank = 4 },
         [13018] = { cost = 650, rank = 2 },
         [1326054] = { cost = 13000, rank = 2 },
-        [1326080] = { cost = 650, rank = 2 },
+        [1326080] = { cost = 11000, rank = 2 },
     },
     [38] = {
         [3552] = { cost = 14000 },
@@ -178,7 +178,7 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [12525] = { cost = 1400, rank = 6 },
         [1240046] = { cost = 32000, rank = 5 },
         [1326055] = { cost = 28000, rank = 3 },
-        [1326081] = { cost = 1400, rank = 3 },
+        [1326081] = { cost = 22000, rank = 3 },
     },
     [50] = {
         [10139] = { cost = 32000, rank = 6, requires = {5504} },
@@ -234,6 +234,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [18809] = { cost = 2100, rank = 8 },
         [1237313] = { cost = 42000, rank = 3 },
         [1239700] = { cost = 42000, rank = 5 },
-        [1326082] = { cost = 2100, rank = 4 },
+        [1326082] = { cost = 31000, rank = 4 },
     },
 }

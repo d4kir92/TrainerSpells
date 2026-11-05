@@ -23,6 +23,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [1022] = { cost = 300, rank = 1 },
         [10290] = { cost = 300, rank = 2, requires = {465} },
         [20287] = { cost = 300, rank = 2, requires = {21084} },
+        [25780] = { cost = 3000 },
         [1311649] = { cost = 300, rank = 1 },
     },
     [12] = {
@@ -36,7 +37,6 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
     },
     [16] = {
         [7294] = { cost = 3000, rank = 1 },
-        [25780] = { cost = 3000 },
     },
     [18] = {
         [1044] = { cost = 3500 },
@@ -122,6 +122,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [20473] = { cost = 1000, rank = 2 },
         [20918] = { cost = 1000, rank = 3 },
         [20922] = { cost = 1000, rank = 3 },
+        [20927] = { cost = 1400, rank = 2 },
     },
     [42] = {
         [4987] = { cost = 21000 },
@@ -161,7 +162,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [20422] = { cost = 28000, rank = 6 },
         [20919] = { cost = 1400, rank = 4 },
         [20923] = { cost = 1400, rank = 4 },
-        [20927] = { cost = 1400, rank = 2 },
+        [20928] = { cost = 2300, rank = 3 },
         [1311590] = { cost = 1400, rank = 2 },
     },
     [52] = {
@@ -203,7 +204,6 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [20773] = { cost = 46000, rank = 5 },
         [20920] = { cost = 2300, rank = 5 },
         [20924] = { cost = 2300, rank = 5 },
-        [20928] = { cost = 2300, rank = 3 },
         [24239] = { cost = 46000, rank = 3 },
         [25890] = { cost = 46000, rank = 1 },
         [25895] = { cost = 46000 },
