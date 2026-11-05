@@ -1179,6 +1179,7 @@ function TrainerSpells.CreateBeastControls(addon, parent)
     nearest:SetText(TrainerSpells:Trans("LID_NEARESTBEAST"))
     nearest:SetWidth(math.max(120, nearest:GetTextWidth() + 30))
     hideLearned:SetPoint("LEFT", nearest, "RIGHT", 12, 0)
+    controls.flowOrder = {mode, family, tameable, nearest, hideLearned}
     nearest:SetScript("OnClick", function()
         Beasts.SetNearestWaypoint(Beasts.FilteredBeasts((TrainerSpells_SearchText or ""):lower()))
     end)

@@ -63,6 +63,43 @@ function TrainerSpells:IsLeatrixWideProfessionEnabled()
     return TrainerSpells:IsAddonLoaded("Leatrix_Plus") and LeaPlusDB and LeaPlusDB["EnhanceProfessions"] == "On"
 end
 
+function TrainerSpells:FlowControls(frame, available, minRowHeight)
+    available = available or frame:GetWidth()
+    if not available or available <= 0 then return end
+    local regions = {frame:GetRegions()}
+    local x, y, rowHeight, row = 0, 0, minRowHeight or 0, {}
+    local function PlaceRow()
+        for _, entry in ipairs(row) do
+            entry[1]:ClearAllPoints()
+            entry[1]:SetPoint("LEFT", frame, "TOPLEFT", entry[2], -(y + rowHeight / 2))
+        end
+    end
+    for _, child in ipairs(frame.flowOrder or {frame:GetChildren()}) do
+        if child:IsShown() then
+            local childWidth = math.min(child:GetWidth(), available)
+            local extent = childWidth
+            for _, region in ipairs(regions) do
+                if region.GetStringWidth and region:IsShown() and region:GetNumPoints() > 0 then
+                    local _, relative, _, offset = region:GetPoint(1)
+                    if relative == child then extent = math.max(extent, childWidth + (offset or 0) + region:GetStringWidth()) end
+                end
+            end
+            if x > 0 and x + extent > available then
+                PlaceRow()
+                x, y, rowHeight, row = 0, y + rowHeight + 4, minRowHeight or 0, {}
+            end
+            child:SetWidth(childWidth)
+            table.insert(row, {child, x})
+            rowHeight = math.max(rowHeight, child:GetHeight())
+            x = x + extent + 8
+        end
+    end
+    PlaceRow()
+    local height = y + rowHeight
+    frame:SetHeight(math.max(1, height))
+    return height
+end
+
 function TrainerSpells:AddContentBorder(frame, owner)
     owner = owner or frame
     frame.contentBackground = owner:CreateTexture(nil, "BACKGROUND", nil, -8)

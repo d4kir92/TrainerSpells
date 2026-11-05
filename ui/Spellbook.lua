@@ -565,9 +565,17 @@ local function PositionPlayerSpellsFrame()
         bar:ClearAllPoints()
         bar:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 33, 3)
         local sliderScale = slider:GetScale()
+        local barWidth, panelWidth, sliderWidth = 0, panel:GetWidth() or 0, 168
+        if not tabsLayout then
+            for index in ipairs(playerSpellsSubTabs.allViews or {}) do
+                local tab = bar:GetTabButton(index)
+                if tab and tab:IsShown() then barWidth = barWidth + tab:GetWidth() end
+            end
+        end
+        if panelWidth > 0 then sliderWidth = math.max(40, math.min(168, panelWidth - 86 - 33 - barWidth - 16)) end
         slider:ClearAllPoints()
         slider:SetPoint("RIGHT", panel, "TOPRIGHT", -86 / sliderScale, 16 / sliderScale)
-        slider:SetWidth(168 / sliderScale)
+        slider:SetWidth(sliderWidth / sliderScale)
         local spoilerFree = playerSpellsSubTabs.spoilerFree
         spoilerFree:ClearAllPoints()
         spoilerFree:SetPoint("TOPLEFT", panel, "TOPLEFT", left, top)
@@ -575,7 +583,7 @@ local function PositionPlayerSpellsFrame()
         spoilerFree:SetShown(showSpoilerFree)
         playerSpellsSubTabs.title:ClearAllPoints()
         playerSpellsSubTabs.title:SetPoint("TOPLEFT", bar, tabsLayout and "TOPLEFT" or "TOPRIGHT", tabsLayout and 0 or 12, 0)
-        playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -266, 35)
+        playerSpellsSubTabs.title:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -(98 + sliderWidth), 35)
         playerSpellsSubTabs.desc:ClearAllPoints()
         playerSpellsSubTabs.desc:SetPoint("TOPLEFT", playerSpellsSubTabs.title, "BOTTOMLEFT", 0, -3)
         playerSpellsSubTabs.desc:SetPoint("TOPRIGHT", playerSpellsSubTabs.title, "BOTTOMRIGHT", 0, -3)
@@ -593,7 +601,9 @@ local function PositionPlayerSpellsFrame()
     if TrainerSpells.WeaponControls then TrainerSpells.WeaponControls:SetShown(showWeaponControls and true or false) end
     if TrainerSpells.ClassTrainerControls then TrainerSpells.ClassTrainerControls:SetShown(showClassTrainerControls and true or false) end
     if TrainerSpells.BeastControls then TrainerSpells.BeastControls:SetShown(showBeastControls and true or false) end
-    local dividerOffset = top + 1 + ((showClassTrainerControls or showBeastControls) and -42 or showWeaponControls and -34 or showSpoilerFree and -26 or 0)
+    local flowControls = showClassTrainerControls or showBeastControls
+    local flowHeight = flowControls and TrainerSpells:FlowControls(flowControls, (anchor:GetWidth() or 0) - left + right, 36)
+    local dividerOffset = top + 1 + (flowControls and -((flowHeight or 36) + 6) or showWeaponControls and -34 or showSpoilerFree and -26 or 0)
     if playerSpellsModeDivider then
         playerSpellsModeDivider:ClearAllPoints()
         if panel then
@@ -632,6 +642,21 @@ local function PositionPlayerSpellsFrame()
     else
         searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 60, 34)
         searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -10, 34)
+    end
+end
+
+for _, controls in ipairs({TrainerSpells.ClassTrainerControls or false, TrainerSpells.BeastControls or false}) do
+    if controls then
+        local function Reflow()
+            if classFrame:IsShown() and not classFrame.compendiumHost and GetPlayerSpellsBook() then C_Timer.After(0, PositionPlayerSpellsFrame) end
+        end
+        controls:HookScript("OnShow", Reflow)
+        controls:HookScript("OnSizeChanged", function(self, width)
+            if width ~= self.flowWidth then
+                self.flowWidth = width
+                Reflow()
+            end
+        end)
     end
 end
 

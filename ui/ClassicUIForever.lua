@@ -121,6 +121,15 @@ function integration:CreateGroup(key, create, label, icon)
         view.spoilerFree:SetPoint("TOPLEFT", panel, "TOPLEFT", 8, -62)
     end
     host:SetScript("OnSizeChanged", function() view:LayoutTabs(); self:LayoutContent(group) end)
+    for _, control in ipairs(view.controls or {}) do
+        control.frame:HookScript("OnShow", function() self:FlowControl(group, control) end)
+        control.frame:HookScript("OnSizeChanged", function(_, width)
+            if width ~= control.flowWidth then
+                control.flowWidth = width
+                self:FlowControl(group, control)
+            end
+        end)
+    end
     for index = 0, #view.entries do
         local entry = view.entries[index]
         local mode = entry and (entry.mode or entry.view)
@@ -170,46 +179,38 @@ function integration:LayoutContent(group)
         view.spoilerFree:ClearAllPoints()
         view.spoilerFree:SetPoint("TOPLEFT", panel, "TOPLEFT", 8 / 0.85, -filterTop / 0.85)
     end
+    local tabsRight = 0
+    if not split then
+        local count = 0
+        for index in ipairs(view.tabs) do if view:IsEntryVisible(index) then count = count + 1 end end
+        if count > 0 then tabsRight = 8 + (count * 30 - 4) * 0.85 end
+    end
     view.slider:SetScale(0.85)
     view.slider:ClearAllPoints()
     view.slider:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -34 / 0.85, -(filterTop + 6) / 0.85)
-    view.slider:SetWidth(math.max(70, (width - 185) / 0.85))
+    view.slider:SetWidth(math.max(40, math.min(width - 185, width - 50 - tabsRight) / 0.85))
     view.scrollBox:SetClipsChildren(true)
     for _, control in ipairs(view.controls or {}) do
         local frame = control.frame
-        local available = host:GetWidth() - 12
-        local x, y, rowHeight = 0, 0, 0
-        for _, child in ipairs({frame:GetChildren()}) do
-            if child:IsShown() then
-                local childWidth = math.min(child:GetWidth(), available)
-                local extent = childWidth
-                for _, region in ipairs({frame:GetRegions()}) do
-                    if region.GetStringWidth and region:IsShown() then
-                        local _, relative, _, offset = region:GetPoint(1)
-                        if relative == child then extent = math.max(extent, childWidth + (offset or 0) + region:GetStringWidth()) end
-                    end
-                end
-                if x > 0 and x + extent > available then x, y, rowHeight = 0, y + rowHeight + 4, 0 end
-                child:ClearAllPoints()
-                child:SetPoint("TOPLEFT", frame, "TOPLEFT", x, -y)
-                child:SetWidth(childWidth)
-                rowHeight = math.max(rowHeight, child:GetHeight())
-                x = x + extent + 8
-            end
-        end
-        control.height = y + rowHeight + 12
-        frame:SetHeight(y + rowHeight)
         frame:ClearAllPoints()
         frame:SetPoint("TOPLEFT", host, "TOPLEFT", 4, -4)
         frame:SetPoint("TOPRIGHT", host, "TOPRIGHT", -4, -4)
-        if control.mode == view.mode then
-            view.scrollBox:ClearAllPoints()
-            view.scrollBox:SetPoint("TOPLEFT", host, "TOPLEFT", 0, -control.height)
-            view.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -24, 0)
-        end
+        self:FlowControl(group, control, (host:GetWidth() or 0) - 8)
     end
     self:BlockMousePassthrough(panel)
     group.layingOut = nil
+end
+
+function integration:FlowControl(group, control, available)
+    local view = group.view
+    local height = TrainerSpells:FlowControls(control.frame, available)
+    if not height then return end
+    control.height = height + 12
+    if control.mode == view.mode then
+        view.scrollBox:ClearAllPoints()
+        view.scrollBox:SetPoint("TOPLEFT", group.host, "TOPLEFT", 0, -control.height)
+        view.scrollBox:SetPoint("BOTTOMRIGHT", group.host, "BOTTOMRIGHT", -24, 0)
+    end
 end
 
 function integration:Layout()
