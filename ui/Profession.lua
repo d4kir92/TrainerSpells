@@ -1100,6 +1100,7 @@ end
 
 local function PositionProfessionsFrameModeTabs()
     if not ProfessionsFrame then return end
+    if TrainerSpells.IsClassicUIForeverProfessions and TrainerSpells:IsClassicUIForeverProfessions() then return end
     if not professionsModeTabs.addon then return end
     for _, list in ipairs({professionsModeTabs, professionsViewTabs}) do
         for _, tab in pairs(list) do tab:ClearAllPoints() end
@@ -1255,6 +1256,7 @@ local function IsTradeSkillAddonEnabled()
 end
 
 local function IsProfessionsFrameAddonEnabled()
+    if TrainerSpells.IsClassicUIForeverProfessions and TrainerSpells:IsClassicUIForeverProfessions() then return false end
     return TrainerSpells:IsTabEnabled("professions") and TrainerSpells:HasProfessionTabs()
 end
 
@@ -1523,7 +1525,7 @@ end
 
 function TrainerSpells:CreateCompendiumProfessions(host)
     local view = self:CreateCompendiumListView(host, PROFESSION_ALL_VIEWS, professionSubTabs.GetSavedView(), self.ProfessionRowHeight, function(entry) return IsProfessionViewEnabled(entry.mode) end)
-    self.CompendiumProfessionView = view
+    if not host.contentAPI then self.CompendiumProfessionView = view end
     view:AddSpoilerFreeCheckbox("professionSpoilerFree", "LID_PROFSPOILERFREE_DESC")
     view.BuildItems = function(current)
         if not current.professionKey then
@@ -1549,4 +1551,5 @@ function TrainerSpells:CreateCompendiumProfessions(host)
         view.dropdown:SetupMenu(function(_, menu) professionPicker.PopulateCompendiumMenu(view, menu) end)
     end
     host:SetScript("OnShow", function() view:Refresh() end)
+    return view
 end

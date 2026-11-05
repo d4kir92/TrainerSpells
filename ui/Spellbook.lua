@@ -1356,6 +1356,7 @@ function TrainerSpells:PositionCompendiumClass()
 end
 
 function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, isEntryVisible)
+    local api = host.contentAPI or AzerothCompendiumAPI
     local view = {host = host, mode = mode, rowHeight = rowHeight, tabs = {}, entries = entries, isEntryVisible = isEntryVisible}
     function view:IsEntryVisible(index)
         return not self.isEntryVisible or self.isEntryVisible(self.entries[index])
@@ -1366,7 +1367,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, 
             local shown = self:IsEntryVisible(index)
             tab:SetShown(shown)
             if shown then
-                AzerothCompendiumAPI.PositionContentTab(tab, host, previous)
+                api.PositionContentTab(tab, host, previous)
                 previous = tab
             end
         end
@@ -1401,7 +1402,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, 
     view.desc:SetPoint("TOPLEFT", view.title, "BOTTOMLEFT", 0, -3)
     view.desc:SetPoint("TOPRIGHT", view.title, "BOTTOMRIGHT", 0, -3)
     for _, entry in ipairs(entries) do
-        local tab = AzerothCompendiumAPI.CreateContentTab(host, view:TranslateTitle(entry.title), entry.icon, function() view.mode = entry.mode or entry.view; view:Refresh() end)
+        local tab = api.CreateContentTab(host, view:TranslateTitle(entry.title), entry.icon, function() view.mode = entry.mode or entry.view; view:Refresh() end)
         tab.mode = entry.mode or entry.view
         if entry.classToken then playerSpellsSubTabs.SetClassIcon(tab.Icon, entry.classToken) end
         tab:SetScript("OnEnter", function(button)
@@ -1470,10 +1471,10 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, 
     end
     host.OnSearchChanged = function() view:Refresh() end
     host:SetScript("OnSizeChanged", function()
-        AzerothCompendiumAPI.PositionHeaderSlider(view.slider)
+        api.PositionHeaderSlider(view.slider)
         view:LayoutTabs()
     end)
-    AzerothCompendiumAPI.PositionHeaderSlider(view.slider)
+    api.PositionHeaderSlider(view.slider)
     host:RegisterEvent("PLAYER_LEVEL_UP")
     host:RegisterEvent("SPELLS_CHANGED")
     host:RegisterEvent("PLAYER_MONEY")
@@ -1485,7 +1486,7 @@ end
 function TrainerSpells:CreateCompendiumClass(host)
     playerSpellsSubTabs.BuildViews()
     local view = self:CreateCompendiumListView(host, playerSpellsSubTabs.allViews, playerSpellsSubTabs.GetSavedView(), self.RowHeight, function(entry) return TrainerSpells:IsTabEnabled(entry.view) end)
-    self.CompendiumClassView = view
+    if not host.contentAPI then self.CompendiumClassView = view end
     view.BuildItems = function(current) return TrainerSpells:BuildClassViewItems(current.mode, host.searchText) end
     view:AddSpoilerFreeCheckbox("spoilerFree", "LID_SPOILERFREE_DESC", "class")
     view.controls = {}
@@ -1499,6 +1500,7 @@ function TrainerSpells:CreateCompendiumClass(host)
         end
     end
     host:SetScript("OnShow", function() view:Refresh() end)
+    return view
 end
 function TrainerSpells:RegisterCompendiumTabs()
     local api = _G["AzerothCompendiumAPI"]

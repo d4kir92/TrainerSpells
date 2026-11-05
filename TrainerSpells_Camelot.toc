@@ -108,4 +108,5 @@ ui\Profession.lua
 ui\HunterBeasts.lua
 ui\HunterBeastsExtras.lua
 ui\Spellbook.lua
+ui\ClassicUIForever.lua
 ui\RowHeightSync.lua
