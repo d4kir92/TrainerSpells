@@ -120,7 +120,7 @@ function integration:CreateGroup(key, create, label, icon)
         view.spoilerFree:ClearAllPoints()
         view.spoilerFree:SetPoint("TOPLEFT", panel, "TOPLEFT", 8, -62)
     end
-    host:SetScript("OnSizeChanged", function() view:LayoutTabs(); self:LayoutContent(group) end)
+    host:SetScript("OnSizeChanged", function() view:LayoutTabs(); self:LayoutContent(group); self:QueueLayout() end)
     for _, control in ipairs(view.controls or {}) do
         control.frame:HookScript("OnShow", function() self:FlowControl(group, control) end)
         control.frame:HookScript("OnSizeChanged", function(_, width)
@@ -238,6 +238,7 @@ function integration:Layout()
     if self.book.TrainTab and self.book.TrainTab:IsShown() then last = self.book.TrainTab end
     local bottom = self.book:GetBottom()
     local top = last and last:GetBottom()
+    if top then top = top * last:GetEffectiveScale() / self.book:GetEffectiveScale() end
     local left = bottom and top and top - #visible * 49 < bottom + (self.professionHost and 16 or 85)
     local capacity = math.max(1, math.floor((self.book:GetHeight() - (self.professionHost and 80 or 150)) / 40))
     for index, tab in ipairs(visible) do
@@ -255,6 +256,15 @@ function integration:Layout()
         tab.border:SetPoint(left and "TOPRIGHT" or "TOPLEFT", tab, left and "TOPRIGHT" or "TOPLEFT", left and 3 or -3, 11)
         tab.border:SetTexCoord(left and 1 or 0, left and 0 or 1, 0, 1)
     end
+end
+
+function integration:QueueLayout()
+    if self.layoutQueued then return end
+    self.layoutQueued = true
+    C_Timer.After(0, function()
+        self.layoutQueued = nil
+        self:Layout()
+    end)
 end
 
 function integration:BindViews()
@@ -283,11 +293,12 @@ function integration:InstallProfessions()
     self.professions = controller
     controller:CreateGroup("professions", TrainerSpells.CreateCompendiumProfessions, TrainerSpells:Trans("LID_PROFESSIONS"), 134708)
     book:HookScript("OnHide", function() controller:Close() end)
-    book:HookScript("OnShow", function() controller:Layout() end)
+    book:HookScript("OnShow", function() controller:Layout(); controller:QueueLayout() end)
+    book:HookScript("OnSizeChanged", function() controller:QueueLayout() end)
     book.BookPage:HookScript("OnHide", function() controller:Close(); controller:Layout() end)
-    book.BookPage:HookScript("OnShow", function() controller:Layout() end)
-    hooksecurefunc(book, "RefreshRightTabs", function() controller:Layout() end)
-    hooksecurefunc(book, "RightTabSelected", function() controller:Close(); controller:Layout() end)
+    book.BookPage:HookScript("OnShow", function() controller:Layout(); controller:QueueLayout() end)
+    hooksecurefunc(book, "RefreshRightTabs", function() controller:Layout(); controller:QueueLayout() end)
+    hooksecurefunc(book, "RightTabSelected", function() controller:Close(); controller:Layout(); controller:QueueLayout() end)
     controller:BindViews()
     TrainerSpells:ApplyTabSettings()
 end
