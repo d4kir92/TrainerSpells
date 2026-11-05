@@ -53,10 +53,36 @@ local function RelocalizeProfessionData()
     end
 end
 
+local function PruneToBuiltin(levels, builtinLevels)
+    if not levels then return end
+    for level, bucket in pairs(levels) do
+        local builtin = builtinLevels[level]
+        if type(bucket) == "table" then
+            for spellID in pairs(bucket) do
+                if not (builtin and builtin[spellID]) then bucket[spellID] = nil end
+            end
+            if next(bucket) == nil then levels[level] = nil end
+        end
+    end
+end
+
+function TrainerSpells:UsesBundledTrainerData(classToken, isPetTraining, professionKey)
+    if TrainerSpells.DebugTrainerEnabled then return false end
+    if professionKey then return TrainerSpellsBuiltin_Profession ~= nil and TrainerSpellsBuiltin_Profession[professionKey] ~= nil end
+    if isPetTraining then return classToken == "HUNTER" and TrainerSpellsBuiltin_HunterPet ~= nil end
+    return TrainerSpellsBuiltin ~= nil and TrainerSpellsBuiltin[classToken] ~= nil
+end
+
+function TrainerSpells:UsesBundledPetData(pet)
+    if TrainerSpells.DebugTrainerEnabled then return false end
+    return TrainerSpellsBuiltin_WarlockPet ~= nil and TrainerSpellsBuiltin_WarlockPet[pet] ~= nil
+end
+
 function TrainerSpells:MergeBuiltinData()
     RelocalizeProfessionData()
     if TrainerSpellsBuiltin then
         for class, levels in pairs(TrainerSpellsBuiltin) do
+            PruneToBuiltin(TrainerSpells_Data[class], levels)
             for level, spells in pairs(levels) do
                 local bucket = TrainerSpells:EnsurePath(class, level)
                 for spellID, data in pairs(spells) do
@@ -64,11 +90,13 @@ function TrainerSpells:MergeBuiltinData()
                         bucket[spellID] = {
                             cost = data.cost or 0,
                             rank = data.rank,
+                            requires = data.requires,
                             faction = data.faction,
                             race = data.race
                         }
                     else
                         if data.cost then bucket[spellID].cost = data.cost end
+                        if data.requires then bucket[spellID].requires = data.requires end
                         if data.faction and bucket[spellID].faction == nil then bucket[spellID].faction = data.faction end
                         if data.race and bucket[spellID].race == nil then bucket[spellID].race = data.race end
                     end
@@ -83,6 +111,7 @@ function TrainerSpells:MergeBuiltinData()
 
     if TrainerSpellsBuiltin_WarlockPet then
         for pet, levels in pairs(TrainerSpellsBuiltin_WarlockPet) do
+            PruneToBuiltin(TrainerSpells_PetData[pet], levels)
             for level, spells in pairs(levels) do
                 local bucket = TrainerSpells:EnsurePetPath(pet, level)
                 for spellID, data in pairs(spells) do
@@ -102,6 +131,7 @@ function TrainerSpells:MergeBuiltinData()
     end
 
     if TrainerSpellsBuiltin_HunterPet then
+        PruneToBuiltin(TrainerSpells_PetTrainerData.HUNTER, TrainerSpellsBuiltin_HunterPet)
         for level, spells in pairs(TrainerSpellsBuiltin_HunterPet) do
             local bucket = TrainerSpells:EnsurePetTrainerPath("HUNTER", level)
             for spellID, data in pairs(spells) do

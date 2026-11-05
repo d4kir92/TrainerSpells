@@ -151,6 +151,13 @@ local function UpdateCollapseButton(rowFrame, elementData, anchor)
         button:SetPushedAtlas(pushedAtlas)
         button:SetHighlightAtlas(atlas, "ADD")
         button:GetHighlightTexture():SetAlpha(0.4)
+        local info = C_Texture.GetAtlasInfo(atlas)
+        local scale = (COLLAPSE_BUTTON_SIZE - 3) / math.max(info.width or 1, info.height or 1, 1)
+        for _, texture in ipairs({button:GetNormalTexture(), button:GetPushedTexture(), button:GetHighlightTexture()}) do
+            texture:ClearAllPoints()
+            texture:SetPoint("CENTER")
+            texture:SetSize((info.width or 1) * scale, (info.height or 1) * scale)
+        end
     else
         button:SetNormalTexture(elementData.collapsed and COLLAPSED_UP or EXPANDED_UP)
         button:SetPushedTexture(elementData.collapsed and COLLAPSED_DOWN or EXPANDED_DOWN)

@@ -165,6 +165,7 @@ local function CaptureTrainerInner()
 
     TrainerSpells:DebugTrainer("CaptureTrainerInner: rankFound=%s", tostring(rankFound))
     if not rankFound then return end
+    if professionKey and TrainerSpells:UsesBundledTrainerData(classToken, false, professionKey) then return end
     for i = 1, numServices do
         local name, rankText, sType, levelReq, icon = TrainerSpells:GetTrainerServiceInfo(i)
         local rank = rankText and tonumber(rankText:match("%d+"))
@@ -200,9 +201,9 @@ local function CaptureTrainerInner()
                 }
             else
                 local spellID = TrainerSpells:GetSpellIDForService(i)
-                if spellID then
+                local isPetTraining = isPetTrainer or TrainerSpells:IsPetTrainerSkillLine(skillLine)
+                if spellID and not TrainerSpells:UsesBundledTrainerData(classToken, isPetTraining) then
                     if not levelReq or levelReq == 0 then levelReq = TrainerSpells:GetSpellLevelLearned(spellID) or levelReq end
-                    local isPetTraining = isPetTrainer or TrainerSpells:IsPetTrainerSkillLine(skillLine)
                     if skillLine ~= lastDebugSkillLine then
                         lastDebugSkillLine = skillLine
                         TrainerSpells:DebugTrainer("CaptureTrainerInner: skillLine=%s isPetTraining=%s classToken=%s", tostring(skillLine), tostring(isPetTraining), tostring(classToken))
@@ -268,6 +269,7 @@ local function OnTrainerServiceSelectedInner(id)
     if isTradeskill then professionKey = TrainerSpells:DetectTrainerProfession() end
     local bucket, key
     if professionKey then
+        if TrainerSpells:UsesBundledTrainerData(classToken, false, professionKey) then return end
         local name = GetTrainerServiceInfo(id)
         local skillReq = TrainerSpells:GetSkillReqForService(id)
         local profession = TrainerSpells_ProfessionData[professionKey]
@@ -279,6 +281,7 @@ local function OnTrainerServiceSelectedInner(id)
         local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(id)
         local levelReq = GetTrainerServiceLevelReq and GetTrainerServiceLevelReq(id) or 0
         local isPetTraining = TrainerSpells:IsPetTrainerSkillLine(skillLine)
+        if TrainerSpells:UsesBundledTrainerData(classToken, isPetTraining) then return end
         local levels = isPetTraining and TrainerSpells_PetTrainerData[classToken] or TrainerSpells_Data[classToken]
         bucket = levels and levels[levelReq]
         key = spellID

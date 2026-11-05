@@ -1,7 +1,6 @@
 TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
     [1] = {
-        [3127] = { cost = 100 },
         [6673] = { cost = 10, rank = 1 },
     },
     [4] = {
@@ -12,6 +11,7 @@ TrainerSpellsBuiltin.WARRIOR = TrainerSpellsBuiltin.WARRIOR or {
         [6343] = { cost = 100, rank = 1 },
     },
     [8] = {
+        [3127] = { cost = 100 },
         [284] = { cost = 200, rank = 2, requires = {78} },
         [1715] = { cost = 200, rank = 1 },
     },

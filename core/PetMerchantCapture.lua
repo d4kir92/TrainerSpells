@@ -36,7 +36,7 @@ local function CaptureMerchantInner()
                 scanTooltip:ClearLines()
                 scanTooltip:SetMerchantItem(i)
                 local pet = DetectPetFromTooltip(scanTooltip)
-                if pet then
+                if pet and not TrainerSpells:UsesBundledPetData(pet) then
                     local spellID = TrainerSpells:GetTooltipSpellID(scanTooltip)
                     if TrainerSpells:IsSaneSpellID(spellID) then
                         local price = GetMerchantItemPrice(i)

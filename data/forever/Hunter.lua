@@ -2,7 +2,6 @@ TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}
 TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
     [1] = {
         [1494] = { cost = 10 },
-        [3127] = { cost = 200 },
     },
     [4] = {
         [1978] = { cost = 100, rank = 1 },
@@ -13,6 +12,7 @@ TrainerSpellsBuiltin.HUNTER = TrainerSpellsBuiltin.HUNTER or {
         [3044] = { cost = 100, rank = 1 },
     },
     [8] = {
+        [3127] = { cost = 200 },
         [5116] = { cost = 200 },
         [14260] = { cost = 200, rank = 2 },
     },
