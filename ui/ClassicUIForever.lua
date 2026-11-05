@@ -38,6 +38,7 @@ function integration:Close()
     self.active = nil
     for _, group in ipairs(self.groups) do group.panel:Hide() end
     for _, tab in ipairs(self.tabs or {}) do tab.selected:Hide() end
+    self:ReleaseNativeMouse()
 end
 
 function integration:Open(group, mode)
@@ -52,6 +53,7 @@ function integration:Open(group, mode)
     group.panel:Show()
     group.view:Refresh()
     self:Layout()
+    self:BlockNativeMouse()
 end
 
 function integration:GetLevel(frame)
@@ -218,7 +220,7 @@ function integration:Layout()
     local visible = {}
     for _, group in ipairs(self.groups) do
         self:LayoutContent(group)
-        local enabled = TrainerSpells:IsTabEnabled(group.key) and (not self.professionHost or (TrainerSpells:IsClassicUIForeverProfessions() and self.book.BookPage:IsShown()))
+        local enabled = TrainerSpells:IsTabEnabled(group.key) and (not self.professionHost or TrainerSpells:IsClassicUIForeverProfessions())
         local split = TrainerSpells:GetTabLayout(group.key == "spellbook" and "spellbookLayout" or "professionLayout") == "tabs"
         local count = 0
         for index in ipairs(group.view.entries) do if group.view:IsEntryVisible(index) then count = count + 1 end end
@@ -236,15 +238,28 @@ function integration:Layout()
     local last = self.professionHost and self.book.ProfessionsOverviewTab or nil
     for _, tab in ipairs(self.professionHost and self.book.rightProfessionTabs or self.book.SkillTabs or {}) do if tab:IsShown() then last = tab end end
     if self.book.TrainTab and self.book.TrainTab:IsShown() then last = self.book.TrainTab end
-    local bottom = self.book:GetBottom()
-    local top = last and last:GetBottom()
-    if top then top = top * last:GetEffectiveScale() / self.book:GetEffectiveScale() end
-    local left = bottom and top and top - #visible * 49 < bottom + (self.professionHost and 16 or 85)
-    local capacity = math.max(1, math.floor((self.book:GetHeight() - (self.professionHost and 80 or 150)) / 40))
+    local bookTop, height = self.book:GetTop(), self.book:GetHeight()
+    local lastBottom = last and last:GetBottom()
+    local start, center = -65, nil
+    if lastBottom and bookTop then
+        local ratio = last:GetEffectiveScale() / self.book:GetEffectiveScale()
+        start = lastBottom * ratio - bookTop - (self.professionHost and 8 or 17)
+        local lastLeft, bookRight = last:GetLeft(), self.book:GetRight()
+        if lastLeft and bookRight then center = (lastLeft + last:GetWidth() / 2) * ratio - bookRight end
+    end
+    local y, column = start, 0
+    local level = math.min(9000, self.book:GetFrameLevel() + 500)
     for index, tab in ipairs(visible) do
+        tab:SetFrameLevel(level)
         tab:ClearAllPoints()
-        if left and (index - 1) % capacity == 0 then
-            tab:SetPoint("TOPRIGHT", self.book, "TOPLEFT", -math.floor((index - 1) / capacity) * 40, -65)
+        local size = tab:GetHeight()
+        if bookTop and height and height > 0 then
+            if index > 1 and y - size < 8 - height then
+                column = column + 1
+                y = start
+            end
+            tab:SetPoint("TOPLEFT", self.book, "TOPRIGHT", (center and center - tab:GetWidth() / 2 or -32) + column * 40, y)
+            y = y - size - 8
         elseif index > 1 then
             tab:SetPoint("TOPLEFT", visible[index - 1], "BOTTOMLEFT", 0, -8)
         elseif last then
@@ -253,9 +268,41 @@ function integration:Layout()
             tab:SetPoint("TOPLEFT", self.book, "TOPRIGHT", -32, -65)
         end
         tab.border:ClearAllPoints()
-        tab.border:SetPoint(left and "TOPRIGHT" or "TOPLEFT", tab, left and "TOPRIGHT" or "TOPLEFT", left and 3 or -3, 11)
-        tab.border:SetTexCoord(left and 1 or 0, left and 0 or 1, 0, 1)
+        tab.border:SetPoint("TOPLEFT", tab, "TOPLEFT", -3, 11)
+        tab.border:SetTexCoord(0, 1, 0, 1)
     end
+end
+
+function integration:BlockNativeMouse()
+    local clicks = self.book and self.book.Clicks
+    local panel = self.active and self.active.panel
+    if not clicks or not panel or not panel:IsShown() or InCombatLockdown() then return end
+    local pl, pb, pw, ph = panel:GetRect()
+    if not pl then return end
+    local ps = panel:GetEffectiveScale()
+    pl, pb, pw, ph = pl * ps, pb * ps, pw * ps, ph * ps
+    self.nativeBlocked = self.nativeBlocked or {}
+    local function Visit(frame)
+        if frame:IsMouseEnabled() then
+            local l, b, w, h = frame:GetRect()
+            if l then
+                local s = frame:GetEffectiveScale()
+                local x, y = (l + w / 2) * s, (b + h / 2) * s
+                if x > pl and x < pl + pw and y > pb and y < pb + ph then
+                    frame:EnableMouse(false)
+                    self.nativeBlocked[frame] = true
+                end
+            end
+        end
+        for _, child in ipairs({frame:GetChildren()}) do Visit(child) end
+    end
+    Visit(clicks)
+end
+
+function integration:ReleaseNativeMouse()
+    if not self.nativeBlocked or InCombatLockdown() then return end
+    for frame in pairs(self.nativeBlocked) do frame:EnableMouse(true) end
+    self.nativeBlocked = nil
 end
 
 function integration:QueueLayout()
@@ -299,6 +346,14 @@ function integration:InstallProfessions()
     book.BookPage:HookScript("OnShow", function() controller:Layout(); controller:QueueLayout() end)
     hooksecurefunc(book, "RefreshRightTabs", function() controller:Layout(); controller:QueueLayout() end)
     hooksecurefunc(book, "RightTabSelected", function() controller:Close(); controller:Layout(); controller:QueueLayout() end)
+    local overview = book.ProfessionsOverviewTab
+    for _, script in ipairs({"OnClick", "OnMouseUp"}) do
+        if overview and overview:HasScript(script) then
+            overview:HookScript(script, function() controller:Close(); controller:QueueLayout() end)
+            break
+        end
+    end
+    if book.CraftingPage then book.CraftingPage:HookScript("OnShow", function() controller:Close(); controller:Layout(); controller:QueueLayout() end) end
     controller:BindViews()
     TrainerSpells:ApplyTabSettings()
 end
@@ -318,7 +373,11 @@ function integration:Install()
     hooksecurefunc(self.book, "Refresh", function()
         if self.active then self.active.panel:SetFrameLevel(self:GetLevel(self.book.Clicks or self.book) + 10) end
         self:Layout()
+        self:BlockNativeMouse()
     end)
+    if type(self.book.BuildPages) == "function" then
+        hooksecurefunc(self.book, "BuildPages", function() self:BlockNativeMouse() end)
+    end
     self:BindViews()
 end
 
@@ -333,6 +392,7 @@ integration.loader:SetScript("OnEvent", function(_, event)
         if integration.professions then integration.professions:Close() end
     end
     integration:Install()
+    if event == "PLAYER_REGEN_ENABLED" and not integration.active then integration:ReleaseNativeMouse() end
     integration:Layout()
     if integration.professions then integration.professions:Layout() end
     if not integration.book and C_AddOns.IsAddOnLoaded("ClassicUIForever") and not integration.timer then
