@@ -234,6 +234,6 @@ TrainerSpellsBuiltin.MAGE = TrainerSpellsBuiltin.MAGE or {
         [18809] = { cost = 2100, rank = 8 },
         [1237313] = { cost = 42000, rank = 3 },
         [1239700] = { cost = 42000, rank = 5 },
-        [1326082] = { cost = 31000, rank = 4 },
+        [1326082] = { cost = 30000, rank = 4 },
     },
 }

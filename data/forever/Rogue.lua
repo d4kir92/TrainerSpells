@@ -22,9 +22,9 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [6770] = { cost = 300, rank = 1 },
     },
     [12] = {
-        [3127] = { cost = 800 },
         [1766] = { cost = 800, rank = 1 },
         [2589] = { cost = 800, rank = 2 },
+        [3127] = { cost = 800 },
     },
     [14] = {
         [703] = { cost = 1200, rank = 1 },
@@ -39,6 +39,7 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
     [18] = {
         [1777] = { cost = 2900, rank = 2 },
         [8676] = { cost = 2900, rank = 1 },
+        [1328825] = { cost = 2200 },
     },
     [20] = {
         [1785] = { cost = 3000, rank = 2 },
@@ -56,6 +57,7 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [2836] = { cost = 5000 },
         [5763] = { cost = 5000, rank = 1 },
         [6762] = { cost = 5000, rank = 4, requires = {2098} },
+        [1329283] = { cost = 6000 },
     },
     [26] = {
         [1767] = { cost = 6000, rank = 2 },
@@ -118,6 +120,7 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [11273] = { cost = 29000, rank = 4 },
         [11279] = { cost = 29000, rank = 6 },
         [11341] = { cost = 29000, rank = 4 },
+        [1329549] = { cost = 23000 },
     },
     [46] = {
         [11197] = { cost = 31000, rank = 4 },
@@ -130,6 +133,7 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [11297] = { cost = 33000, rank = 3 },
         [11299] = { cost = 33000, rank = 7, requires = {2098} },
         [13229] = { cost = 33000, rank = 3 },
+        [1325756] = { cost = 43000, rank = 2 },
     },
     [50] = {
         [3421] = { cost = 35000, rank = 2 },
@@ -153,6 +157,7 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [11198] = { cost = 50000, rank = 5 },
         [11300] = { cost = 50000, rank = 8, requires = {2098} },
         [13230] = { cost = 50000, rank = 4 },
+        [1325757] = { cost = 48000, rank = 3, requires = {1325756} },
     },
     [58] = {
         [1769] = { cost = 52000, rank = 4 },
@@ -166,5 +171,6 @@ TrainerSpellsBuiltin.ROGUE = TrainerSpellsBuiltin.ROGUE or {
         [11286] = { cost = 54000, rank = 5 },
         [11343] = { cost = 54000, rank = 6 },
         [1241584] = { cost = 54000, rank = 3 },
+        [1325758] = { cost = 51000, rank = 4, requires = {1325757} },
     },
 }

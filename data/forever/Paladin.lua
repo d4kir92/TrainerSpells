@@ -14,9 +14,9 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [21082] = { cost = 100, rank = 1 },
     },
     [8] = {
-        [3127] = { cost = 100 },
         [853] = { cost = 100, rank = 1 },
         [1152] = { cost = 100 },
+        [3127] = { cost = 100 },
     },
     [10] = {
         [633] = { cost = 300, rank = 1 },
@@ -210,6 +210,7 @@ TrainerSpellsBuiltin.PALADIN = TrainerSpellsBuiltin.PALADIN or {
         [25898] = { cost = 2300 },
         [25916] = { cost = 46000, rank = 2, requires = {19740} },
         [25918] = { cost = 46000, rank = 2 },
+        [1239570] = { cost = 29000, rank = 4, requires = {20928} },
         [1311595] = { cost = 2300, rank = 3 },
     },
 }
