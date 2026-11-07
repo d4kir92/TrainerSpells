@@ -5,8 +5,24 @@ TrainerSpells.Pricing = {
         Horde = {76, 68, 81, 530, 911, 1133},
     },
     sideFactions = {
-        Alliance = {72, 47, 54, 69, 930, 1134, 1094},
-        Horde = {76, 68, 81, 530, 911, 1133, 1124},
+        Alliance = {72, 47, 54, 69, 930, 1134, 1094, 2779},
+        Horde = {76, 68, 81, 530, 911, 1133, 1124, 2778},
+    },
+    foreverFactions = {
+        Alliance = {72, 47, 54, 69, 2779},
+        Horde = {76, 68, 81, 530, 2778},
+    },
+    factionAreas = {
+        [47] = {1537},
+        [54] = {1537, 1},
+        [68] = {1497},
+        [69] = {1657},
+        [72] = {1519},
+        [76] = {1637},
+        [81] = {1638},
+        [530] = {1637, 14},
+        [2778] = {16593},
+        [2779] = {16593},
     },
     trainerFactions = {
         tbc = {
@@ -47,6 +63,7 @@ TrainerSpells.Pricing = {
 
 function TrainerSpells.Pricing.GetTrainerFactions(classToken)
     local interface = select(4, GetBuildInfo()) or 0
+    if interface >= 16000 and interface < 20000 then return TrainerSpells.Pricing.foreverFactions[UnitFactionGroup("player")] end
     local list = TrainerSpells.Pricing.trainerFactions[interface < 30000 and "tbc" or interface < 40000 and "wrath" or "cata"]
     return list[classToken]
 end
@@ -67,7 +84,7 @@ function TrainerSpells.Pricing.GetDiscount(standing)
     return math.max(0, math.min(20, (standing - 4) * 5))
 end
 
-function TrainerSpells.Pricing.GetBestDiscount()
+function TrainerSpells.Pricing.GetFactions()
     local Pricing = TrainerSpells.Pricing
     local side = UnitFactionGroup("player")
     local enemy = {}
@@ -78,15 +95,45 @@ function TrainerSpells.Pricing.GetBestDiscount()
     end
 
     local classToken = select(2, UnitClass("player"))
-    local names, bestStanding = {}, 0
+    local factions = {}
     for _, factionID in ipairs(Pricing.GetTrainerFactions(classToken) or Pricing.capitals[side] or {}) do
         local name, standing = Pricing.GetFaction(factionID)
         if name and not enemy[factionID] and type(standing) == "number" then
-            if standing > bestStanding then
-                names, bestStanding = {name}, standing
-            elseif standing == bestStanding then
-                table.insert(names, name)
-            end
+            table.insert(factions, {
+                id = factionID,
+                name = name,
+                standing = standing,
+                discount = Pricing.GetDiscount(standing)
+            })
+        end
+    end
+
+    table.sort(factions, function(left, right)
+        if left.discount ~= right.discount then return left.discount > right.discount end
+        return left.name < right.name
+    end)
+    return factions
+end
+
+function TrainerSpells.Pricing.IsInFactionArea(factionID)
+    local areas = TrainerSpells.Pricing.factionAreas[factionID]
+    if not areas or not C_Map or not C_Map.GetAreaInfo or not GetRealZoneText then return false end
+    local zone = GetRealZoneText()
+    if not zone or zone == "" then return false end
+    for _, areaID in ipairs(areas) do
+        if C_Map.GetAreaInfo(areaID) == zone then return true end
+    end
+    return false
+end
+
+function TrainerSpells.Pricing.GetBestDiscount()
+    local Pricing = TrainerSpells.Pricing
+    local names, bestStanding = {}, 0
+    for _, faction in ipairs(Pricing.GetFactions()) do
+        if faction.standing > bestStanding then
+            names, bestStanding = {faction.name}, faction.standing
+        elseif faction.standing == bestStanding then
+            table.insert(names, faction.name)
         end
     end
 
@@ -163,7 +210,17 @@ function TrainerSpells.Pricing.AddTooltip(tooltip, entry)
     end
 
     if mode ~= "base" and entry.priceFaction and (entry.priceDiscount or 0) > 0 then
-        tooltip:AddLine(string.format(TrainerSpells:Trans("LID_PRICE_FACTIONS"), entry.priceDiscount) .. ": " .. entry.priceFaction, 0.8, 0.8, 0.8, true)
+        for _, faction in ipairs(TrainerSpells.Pricing.GetFactions()) do
+            if faction.discount > 0 then
+                local label = _G["FACTION_STANDING_LABEL" .. faction.standing]
+                local text = string.format(TrainerSpells:Trans("LID_PRICE_FACTIONS"), faction.discount) .. ": " .. faction.name .. (label and (" (" .. label .. ")") or "")
+                if TrainerSpells.Pricing.IsInFactionArea(faction.id) then
+                    tooltip:AddLine(text, 0.2, 1, 0.2, true)
+                else
+                    tooltip:AddLine(text, 0.8, 0.8, 0.8, true)
+                end
+            end
+        end
         tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_COMPARE"), 0.6, 0.6, 0.6, true)
     end
 
