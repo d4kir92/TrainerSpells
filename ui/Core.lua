@@ -1097,3 +1097,96 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
         rowFrame:SetScript("OnMouseUp", function(sel, button) if button == "RightButton" then TrainerSpells:ShowIgnoreMenu(sel, entry) end end)
     end
 end
+
+TrainerSpells.TextTheme = {
+    TEXT = {0.25, 0.13, 0},
+    DIM = {0.45, 0.38, 0.3},
+    PAGE_BRIGHTNESS = 0.8,
+    LIGHT_THRESHOLD = 0.4,
+    TARGET_LUMINANCE = 0.35,
+    BOOK_TEXTURES = {"BookBGLeft", "BookBGRight", "BookBGHalved"},
+    ROW_FONTS = {"nameFS", "levelFS", "countFS", "costFS", "sourceFS"},
+}
+
+function TrainerSpells:IsOnLightBackground(frame)
+    local book = PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
+    if not book or not frame then return false end
+    local parent = frame
+    while parent and parent ~= book do parent = parent:GetParent() end
+    if not parent then return false end
+    local theme, brightness = self.TextTheme, 0
+    for _, key in ipairs(theme.BOOK_TEXTURES) do
+        local texture = book[key]
+        if texture and texture:IsShown() then
+            local r, g, b, a = texture:GetVertexColor()
+            brightness = math.max(brightness, (0.299 * r + 0.587 * g + 0.114 * b) * (a or 1) * theme.PAGE_BRIGHTNESS)
+        end
+    end
+    return brightness >= theme.LIGHT_THRESHOLD
+end
+
+function TrainerSpells:ToLightBackgroundColor(r, g, b)
+    local theme = self.TextTheme
+    local high, low = math.max(r, g, b), math.min(r, g, b)
+    if high - low < 0.15 then
+        local t = math.max(0, math.min(1, (1 - high) / 0.5))
+        local text, dim = theme.TEXT, theme.DIM
+        return text[1] + (dim[1] - text[1]) * t, text[2] + (dim[2] - text[2]) * t, text[3] + (dim[3] - text[3]) * t
+    end
+    local luminance = 0.299 * r + 0.587 * g + 0.114 * b
+    local scale = luminance > theme.TARGET_LUMINANCE and theme.TARGET_LUMINANCE / luminance or 1
+    return r * scale, g * scale, b * scale
+end
+
+function TrainerSpells:ToLightBackgroundText(text)
+    if type(text) ~= "string" or text == "" then return text end
+    return (text:gsub("|c(%x%x)(%x%x)(%x%x)(%x%x)", function(alpha, r, g, b)
+        local nr, ng, nb = self:ToLightBackgroundColor(tonumber(r, 16) / 255, tonumber(g, 16) / 255, tonumber(b, 16) / 255)
+        return ("|c%s%02x%02x%02x"):format(alpha, math.floor(nr * 255 + 0.5), math.floor(ng * 255 + 0.5), math.floor(nb * 255 + 0.5))
+    end))
+end
+
+function TrainerSpells:ApplyFontStringTheme(fontString, light)
+    if not fontString then return end
+    if not fontString.tsBaseColor then fontString.tsBaseColor = {fontString:GetTextColor()} end
+    local base = fontString.tsBaseColor
+    if light then
+        fontString:SetTextColor(self:ToLightBackgroundColor(base[1], base[2], base[3]))
+    else
+        fontString:SetTextColor(base[1], base[2], base[3], base[4])
+    end
+end
+
+function TrainerSpells:ApplyPanelTextTheme(frame, extraFontStrings)
+    if not frame then return end
+    local light = self:IsOnLightBackground(frame)
+    for _, region in ipairs({frame:GetRegions()}) do
+        if region:GetObjectType() == "FontString" then self:ApplyFontStringTheme(region, light) end
+    end
+    for _, fontString in ipairs(extraFontStrings or {}) do
+        if fontString then self:ApplyFontStringTheme(fontString, light) end
+    end
+end
+
+function TrainerSpells:ApplyRowTextTheme(rowFrame, elementData)
+    local light = not elementData.isHeader and self:IsOnLightBackground(rowFrame)
+    for _, key in ipairs(self.TextTheme.ROW_FONTS) do
+        self:ApplyFontStringTheme(rowFrame[key], light)
+    end
+    if not light then return end
+    for _, key in ipairs(self.TextTheme.ROW_FONTS) do
+        local fontString = rowFrame[key]
+        if fontString then fontString:SetText(self:ToLightBackgroundText(fontString:GetText())) end
+    end
+    if rowFrame.levelFull then
+        rowFrame.levelFull = self:ToLightBackgroundText(rowFrame.levelFull)
+        rowFrame.levelShort = self:ToLightBackgroundText(rowFrame.levelShort)
+        FitRowLevel(rowFrame)
+    end
+end
+
+TrainerSpells.BuildScrollRow = TrainerSpells.InitScrollRow
+function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
+    self:BuildScrollRow(rowFrame, elementData, rowHeight)
+    self:ApplyRowTextTheme(rowFrame, elementData)
+end

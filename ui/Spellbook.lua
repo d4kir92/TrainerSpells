@@ -108,6 +108,7 @@ local function PositionFrame()
         TrainerSpells.ClassScrollBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 6, controlsOffset + barOffset)
         TrainerSpells.ClassScrollBox:SetPoint("BOTTOMRIGHT", classFrame, "BOTTOMRIGHT", -24, 13)
     end
+    TrainerSpells:ApplyClassPanelTextTheme()
 end
 
 if SpellBookFrame then hooksecurefunc(SpellBookFrame, "SetScale", function() if classFrame:IsShown() then PositionFrame() end end) end
@@ -493,6 +494,14 @@ local playerSpellsModeDivider
 local playerSpellsModeLastTab
 local playerSpellsContentHidden = false
 local playerSpellsSubTabs = {}
+function TrainerSpells:ApplyClassPanelTextTheme()
+    local spoilerFree = playerSpellsSubTabs.spoilerFree
+    self:ApplyPanelTextTheme(classFrame, {spoilerFree and spoilerFree.text or false})
+    for _, controls in ipairs({self.WeaponControls or false, self.ClassTrainerControls or false, self.BeastControls or false}) do
+        if controls then self:ApplyPanelTextTheme(controls) end
+    end
+end
+
 function playerSpellsSubTabs.GetSavedView()
     local saved = TrainerSpells_Character and TrainerSpells_Character.classView
     for _, entry in ipairs(playerSpellsSubTabs.views or {}) do
@@ -643,6 +652,7 @@ local function PositionPlayerSpellsFrame()
         searchBox:SetPoint("TOPLEFT", classFrame, "TOPLEFT", 60, 34)
         searchBox:SetPoint("TOPRIGHT", classFrame, "TOPRIGHT", -10, 34)
     end
+    TrainerSpells:ApplyClassPanelTextTheme()
 end
 
 for _, controls in ipairs({TrainerSpells.ClassTrainerControls or false, TrainerSpells.BeastControls or false}) do

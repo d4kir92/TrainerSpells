@@ -6,10 +6,30 @@ local PriceScan = {
         available = true,
         unavailable = true,
         used = true
-    }
+    },
+    frameName = "TrainerSpellsPriceScanFrame",
+    titleKey = "LID_PRICESCAN_TITLE",
+    waitingKey = "LID_PRICESCAN_WAITING",
+    wrongTrainerKey = "LID_PRICESCAN_NOTCLASS",
+    offsetX = 0,
+    offsetY = 0
 }
 
+local PetPriceScan = setmetatable({
+    scans = {},
+    pet = true,
+    frameName = "TrainerSpellsPetPriceScanFrame",
+    titleKey = "LID_PRICESCAN_PETTITLE",
+    waitingKey = "LID_PRICESCAN_PETWAITING",
+    wrongTrainerKey = "LID_PRICESCAN_NOTPET",
+    offsetX = 40,
+    offsetY = -40
+}, {
+    __index = PriceScan
+})
+
 TrainerSpells.PriceScan = PriceScan
+TrainerSpells.PetPriceScan = PetPriceScan
 local function SortedNumberKeys(data)
     local keys = {}
     for key in pairs(data or {}) do
@@ -89,8 +109,41 @@ local function HasPvPDiscount()
     return rank ~= nil and rank >= 3
 end
 
+local function IsPetTrainer()
+    if C_Trainer and C_Trainer.GetTrainerType and Enum.TrainerType and Enum.TrainerType.Pet ~= nil and C_Trainer.GetTrainerType() == Enum.TrainerType.Pet then return true end
+    if not GetNumTrainerServices or not GetTrainerServiceSkillLine then return false end
+    for i = 1, GetNumTrainerServices() do
+        if TrainerSpells:IsPetTrainerSkillLine(GetTrainerServiceSkillLine(i)) then return true end
+    end
+    return false
+end
+
+function PriceScan:GetBuiltin(classToken)
+    return TrainerSpellsBuiltin and TrainerSpellsBuiltin[classToken] or {}
+end
+
+function PriceScan:GetTarget(classToken)
+    return "TrainerSpellsBuiltin." .. classToken, "TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}"
+end
+
+function PriceScan:GetFileName(classToken)
+    return ClassFileName(classToken)
+end
+
+function PetPriceScan:GetBuiltin()
+    return TrainerSpellsBuiltin_HunterPet or {}
+end
+
+function PetPriceScan:GetTarget()
+    return "TrainerSpellsBuiltin_HunterPet"
+end
+
+function PetPriceScan:GetFileName()
+    return "HunterPet"
+end
+
 function PriceScan:BuildMerged(classToken)
-    local builtin = TrainerSpellsBuiltin and TrainerSpellsBuiltin[classToken] or {}
+    local builtin = self:GetBuiltin(classToken)
     local merged, levelOf = {}, {}
     for level, spells in pairs(builtin) do
         merged[level] = {}
@@ -161,8 +214,8 @@ function PriceScan:BuildMerged(classToken)
 end
 
 function PriceScan:BuildFileText(classToken, merged)
-    local target = "TrainerSpellsBuiltin." .. classToken
-    local lines = {"TrainerSpellsBuiltin = TrainerSpellsBuiltin or {}"}
+    local target, header = self:GetTarget(classToken)
+    local lines = {header}
     local levels = SortedNumberKeys(merged)
     if #levels == 0 then
         table.insert(lines, target .. " = " .. target .. " or {}")
@@ -210,9 +263,9 @@ function PriceScan:Refresh()
     local _, classToken = UnitClass("player")
     if not classToken then return end
     local merged, changes = self:BuildMerged(classToken)
-    frame.FileLabel:SetText(TrainerSpells:Trans("LID_PRICESCAN_FILE"):format(("data/%s/%s.lua"):format(DataFolder(), ClassFileName(classToken))))
+    frame.FileLabel:SetText(TrainerSpells:Trans("LID_PRICESCAN_FILE"):format(("data/%s/%s.lua"):format(DataFolder(), self:GetFileName(classToken))))
     frame.ChangesLabel:SetText(TrainerSpells:Trans("LID_PRICESCAN_CHANGES"):format(#changes))
-    frame.Status:SetText(self.status or TrainerSpells:Trans("LID_PRICESCAN_WAITING"))
+    frame.Status:SetText(self.status or TrainerSpells:Trans(self.waitingKey))
     SetBoxText(frame.ChangesBox, self:BuildChangesText(changes))
     SetBoxText(frame.FileBox, self:BuildFileText(classToken, merged))
 end
@@ -225,8 +278,11 @@ end
 function PriceScan:Scan()
     if not self.frame or not self.frame:IsShown() then return end
     if not GetNumTrainerServices or not GetTrainerServiceCost then return end
-    if IsTradeskillTrainer and IsTradeskillTrainer() then
-        self:SetStatus("|cffff5555" .. TrainerSpells:Trans("LID_PRICESCAN_NOTCLASS") .. "|r")
+    local _, classToken = UnitClass("player")
+    if not classToken then return end
+    local petTrainer = IsPetTrainer()
+    if (IsTradeskillTrainer and IsTradeskillTrainer()) or (self.pet and (not petTrainer or classToken ~= "HUNTER")) then
+        self:SetStatus("|cffff5555" .. TrainerSpells:Trans(self.wrongTrainerKey) .. "|r")
         return
     end
 
@@ -236,11 +292,9 @@ function PriceScan:Scan()
         return
     end
 
-    local _, classToken = UnitClass("player")
-    if not classToken then return end
     if TrainerSpells.EnableTrainerDebugFilters then TrainerSpells:EnableTrainerDebugFilters() end
     TrainerSpells:ExpandAllTrainerHeaders()
-    local builtinLevels = TrainerSpellsBuiltin and TrainerSpellsBuiltin[classToken] or {}
+    local builtinLevels = self:GetBuiltin(classToken)
     local inBuiltin = {}
     for _, spells in pairs(builtinLevels) do
         for spellID in pairs(spells) do
@@ -254,7 +308,8 @@ function PriceScan:Scan()
         if self.serviceTypes[sType] then
             local spellID = TrainerSpells:GetSpellIDForService(i)
             local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
-            if spellID and not TrainerSpells:IsPetTrainerSkillLine(skillLine) and not TrainerSpells:IsRidingSpell(spellID) and not TrainerSpells:IsWeaponSkillSpell(spellID) then
+            local isPet = petTrainer or TrainerSpells:IsPetTrainerSkillLine(skillLine)
+            if spellID and isPet == (self.pet == true) and not TrainerSpells:IsRidingSpell(spellID) and not TrainerSpells:IsWeaponSkillSpell(spellID) then
                 if not levelReq or levelReq == 0 then levelReq = TrainerSpells:GetSpellLevelLearned(spellID) end
                 if levelReq and levelReq > 0 then
                     rows[spellID] = {
@@ -273,7 +328,7 @@ function PriceScan:Scan()
     end
 
     if count > 0 and known == 0 then
-        self:SetStatus("|cffff5555" .. TrainerSpells:Trans("LID_PRICESCAN_NOTCLASS") .. "|r")
+        self:SetStatus("|cffff5555" .. TrainerSpells:Trans(self.wrongTrainerKey) .. "|r")
         return
     end
 
@@ -290,8 +345,8 @@ function PriceScan:ScheduleScan()
     if self.scanScheduled then return end
     self.scanScheduled = true
     C_Timer.After(0.2, function()
-        PriceScan.scanScheduled = false
-        local ok, err = pcall(PriceScan.Scan, PriceScan)
+        self.scanScheduled = false
+        local ok, err = pcall(self.Scan, self)
         if not ok then TrainerSpells:ERR("|cffff5555TrainerSpells:|r " .. tostring(err)) end
     end)
 end
@@ -314,9 +369,10 @@ local function CreateTextBox(frame, left, right, minHeight)
 end
 
 function PriceScan:CreateFrame()
-    local frame = CreateFrame("Frame", "TrainerSpellsPriceScanFrame", UIParent, "BackdropTemplate")
+    local scan = self
+    local frame = CreateFrame("Frame", self.frameName, UIParent, "BackdropTemplate")
     frame:SetSize(1000, 600)
-    frame:SetPoint("CENTER")
+    frame:SetPoint("CENTER", self.offsetX, self.offsetY)
     frame:SetFrameStrata("DIALOG")
     frame:SetClampedToScreen(true)
     frame:SetMovable(true)
@@ -340,7 +396,7 @@ function PriceScan:CreateFrame()
 
     local title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
     title:SetPoint("TOP", 0, -18)
-    title:SetText(TrainerSpells:Trans("LID_PRICESCAN_TITLE"))
+    title:SetText(TrainerSpells:Trans(self.titleKey))
     local closeButton = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
     closeButton:SetPoint("TOPRIGHT", -5, -5)
     local status = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -370,17 +426,17 @@ function PriceScan:CreateFrame()
     clearButton:SetPoint("BOTTOMLEFT", 24, 20)
     clearButton:SetText(TrainerSpells:Trans("LID_PRICESCAN_CLEAR"))
     clearButton:SetScript("OnClick", function()
-        PriceScan.scans = {}
-        PriceScan:SetStatus(nil)
+        scan.scans = {}
+        scan:SetStatus(nil)
     end)
 
     frame:SetScript("OnShow", function()
-        PriceScan:Refresh()
-        if ClassTrainerFrame and ClassTrainerFrame:IsShown() then PriceScan:ScheduleScan() end
+        scan:Refresh()
+        if ClassTrainerFrame and ClassTrainerFrame:IsShown() then scan:ScheduleScan() end
     end)
 
     frame:Hide()
-    table.insert(UISpecialFrames, "TrainerSpellsPriceScanFrame")
+    table.insert(UISpecialFrames, self.frameName)
     self.frame = frame
 end
 
@@ -397,11 +453,26 @@ local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("TRAINER_SHOW")
 eventFrame:RegisterEvent("TRAINER_UPDATE")
 eventFrame:SetScript("OnEvent", function()
-    if PriceScan.frame and PriceScan.frame:IsShown() then PriceScan:ScheduleScan() end
+    local classOpen = PriceScan.frame and PriceScan.frame:IsShown()
+    local petOpen = PetPriceScan.frame and PetPriceScan.frame:IsShown()
+    if not classOpen and not petOpen then return end
+    if select(2, UnitClass("player")) == "HUNTER" and IsPetTrainer() then
+        if petOpen then
+            PetPriceScan:ScheduleScan()
+        else
+            PetPriceScan:Toggle()
+        end
+    elseif classOpen then
+        PriceScan:ScheduleScan()
+    end
 end)
 
 SLASH_TRAINERSPELLSPRICES1 = "/tsprices"
 SLASH_TRAINERSPELLSPRICES2 = "/trainerspellsprices"
-SlashCmdList.TRAINERSPELLSPRICES = function()
-    PriceScan:Toggle()
+SlashCmdList.TRAINERSPELLSPRICES = function(input)
+    if tostring(input or ""):lower():match("pet") then
+        PetPriceScan:Toggle()
+    else
+        PriceScan:Toggle()
+    end
 end
