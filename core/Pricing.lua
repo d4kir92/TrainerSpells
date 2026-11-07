@@ -5,14 +5,35 @@ TrainerSpells.Pricing = {
         Horde = {76, 68, 81, 530, 911, 1133},
     },
     sideFactions = {
-        Alliance = {72, 47, 54, 69, 930, 1134, 1094, 2779},
-        Horde = {76, 68, 81, 530, 911, 1133, 1124, 2778},
+        Alliance = {72, 47, 54, 69, 930, 1134, 1094, 2779, 2740},
+        Horde = {76, 68, 81, 530, 911, 1133, 1124, 2778, 2787},
     },
     foreverFactions = {
         Alliance = {72, 47, 54, 69, 2779},
         Horde = {76, 68, 81, 530, 2778},
     },
+    foreverClassFactions = {
+        DRUID = {
+            Alliance = {609, 2740},
+            Horde = {609, 2787},
+        },
+        MAGE = {
+            Alliance = {2740},
+        },
+        ROGUE = {
+            Alliance = {21, 349},
+            Horde = {21, 349},
+        },
+        SHAMAN = {
+            Horde = {2787},
+        },
+    },
     factionAreas = {
+        [21] = {33},
+        [349] = {36},
+        [609] = {493},
+        [2740] = {36},
+        [2787] = {215},
         [47] = {1537},
         [54] = {1537, 1},
         [68] = {1497},
@@ -72,7 +93,19 @@ end
 
 function TrainerSpells.Pricing.GetTrainerFactions(classToken)
     local interface = select(4, GetBuildInfo()) or 0
-    if TrainerSpells.Pricing.IsForever() then return TrainerSpells.Pricing.foreverFactions[UnitFactionGroup("player")] end
+    if TrainerSpells.Pricing.IsForever() then
+        local side = UnitFactionGroup("player")
+        local list = {}
+        for _, factionID in ipairs(TrainerSpells.Pricing.foreverFactions[side] or {}) do
+            table.insert(list, factionID)
+        end
+
+        local extra = TrainerSpells.Pricing.foreverClassFactions[classToken]
+        for _, factionID in ipairs(extra and extra[side] or {}) do
+            table.insert(list, factionID)
+        end
+        return list
+    end
     local list = TrainerSpells.Pricing.trainerFactions[interface < 30000 and "tbc" or interface < 40000 and "wrath" or "cata"]
     return list[classToken]
 end
