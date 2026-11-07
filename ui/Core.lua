@@ -1112,7 +1112,10 @@ function TrainerSpells:IsOnLightBackground(frame)
     local book = PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
     if not book or not frame then return false end
     local parent = frame
-    while parent and parent ~= book do parent = parent:GetParent() end
+    while parent and parent ~= book do
+        if parent.tsLightBackground ~= nil then return parent.tsLightBackground end
+        parent = parent:GetParent()
+    end
     if not parent then return false end
     local theme, brightness = self.TextTheme, 0
     for _, key in ipairs(theme.BOOK_TEXTURES) do
@@ -1146,14 +1149,37 @@ function TrainerSpells:ToLightBackgroundText(text)
     end))
 end
 
+function TrainerSpells:IsNeutralColor(r, g, b)
+    return math.max(r, g, b) - math.min(r, g, b) < 0.15
+end
+
+function TrainerSpells:HasColoredText(text)
+    if type(text) ~= "string" then return false end
+    for r, g, b in text:gmatch("|c%x%x(%x%x)(%x%x)(%x%x)") do
+        if not self:IsNeutralColor(tonumber(r, 16) / 255, tonumber(g, 16) / 255, tonumber(b, 16) / 255) then return true end
+    end
+    return false
+end
+
 function TrainerSpells:ApplyFontStringTheme(fontString, light)
     if not fontString then return end
     if not fontString.tsBaseColor then fontString.tsBaseColor = {fontString:GetTextColor()} end
-    local base = fontString.tsBaseColor
+    if not fontString.tsBaseShadow then
+        local r, g, b, a = fontString:GetShadowColor()
+        local x, y = fontString:GetShadowOffset()
+        fontString.tsBaseShadow = {r or 0, g or 0, b or 0, a or 1, x or 0, y or 0}
+    end
+    local base, shadow = fontString.tsBaseColor, fontString.tsBaseShadow
     if light then
         fontString:SetTextColor(self:ToLightBackgroundColor(base[1], base[2], base[3]))
+    end
+    if light and self:IsNeutralColor(base[1], base[2], base[3]) and not self:HasColoredText(fontString:GetText()) then
+        fontString:SetShadowColor(0, 0, 0, 0)
+        fontString:SetShadowOffset(0, 0)
     else
-        fontString:SetTextColor(base[1], base[2], base[3], base[4])
+        if not light then fontString:SetTextColor(base[1], base[2], base[3], base[4]) end
+        fontString:SetShadowColor(shadow[1], shadow[2], shadow[3], shadow[4])
+        fontString:SetShadowOffset(shadow[5], shadow[6])
     end
 end
 

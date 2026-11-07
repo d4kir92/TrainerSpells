@@ -495,11 +495,16 @@ local playerSpellsModeLastTab
 local playerSpellsContentHidden = false
 local playerSpellsSubTabs = {}
 function TrainerSpells:ApplyClassPanelTextTheme()
+    local previous = classFrame.tsLightBackground
+    classFrame.tsLightBackground = nil
+    local light = self:IsOnLightBackground(classFrame)
+    classFrame.tsLightBackground = light
     local spoilerFree = playerSpellsSubTabs.spoilerFree
     self:ApplyPanelTextTheme(classFrame, {spoilerFree and spoilerFree.text or false})
     for _, controls in ipairs({self.WeaponControls or false, self.ClassTrainerControls or false, self.BeastControls or false}) do
         if controls then self:ApplyPanelTextTheme(controls) end
     end
+    if (previous or false) ~= light and TrainerSpells_Refresh then C_Timer.After(0, TrainerSpells_Refresh) end
 end
 
 function playerSpellsSubTabs.GetSavedView()

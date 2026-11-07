@@ -182,8 +182,27 @@ function Beasts.ScanStable()
     Beasts.SetKnownSource("tamed", found)
 end
 
+function Beasts.ScanTrainer()
+    if select(2, UnitClass("player")) ~= "HUNTER" or not GetNumTrainerServices or not GetTrainerServiceInfo then return end
+    local store = Beasts.Store().beastKnown
+    local found = store.trainer or {}
+    local changed = false
+    for index = 1, GetNumTrainerServices() or 0 do
+        local _, _, serviceType = TrainerSpells:GetTrainerServiceInfo(index)
+        local spell = serviceType == "used" and TrainerSpells:GetSpellIDForService(index)
+        if spell and Beasts.rankBySpell[spell] and not found[spell] then
+            found[spell] = true
+            changed = true
+        end
+    end
+    if changed then
+        store.trainer = found
+        Beasts.ScheduleRefresh()
+    end
+end
+
 function Beasts.ScanKnown()
-    for _, scan in ipairs({Beasts.ScanCraft, Beasts.ScanPetBook, Beasts.ScanStable}) do
+    for _, scan in ipairs({Beasts.ScanCraft, Beasts.ScanPetBook, Beasts.ScanStable, Beasts.ScanTrainer}) do
         local ok, err = pcall(scan)
         if not ok and geterrorhandler then geterrorhandler()(err) end
     end
@@ -209,7 +228,7 @@ function Beasts.ScheduleScan()
 end
 
 Beasts.eventFrame = CreateFrame("Frame")
-for _, event in ipairs({"PLAYER_ENTERING_WORLD", "CRAFT_SHOW", "CRAFT_UPDATE", "PET_BAR_UPDATE", "UNIT_PET", "SPELLS_CHANGED", "PET_STABLE_SHOW", "PET_STABLE_UPDATE", "PLAYER_TARGET_CHANGED", "UPDATE_MOUSEOVER_UNIT"}) do
+for _, event in ipairs({"PLAYER_ENTERING_WORLD", "CRAFT_SHOW", "CRAFT_UPDATE", "PET_BAR_UPDATE", "UNIT_PET", "SPELLS_CHANGED", "PET_STABLE_SHOW", "PET_STABLE_UPDATE", "TRAINER_SHOW", "TRAINER_UPDATE", "PLAYER_TARGET_CHANGED", "UPDATE_MOUSEOVER_UNIT"}) do
     pcall(Beasts.eventFrame.RegisterEvent, Beasts.eventFrame, event)
 end
 Beasts.eventFrame:SetScript("OnEvent", function(_, event, unit)

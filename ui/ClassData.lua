@@ -139,7 +139,8 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
                 icon = icon or "Interface\\Icons\\INV_Misc_QuestionMark"
                 local hasRealRank = (type(rank) == "number") or (type(rank) == "string" and rank:match("%d+") ~= nil)
                 local rankNum = (type(rank) == "number" and rank) or (type(rank) == "string" and tonumber(rank:match("%d+"))) or 1
-                local isLearnedPetSpell = spellID and TrainerSpells:IsPetSpellKnown(spellID)
+                local beasts = TrainerSpells.HunterBeasts
+                local isLearnedPetSpell = spellID and (TrainerSpells:IsPetSpellKnown(spellID) or (beasts and beasts.IsKnown and beasts.rankBySpell and beasts.rankBySpell[spellID] and beasts.IsKnown(spellID)))
                 local directlyKnown = (spellID and IsPlayerSpell and IsPlayerSpell(spellID)) or isLearnedPetSpell or status == "used"
                 local entry = {
                     level = lvl,
