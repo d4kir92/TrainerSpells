@@ -68,6 +68,12 @@ f:SetScript("OnEvent", function(self, event, arg1)
             TrainerSpells:CaptureTrainerRequirements()
         end
     elseif event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then
+        if event == "MERCHANT_SHOW" then
+            TrainerSpells.MerchantScanComplete = false
+        elseif TrainerSpells.MerchantScanComplete then
+            return
+        end
+
         if C_Timer then
             if not merchantCaptureScheduled then
                 merchantCaptureScheduled = true

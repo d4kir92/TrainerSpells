@@ -27,11 +27,14 @@ local function CaptureMerchantInner()
     if not GetMerchantNumItems or not GetItemInfoCompat then return end
     local numItems = GetMerchantNumItems()
     local neu = 0
+    local complete = numItems > 0
     local scanTooltip = TrainerSpells.ScanTooltip
     for i = 1, numItems do
         local itemLink = GetMerchantItemLink(i)
+        if not itemLink then complete = false end
         if itemLink then
             local itemName, _, _, _, itemMinLevel = GetItemInfoCompat(itemLink)
+            if not itemMinLevel then complete = false end
             if itemMinLevel then
                 scanTooltip:ClearLines()
                 scanTooltip:SetMerchantItem(i)
@@ -53,6 +56,7 @@ local function CaptureMerchantInner()
         end
     end
 
+    TrainerSpells.MerchantScanComplete = complete
     if neu > 0 then TrainerSpells:MSG("|cff33ff99TrainerSpells:|r " .. TrainerSpells:Trans("LID_NEWPETSKILLS"):format(neu)) end
 end
 
