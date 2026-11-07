@@ -199,7 +199,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         [20747] = { cost = 23000, rank = 4 },
         [24976] = { cost = 1150, rank = 4 },
         [1235826] = { cost = 18000, rank = 4 },
-        [1238069] = { cost = 8000, rank = 2 },
+        [1238069] = { cost = 18000, rank = 2 },
         [1238214] = { cost = 18000, rank = 2 },
     },
     [52] = {
@@ -246,7 +246,7 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         [20748] = { cost = 40000, rank = 5 },
         [24977] = { cost = 2000, rank = 5 },
         [1237951] = { cost = 24000, rank = 5 },
-        [1238070] = { cost = 17000, rank = 3 },
+        [1238070] = { cost = 28000, rank = 3 },
         [1238073] = { cost = 28000, rank = 4 },
         [1238215] = { cost = 24000, rank = 3 },
     },
