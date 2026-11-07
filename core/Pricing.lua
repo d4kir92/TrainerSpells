@@ -61,9 +61,18 @@ TrainerSpells.Pricing = {
     },
 }
 
+function TrainerSpells.Pricing.IsForever()
+    local interface = select(4, GetBuildInfo()) or 0
+    return interface >= 16000 and interface < 20000
+end
+
+function TrainerSpells.Pricing.UsesClassicDiscounts()
+    return TrainerSpells.Pricing.IsForever() or (WOW_PROJECT_CLASSIC ~= nil and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
+end
+
 function TrainerSpells.Pricing.GetTrainerFactions(classToken)
     local interface = select(4, GetBuildInfo()) or 0
-    if interface >= 16000 and interface < 20000 then return TrainerSpells.Pricing.foreverFactions[UnitFactionGroup("player")] end
+    if TrainerSpells.Pricing.IsForever() then return TrainerSpells.Pricing.foreverFactions[UnitFactionGroup("player")] end
     local list = TrainerSpells.Pricing.trainerFactions[interface < 30000 and "tbc" or interface < 40000 and "wrath" or "cata"]
     return list[classToken]
 end
@@ -80,7 +89,7 @@ end
 
 function TrainerSpells.Pricing.GetDiscount(standing)
     if type(standing) ~= "number" then return 0 end
-    if WOW_PROJECT_CLASSIC and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then return standing >= 6 and 10 or 0 end
+    if TrainerSpells.Pricing.UsesClassicDiscounts() then return standing >= 6 and 10 or 0 end
     return math.max(0, math.min(20, (standing - 4) * 5))
 end
 
@@ -150,7 +159,7 @@ function TrainerSpells.Pricing.CaptureBaseCost(cost, existing)
     if existing and existing.baseCost and not existing.baseCostEstimated then return existing.baseCost, false end
     local standing = UnitReaction and UnitReaction("npc", "player")
     if type(standing) ~= "number" or TrainerSpells.Pricing.GetDiscount(standing) > 0 then return nil, nil end
-    if WOW_PROJECT_CLASSIC and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and GetPVPRankInfo and UnitPVPRank then
+    if TrainerSpells.Pricing.UsesClassicDiscounts() and GetPVPRankInfo and UnitPVPRank then
         local rank = select(2, GetPVPRankInfo(UnitPVPRank("player"), "player"))
         if rank and rank >= 3 then return nil, nil end
     end

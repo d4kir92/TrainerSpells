@@ -84,7 +84,7 @@ local function Money(cost)
 end
 
 local function HasPvPDiscount()
-    if not (WOW_PROJECT_CLASSIC and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and GetPVPRankInfo and UnitPVPRank) then return false end
+    if not (TrainerSpells.Pricing.UsesClassicDiscounts() and GetPVPRankInfo and UnitPVPRank) then return false end
     local rank = select(2, GetPVPRankInfo(UnitPVPRank("player"), "player"))
     return rank ~= nil and rank >= 3
 end
