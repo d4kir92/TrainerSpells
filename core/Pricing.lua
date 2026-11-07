@@ -251,19 +251,22 @@ function TrainerSpells.Pricing.AddTooltip(tooltip, entry)
         PriceLine("LID_PRICE_BEST", entry.cost or 0)
     end
 
-    if mode ~= "base" and entry.priceFaction and (entry.priceDiscount or 0) > 0 then
+    if mode ~= "base" then
+        local anyDiscount = false
         for _, faction in ipairs(TrainerSpells.Pricing.GetFactions()) do
-            if faction.discount > 0 then
-                local label = _G["FACTION_STANDING_LABEL" .. faction.standing]
-                local text = string.format(TrainerSpells:Trans("LID_PRICE_FACTIONS"), faction.discount) .. ": " .. faction.name .. (label and (" (" .. label .. ")") or "")
-                if TrainerSpells.Pricing.IsInFactionArea(faction.id) then
-                    tooltip:AddLine(text, 0.2, 1, 0.2, true)
-                else
-                    tooltip:AddLine(text, 0.8, 0.8, 0.8, true)
-                end
+            local label = _G["FACTION_STANDING_LABEL" .. faction.standing]
+            local text = string.format(TrainerSpells:Trans("LID_PRICE_FACTIONS"), faction.discount) .. ": " .. faction.name .. (label and (" (" .. label .. ")") or "")
+            if faction.discount <= 0 then
+                tooltip:AddLine(text, 0.5, 0.5, 0.5, true)
+            elseif TrainerSpells.Pricing.IsInFactionArea(faction.id) then
+                anyDiscount = true
+                tooltip:AddLine(text, 0.2, 1, 0.2, true)
+            else
+                anyDiscount = true
+                tooltip:AddLine(text, 0.8, 0.8, 0.8, true)
             end
         end
-        tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_COMPARE"), 0.6, 0.6, 0.6, true)
+        if anyDiscount then tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_COMPARE"), 0.6, 0.6, 0.6, true) end
     end
 
     if entry.baseCostEstimated then tooltip:AddLine(TrainerSpells:Trans("LID_PRICE_ESTIMATED"), 0.6, 0.6, 0.6, true) end
