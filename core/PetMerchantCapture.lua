@@ -125,10 +125,20 @@ local function ReadPetBook()
     local health = UnitHealth("pet")
     if TrainerSpells:IsSecret(health) or health <= 0 then return end
     local petSpells, petSpellIDs = {}, {}
+    local function RankFromText(text)
+        if type(text) ~= "string" or TrainerSpells:IsSecret(text) then return nil end
+        return tonumber(text:match("%d+"))
+    end
+
+    local getSubtext = C_Spell and C_Spell.GetSpellSubtext or GetSpellSubtext
     local function AddPetSpell(name, rank, id)
         if type(id) == "number" then petSpellIDs[id] = true end
         if type(name) ~= "string" or name == "" then return end
-        local rankNum = type(rank) == "string" and tonumber(rank:match("%d+"))
+        local rankNum = RankFromText(rank)
+        if not rankNum and type(id) == "number" and getSubtext then
+            local ok, subtext = pcall(getSubtext, id)
+            rankNum = ok and RankFromText(subtext) or nil
+        end
         petSpells[name] = math.max(petSpells[name] or 0, rankNum or 1)
     end
 
@@ -176,7 +186,8 @@ local function ResolvePetKey(family, petSpells, petSpellIDs)
 end
 
 local function MarkKnownPetSpells(pet, dataTable, petSpells, petSpellIDs)
-    TrainerSpells_Character.learnedSpellsPet[pet] = TrainerSpells_Character.learnedSpellsPet[pet] or {}
+    local learned = TrainerSpells_Character.learnedSpellsPet[pet] or {}
+    TrainerSpells_Character.learnedSpellsPet[pet] = learned
     local changed = false
     for _, spells in pairs(dataTable) do
         for spellID, data in pairs(spells) do
@@ -184,14 +195,9 @@ local function MarkKnownPetSpells(pet, dataTable, petSpells, petSpellIDs)
             local name = TrainerSpells:GetSpellInfo(spellID)
             local rankNum = type(data) == "table" and tonumber(data.rank)
             local maxKnown = name and petSpells[name]
-            if petSpellIDs[spellID] then
-                TrainerSpells_Character.learnedSpellsPet[pet][spellID] = true
-                changed = true
-            elseif not maxKnown then
-                TrainerSpells_Character.learnedSpellsPet[pet][spellID] = false
-                changed = true
-            elseif rankNum then
-                TrainerSpells_Character.learnedSpellsPet[pet][spellID] = rankNum <= maxKnown
+            local known = (petSpellIDs[spellID] or (maxKnown and (not rankNum or rankNum <= maxKnown))) and true or false
+            if learned[spellID] ~= known then
+                learned[spellID] = known
                 changed = true
             end
         end

@@ -7,6 +7,7 @@ f:RegisterEvent("MERCHANT_SHOW")
 f:RegisterEvent("MERCHANT_UPDATE")
 f:RegisterEvent("UNIT_PET")
 f:RegisterEvent("SPELLS_CHANGED")
+f:RegisterEvent("PET_BAR_UPDATE")
 local captureScheduled = false
 local merchantCaptureScheduled = false
 local petSyncScheduled = false
@@ -85,7 +86,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         else
             TrainerSpells:CaptureMerchant()
         end
-    elseif event == "SPELLS_CHANGED" or (event == "UNIT_PET" and arg1 == "player") then
+    elseif event == "SPELLS_CHANGED" or event == "PET_BAR_UPDATE" or (event == "UNIT_PET" and arg1 == "player") then
         if C_Timer then
             if not petSyncScheduled then
                 petSyncScheduled = true
