@@ -211,6 +211,15 @@ function TrainerSpells:ToggleSettings()
             end
         })
 
+        if self.HunterBeasts then
+            win:AddCheckbox({
+                label = "LID_SHOW_BEAST_TOOLTIPS",
+                added = "2026-11-09",
+                value = TrainerSpells_Character.showBeastTooltips ~= false,
+                func = function(value) TrainerSpells_Character.showBeastTooltips = value end
+            })
+        end
+
         if self.AutoRanks then
             local autoRanks = self.AutoRanks.Settings()
             win:AddCategory({

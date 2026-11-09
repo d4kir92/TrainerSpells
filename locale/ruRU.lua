@@ -190,6 +190,7 @@ TrainerSpells:AddTrans("ruRU", "LID_SETTINGS_WEAPONS", "Владение ору�
 TrainerSpells:AddTrans("ruRU", "LID_SHIFTCLICK_MAP", "Shift+клик: показать на карте мира")
 TrainerSpells:AddTrans("ruRU", "LID_SHOWMINIMAPBUTTON", "Показывать кнопку у миникарты")
 TrainerSpells:AddTrans("ruRU", "LID_SHOWONMAP", "Показать на карте")
+TrainerSpells:AddTrans("ruRU", "LID_SHOW_BEAST_TOOLTIPS", "Показывать сведения о зверях при наведении")
 TrainerSpells:AddTrans("ruRU", "LID_SKILL", "Навык")
 TrainerSpells:AddTrans("ruRU", "LID_SOURCE", "Источник")
 TrainerSpells:AddTrans("ruRU", "LID_SPOILERFREE", "Без спойлеров")

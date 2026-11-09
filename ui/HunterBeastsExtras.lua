@@ -242,6 +242,7 @@ Beasts.eventFrame:SetScript("OnEvent", function(_, event, unit)
 end)
 
 function Beasts.AddUnitTooltip(tooltip)
+    if select(2, UnitClass("player")) ~= "HUNTER" or TrainerSpells_Character.showBeastTooltips == false then return end
     if not tooltip or not tooltip.GetUnit then return end
     local ok, _, unit = pcall(tooltip.GetUnit, tooltip)
     if not ok or not Beasts.IsUsable(unit) then return end
