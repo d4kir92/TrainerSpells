@@ -537,7 +537,17 @@ local function AddSpellTooltipExtra(tooltip, spellID)
         tooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
     end
 
-    if extra.questReward then tooltip:AddLine(TrainerSpells:Trans("LID_QUEST_SPELL"), 1, 0.82, 0, true) end
+    if extra.questReward then
+        local start = extra.questStart
+        local text = TrainerSpells:Trans("LID_QUEST_SPELL")
+        if start then
+            local title = C_QuestLog and C_QuestLog.GetTitleForQuestID and C_QuestLog.GetTitleForQuestID(start.questID)
+            text = text .. ": " .. (title and title ~= "" and title or start.questName)
+        end
+
+        tooltip:AddLine(text, 1, 0.82, 0, true)
+        if start and start.uiMapID then tooltip:AddLine(TrainerSpells:Trans("LID_LEFTCLICK_SETWAYPOINT"), 0.2, 1, 0.2) end
+    end
     if extra.source then tooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. extra.source, 0.9, 0.9, 0.9, true) end
     return true
 end
@@ -1087,6 +1097,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
                     priceEntry = entry,
                     source = entry.source,
                     questReward = entry.questReward,
+                    questStart = entry.questStart,
                 }
 
                 GameTooltip:SetSpellByID(entry.spellID)
@@ -1112,7 +1123,13 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             GameTooltip_Hide(sel)
         end)
 
-        rowFrame:SetScript("OnMouseUp", function(sel, button) if button == "RightButton" then TrainerSpells:ShowIgnoreMenu(sel, entry) end end)
+        rowFrame:SetScript("OnMouseUp", function(sel, button)
+            if button == "LeftButton" and entry.questStart and entry.questStart.uiMapID then
+                TrainerSpells:SetMapWaypoint(entry.questStart)
+            elseif button == "RightButton" then
+                TrainerSpells:ShowIgnoreMenu(sel, entry)
+            end
+        end)
     end
 end
 

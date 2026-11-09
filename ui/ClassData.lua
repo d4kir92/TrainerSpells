@@ -130,7 +130,9 @@ function TrainerSpells:BuildEntriesFromData(dataTable, questSpells)
         if not (TrainerSpells_Character and TrainerSpells_Character.spoilerFree) then
             for spellID, level in pairs(questLevels) do
                 merged[level] = merged[level] or {}
-                merged[level][spellID] = {questReward = true}
+                local start = TrainerSpells.QuestSpellStarts and TrainerSpells.QuestSpellStarts[spellID]
+                if start and not start.questID then start = start[raceID] or start[playerFaction] end
+                merged[level][spellID] = {questReward = true, questStart = start}
             end
         end
 
@@ -186,6 +188,7 @@ function TrainerSpells:BuildEntriesFromData(dataTable, questSpells)
                     levelReq = levelReq,
                     source = source,
                     questReward = type(data) == "table" and data.questReward,
+                    questStart = type(data) == "table" and data.questStart,
                     sourceLocations = GetSourceLocations(sourceLocations, playerFaction),
                 }
 
