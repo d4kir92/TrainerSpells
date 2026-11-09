@@ -221,11 +221,11 @@ local function InstallScrollBoxTrainerFilter()
     local scrollBox = ClassTrainerFrame.ScrollBox
     if not Menu or not Menu.ModifyMenu or not scrollBox.ForEachFrame or not scrollBox.Update then return false end
     local view = scrollBox:GetView()
-    if not view or not view.SetElementExtentCalculator or not scrollBox.FullUpdate then return false end
+    if not view or not view.SetElementExtentCalculator or not view.SetVirtualized or not scrollBox.FullUpdate then return false end
     local fixedExtent = view:HasElementExtent() and view:GetIdenticalElementExtent()
     local nativeCalculator = view:GetElementExtentCalculator()
     local hiddenRows = setmetatable({}, {__mode = "k"})
-    local lookupProvider, cachedSpellIDs, professionKey
+    local lookupProvider, cachedSpellIDs, resolvedSpellIDs, professionKey
 
     local function ShouldHide(node)
         if TrainerSpells_Character.showIgnoredInTrainer then return false end
@@ -239,11 +239,18 @@ local function InstallScrollBoxTrainerFilter()
         if lookupProvider ~= provider or not cachedSpellIDs then
             lookupProvider = provider
             cachedSpellIDs = BuildCachedSpellIDLookup()
+            resolvedSpellIDs = setmetatable({}, {__mode = "k"})
             professionKey = IsTradeskillTrainer and IsTradeskillTrainer() and TrainerSpells:DetectTrainerProfession()
         end
 
-        local rank = subText and tonumber(subText:match("%d+")) or 0
-        local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rank] or TrainerSpells:GetSpellIDForService(index)
+        local spellID = resolvedSpellIDs[node]
+        if not spellID then
+            local rank = subText and tonumber(subText:match("%d+")) or 0
+            spellID = TrainerSpells:GetSpellIDForService(index, true)
+            if not spellID and cachedSpellIDs[name] then spellID = cachedSpellIDs[name][rank] end
+            resolvedSpellIDs[node] = spellID
+        end
+
         if professionKey then return TrainerSpells_IsProfessionSpellIgnored(spellID, professionKey) end
         return TrainerSpells_IsIgnored(spellID, name)
     end
@@ -261,18 +268,29 @@ local function InstallScrollBoxTrainerFilter()
         end)
     end
 
-    view:SetElementExtentCalculator(function(dataIndex, node)
+    local function FilteredExtent(dataIndex, node)
         if ShouldHide(node) then return 0 end
         if fixedExtent then return fixedExtent end
         if nativeCalculator then return nativeCalculator(dataIndex, node) end
         return view:GetTemplateExtentFromElementData(node)
-    end)
+    end
+
+    view:SetVirtualized(false)
 
     local function RefreshLayout()
+        if not TrainerSpells_Character.showIgnoredInTrainer then
+            view:SetElementExtentCalculator(FilteredExtent)
+        elseif fixedExtent then
+            view:SetElementExtent(fixedExtent)
+        else
+            view:SetElementExtentCalculator(nativeCalculator)
+        end
+
         scrollBox:ForEachFrame(function(row, node)
             view:ResizeFrame(scrollBox, row, row:GetOrderIndex(), node)
         end)
         scrollBox:FullUpdate(true)
+        scrollBox:ScrollToBegin(true)
         RefreshRows()
     end
 
@@ -283,7 +301,7 @@ local function InstallScrollBoxTrainerFilter()
         for _, description in rootDescription:EnumerateElementDescriptions() do
             local iterator, state, first = description:EnumerateElementDescriptions()
             if iterator(state, first) ~= nil then
-                description:CreateCheckbox(TrainerSpells:Trans("LID_IGNORED"), function()
+                description:CreateCheckbox(YELLOW_FONT_COLOR:WrapTextInColorCode(TrainerSpells:Trans("LID_IGNORED")), function()
                     return TrainerSpells_Character.showIgnoredInTrainer
                 end, function()
                     TrainerSpells_Character.showIgnoredInTrainer = not TrainerSpells_Character.showIgnoredInTrainer

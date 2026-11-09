@@ -187,7 +187,7 @@ function TrainerSpells:GetTrainerServiceInfo(i)
     return name, second, third, levelReq, icon, nil
 end
 
-function TrainerSpells:GetSpellIDForService(i)
+function TrainerSpells:GetSpellIDForService(i, requireExactMatch)
     local scanTooltip = TrainerSpells.ScanTooltip
     local spellID
     if scanTooltip.GetSpell then
@@ -199,7 +199,7 @@ function TrainerSpells:GetSpellIDForService(i)
         if tooltipData and tooltipData.type == Enum.TooltipDataType.Spell then spellID = tooltipData.id end
     end
 
-    if not spellID then
+    if not spellID and not requireExactMatch then
         local name = GetTrainerServiceInfo(i)
         if name then
             local _, _, _, _, _, _, foundSpellID = TrainerSpells:GetSpellInfo(name)
