@@ -84,6 +84,30 @@ local function TrainerSpells_ClassTrainerFrame_Update()
     ClassTrainerNameText:SetText(UnitName("npc"))
     ClassTrainerGreetingText:SetText(GetTrainerGreetingText())
     local visibleList = BuildVisibleTrainerIndexList()
+    local selected = ClassTrainerFrame.selectedService
+    if selected and not TrainerSpells_Character.showIgnoredInTrainer and not tContains(visibleList, selected) then
+        local nextService, nextPosition
+        for position, index in ipairs(visibleList) do
+            if select(3, GetTrainerServiceInfo(index)) == "available" then
+                nextService, nextPosition = index, position
+                if index > selected then break end
+            end
+        end
+
+        ClassTrainerFrame.showSkillDetails = nextService and true or nil
+        if nextService then
+            ClassTrainer_SetSelection(nextService)
+            local offset = FauxScrollFrame_GetOffset(ClassTrainerListScrollFrame)
+            if nextPosition <= offset or nextPosition > offset + CLASS_TRAINER_SKILLS_DISPLAYED then
+                ClassTrainerListScrollFrameScrollBar:SetValue(CLASS_TRAINER_SKILL_HEIGHT * math.max(0, nextPosition - CLASS_TRAINER_SKILLS_DISPLAYED))
+            end
+        else
+            ClassTrainerFrame.selectedService = nil
+            ClassTrainerFrame.renewSelection = nil
+            ClassTrainerTrainButton:Disable()
+        end
+    end
+
     local numTrainerServices = #visibleList
     local skillOffset = FauxScrollFrame_GetOffset(ClassTrainerListScrollFrame)
     if numTrainerServices == 0 then
@@ -227,10 +251,8 @@ local function InstallScrollBoxTrainerFilter()
     local hiddenRows = setmetatable({}, {__mode = "k"})
     local lookupProvider, cachedSpellIDs, resolvedSpellIDs, professionKey
 
-    local function ShouldHide(node)
+    local function ShouldHideService(index)
         if TrainerSpells_Character.showIgnoredInTrainer then return false end
-        local data = node and node.GetData and node:GetData()
-        local index = data and data.skillIndex
         if not index then return false end
         local name, subText, serviceType = TrainerSpells:GetTrainerServiceInfo(index)
         if not name or serviceType == "header" then return false end
@@ -239,20 +261,25 @@ local function InstallScrollBoxTrainerFilter()
         if lookupProvider ~= provider or not cachedSpellIDs then
             lookupProvider = provider
             cachedSpellIDs = BuildCachedSpellIDLookup()
-            resolvedSpellIDs = setmetatable({}, {__mode = "k"})
+            resolvedSpellIDs = {}
             professionKey = IsTradeskillTrainer and IsTradeskillTrainer() and TrainerSpells:DetectTrainerProfession()
         end
 
-        local spellID = resolvedSpellIDs[node]
+        local spellID = resolvedSpellIDs[index]
         if not spellID then
             local rank = subText and tonumber(subText:match("%d+")) or 0
             spellID = TrainerSpells:GetSpellIDForService(index, true)
             if not spellID and cachedSpellIDs[name] then spellID = cachedSpellIDs[name][rank] end
-            resolvedSpellIDs[node] = spellID
+            resolvedSpellIDs[index] = spellID
         end
 
         if professionKey then return TrainerSpells_IsProfessionSpellIgnored(spellID, professionKey) end
         return TrainerSpells_IsIgnored(spellID, name)
+    end
+
+    local function ShouldHide(node)
+        local data = node and node.GetData and node:GetData()
+        return data and ShouldHideService(data.skillIndex)
     end
 
     local function RefreshRows()
@@ -277,6 +304,36 @@ local function InstallScrollBoxTrainerFilter()
 
     view:SetVirtualized(false)
 
+    local function RefreshSelection()
+        if not ClassTrainerFrame:IsShown() then return end
+        local selected = ClassTrainerFrame.selectedService
+        local stepIndex = GetTrainerServiceStepIndex and GetTrainerServiceStepIndex()
+        if selected and selected ~= stepIndex and ShouldHideService(selected) then
+            local nextService
+            for index = 1, GetNumTrainerServices() do
+                if index ~= stepIndex and select(3, TrainerSpells:GetTrainerServiceInfo(index)) == "available" and not ShouldHideService(index) then
+                    nextService = index
+                    if index > selected then break end
+                end
+            end
+
+            if nextService then
+                ClassTrainer_SetSelection(nextService)
+                scrollBox:ScrollToElementDataByPredicate(function(data)
+                    return data.skillIndex == nextService
+                end, ScrollBoxConstants.AlignNearest)
+            else
+                ClassTrainerFrame.selectedService = nil
+                if ClassTrainerFrame_SetTrainButtonEnabled then
+                    ClassTrainerFrame_SetTrainButtonEnabled(false)
+                else
+                    ClassTrainerTrainButton:Disable()
+                end
+            end
+        end
+        RefreshRows()
+    end
+
     local function RefreshLayout()
         if not TrainerSpells_Character.showIgnoredInTrainer then
             view:SetElementExtentCalculator(FilteredExtent)
@@ -291,11 +348,12 @@ local function InstallScrollBoxTrainerFilter()
         end)
         scrollBox:FullUpdate(true)
         scrollBox:ScrollToBegin(true)
-        RefreshRows()
+        RefreshSelection()
     end
 
     hooksecurefunc(scrollBox, "Update", RefreshRows)
-    hooksecurefunc("ClassTrainerFrame_Update", RefreshRows)
+    hooksecurefunc("ClassTrainerFrame_Update", RefreshSelection)
+    hooksecurefunc("ClassTrainer_SetSelection", RefreshSelection)
     Menu.ModifyMenu("MENU_TRAINER_FILTER", function(owner, rootDescription)
         if owner ~= ClassTrainerFrame.FilterDropdown then return end
         for _, description in rootDescription:EnumerateElementDescriptions() do
