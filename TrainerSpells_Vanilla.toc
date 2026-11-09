@@ -98,6 +98,7 @@ core\Events.lua
 core\AutoRanks.lua
 
 ui\Core.lua
+data\classicera\QuestSpells.lua
 ui\ClassData.lua
 ui\ClassList.lua
 ui\TrainerLocations.lua

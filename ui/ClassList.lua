@@ -65,9 +65,10 @@ function TrainerSpells:BuildClassViewItems(viewMode, searchText)
     local selectedLevel = UnitLevel("player") or 1
     local selectedClass = select(2, UnitClass("player"))
     local classData = selectedClass and TrainerSpells_Data and TrainerSpells_Data[selectedClass]
+    local questSpells = TrainerSpells.QuestSpells and TrainerSpells.QuestSpells[selectedClass]
     local items = {}
-    if viewMode == "class" and classData then
-        local groups = TrainerSpells:ClassifyEntries(classData, searchText, selectedLevel)
+    if viewMode == "class" and (classData or questSpells) then
+        local groups = TrainerSpells:ClassifyEntries(classData or {}, searchText, selectedLevel, nil, nil, questSpells)
         TrainerSpells:AppendGroupItems(items, groups, "")
     end
 
@@ -91,7 +92,7 @@ function TrainerSpells:BuildClassViewItems(viewMode, searchText)
     if #items == 0 then
         if viewMode == "weapons" or viewMode == "trainers" or viewMode == "beasts" then
             TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NOENTRIES"), "|cffaaaaaa")
-        elseif not classData then
+        elseif not classData and not questSpells then
             TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NODATAFORCLASS"):format(tostring(selectedClass)), "|cffff5555")
         else
             TrainerSpells:AddHeaderItem(items, TrainerSpells:Trans("LID_NOENTRIES"), "|cffaaaaaa")

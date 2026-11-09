@@ -537,6 +537,7 @@ local function AddSpellTooltipExtra(tooltip, spellID)
         tooltip:AddLine(TrainerSpells:Trans("LID_OWNGOLD") .. ": " .. GetMoneyString(GetMoney() or 0, true), 1, 1, 1)
     end
 
+    if extra.questReward then tooltip:AddLine(TrainerSpells:Trans("LID_QUEST_SPELL"), 1, 0.82, 0, true) end
     if extra.source then tooltip:AddLine(TrainerSpells:Trans("LID_SOURCE") .. ": " .. extra.source, 0.9, 0.9, 0.9, true) end
     return true
 end
@@ -1009,7 +1010,9 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
             costFS:SetPoint("RIGHT", rowFrame, "RIGHT", -4, 0)
             costFS:Show()
             costFS:SetWidth(GetCostColumnWidth(costFS, elementData.costColumn, fontSize))
-            if entry.baseCost ~= nil or (entry.cost and entry.cost > 0) then
+            if entry.questReward then
+                costFS:SetText("|cffffd100!|r")
+            elseif entry.baseCost ~= nil or (entry.cost and entry.cost > 0) then
                 local costColor = elementData.dimName and Colors.DIM_NAME or ((GetMoney() or 0) >= entry.cost and "|cffffffff" or "|cffff3333")
                 costFS:SetText(costColor .. TrainerSpells.Pricing.Text(entry.baseCost, entry.cost, entry.baseCostEstimated, costColor) .. "|r")
             else
@@ -1083,6 +1086,7 @@ function TrainerSpells:InitScrollRow(rowFrame, elementData, rowHeight)
                     cost = entry.cost,
                     priceEntry = entry,
                     source = entry.source,
+                    questReward = entry.questReward,
                 }
 
                 GameTooltip:SetSpellByID(entry.spellID)

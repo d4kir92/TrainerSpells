@@ -44,7 +44,7 @@ function TrainerSpells:SumCost(list)
         baseCost = baseCost + (entry.baseCost or 0)
         estimated = estimated or entry.baseCostEstimated
         eligible = eligible or entry.priceEligible
-        if entry.baseCost == nil then complete = false end
+        if entry.baseCost == nil and not entry.questReward then complete = false end
     end
     if not eligible then return total end
     local discount, factionName = TrainerSpells.Pricing.GetBestDiscount()
@@ -60,7 +60,11 @@ function TrainerSpells:AddCostColumn(items)
     local seen = {}
     for _, item in ipairs(items) do
         local cost = item.entry and item.showCostTooltip and item.entry.cost
-        if item.entry and item.entry.baseCost ~= nil then cost = TrainerSpells.Pricing.Text(item.entry.baseCost, cost, item.entry.baseCostEstimated) end
+        if item.entry and item.entry.questReward then
+            cost = "!"
+        elseif item.entry and item.entry.baseCost ~= nil then
+            cost = TrainerSpells.Pricing.Text(item.entry.baseCost, cost, item.entry.baseCostEstimated)
+        end
         if cost and (type(cost) == "string" or cost > 0) and not seen[cost] then
             seen[cost] = true
             table.insert(column.costs, cost)
@@ -96,7 +100,7 @@ local function GetSourceLocations(locations, playerFaction)
     return #result > 0 and result or nil
 end
 
-function TrainerSpells:BuildEntriesFromData(dataTable)
+function TrainerSpells:BuildEntriesFromData(dataTable, questSpells)
     local allEntries = {}
     local knownMaxRank = {}
     local playerFaction = TrainerSpells:GetPlayerFaction()
@@ -107,6 +111,32 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
     for _, professionData in pairs(TrainerSpells_ProfessionData or {}) do
         if dataTable == professionData then priceEligible = true; break end
     end
+    if questSpells then
+        local questLevels = {}
+        local _, _, raceID = UnitRace("player")
+        for spellID, levels in pairs(questSpells) do
+            questLevels[spellID] = type(levels) == "table" and levels[raceID] or type(levels) == "number" and levels or nil
+        end
+
+        local merged = {}
+        for level, spells in pairs(dataTable) do
+            merged[level] = {}
+            for spellID, data in pairs(spells) do
+                local id = type(data) == "table" and data.spellID or spellID
+                if not questLevels[id] then merged[level][spellID] = data end
+            end
+        end
+
+        if not (TrainerSpells_Character and TrainerSpells_Character.spoilerFree) then
+            for spellID, level in pairs(questLevels) do
+                merged[level] = merged[level] or {}
+                merged[level][spellID] = {questReward = true}
+            end
+        end
+
+        dataTable = merged
+    end
+
     for lvl, spells in pairs(dataTable) do
         for key, data in pairs(spells) do
             local cost, rank, status, requires, faction, race, spellID, icon, levelReq
@@ -155,10 +185,11 @@ function TrainerSpells:BuildEntriesFromData(dataTable)
                     requires = requires,
                     levelReq = levelReq,
                     source = source,
+                    questReward = type(data) == "table" and data.questReward,
                     sourceLocations = GetSourceLocations(sourceLocations, playerFaction),
                 }
 
-                if priceEligible then TrainerSpells.Pricing.Apply(entry, data, discount, factionName) end
+                if priceEligible and not entry.questReward then TrainerSpells.Pricing.Apply(entry, data, discount, factionName) end
 
                 table.insert(allEntries, entry)
                 if directlyKnown and hasRealRank then knownMaxRank[name] = math.max(knownMaxRank[name] or 0, rankNum) end
@@ -189,8 +220,8 @@ function TrainerSpells:CreateSpoilerFreeCheckbox(parent, settingKey, descKey, on
     return checkbox
 end
 
-function TrainerSpells:ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck, professionKey)
-    local allEntries, knownMaxRank = TrainerSpells:BuildEntriesFromData(dataTable)
+function TrainerSpells:ClassifyEntries(dataTable, searchText, selectedLevel, skipTalentCheck, professionKey, questSpells)
+    local allEntries, knownMaxRank = TrainerSpells:BuildEntriesFromData(dataTable, questSpells)
     local talentNames, learnedTalents
     if not skipTalentCheck then talentNames, learnedTalents = TrainerSpells:GetTalentNameSet() end
     local ignored, known, remaining = {}, {}, {}

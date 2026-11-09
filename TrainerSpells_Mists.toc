@@ -130,6 +130,7 @@ core\Ignore.lua
 core\Events.lua
 
 ui\Core.lua
+data\mists\QuestSpells.lua
 ui\ClassData.lua
 ui\ClassList.lua
 ui\TrainerLocations.lua

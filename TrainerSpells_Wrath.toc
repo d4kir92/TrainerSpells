@@ -119,6 +119,7 @@ core\Ignore.lua
 core\Events.lua
 
 ui\Core.lua
+data\wrath\QuestSpells.lua
 ui\ClassData.lua
 ui\ClassList.lua
 ui\TrainerLocations.lua
