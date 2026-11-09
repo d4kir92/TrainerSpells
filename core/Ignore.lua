@@ -1,8 +1,21 @@
 local _, TrainerSpells = ...
-function TrainerSpells_ToggleIgnoreSpell(spellID)
+function TrainerSpells_ToggleIgnoreSpell(spellID, name)
     spellID = tonumber(spellID)
     local _, classToken = UnitClass("player")
     if not classToken or not spellID then return end
+    name = name or TrainerSpells:GetSpellInfo(spellID)
+    local ignoredNames = TrainerSpells_IgnoredNames[classToken]
+    local ignoredRanks = ignoredNames and ignoredNames[name]
+    if ignoredRanks then
+        if type(ignoredRanks) ~= "table" then
+            ignoredRanks = {}
+            ignoredNames[name] = ignoredRanks
+        end
+
+        ignoredRanks[spellID] = not ignoredRanks[spellID] or nil
+        return
+    end
+
     TrainerSpells_Ignored[classToken] = TrainerSpells_Ignored[classToken] or {}
     local ignored = TrainerSpells_Ignored[classToken]
     if ignored[spellID] then
@@ -12,21 +25,17 @@ function TrainerSpells_ToggleIgnoreSpell(spellID)
     end
 end
 
-function TrainerSpells_ToggleIgnoreName(name)
+function TrainerSpells_SetIgnoreName(name, ignore)
     local _, classToken = UnitClass("player")
     if not classToken or not name then return end
     TrainerSpells_IgnoredNames[classToken] = TrainerSpells_IgnoredNames[classToken] or {}
-    local ignored = TrainerSpells_IgnoredNames[classToken]
-    if ignored[name] then
-        ignored[name] = nil
-        local ignoredSpells = TrainerSpells_Ignored[classToken]
-        if ignoredSpells then
-            for spellID in pairs(ignoredSpells) do
-                if TrainerSpells:GetSpellInfo(spellID) == name then ignoredSpells[spellID] = nil end
-            end
+    TrainerSpells_IgnoredNames[classToken][name] = ignore or nil
+    if ignore then return end
+    local ignoredSpells = TrainerSpells_Ignored[classToken]
+    if ignoredSpells then
+        for spellID in pairs(ignoredSpells) do
+            if TrainerSpells:GetSpellInfo(spellID) == name then ignoredSpells[spellID] = nil end
         end
-    else
-        ignored[name] = true
     end
 end
 
@@ -37,14 +46,12 @@ function TrainerSpells_IsSpellIgnored(spellID)
     return TrainerSpells_Ignored[classToken] and TrainerSpells_Ignored[classToken][spellID] or false
 end
 
-function TrainerSpells_IsNameIgnored(name)
-    local _, classToken = UnitClass("player")
-    if not classToken or not name then return false end
-    return TrainerSpells_IgnoredNames[classToken] and TrainerSpells_IgnoredNames[classToken][name] or false
-end
-
 function TrainerSpells_IsIgnored(spellID, name)
-    return TrainerSpells_IsSpellIgnored(spellID) or TrainerSpells_IsNameIgnored(name)
+    local _, classToken = UnitClass("player")
+    local ignoredNames = classToken and TrainerSpells_IgnoredNames[classToken]
+    local ignoredRanks = ignoredNames and ignoredNames[name]
+    if type(ignoredRanks) == "table" then return not ignoredRanks[tonumber(spellID)] end
+    return ignoredRanks == true or TrainerSpells_IsSpellIgnored(spellID)
 end
 
 function TrainerSpells_IsProfessionSpellIgnored(spellID, professionKey)

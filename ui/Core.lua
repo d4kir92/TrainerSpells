@@ -461,26 +461,40 @@ local function IgnoreMenu_Initialize(sel, level, rootDescription, entry)
 
         AddButton(info)
     else
-        local spellIgnored = TrainerSpells_IsSpellIgnored and TrainerSpells_IsSpellIgnored(entry.spellID)
-        local nameIgnored = TrainerSpells_IsNameIgnored and TrainerSpells_IsNameIgnored(entry.name)
+        local spellIgnored = TrainerSpells_IsIgnored(entry.spellID, entry.name)
         info = CreateInfo()
         info.text = spellIgnored and TrainerSpells:Trans("LID_STOPIGNORINGTHISRANK") or TrainerSpells:Trans("LID_IGNORINGTHISRANK")
         info.notCheckable = true
         info.func = function()
-            TrainerSpells_ToggleIgnoreSpell(entry.spellID)
+            TrainerSpells_ToggleIgnoreSpell(entry.spellID, entry.name)
             TrainerSpells_Refresh()
         end
 
         AddButton(info)
-        info = CreateInfo()
-        info.text = nameIgnored and TrainerSpells:Trans("LID_STOPIGNOREINGALLRANKS") or TrainerSpells:Trans("LID_IGNOREALLRANKS")
-        info.notCheckable = true
-        info.func = function()
-            TrainerSpells_ToggleIgnoreName(entry.name)
-            TrainerSpells_Refresh()
+        local rankState = entry.rankIgnoreState or {hasIgnored = spellIgnored, hasUnignored = not spellIgnored}
+        if rankState.hasUnignored then
+            info = CreateInfo()
+            info.text = TrainerSpells:Trans("LID_IGNOREALLRANKS")
+            info.notCheckable = true
+            info.func = function()
+                TrainerSpells_SetIgnoreName(entry.name, true)
+                TrainerSpells_Refresh()
+            end
+
+            AddButton(info)
         end
 
-        AddButton(info)
+        if rankState.hasIgnored then
+            info = CreateInfo()
+            info.text = TrainerSpells:Trans("LID_STOPIGNOREINGALLRANKS")
+            info.notCheckable = true
+            info.func = function()
+                TrainerSpells_SetIgnoreName(entry.name, false)
+                TrainerSpells_Refresh()
+            end
+
+            AddButton(info)
+        end
     end
 
     info = CreateInfo()

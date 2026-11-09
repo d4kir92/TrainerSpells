@@ -200,13 +200,28 @@ function TrainerSpells:ClassifyEntries(dataTable, searchText, selectedLevel, ski
     else
         spoilerLimit = TrainerSpells_Character and TrainerSpells_Character.spoilerFree and selectedLevel + 2
     end
+    local rankIgnoreStates = {}
     for _, entry in ipairs(allEntries) do
+        local isIgnored
+        if not professionKey then
+            isIgnored = TrainerSpells_IsIgnored(entry.spellID, entry.name)
+            local rankState = rankIgnoreStates[entry.name]
+            if not rankState then
+                rankState = {}
+                rankIgnoreStates[entry.name] = rankState
+            end
+
+            entry.rankIgnoreState = rankState
+            if isIgnored then
+                rankState.hasIgnored = true
+            else
+                rankState.hasUnignored = true
+            end
+        end
+
         if (not spoilerLimit or entry.level <= spoilerLimit) and TrainerSpells:EntryMatchesSearch(entry, searchText) then
-            local isIgnored
             if professionKey then
                 isIgnored = TrainerSpells_IsProfessionSpellIgnored and TrainerSpells_IsProfessionSpellIgnored(entry.spellID, professionKey)
-            else
-                isIgnored = TrainerSpells_IsIgnored and TrainerSpells_IsIgnored(entry.spellID, entry.name)
             end
 
             if isIgnored then

@@ -217,10 +217,95 @@ function TrainerSpells:EnsureTrainerUpdateOverrideInstalled()
     ClassTrainerFrame_Update()
 end
 
+local function InstallScrollBoxTrainerFilter()
+    local scrollBox = ClassTrainerFrame.ScrollBox
+    if not Menu or not Menu.ModifyMenu or not scrollBox.ForEachFrame or not scrollBox.Update then return false end
+    local view = scrollBox:GetView()
+    if not view or not view.SetElementExtentCalculator or not scrollBox.FullUpdate then return false end
+    local fixedExtent = view:HasElementExtent() and view:GetIdenticalElementExtent()
+    local nativeCalculator = view:GetElementExtentCalculator()
+    local hiddenRows = setmetatable({}, {__mode = "k"})
+    local lookupProvider, cachedSpellIDs, professionKey
+
+    local function ShouldHide(node)
+        if TrainerSpells_Character.showIgnoredInTrainer then return false end
+        local data = node and node.GetData and node:GetData()
+        local index = data and data.skillIndex
+        if not index then return false end
+        local name, subText, serviceType = TrainerSpells:GetTrainerServiceInfo(index)
+        if not name or serviceType == "header" then return false end
+
+        local provider = scrollBox:GetDataProvider()
+        if lookupProvider ~= provider or not cachedSpellIDs then
+            lookupProvider = provider
+            cachedSpellIDs = BuildCachedSpellIDLookup()
+            professionKey = IsTradeskillTrainer and IsTradeskillTrainer() and TrainerSpells:DetectTrainerProfession()
+        end
+
+        local rank = subText and tonumber(subText:match("%d+")) or 0
+        local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rank] or TrainerSpells:GetSpellIDForService(index)
+        if professionKey then return TrainerSpells_IsProfessionSpellIgnored(spellID, professionKey) end
+        return TrainerSpells_IsIgnored(spellID, name)
+    end
+
+    local function RefreshRows()
+        if not ClassTrainerFrame:IsShown() then return end
+        scrollBox:ForEachFrame(function(row)
+            if ShouldHide(row:GetElementData()) then
+                hiddenRows[row] = true
+                row:Hide()
+            elseif hiddenRows[row] then
+                hiddenRows[row] = nil
+                row:Show()
+            end
+        end)
+    end
+
+    view:SetElementExtentCalculator(function(dataIndex, node)
+        if ShouldHide(node) then return 0 end
+        if fixedExtent then return fixedExtent end
+        if nativeCalculator then return nativeCalculator(dataIndex, node) end
+        return view:GetTemplateExtentFromElementData(node)
+    end)
+
+    local function RefreshLayout()
+        scrollBox:ForEachFrame(function(row, node)
+            view:ResizeFrame(scrollBox, row, row:GetOrderIndex(), node)
+        end)
+        scrollBox:FullUpdate(true)
+        RefreshRows()
+    end
+
+    hooksecurefunc(scrollBox, "Update", RefreshRows)
+    hooksecurefunc("ClassTrainerFrame_Update", RefreshRows)
+    Menu.ModifyMenu("MENU_TRAINER_FILTER", function(owner, rootDescription)
+        if owner ~= ClassTrainerFrame.FilterDropdown then return end
+        for _, description in rootDescription:EnumerateElementDescriptions() do
+            local iterator, state, first = description:EnumerateElementDescriptions()
+            if iterator(state, first) ~= nil then
+                description:CreateCheckbox(TrainerSpells:Trans("LID_IGNORED"), function()
+                    return TrainerSpells_Character.showIgnoredInTrainer
+                end, function()
+                    TrainerSpells_Character.showIgnoredInTrainer = not TrainerSpells_Character.showIgnoredInTrainer
+                    RefreshLayout()
+                end)
+                break
+            end
+        end
+    end)
+    RefreshLayout()
+    return true
+end
+
 local trainerFilterHookInstalled = false
 function TrainerSpells:EnsureTrainerFilterHookInstalled()
-    if trainerFilterHookInstalled or not trainerUpdateOverrideInstalled then return end
-    if not ClassTrainerFrame or not ClassTrainerFrame.FilterDropdown then return end
+    if trainerFilterHookInstalled or not ClassTrainerFrame or not ClassTrainerFrame.FilterDropdown then return end
+    if ClassTrainerFrame.ScrollBox and ClassTrainerFrame_Update then
+        trainerFilterHookInstalled = InstallScrollBoxTrainerFilter()
+        return
+    end
+
+    if not trainerUpdateOverrideInstalled then return end
     trainerFilterHookInstalled = true
     local function IsNativeFilterSelected(filter)
         return GetTrainerStatusSelections()[filter]
