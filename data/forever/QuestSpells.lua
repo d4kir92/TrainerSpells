@@ -48,7 +48,7 @@ TrainerSpells.QuestSpells = {
     },
     SHAMAN = {
         [3599] = 10,
-        [5394] = { [2] = 20, [3] = 20, [6] = 20, [8] = 20 },
+        [5394] = { [2] = 20, [3] = 20, [6] = 20, [8] = 20, [96] = 20 },
         [8071] = { [2] = 4, [3] = 4, [6] = 4, [8] = 4, [96] = 3 },
     },
     WARLOCK = {
@@ -159,6 +159,7 @@ TrainerSpells.QuestSpellStarts = {
         [3] = {questID = 94505, questName = "Call of Water"},
         [6] = {questID = 96, questName = "Call of Water"},
         [8] = {questID = 96, questName = "Call of Water"},
+        [96] = {questID = 96, questName = "Call of Water"},
     },
     [5487] = moonglade,
     [5502] = {questID = 1652, questName = "The Tome of Valor"},
