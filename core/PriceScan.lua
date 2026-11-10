@@ -156,6 +156,14 @@ function PetPriceScan:GetFileName()
     return "HunterPet"
 end
 
+local function HasUnlearnedQuestRequirement(entry, questSpells)
+    if not questSpells or not entry.requires then return false end
+    for _, spellID in ipairs(entry.requires) do
+        if questSpells[spellID] and not (IsPlayerSpell and IsPlayerSpell(spellID)) then return true end
+    end
+    return false
+end
+
 function PriceScan:BuildMerged(classToken)
     local builtin = self:GetBuiltin(classToken)
     local merged, levelOf = {}, {}
@@ -232,7 +240,8 @@ function PriceScan:BuildMerged(classToken)
             local name = TrainerSpells:GetSpellInfo(spellID)
             local observed = seen[spellID] or (name and seen[ServiceNameKey(name, entry.rank)])
             local separateSource = (questSpells and questSpells[spellID]) or (classToken == "MAGE" and mageTravelSpells[spellID])
-            if not observed and not separateSource and raceMatches and (not entry.faction or entry.faction == playerFaction) then
+            local locked = HasUnlearnedQuestRequirement(entry, questSpells)
+            if not observed and not separateSource and not locked and raceMatches and (not entry.faction or entry.faction == playerFaction) then
                 merged[level][spellID] = nil
                 if next(merged[level]) == nil then merged[level] = nil end
                 table.insert(changes, {
