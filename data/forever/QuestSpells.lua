@@ -71,6 +71,10 @@ TrainerSpells.QuestSpells = {
     },
 }
 
+TrainerSpells.QuestSpellRanks = {
+    [5394] = 1,
+}
+
 local defensiveStance = {
     [1] = {questID = 1638, questName = "A Warrior's Training", uiMapID = 1429, x = 41.09, y = 65.77},
     [2] = {questID = 1498, questName = "Path of Defense", uiMapID = 1413, x = 61, y = 21},

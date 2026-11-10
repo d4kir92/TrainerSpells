@@ -132,7 +132,8 @@ function TrainerSpells:BuildEntriesFromData(dataTable, questSpells)
                 merged[level] = merged[level] or {}
                 local start = TrainerSpells.QuestSpellStarts and TrainerSpells.QuestSpellStarts[spellID]
                 if start and not start.questID then start = start[raceID] or start[playerFaction] end
-                merged[level][spellID] = {questReward = true, questStart = start}
+                local rank = TrainerSpells.QuestSpellRanks and TrainerSpells.QuestSpellRanks[spellID]
+                merged[level][spellID] = {questReward = true, questStart = start, rank = rank}
             end
         end
 
