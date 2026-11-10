@@ -269,6 +269,10 @@ SlashCmdList.TRAINERSPELLSDEBUG = function(input)
         TrainerSpells.DebugTrainerEnabled = not TrainerSpells.DebugTrainerEnabled
     end
 
+    if ClassTrainerFrame and ClassTrainerFrame:IsShown() and ClassTrainerFrame_Update then
+        ClassTrainerFrame_Update(true)
+    end
+
     if TrainerSpells.DebugTrainerEnabled then
         TrainerSpells:EnableTrainerDebugFilters()
         TrainerSpells:MSG(TrainerSpells:Trans("LID_TRAINERDEBUGON"))

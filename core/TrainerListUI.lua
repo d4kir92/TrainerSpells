@@ -264,36 +264,58 @@ local function InstallTrainerSelectionList(trainer)
 
     local learn = CreateFrame("Button", nil, overlay, "MagicButtonTemplate")
     learn:SetAllPoints(nativeLearn)
-    learn:SetText("TS: " .. TRAIN)
+    learn:SetText(TRAIN)
     learn:Disable()
 
-    local scrollAlpha, barAlpha, learnAlpha
+    local learnAll = CreateFrame("Button", nil, overlay, "MagicButtonTemplate")
+    learnAll:SetPoint("BOTTOMRIGHT", learn, "BOTTOMLEFT", -4, 0)
+    learnAll:SetSize(88, nativeLearn:GetHeight())
+    learnAll:SetText(TrainerSpells:Trans("LID_TRAIN_ALL"))
+    learnAll:Disable()
+
+    local toggle = CreateFrame("CheckButton", nil, trainer, "UICheckButtonTemplate")
+    toggle:SetPoint("BOTTOMLEFT", trainer, "BOTTOMRIGHT", 2, 0)
+    toggle:SetSize(24, 24)
+    toggle:SetFrameStrata("DIALOG")
+    local toggleLabel = toggle:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    toggleLabel:SetPoint("LEFT", toggle, "RIGHT", 1, 0)
+    toggleLabel:SetText("TS")
+    toggle:Hide()
+
+    local nativeRows = nativeScroll:GetScrollTarget()
+    local rowsShown, barAlpha, learnAlpha
     overlay:SetScript("OnShow", function()
-        scrollAlpha, barAlpha, learnAlpha = nativeScroll:GetAlpha(), nativeBar:GetAlpha(), nativeLearn:GetAlpha()
-        nativeScroll:SetAlpha(0)
+        rowsShown = nativeRows:IsShown()
+        barAlpha, learnAlpha = nativeBar:GetAlpha(), nativeLearn:GetAlpha()
+        nativeRows:Hide()
         nativeBar:SetAlpha(0)
         nativeLearn:SetAlpha(0)
     end)
     overlay:SetScript("OnHide", function()
-        nativeScroll:SetAlpha(scrollAlpha)
+        nativeRows:SetShown(rowsShown)
         nativeBar:SetAlpha(barAlpha)
         nativeLearn:SetAlpha(learnAlpha)
     end)
 
-    local selected, trainerGUID
+    local selected, trainerGUID, batch
     local function CanLearn(entry)
         return entry and entry.status == "available" and entry.cost and entry.cost <= GetMoney()
     end
 
     local function UpdateSelection()
-        learn:SetEnabled(not not CanLearn(selected))
+        learn:SetEnabled(not batch and not not CanLearn(selected))
         scroll:ForEachFrame(function(row)
             row.selectedTex:SetShown(row:GetElementData() == selected)
         end)
     end
 
     local view = CreateScrollBoxListLinearView()
-    view:SetPadding(1, 0, 1, 0, 0)
+    local nativeView = nativeScroll:GetView()
+    if nativeView and nativeView.padding then
+        ScrollBoxListViewMixin.SetPadding(view, nativeView.padding)
+    else
+        view:SetPadding(1, 0, 1, 0, 0)
+    end
     view:SetElementInitializer("ClassTrainerSkillButtonTemplate", function(row, entry)
         ClassTrainerFrame_InitServiceButton(row, entry)
         row.selectedTex:SetShown(entry == selected)
@@ -323,6 +345,7 @@ local function InstallTrainerSelectionList(trainer)
                         rank = rank or "",
                         category = category,
                         status = status,
+                        ignored = ignored,
                         spellID = spellID,
                         cost = GetTrainerServiceCost(index)
                     }
@@ -344,6 +367,12 @@ local function InstallTrainerSelectionList(trainer)
         return match
     end
 
+    local function FindTrainableEntry(entries)
+        for _, entry in ipairs(entries) do
+            if not entry.ignored and CanLearn(entry) and FindEntry(entries, entry) then return entry end
+        end
+    end
+
     local function GetSupportedTrainerGUID()
         if IsTradeskillTrainer and IsTradeskillTrainer() then return nil end
         local petType = Enum and Enum.TrainerType and Enum.TrainerType.Pet
@@ -351,25 +380,76 @@ local function InstallTrainerSelectionList(trainer)
         return UnitGUID("npc")
     end
 
-    local function RefreshList()
+    local function RefreshList(retainScrollPosition)
         if not trainer:IsShown() then return end
         local guid = GetSupportedTrainerGUID()
-        if not guid then
-            selected, trainerGUID = nil, nil
+        local debugEnabled = TrainerSpells.DebugTrainerEnabled
+        local enabled = not debugEnabled or not TrainerSpells_Character.useBlizzardTrainerList
+        toggle:SetShown(guid ~= nil and debugEnabled)
+        toggle:SetChecked(enabled)
+        if not guid or not enabled then
+            selected, trainerGUID, batch = nil, nil, nil
             overlay:Hide()
             return
         end
-        if guid ~= trainerGUID then selected = nil end
+        if guid ~= trainerGUID then selected, batch = nil, nil end
         trainerGUID = guid
         local entries = ReadEntries()
         selected = FindEntry(entries, selected)
         overlay:Show()
-        scroll:SetDataProvider(CreateDataProvider(entries), ScrollBoxConstants.RetainScrollPosition)
+        local retain = retainScrollPosition ~= false and ScrollBoxConstants.RetainScrollPosition
+        scroll:SetDataProvider(CreateDataProvider(entries), retain)
         UpdateSelection()
+        learnAll:SetEnabled(not batch and FindTrainableEntry(entries) ~= nil)
     end
 
+    toggle:SetScript("OnClick", function(self)
+        TrainerSpells_Character.useBlizzardTrainerList = not self:GetChecked()
+        RefreshList()
+    end)
+
+    learnAll:SetScript("OnClick", function()
+        if batch or not trainerGUID or not overlay:IsVisible() then return end
+        local session = {guid = trainerGUID}
+        batch = session
+        learnAll:Disable()
+        UpdateSelection()
+
+        local function TrainNext()
+            if batch ~= session then return end
+            if not overlay:IsVisible() or session.guid ~= GetSupportedTrainerGUID() then
+                batch = nil
+                RefreshList()
+                return
+            end
+
+            local entries = ReadEntries()
+            local pending = FindEntry(entries, session.pending)
+            if pending and pending.status == "available" then
+                if GetTime() < session.deadline then
+                    C_Timer.After(0.1, TrainNext)
+                    return
+                end
+            else
+                local entry = FindTrainableEntry(entries)
+                if entry then
+                    session.pending = entry
+                    session.deadline = GetTime() + 3
+                    BuyTrainerService(entry.skillIndex)
+                    C_Timer.After(0.1, TrainNext)
+                    return
+                end
+            end
+
+            batch = nil
+            RefreshList()
+        end
+
+        TrainNext()
+    end)
+
     learn:SetScript("OnClick", function()
-        if not trainer:IsShown() or not trainerGUID or trainerGUID ~= GetSupportedTrainerGUID() then return end
+        if batch or not overlay:IsVisible() or not trainer:IsShown() or not trainerGUID or trainerGUID ~= GetSupportedTrainerGUID() then return end
         local entry = FindEntry(ReadEntries(), selected)
         if CanLearn(entry) then
             selected = nil
@@ -379,12 +459,14 @@ local function InstallTrainerSelectionList(trainer)
         RefreshList()
     end)
     trainer:HookScript("OnHide", function()
-        selected, trainerGUID = nil, nil
+        selected, trainerGUID, batch = nil, nil, nil
         learn:Disable()
     end)
     hooksecurefunc("ClassTrainerFrame_Update", RefreshList)
     overlay:RegisterEvent("PLAYER_MONEY")
-    overlay:SetScript("OnEvent", RefreshList)
+    overlay:SetScript("OnEvent", function()
+        RefreshList()
+    end)
     RefreshList()
     return RefreshList
 end
