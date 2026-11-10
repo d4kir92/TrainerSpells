@@ -243,6 +243,152 @@ function TrainerSpells:EnsureTrainerUpdateOverrideInstalled()
     ClassTrainerFrame_Update()
 end
 
+local function InstallTrainerSelectionList(trainer)
+    if not TrainerSpells.Pricing.IsForever() or not BuyTrainerService then return end
+
+    local nativeScroll, nativeBar = trainer.ScrollBox, trainer.ScrollBar
+    local nativeLearn = trainer.TrainButton or ClassTrainerTrainButton
+    if not nativeBar or not nativeLearn or not ClassTrainerFrame_InitServiceButton then return end
+
+    local overlay = CreateFrame("Frame", nil, trainer)
+    overlay:Hide()
+    overlay:SetPoint("TOPLEFT", nativeScroll)
+    overlay:SetPoint("BOTTOMRIGHT", nativeBar)
+    overlay:SetFrameStrata("DIALOG")
+    overlay:EnableMouse(true)
+
+    local scroll = CreateFrame("Frame", nil, overlay, "WowScrollBoxList")
+    scroll:SetAllPoints(nativeScroll)
+    local scrollbar = CreateFrame("EventFrame", nil, overlay, "MinimalScrollBar")
+    scrollbar:SetAllPoints(nativeBar)
+
+    local learn = CreateFrame("Button", nil, overlay, "MagicButtonTemplate")
+    learn:SetAllPoints(nativeLearn)
+    learn:SetText("TS: " .. TRAIN)
+    learn:Disable()
+
+    local scrollAlpha, barAlpha, learnAlpha
+    overlay:SetScript("OnShow", function()
+        scrollAlpha, barAlpha, learnAlpha = nativeScroll:GetAlpha(), nativeBar:GetAlpha(), nativeLearn:GetAlpha()
+        nativeScroll:SetAlpha(0)
+        nativeBar:SetAlpha(0)
+        nativeLearn:SetAlpha(0)
+    end)
+    overlay:SetScript("OnHide", function()
+        nativeScroll:SetAlpha(scrollAlpha)
+        nativeBar:SetAlpha(barAlpha)
+        nativeLearn:SetAlpha(learnAlpha)
+    end)
+
+    local selected, trainerGUID
+    local function CanLearn(entry)
+        return entry and entry.status == "available" and entry.cost and entry.cost <= GetMoney()
+    end
+
+    local function UpdateSelection()
+        learn:SetEnabled(not not CanLearn(selected))
+        scroll:ForEachFrame(function(row)
+            row.selectedTex:SetShown(row:GetElementData() == selected)
+        end)
+    end
+
+    local view = CreateScrollBoxListLinearView()
+    view:SetPadding(1, 0, 1, 0, 0)
+    view:SetElementInitializer("ClassTrainerSkillButtonTemplate", function(row, entry)
+        ClassTrainerFrame_InitServiceButton(row, entry)
+        row.selectedTex:SetShown(entry == selected)
+        row:SetScript("OnClick", function(self)
+            selected = self:GetElementData()
+            UpdateSelection()
+        end)
+    end)
+    ScrollUtil.InitScrollBoxListWithScrollBar(scroll, scrollbar, view)
+
+    local function ReadEntries()
+        local list = {}
+        local lookup = BuildCachedSpellIDLookup()
+        for index = 1, GetNumTrainerServices() do
+            local name, rank, status, _, _, category = TrainerSpells:GetTrainerServiceInfo(index)
+            if name and status and status ~= "header" then
+                local spellID = TrainerSpells:GetSpellIDForService(index, true)
+                local ranks = lookup[name]
+                local rankNumber = rank and tonumber(rank:match("%d+")) or 0
+                local ignored = TrainerSpells_IsIgnored(spellID or (ranks and ranks[rankNumber]), name)
+                if not ignored or TrainerSpells_Character.showIgnoredInTrainer then
+                    list[#list + 1] = {
+                        skillIndex = index,
+                        playerMoney = GetMoney(),
+                        isTradeSkill = false,
+                        name = name,
+                        rank = rank or "",
+                        category = category,
+                        status = status,
+                        spellID = spellID,
+                        cost = GetTrainerServiceCost(index)
+                    }
+                end
+            end
+        end
+        return list
+    end
+
+    local function FindEntry(list, target)
+        if not target then return nil end
+        local match
+        for _, entry in ipairs(list) do
+            if entry.name == target.name and entry.rank == target.rank and entry.category == target.category and entry.spellID == target.spellID then
+                if match then return nil end
+                match = entry
+            end
+        end
+        return match
+    end
+
+    local function GetSupportedTrainerGUID()
+        if IsTradeskillTrainer and IsTradeskillTrainer() then return nil end
+        local petType = Enum and Enum.TrainerType and Enum.TrainerType.Pet
+        if petType ~= nil and C_Trainer and C_Trainer.GetTrainerType and C_Trainer.GetTrainerType() == petType then return nil end
+        return UnitGUID("npc")
+    end
+
+    local function RefreshList()
+        if not trainer:IsShown() then return end
+        local guid = GetSupportedTrainerGUID()
+        if not guid then
+            selected, trainerGUID = nil, nil
+            overlay:Hide()
+            return
+        end
+        if guid ~= trainerGUID then selected = nil end
+        trainerGUID = guid
+        local entries = ReadEntries()
+        selected = FindEntry(entries, selected)
+        overlay:Show()
+        scroll:SetDataProvider(CreateDataProvider(entries), ScrollBoxConstants.RetainScrollPosition)
+        UpdateSelection()
+    end
+
+    learn:SetScript("OnClick", function()
+        if not trainer:IsShown() or not trainerGUID or trainerGUID ~= GetSupportedTrainerGUID() then return end
+        local entry = FindEntry(ReadEntries(), selected)
+        if CanLearn(entry) then
+            selected = nil
+            learn:Disable()
+            BuyTrainerService(entry.skillIndex)
+        end
+        RefreshList()
+    end)
+    trainer:HookScript("OnHide", function()
+        selected, trainerGUID = nil, nil
+        learn:Disable()
+    end)
+    hooksecurefunc("ClassTrainerFrame_Update", RefreshList)
+    overlay:RegisterEvent("PLAYER_MONEY")
+    overlay:SetScript("OnEvent", RefreshList)
+    RefreshList()
+    return RefreshList
+end
+
 local function InstallScrollBoxTrainerFilter()
     local trainer = ClassTrainerFrame
     local scrollBox = trainer.ScrollBox
@@ -295,6 +441,7 @@ local function InstallScrollBoxTrainerFilter()
         end)
     end
 
+    local refreshSelectionList = InstallTrainerSelectionList(trainer)
     hooksecurefunc(scrollBox, "Update", RefreshRows)
     hooksecurefunc("ClassTrainerFrame_Update", RefreshRows)
     hooksecurefunc("ClassTrainer_SetSelection", RefreshRows)
@@ -305,6 +452,7 @@ local function InstallScrollBoxTrainerFilter()
         end, function()
             TrainerSpells_Character.showIgnoredInTrainer = not TrainerSpells_Character.showIgnoredInTrainer
             RefreshRows()
+            if refreshSelectionList then refreshSelectionList() end
         end)
     end)
     local driver = CreateFrame("Frame")
