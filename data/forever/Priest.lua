@@ -22,7 +22,6 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [2652] = { cost = 15, rank = 1, race = "Scourge" },
         [8092] = { cost = 300, rank = 1 },
         [9035] = { cost = 15, rank = 1, race = "Troll" },
-        [10797] = { cost = 15, rank = 1, race = "NightElf" },
         [13908] = { cost = 15, rank = 1, race = {"Dwarf", "Human"} },
     },
     [12] = {
