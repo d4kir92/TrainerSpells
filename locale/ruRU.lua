@@ -121,6 +121,7 @@ TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_CLEAR", "Очистить скан
 TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_DISCOUNT", "Этот наставник даёт вам скидку (репутация или PvP-звание). Сканируйте персонажем, который платит полную цену.")
 TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_EDIT", "Изменено")
 TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_FILE", "Файл: %s")
+TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_MISSING", "Не найдено у наставника")
 TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_NOCHANGES", "Изменений нет.")
 TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_NOTCLASS", "Это не наставник вашего класса.")
 TrainerSpells:AddTrans("ruRU", "LID_PRICESCAN_NOTPET", "Это не дрессировщик питомцев охотника.")

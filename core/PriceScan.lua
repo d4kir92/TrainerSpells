@@ -1,6 +1,7 @@
 local _, TrainerSpells = ...
 local PriceScan = {
     scans = {},
+    seen = {},
     fieldOrder = {"cost", "rank", "requires", "faction", "race"},
     serviceTypes = {
         available = true,
@@ -17,6 +18,7 @@ local PriceScan = {
 
 local PetPriceScan = setmetatable({
     scans = {},
+    seen = {},
     pet = true,
     frameName = "TrainerSpellsPetPriceScanFrame",
     titleKey = "LID_PRICESCAN_PETTITLE",
@@ -30,6 +32,18 @@ local PetPriceScan = setmetatable({
 
 TrainerSpells.PriceScan = PriceScan
 TrainerSpells.PetPriceScan = PetPriceScan
+local mageTravelSpells = {
+    [3561] = true, [3562] = true, [3563] = true, [3565] = true, [3566] = true, [3567] = true,
+    [10059] = true, [11416] = true, [11417] = true, [11418] = true, [11419] = true, [11420] = true,
+    [32266] = true, [32267] = true, [32271] = true, [32272] = true, [33690] = true, [33691] = true,
+    [35715] = true, [35717] = true, [49358] = true, [49359] = true, [49360] = true, [49361] = true,
+    [53140] = true, [53142] = true, [88342] = true, [88344] = true, [88345] = true, [88346] = true
+}
+
+local function ServiceNameKey(name, rank)
+    return name .. "\0" .. (rank or 0)
+end
+
 local function SortedNumberKeys(data)
     local keys = {}
     for key in pairs(data or {}) do
@@ -206,6 +220,31 @@ function PriceScan:BuildMerged(classToken)
         end
     end
 
+    local seen = self.seen[classToken]
+    if seen then
+        local questSpells = not self.pet and TrainerSpells.QuestSpells and TrainerSpells.QuestSpells[classToken]
+        local playerFaction = TrainerSpells:GetPlayerFaction()
+        local playerRace = TrainerSpells:GetPlayerRace()
+        for spellID, level in pairs(levelOf) do
+            local entry = builtin[level][spellID]
+            local race = entry.race
+            local raceMatches = not race or race == playerRace or (type(race) == "table" and tContains(race, playerRace))
+            local name = TrainerSpells:GetSpellInfo(spellID)
+            local observed = seen[spellID] or (name and seen[ServiceNameKey(name, entry.rank)])
+            local separateSource = (questSpells and questSpells[spellID]) or (classToken == "MAGE" and mageTravelSpells[spellID])
+            if not observed and not separateSource and raceMatches and (not entry.faction or entry.faction == playerFaction) then
+                merged[level][spellID] = nil
+                if next(merged[level]) == nil then merged[level] = nil end
+                table.insert(changes, {
+                    kind = "missing",
+                    spellID = spellID,
+                    scan = {level = level, name = name},
+                    diffs = {}
+                })
+            end
+        end
+    end
+
     table.sort(changes, function(left, right)
         if left.scan.level ~= right.scan.level then return left.scan.level < right.scan.level end
         return left.spellID < right.spellID
@@ -240,6 +279,9 @@ function PriceScan:BuildChangesText(changes)
     local lines = {}
     for _, change in ipairs(changes) do
         local label = change.kind == "add" and ("|cff33ff99" .. TrainerSpells:Trans("LID_PRICESCAN_ADD") .. "|r") or ("|cffffd100" .. TrainerSpells:Trans("LID_PRICESCAN_EDIT") .. "|r")
+        if change.kind == "missing" then
+            label = "|cffff8844" .. TrainerSpells:Trans("LID_PRICESCAN_MISSING") .. "|r"
+        end
         local name = change.scan.name or "?"
         if change.scan.rankText and change.scan.rankText ~= "" then name = name .. " (" .. change.scan.rankText .. ")" end
         table.insert(lines, ("%s  [%d] %s  #%d"):format(label, change.scan.level, name, change.spellID))
@@ -302,20 +344,24 @@ function PriceScan:Scan()
         end
     end
 
-    local rows, count, known = {}, 0, 0
+    local rows, seen, count, known = {}, {}, 0, 0
     for i = 1, GetNumTrainerServices() do
         local name, rankText, sType, levelReq = TrainerSpells:GetTrainerServiceInfo(i)
         if self.serviceTypes[sType] then
             local spellID = TrainerSpells:GetSpellIDForService(i)
             local skillLine = GetTrainerServiceSkillLine and GetTrainerServiceSkillLine(i)
             local isPet = petTrainer or TrainerSpells:IsPetTrainerSkillLine(skillLine)
-            if spellID and isPet == (self.pet == true) and not TrainerSpells:IsRidingSpell(spellID) and not TrainerSpells:IsWeaponSkillSpell(spellID) then
+            local rank = rankText and tonumber(rankText:match("%d+"))
+            local matchesScan = isPet == (self.pet == true)
+            if name and matchesScan then seen[ServiceNameKey(name, rank)] = true end
+            if spellID and matchesScan and not TrainerSpells:IsRidingSpell(spellID) and not TrainerSpells:IsWeaponSkillSpell(spellID) then
+                seen[spellID] = true
                 if not levelReq or levelReq == 0 then levelReq = TrainerSpells:GetSpellLevelLearned(spellID) end
                 if levelReq and levelReq > 0 then
                     rows[spellID] = {
                         level = levelReq,
                         cost = GetTrainerServiceCost(i) or 0,
-                        rank = rankText and tonumber(rankText:match("%d+")),
+                        rank = rank,
                         rankText = rankText,
                         name = name
                     }
@@ -334,6 +380,10 @@ function PriceScan:Scan()
 
     if count == 0 then return end
     self.scans[classToken] = self.scans[classToken] or {}
+    self.seen[classToken] = self.seen[classToken] or {}
+    for key in pairs(seen) do
+        self.seen[classToken][key] = true
+    end
     for spellID, row in pairs(rows) do
         self.scans[classToken][spellID] = row
     end
@@ -427,6 +477,7 @@ function PriceScan:CreateFrame()
     clearButton:SetText(TrainerSpells:Trans("LID_PRICESCAN_CLEAR"))
     clearButton:SetScript("OnClick", function()
         scan.scans = {}
+        scan.seen = {}
         scan:SetStatus(nil)
     end)
 
