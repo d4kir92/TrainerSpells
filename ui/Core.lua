@@ -370,6 +370,9 @@ end
 function TrainerSpells:SortEntries(list)
     table.sort(list, function(a, b)
         if a.level ~= b.level then return a.level < b.level end
+        local aQuest = a.questReward and (a.questStart and a.questStart.questID or 0) or math.huge
+        local bQuest = b.questReward and (b.questStart and b.questStart.questID or 0) or math.huge
+        if aQuest ~= bQuest then return aQuest < bQuest end
         return a.key < b.key
     end)
 end

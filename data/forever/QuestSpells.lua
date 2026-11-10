@@ -3,6 +3,9 @@ TrainerSpells.QuestSpells = {
     DRUID = {
         [768] = 20,
         [1066] = 16,
+        [1079] = 20,
+        [1082] = 20,
+        [5215] = 20,
         [5487] = 10,
         [8946] = 14,
         [18960] = 10,
@@ -97,6 +100,11 @@ local moonglade = {
     Horde = {questID = 5922, questName = "Moonglade", uiMapID = 1456, x = 76.48, y = 27.22},
 }
 
+local catForm = {
+    Alliance = {questID = 98393, questName = "The Great Cat Spirit", uiMapID = 1457, x = 35.37, y = 8.4},
+    Horde = {questID = 98340, questName = "The Great Cat Spirit", uiMapID = 1456, x = 76.48, y = 27.22},
+}
+
 TrainerSpells.QuestSpellStarts = {
     [71] = defensiveStance,
     [355] = defensiveStance,
@@ -122,16 +130,15 @@ TrainerSpells.QuestSpellStarts = {
         [7] = {questID = 65603, questName = "The Binding"},
         [8] = {questID = 65604, questName = "The Binding"},
     },
-    [768] = {
-        Alliance = {questID = 98393, questName = "The Great Cat Spirit", uiMapID = 1457, x = 35.37, y = 8.4},
-        Horde = {questID = 98340, questName = "The Great Cat Spirit", uiMapID = 1456, x = 76.48, y = 27.22},
-    },
+    [768] = catForm,
     [883] = taming,
     [982] = taming,
     [1066] = {
         Alliance = {questID = 26, questName = "A Lesson to Learn", uiMapID = 1457, x = 35.37, y = 8.4},
         Horde = {questID = 27, questName = "A Lesson to Learn", uiMapID = 1456, x = 76.48, y = 27.22},
     },
+    [1079] = catForm,
+    [1082] = catForm,
     [1122] = {questID = 7603, questName = "Kroshius' Infernal Core"},
     [1515] = taming,
     [2458] = berserkerStance,
@@ -146,6 +153,7 @@ TrainerSpells.QuestSpellStarts = {
         [6] = {questID = 2984, questName = "Call of Fire", uiMapID = 1412, x = 47.4, y = 62.54},
     },
     [5149] = taming,
+    [5215] = catForm,
     [5394] = {
         [2] = {questID = 96, questName = "Call of Water"},
         [3] = {questID = 94505, questName = "Call of Water"},

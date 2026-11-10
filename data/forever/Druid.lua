@@ -47,13 +47,9 @@ TrainerSpellsBuiltin.DRUID = TrainerSpellsBuiltin.DRUID or {
         [16810] = { cost = 1500, rank = 2, requires = {339} },
     },
     [20] = {
-        [768] = { cost = 2000 },
-        [1079] = { cost = 2000, rank = 1, requires = {768} },
-        [1082] = { cost = 2000, rank = 1, requires = {768} },
         [1735] = { cost = 2400, rank = 2 },
         [2912] = { cost = 2400, rank = 1 },
         [5188] = { cost = 2400, rank = 4, requires = {5186} },
-        [5215] = { cost = 2000, rank = 1, requires = {768} },
         [5221] = { cost = 2400, rank = 1 },
         [6756] = { cost = 2400, rank = 3, requires = {1126} },
         [16864] = { cost = 2400 },
