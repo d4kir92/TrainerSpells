@@ -115,7 +115,6 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [6077] = { cost = 8000, rank = 5 },
         [8131] = { cost = 8000, rank = 2 },
         [9473] = { cost = 8000, rank = 3 },
-        [1240770] = { cost = 11000, rank = 2 },
         [1309595] = { cost = 8000, rank = 1 },
     },
     [34] = {
@@ -143,7 +142,6 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [6060] = { cost = 12000, rank = 6, requires = {585} },
         [6078] = { cost = 12000, rank = 6 },
         [9474] = { cost = 12000, rank = 4 },
-        [1240771] = { cost = 16000, rank = 3 },
     },
     [40] = {
         [996] = { cost = 13000, rank = 2 },
@@ -182,7 +180,6 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19278] = { cost = 16000, rank = 4, race = "Scourge" },
         [19310] = { cost = 14000, rank = 4, race = "Troll" },
         [27799] = { cost = 16000, rank = 4 },
-        [1240772] = { cost = 24000, rank = 4 },
     },
     [46] = {
         [10881] = { cost = 17000, rank = 4 },
@@ -210,9 +207,7 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [19274] = { cost = 1500, rank = 4, race = "Human" },
         [19284] = { cost = 18000, rank = 5, race = "Troll" },
         [19304] = { cost = 1500, rank = 6, race = "NightElf" },
-        [27870] = { cost = 1500, rank = 2 },
         [1240721] = { cost = 20000, rank = 3 },
-        [1240773] = { cost = 30000, rank = 5 },
         [1240826] = { cost = 20000, rank = 2 },
         [1277327] = { cost = 900, rank = 4, race = "Scourge" },
         [1277334] = { cost = 900, rank = 4, race = "Dwarf" },
@@ -239,7 +234,6 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [10917] = { cost = 26000, rank = 7 },
         [10929] = { cost = 26000, rank = 9 },
         [10958] = { cost = 26000, rank = 3 },
-        [1240774] = { cost = 42000, rank = 6 },
         [1309636] = { cost = 26000, rank = 4 },
     },
     [58] = {
@@ -269,7 +263,6 @@ TrainerSpellsBuiltin.PRIEST = TrainerSpellsBuiltin.PRIEST or {
         [27681] = { cost = 28000, rank = 1 },
         [27801] = { cost = 28000, rank = 6 },
         [27841] = { cost = 28000, rank = 4 },
-        [27871] = { cost = 1500, rank = 3, requires = {27870} },
         [1240827] = { cost = 28000, rank = 3 },
         [1277328] = { cost = 1500, rank = 5, race = "Scourge" },
         [1277335] = { cost = 1500, rank = 5, race = "Dwarf" },
