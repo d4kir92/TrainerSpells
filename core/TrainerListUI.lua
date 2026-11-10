@@ -37,7 +37,7 @@ local function ServiceMatchesTrainerFilters(serviceType, isIgnored)
     local selections = GetTrainerStatusSelections()
     local hasSelectedStatus = HasSelectedTrainerStatus()
     if isIgnored then
-        return TrainerSpells_Character.showIgnoredInTrainer and (not hasSelectedStatus or selections[serviceType])
+        return selections[serviceType] or (TrainerSpells_Character.showIgnoredInTrainer and not hasSelectedStatus)
     end
     return hasSelectedStatus and selections[serviceType] or false
 end
@@ -63,7 +63,7 @@ end
 local function BuildVisibleTrainerIndexList()
     local total = GetNumTrainerServices()
     local cachedSpellIDs = BuildCachedSpellIDLookup()
-    local list = {}
+    local list, ignored = {}, {}
     for i = 1, total do
         local name, subText, serviceType = GetTrainerServiceInfo(i)
         local keep = serviceType == "header"
@@ -71,24 +71,25 @@ local function BuildVisibleTrainerIndexList()
             local rankNum = subText and tonumber(subText:match("%d+")) or 0
             local spellID = cachedSpellIDs[name] and cachedSpellIDs[name][rankNum]
             if not spellID then spellID = TrainerSpells:GetSpellIDForService(i) end
-            keep = ServiceMatchesTrainerFilters(serviceType, TrainerSpells_IsIgnored(spellID, name))
+            ignored[i] = TrainerSpells_IsIgnored(spellID, name)
+            keep = ServiceMatchesTrainerFilters(serviceType, ignored[i])
         end
 
         if keep then table.insert(list, i) end
     end
-    return list
+    return list, ignored
 end
 
 local function TrainerSpells_ClassTrainerFrame_Update()
     SetPortraitTexture(ClassTrainerFramePortrait, "npc")
     ClassTrainerNameText:SetText(UnitName("npc"))
     ClassTrainerGreetingText:SetText(GetTrainerGreetingText())
-    local visibleList = BuildVisibleTrainerIndexList()
+    local visibleList, ignored = BuildVisibleTrainerIndexList()
     local selected = ClassTrainerFrame.selectedService
     if selected and not TrainerSpells_Character.showIgnoredInTrainer and not tContains(visibleList, selected) then
         local nextService, nextPosition
         for position, index in ipairs(visibleList) do
-            if select(3, GetTrainerServiceInfo(index)) == "available" then
+            if not ignored[index] and select(3, GetTrainerServiceInfo(index)) == "available" then
                 nextService, nextPosition = index, position
                 if index > selected then break end
             end
@@ -183,6 +184,7 @@ local function TrainerSpells_ClassTrainerFrame_Update()
                 end
             end
 
+            skillButton:SetAlpha(ignored[skillIndex] and not TrainerSpells_Character.showIgnoredInTrainer and 0.25 or 1)
             skillButton:SetID(skillIndex)
             skillButton:Show()
             if ClassTrainerFrame.selectedService and GetTrainerSelectionIndex() == skillIndex then
@@ -246,7 +248,7 @@ local function InstallScrollBoxTrainerFilter()
     local scrollBox = trainer.ScrollBox
     if not Menu or not Menu.ModifyMenu or not scrollBox.ForEachFrame or not scrollBox.GetDataProvider or not scrollBox.Update then return false end
     if not ClassTrainerFrame_Update or not ClassTrainer_SetSelection then return false end
-    local hiddenRows = setmetatable({}, {__mode = "k"})
+    local dimmedRows = setmetatable({}, {__mode = "k"})
     local provider, cachedSpellIDs, resolvedSpellIDs, professionKey
 
     local function RefreshRows()
@@ -263,36 +265,32 @@ local function InstallScrollBoxTrainerFilter()
             node = node or row:GetElementData()
             local data = node and (node.GetData and node:GetData() or node.data or node)
             local index = data and data.skillIndex
-            local hidden = false
+            local ignored = false
             if index and row ~= trainer.skillStepButton and not TrainerSpells_Character.showIgnoredInTrainer then
-                local displayIndex = data.displayIndex or index
-                if displayIndex ~= trainer.selectedService and not (row:IsShown() and row:IsMouseOver()) then
-                    local name, subText, serviceType = TrainerSpells:GetTrainerServiceInfo(index)
-                    if name and serviceType ~= "header" then
-                        local spellID = resolvedSpellIDs[index]
-                        if spellID == nil then
-                            spellID = TrainerSpells:GetSpellIDForService(index, true)
-                            local rank = subText and tonumber(subText:match("%d+")) or 0
-                            if not spellID and cachedSpellIDs[name] then spellID = cachedSpellIDs[name][rank] end
-                            resolvedSpellIDs[index] = spellID or false
-                        end
+                local name, subText, serviceType = TrainerSpells:GetTrainerServiceInfo(index)
+                if name and serviceType ~= "header" then
+                    local spellID = resolvedSpellIDs[index]
+                    if spellID == nil then
+                        spellID = TrainerSpells:GetSpellIDForService(index, true)
+                        local rank = subText and tonumber(subText:match("%d+")) or 0
+                        if not spellID and cachedSpellIDs[name] then spellID = cachedSpellIDs[name][rank] end
+                        resolvedSpellIDs[index] = spellID or false
+                    end
 
-                        if professionKey then
-                            hidden = TrainerSpells_IsProfessionSpellIgnored(spellID, professionKey)
-                        else
-                            hidden = TrainerSpells_IsIgnored(spellID, name)
-                        end
+                    if professionKey then
+                        ignored = TrainerSpells_IsProfessionSpellIgnored(spellID, professionKey)
+                    else
+                        ignored = TrainerSpells_IsIgnored(spellID, name)
                     end
                 end
             end
 
-            if hidden then
-                hiddenRows[row] = node
-                if row:IsShown() then row:Hide() end
-            elseif hiddenRows[row] then
-                local previousNode = hiddenRows[row]
-                hiddenRows[row] = nil
-                if previousNode == node then row:Show() end
+            if ignored then
+                dimmedRows[row] = true
+                row:SetAlpha(0.25)
+            elseif dimmedRows[row] then
+                dimmedRows[row] = nil
+                row:SetAlpha(1)
             end
         end)
     end
