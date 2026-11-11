@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("esES", "LID_TRAINERSVIEW_DESC", "Dónde encontrar a tus 
 TrainerSpells:AddTrans("esES", "LID_TRAININGPOINTS", "Puntos de entrenamiento")
 TrainerSpells:AddTrans("esES", "LID_TRAINS_THROUGH_LEVEL_6", "Entrenador inicial: enseña hasta el nivel 6")
 TrainerSpells:AddTrans("esES", "LID_TRAIN_ALL", "Aprender todo")
+TrainerSpells:AddTrans("esES", "LID_TRAIN_ALL_CONFIRM", "¿Seguro que quieres aprender %d hechizos por un total de %s?")
 TrainerSpells:AddTrans("esES", "LID_UNKNOWNSOURCE", "Sin fuente conocida")
 TrainerSpells:AddTrans("esES", "LID_WAYPOINTFOR", "Punto de ruta establecido: %s en %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("esES", "LID_WEAPON", "Arma")

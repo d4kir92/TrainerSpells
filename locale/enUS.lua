@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("enUS", "LID_TRAINERSVIEW_DESC", "Where to find your trai
 TrainerSpells:AddTrans("enUS", "LID_TRAININGPOINTS", "Training points")
 TrainerSpells:AddTrans("enUS", "LID_TRAINS_THROUGH_LEVEL_6", "Starter trainer: trains through level 6")
 TrainerSpells:AddTrans("enUS", "LID_TRAIN_ALL", "Train All")
+TrainerSpells:AddTrans("enUS", "LID_TRAIN_ALL_CONFIRM", "Are you sure you want to train %d spells for a total of %s?")
 TrainerSpells:AddTrans("enUS", "LID_UNKNOWNSOURCE", "No known source")
 TrainerSpells:AddTrans("enUS", "LID_WAYPOINTFOR", "Waypoint set: %s in %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("enUS", "LID_WEAPON", "Weapon")

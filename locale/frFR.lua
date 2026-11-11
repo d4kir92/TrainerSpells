@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("frFR", "LID_TRAINERSVIEW_DESC", "Où trouver vos maître
 TrainerSpells:AddTrans("frFR", "LID_TRAININGPOINTS", "Points de dressage")
 TrainerSpells:AddTrans("frFR", "LID_TRAINS_THROUGH_LEVEL_6", "Maître de départ : enseigne jusqu’au niveau 6")
 TrainerSpells:AddTrans("frFR", "LID_TRAIN_ALL", "Tout apprendre")
+TrainerSpells:AddTrans("frFR", "LID_TRAIN_ALL_CONFIRM", "Voulez-vous vraiment apprendre %d sorts pour un total de %s ?")
 TrainerSpells:AddTrans("frFR", "LID_UNKNOWNSOURCE", "Aucune source connue")
 TrainerSpells:AddTrans("frFR", "LID_WAYPOINTFOR", "Point de navigation placé : %s à %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("frFR", "LID_WEAPON", "Arme")

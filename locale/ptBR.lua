@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("ptBR", "LID_TRAINERSVIEW_DESC", "Onde encontrar seus ins
 TrainerSpells:AddTrans("ptBR", "LID_TRAININGPOINTS", "Pontos de treinamento")
 TrainerSpells:AddTrans("ptBR", "LID_TRAINS_THROUGH_LEVEL_6", "Instrutor inicial: ensina até o nível 6")
 TrainerSpells:AddTrans("ptBR", "LID_TRAIN_ALL", "Aprender tudo")
+TrainerSpells:AddTrans("ptBR", "LID_TRAIN_ALL_CONFIRM", "Tem certeza de que deseja aprender %d feitiços por um total de %s?")
 TrainerSpells:AddTrans("ptBR", "LID_UNKNOWNSOURCE", "Nenhuma fonte conhecida")
 TrainerSpells:AddTrans("ptBR", "LID_WAYPOINTFOR", "Ponto de navegação definido: %s em %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("ptBR", "LID_WEAPON", "Arma")

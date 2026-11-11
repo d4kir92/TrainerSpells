@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("itIT", "LID_TRAINERSVIEW_DESC", "Dove trovare i tuoi ist
 TrainerSpells:AddTrans("itIT", "LID_TRAININGPOINTS", "Punti addestramento")
 TrainerSpells:AddTrans("itIT", "LID_TRAINS_THROUGH_LEVEL_6", "Maestro iniziale: insegna fino al livello 6")
 TrainerSpells:AddTrans("itIT", "LID_TRAIN_ALL", "Impara tutto")
+TrainerSpells:AddTrans("itIT", "LID_TRAIN_ALL_CONFIRM", "Vuoi davvero apprendere %d incantesimi per un totale di %s?")
 TrainerSpells:AddTrans("itIT", "LID_UNKNOWNSOURCE", "Nessuna fonte conosciuta")
 TrainerSpells:AddTrans("itIT", "LID_WAYPOINTFOR", "Punto di navigazione impostato: %s a %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("itIT", "LID_WEAPON", "Arma")

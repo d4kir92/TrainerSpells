@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("deDE", "LID_TRAINERSVIEW_DESC", "Wo du deine Lehrer find
 TrainerSpells:AddTrans("deDE", "LID_TRAININGPOINTS", "Trainingspunkte")
 TrainerSpells:AddTrans("deDE", "LID_TRAINS_THROUGH_LEVEL_6", "Startgebietslehrer: bildet bis Stufe 6 aus")
 TrainerSpells:AddTrans("deDE", "LID_TRAIN_ALL", "Alles lernen")
+TrainerSpells:AddTrans("deDE", "LID_TRAIN_ALL_CONFIRM", "Möchtest du %d Zauber für insgesamt %s erlernen?")
 TrainerSpells:AddTrans("deDE", "LID_UNKNOWNSOURCE", "Keine bekannte Quelle")
 TrainerSpells:AddTrans("deDE", "LID_WAYPOINTFOR", "Wegpunkt gesetzt: %s in %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("deDE", "LID_WEAPON", "Waffe")

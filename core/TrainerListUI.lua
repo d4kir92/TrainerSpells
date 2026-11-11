@@ -292,6 +292,7 @@ local function InstallTrainerSelectionList(trainer)
         nativeLearn:SetAlpha(0)
     end)
     overlay:SetScript("OnHide", function()
+        StaticPopup_Hide("TRAINERSPELLS_CONFIRM_TRAIN_ALL")
         nativeRows:SetShown(rowsShown)
         nativeBar:SetAlpha(barAlpha)
         nativeLearn:SetAlpha(learnAlpha)
@@ -367,10 +368,15 @@ local function InstallTrainerSelectionList(trainer)
         return match
     end
 
-    local function FindTrainableEntry(entries)
+    local function GetTrainingPlan(entries)
+        local plan, totalCost = {}, 0
         for _, entry in ipairs(entries) do
-            if not entry.ignored and CanLearn(entry) and FindEntry(entries, entry) then return entry end
+            if not entry.ignored and entry.status == "available" and entry.cost and FindEntry(entries, entry) then
+                plan[#plan + 1] = entry
+                totalCost = totalCost + entry.cost
+            end
         end
+        return plan, totalCost
     end
 
     local function GetSupportedTrainerGUID()
@@ -403,7 +409,8 @@ local function InstallTrainerSelectionList(trainer)
         if not showTrainAll then batch = nil end
         UpdateSelection()
         learnAll:SetShown(showTrainAll)
-        learnAll:SetEnabled(showTrainAll and not batch and FindTrainableEntry(entries) ~= nil)
+        local plan, totalCost = GetTrainingPlan(entries)
+        learnAll:SetEnabled(showTrainAll and not batch and #plan > 0 and totalCost <= GetMoney())
     end
 
     toggle:SetScript("OnClick", function(self)
@@ -411,9 +418,25 @@ local function InstallTrainerSelectionList(trainer)
         RefreshList()
     end)
 
-    learnAll:SetScript("OnClick", function()
-        if TrainerSpells_Character.showTrainAll == false or batch or not trainerGUID or not overlay:IsVisible() then return end
-        local session = {guid = trainerGUID}
+    local function CanTrainAll(guid)
+        return TrainerSpells_Character.showTrainAll ~= false and not batch and guid and guid == trainerGUID and overlay:IsVisible() and guid == GetSupportedTrainerGUID()
+    end
+
+    local function StartTraining(session)
+        if not CanTrainAll(session.guid) then return end
+        local plan, totalCost = GetTrainingPlan(ReadEntries())
+        if #plan ~= #session.plan or totalCost ~= session.totalCost or totalCost > GetMoney() then
+            RefreshList()
+            return
+        end
+        for _, quoted in ipairs(session.plan) do
+            local entry = FindEntry(plan, quoted)
+            if not entry or entry.cost ~= quoted.cost then
+                RefreshList()
+                return
+            end
+        end
+
         batch = session
         learnAll:Disable()
         UpdateSelection()
@@ -434,9 +457,11 @@ local function InstallTrainerSelectionList(trainer)
                     return
                 end
             else
-                local entry = FindTrainableEntry(entries)
-                if entry then
+                local quoted = session.plan[session.nextIndex]
+                local entry = FindEntry(entries, quoted)
+                if CanLearn(entry) and not entry.ignored and entry.cost <= quoted.cost then
                     session.pending = entry
+                    session.nextIndex = session.nextIndex + 1
                     session.deadline = GetTime() + 3
                     BuyTrainerService(entry.skillIndex)
                     C_Timer.After(0.1, TrainNext)
@@ -449,6 +474,26 @@ local function InstallTrainerSelectionList(trainer)
         end
 
         TrainNext()
+    end
+
+    StaticPopupDialogs["TRAINERSPELLS_CONFIRM_TRAIN_ALL"] = {
+        text = "%s",
+        button1 = YES,
+        button2 = NO,
+        OnAccept = function(_, session) StartTraining(session) end,
+        timeout = 0,
+        hideOnEscape = true
+    }
+
+    learnAll:SetScript("OnClick", function()
+        if not CanTrainAll(trainerGUID) then return end
+        local plan, totalCost = GetTrainingPlan(ReadEntries())
+        if #plan == 0 or totalCost > GetMoney() then
+            RefreshList()
+            return
+        end
+        local message = format(TrainerSpells:Trans("LID_TRAIN_ALL_CONFIRM"), #plan, GetCoinTextureString(totalCost))
+        StaticPopup_Show("TRAINERSPELLS_CONFIRM_TRAIN_ALL", message, nil, {guid = trainerGUID, plan = plan, totalCost = totalCost, nextIndex = 1})
     end)
 
     learn:SetScript("OnClick", function()

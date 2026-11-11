@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("ruRU", "LID_TRAINERSVIEW_DESC", "Где найти ва�
 TrainerSpells:AddTrans("ruRU", "LID_TRAININGPOINTS", "Очки обучения")
 TrainerSpells:AddTrans("ruRU", "LID_TRAINS_THROUGH_LEVEL_6", "Начальный наставник: обучает до 6-го уровня")
 TrainerSpells:AddTrans("ruRU", "LID_TRAIN_ALL", "Выучить всё")
+TrainerSpells:AddTrans("ruRU", "LID_TRAIN_ALL_CONFIRM", "Вы уверены, что хотите изучить заклинания (%d) за %s?")
 TrainerSpells:AddTrans("ruRU", "LID_UNKNOWNSOURCE", "Источник неизвестен")
 TrainerSpells:AddTrans("ruRU", "LID_WAYPOINTFOR", "Путевая точка установлена: %s, %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("ruRU", "LID_WEAPON", "Оружие")

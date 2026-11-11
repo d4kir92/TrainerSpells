@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("koKR", "LID_TRAINERSVIEW_DESC", "훈련사를 찾을 수
 TrainerSpells:AddTrans("koKR", "LID_TRAININGPOINTS", "훈련 점수")
 TrainerSpells:AddTrans("koKR", "LID_TRAINS_THROUGH_LEVEL_6", "초반 훈련관: 6레벨까지 훈련")
 TrainerSpells:AddTrans("koKR", "LID_TRAIN_ALL", "모두 배우기")
+TrainerSpells:AddTrans("koKR", "LID_TRAIN_ALL_CONFIRM", "주문 %d개를 배우시겠습니까? 총 비용은 %s입니다.")
 TrainerSpells:AddTrans("koKR", "LID_UNKNOWNSOURCE", "알려진 출처 없음")
 TrainerSpells:AddTrans("koKR", "LID_WAYPOINTFOR", "경유지 설정: %s - %s (%.1f, %.1f)")
 TrainerSpells:AddTrans("koKR", "LID_WEAPON", "무기")

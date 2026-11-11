@@ -212,6 +212,7 @@ TrainerSpells:AddTrans("zhCN", "LID_TRAINERSVIEW_DESC", "在哪里可以找到�
 TrainerSpells:AddTrans("zhCN", "LID_TRAININGPOINTS", "训练点数")
 TrainerSpells:AddTrans("zhCN", "LID_TRAINS_THROUGH_LEVEL_6", "初始训练师：可训练至6级")
 TrainerSpells:AddTrans("zhCN", "LID_TRAIN_ALL", "全部学习")
+TrainerSpells:AddTrans("zhCN", "LID_TRAIN_ALL_CONFIRM", "确定要学习%d个法术吗？总费用为%s。")
 TrainerSpells:AddTrans("zhCN", "LID_UNKNOWNSOURCE", "没有已知来源")
 TrainerSpells:AddTrans("zhCN", "LID_WAYPOINTFOR", "已设置导航点：%s，%s（%.1f，%.1f）")
 TrainerSpells:AddTrans("zhCN", "LID_WEAPON", "武器")
