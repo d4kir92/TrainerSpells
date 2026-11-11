@@ -492,7 +492,7 @@ local function InstallTrainerSelectionList(trainer)
             RefreshList()
             return
         end
-        local message = format(TrainerSpells:Trans("LID_TRAIN_ALL_CONFIRM"), #plan, GetCoinTextureString(totalCost))
+        local message = TrainerSpells:Trans("LID_TRAIN_ALL_CONFIRM"):format(#plan, GetMoneyString(totalCost, true))
         StaticPopup_Show("TRAINERSPELLS_CONFIRM_TRAIN_ALL", message, nil, {guid = trainerGUID, plan = plan, totalCost = totalCost, nextIndex = 1})
     end)
 
