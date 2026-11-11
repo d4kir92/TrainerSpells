@@ -211,6 +211,18 @@ function TrainerSpells:ToggleSettings()
             end
         })
 
+        if self.Pricing.IsForever() then
+            win:AddCheckbox({
+                label = "LID_TRAIN_ALL",
+                added = "2026-11-11",
+                value = TrainerSpells_Character.showTrainAll ~= false,
+                func = function(value)
+                    TrainerSpells_Character.showTrainAll = value
+                    if self.RefreshTrainerSelectionList then self.RefreshTrainerSelectionList() end
+                end
+            })
+        end
+
         if self.HunterBeasts then
             win:AddCheckbox({
                 label = "LID_SHOW_BEAST_TOOLTIPS",

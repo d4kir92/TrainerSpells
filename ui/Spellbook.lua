@@ -1070,7 +1070,8 @@ end
 
 local function FitNativeSearchBox()
     local book = GetPlayerSpellsBook()
-    local nativeSearchBox = book and book.SearchBox
+    if InCombatLockdown() or not book or not book:IsVisible() then return end
+    local nativeSearchBox = book.SearchBox
     if not nativeSearchBox or not playerSpellsModeLastTab then return end
     if not playerSpellsSubTabs.searchPoints then
         local points = {}
@@ -1299,16 +1300,41 @@ local function InstallPlayerSpellsIntegration()
 end
 
 if not SpellBookFrame and TrainerSpells:HasClassTrainers() then
-    if C_AddOns and C_AddOns.IsAddOnLoaded and C_AddOns.IsAddOnLoaded("Blizzard_PlayerSpells") then
+    local playerSpellsLoader = CreateFrame("Frame")
+    local function InstallWhenVisible()
+        local book = GetPlayerSpellsBook()
+        if playerSpellsModeTabContainer or not book or not book:IsVisible() then return end
+        if InCombatLockdown() then
+            playerSpellsLoader:RegisterEvent("PLAYER_REGEN_ENABLED")
+            return
+        end
+
         InstallPlayerSpellsIntegration()
-    else
-        local playerSpellsLoader = CreateFrame("Frame")
-        playerSpellsLoader:RegisterEvent("ADDON_LOADED")
-        playerSpellsLoader:SetScript("OnEvent", function(self, _, addonName)
-            if addonName ~= "Blizzard_PlayerSpells" then return end
-            self:UnregisterEvent("ADDON_LOADED")
-            InstallPlayerSpellsIntegration()
+    end
+
+    local function WatchSpellBook()
+        local book = GetPlayerSpellsBook()
+        if not book then return end
+        book:HookScript("OnShow", function()
+            if not playerSpellsModeTabContainer then C_Timer.After(0, InstallWhenVisible) end
         end)
+        C_Timer.After(0, InstallWhenVisible)
+    end
+
+    playerSpellsLoader:SetScript("OnEvent", function(self, event, addonName)
+        if event == "PLAYER_REGEN_ENABLED" then
+            self:UnregisterEvent(event)
+            C_Timer.After(0, InstallWhenVisible)
+        elseif addonName == "Blizzard_PlayerSpells" then
+            self:UnregisterEvent(event)
+            WatchSpellBook()
+        end
+    end)
+
+    if GetPlayerSpellsBook() then
+        WatchSpellBook()
+    else
+        playerSpellsLoader:RegisterEvent("ADDON_LOADED")
     end
 end
 

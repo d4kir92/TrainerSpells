@@ -96,8 +96,26 @@ function TrainerSpells:GetProfessionName(key)
     return PROFESSION_KEY_TO_NAME[key]
 end
 
-function TrainerSpells:GetProfessionKey(name)
-    return PROFESSION_NAME_TO_KEY[name]
+local PROFESSION_KEY_BY_SKILL_LINE = {
+    [129] = "First Aid",
+    [164] = "Blacksmithing",
+    [165] = "Leatherworking",
+    [171] = "Alchemy",
+    [182] = "Herbalism",
+    [184] = "Cooking",
+    [186] = "Mining",
+    [197] = "Tailoring",
+    [202] = "Engineering",
+    [333] = "Enchanting",
+    [356] = "Fishing",
+    [393] = "Skinning",
+    [755] = "Jewelcrafting",
+    [773] = "Inscription",
+    [794] = "Archaeology",
+}
+
+function TrainerSpells:GetProfessionKey(name, skillLineID)
+    return PROFESSION_KEY_BY_SKILL_LINE[skillLineID] or PROFESSION_NAME_TO_KEY[name]
 end
 
 function TrainerSpells:GetProfessionIcon(key)

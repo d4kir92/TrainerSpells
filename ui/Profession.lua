@@ -88,8 +88,9 @@ local function GetOpenProfession()
     if not professionInfo and C_TradeSkillUI and C_TradeSkillUI.GetBaseProfessionInfo then professionInfo = C_TradeSkillUI.GetBaseProfessionInfo() end
     if type(professionInfo) ~= "table" then return nil, nil end
     local professionName = professionInfo.parentProfessionName
-    local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
-    if professionKey then return professionKey, professionName end
+    local professionKey = TrainerSpells:GetProfessionKey(nil, professionInfo.parentProfessionID)
+        or TrainerSpells:GetProfessionKey(professionName, professionInfo.professionID)
+    if professionKey then return professionKey, professionName or professionInfo.professionName or professionInfo.name end
     professionName = professionInfo.professionName
     professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
     if professionKey then return professionKey, professionName end
@@ -134,8 +135,8 @@ function professionPicker.GetOwned()
     for slot = 1, 10 do
         local professionIndex = professionIndices[slot]
         if professionIndex then
-            local professionName, icon, rank, maxRank = GetProfessionInfo(professionIndex)
-            local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
+            local professionName, icon, rank, maxRank, _, _, skillLineID = GetProfessionInfo(professionIndex)
+            local professionKey = TrainerSpells:GetProfessionKey(professionName, skillLineID)
             if professionKey then table.insert(owned, {key = professionKey, name = professionName, icon = icon, rank = rank or 0, maxRank = maxRank or 0, owned = true}) end
         end
     end
@@ -1480,6 +1481,18 @@ local function InstallProfessionsFrameIntegration()
 
     hooksecurefunc(ProfessionsFrame, "SetScale", function() if professionFrame:IsShown() then PositionProfessionFrame() end end)
     ApplyProfessionTabSettings()
+end
+
+function TrainerSpells_OpenProfessions(mode)
+    if IsProfessionsCombatLocked() or not IsProfessionsFrameAddonEnabled() then return false end
+    if mode and not IsProfessionViewEnabled(mode) then return false end
+    if not ProfessionsFrame and C_AddOns and C_AddOns.LoadAddOn then C_AddOns.LoadAddOn("Blizzard_Professions") end
+    InstallProfessionsFrameIntegration()
+    if not professionsFrameHooksInstalled then return false end
+    if not ProfessionsFrame:IsShown() then ShowUIPanel(ProfessionsFrame) end
+    if not ProfessionsFrame:IsShown() then return false end
+    OpenProfessionsFrameView(mode)
+    return true
 end
 
 if ProfessionsFrame then

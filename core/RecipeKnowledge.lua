@@ -60,8 +60,8 @@ local function SyncProfessionRoster()
     for slot = 1, 6 do
         local professionIndex = professionIndices[slot]
         if professionIndex then
-            local professionName, _, skillLevel, maxSkillLevel = GetProfessionInfo(professionIndex)
-            local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
+            local professionName, _, skillLevel, maxSkillLevel, _, _, skillLineID = GetProfessionInfo(professionIndex)
+            local professionKey = TrainerSpells:GetProfessionKey(professionName, skillLineID)
             if professionKey then
                 UpdateProfessionRecord(record, professionKey, professionName, skillLevel, maxSkillLevel)
                 seen[professionKey] = true
@@ -81,7 +81,8 @@ local function GetOpenProfession()
     local professionInfo = C_TradeSkillUI and C_TradeSkillUI.GetBaseProfessionInfo and C_TradeSkillUI.GetBaseProfessionInfo()
     if type(professionInfo) == "table" then
         local professionName = professionInfo.parentProfessionName or professionInfo.professionName or professionInfo.name
-        local professionKey = professionName and TrainerSpells:GetProfessionKey(professionName)
+        local professionKey = TrainerSpells:GetProfessionKey(nil, professionInfo.parentProfessionID)
+            or TrainerSpells:GetProfessionKey(professionName, professionInfo.professionID)
         if professionKey then return professionKey, professionName, professionInfo.skillLevel, professionInfo.maxSkillLevel, professionInfo end
     end
 
