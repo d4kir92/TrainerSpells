@@ -1261,20 +1261,25 @@ end
 function playerSpellsSubTabs.PrewarmRows()
     if classFrame:IsShown() or classFrame.compendiumHost then return end
     PositionPlayerSpellsFrame()
+    local scrollBox = TrainerSpells.ClassScrollBox
     local rowHeight = TrainerSpells.RowHeight
     TrainerSpells.RowHeight = TrainerSpells.MinRowHeight
-    TrainerSpells.ClassScrollBox:ClearAllPoints()
-    TrainerSpells.ClassScrollBox:SetAllPoints(classFrame)
-    local savedView = TrainerSpells.ClassView
+    scrollBox:ClearAllPoints()
+    scrollBox:SetAllPoints(classFrame)
+    local items = {}
+    for index = 1, math.ceil(classFrame:GetHeight() / TrainerSpells.MinRowHeight) + 2 do
+        items[index] = {entry = {name = ""}}
+    end
+
     TrainerSpells.RunDetached(classFrame, function()
+        classFrame.prewarmingRows = true
         classFrame:Show()
-        for _, entry in ipairs(playerSpellsSubTabs.views or {}) do
-            TrainerSpells.ClassView = entry.view
-            TrainerSpells_Refresh()
-        end
+        scrollBox:SetDataProvider(CreateDataProvider(items))
+        if ScrollBoxConstants.UpdateImmediately then scrollBox:FullUpdate(ScrollBoxConstants.UpdateImmediately) end
         classFrame:Hide()
+        scrollBox:RemoveDataProvider()
+        classFrame.prewarmingRows = nil
     end)
-    TrainerSpells.ClassView = savedView
     TrainerSpells.RowHeight = rowHeight
 end
 

@@ -147,7 +147,8 @@ function TrainerSpells:SetClassView(view)
     if TrainerSpells_Refresh then TrainerSpells_Refresh() end
 end
 
-classFrame:SetScript("OnShow", function()
+classFrame:SetScript("OnShow", function(self)
+    if self.prewarmingRows then return end
     if TrainerSpells_SyncPetSpells then TrainerSpells_SyncPetSpells() end
     TrainerSpells_Refresh()
 end)
