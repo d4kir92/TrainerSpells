@@ -1,7 +1,7 @@
 local _, TrainerSpells = ...
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
-f:RegisterEvent("PLAYER_LOGIN")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:RegisterEvent("TRAINER_SHOW")
 f:RegisterEvent("TRAINER_UPDATE")
 f:RegisterEvent("MERCHANT_SHOW")
@@ -34,7 +34,8 @@ f:SetScript("OnEvent", function(self, event, arg1)
         _G.TrainerSpells_ToggleIgnoreProfessionSpell = TrainerSpells_ToggleIgnoreProfessionSpell
         _G.TrainerSpells_IsProfessionSpellIgnored = TrainerSpells_IsProfessionSpellIgnored
         TrainerSpells:MigrateLegacyProfessionIgnores()
-    elseif event == "PLAYER_LOGIN" then
+    elseif event == "PLAYER_ENTERING_WORLD" then
+        self:UnregisterEvent(event)
         if TrainerSpells.WhatsNew then TrainerSpells.WhatsNew:ShowIfNew() end
     elseif event == "TRAINER_SHOW" or event == "TRAINER_UPDATE" then
         if TrainerSpells.DebugTrainerEnabled then TrainerSpells:EnableTrainerDebugFilters() end

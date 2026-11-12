@@ -226,20 +226,8 @@ function TrainerSpells:GetSettingsWindow()
             end
         })
 
-        if self.Pricing.IsForever() then
-            win:AddCheckbox({
-                label = "LID_TRAIN_ALL",
-                added = "2026-11-12",
-                whatsNew = "LID_TRAIN_ALL_OPT_IN",
-                value = self:IsTrainAllEnabled(),
-                func = function(value)
-                    TrainerSpells_Character.enableTrainAll = value
-                    if self.RefreshTrainerSelectionList then self.RefreshTrainerSelectionList() end
-                end
-            })
-        end
-
         if self.WhatsNew then self.WhatsNew:AddSettingsCheckbox(win, "2026-11-12") end
+        if self.Pricing.IsForever() then self:AddTrainAllSetting(win) end
 
         if self.HunterBeasts then
             win:AddCheckbox({
@@ -407,6 +395,29 @@ end
 
 function TrainerSpells:ToggleSettings()
     self:GetSettingsWindow():Toggle()
+end
+
+function TrainerSpells:AddTrainAllSetting(win, inNotice)
+    local checkbox = win:AddCheckbox({
+        label = "LID_TRAIN_ALL",
+        added = "2026-11-12",
+        tooltip = "LID_TRAIN_ALL_TOOLTIP",
+        whatsNewControl = not inNotice and function(noticeWindow) return self:AddTrainAllSetting(noticeWindow, true) end,
+        value = self:IsTrainAllEnabled(),
+        func = function(value)
+            TrainerSpells_Character.enableTrainAll = value
+            if self.TrainAllSettingsCheckbox then self.TrainAllSettingsCheckbox:SetChecked(value) end
+            if self.TrainAllNoticeCheckbox then self.TrainAllNoticeCheckbox:SetChecked(value) end
+            if self.RefreshTrainerSelectionList then self.RefreshTrainerSelectionList() end
+        end
+    })
+    if inNotice then
+        self.TrainAllNoticeCheckbox = checkbox
+    else
+        self.TrainAllSettingsCheckbox = checkbox
+    end
+
+    return checkbox
 end
 
 function TrainerSpells:IsTrainAllEnabled()
