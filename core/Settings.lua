@@ -54,16 +54,22 @@ function TrainerSpells:RefreshLanguage()
         end
     end
 
+    if self.WhatsNew then self.WhatsNew:RefreshLanguage() end
     if TrainerSpells_Refresh then TrainerSpells_Refresh() end
     if TrainerSpells_ProfessionRefresh then TrainerSpells_ProfessionRefresh() end
 end
 
 function TrainerSpells:AddLanguageButton(win)
+    local function SelectLanguage(lang)
+        self:SetLanguage(lang)
+        if win:IsShown() then win:Raise() end
+    end
+
     local function LanguageMenu(_, root)
         root:CreateTitle(self:Trans("LID_LANGUAGE"))
         for _, info in ipairs(self.LANGUAGES) do
             local lang = info[2]
-            root:CreateRadio(format("%s (%s)", info[1], lang), function() return self:GetLanguage() == lang end, function() self:SetLanguage(lang) end)
+            root:CreateRadio(format("%s (%s)", info[1], lang), function() return self:GetLanguage() == lang end, function() SelectLanguage(lang) end)
         end
     end
 
@@ -94,7 +100,7 @@ function TrainerSpells:AddLanguageButton(win)
                     if info[2] == self:GetLanguage() then current = i end
                 end
 
-                self:SetLanguage(self.LANGUAGES[current % #self.LANGUAGES + 1][2])
+                SelectLanguage(self.LANGUAGES[current % #self.LANGUAGES + 1][2])
             end
         end)
 
@@ -107,8 +113,13 @@ function TrainerSpells:AddLanguageButton(win)
         button:SetScript("OnLeave", function() GameTooltip:Hide() end)
     end
 
-    button:SetText(self:GetLanguageName())
+    local function RefreshButton()
+        button:SetText(self:GetLanguageName())
+    end
+
+    RefreshButton()
     win.Language = button
+    return RefreshButton
 end
 
 TrainerSpells.TabSettings = {}
@@ -180,11 +191,15 @@ function TrainerSpells:HasProfessionTabs()
     return self:IsTabEnabled("profession_skill") or self:IsTabEnabled("profession_recipes") or self:IsTabEnabled("profession_trainers")
 end
 
-function TrainerSpells:ToggleSettings()
+function TrainerSpells:GetSettingsWindowTitle()
+    return format("|T%s:20:20|t TrainerSpells v%s", self:GetAddonIcon(), self:GetAddonVersion())
+end
+
+function TrainerSpells:GetSettingsWindow()
     if not self.SettingsWindow then
         local win = self:CreateUIWindow({
             name = "TrainerSpellsSettings",
-            title = format("|T%s:20:20|t TrainerSpells v%s", TrainerSpells:GetAddonIcon(), TrainerSpells:GetAddonVersion()),
+            title = self:GetSettingsWindowTitle(),
             width = 520,
             height = 600
         })
@@ -214,14 +229,17 @@ function TrainerSpells:ToggleSettings()
         if self.Pricing.IsForever() then
             win:AddCheckbox({
                 label = "LID_TRAIN_ALL",
-                added = "2026-11-11",
-                value = TrainerSpells_Character.showTrainAll ~= false,
+                added = "2026-11-12",
+                whatsNew = "LID_TRAIN_ALL_OPT_IN",
+                value = self:IsTrainAllEnabled(),
                 func = function(value)
-                    TrainerSpells_Character.showTrainAll = value
+                    TrainerSpells_Character.enableTrainAll = value
                     if self.RefreshTrainerSelectionList then self.RefreshTrainerSelectionList() end
                 end
             })
         end
+
+        if self.WhatsNew then self.WhatsNew:AddSettingsCheckbox(win, "2026-11-12") end
 
         if self.HunterBeasts then
             win:AddCheckbox({
@@ -384,10 +402,29 @@ function TrainerSpells:ToggleSettings()
         win:Layout()
     end
 
-    self.SettingsWindow:SetShown(not self.SettingsWindow:IsShown())
+    return self.SettingsWindow
+end
+
+function TrainerSpells:ToggleSettings()
+    self:GetSettingsWindow():Toggle()
+end
+
+function TrainerSpells:IsTrainAllEnabled()
+    return TrainerSpells_Character.enableTrainAll == true
 end
 
 function TrainerSpells:InitializeSettings()
+    TrainerSpells_Global = TrainerSpells_Global or {}
+    TrainerSpells_Global.whatsNew = TrainerSpells_Global.whatsNew or {}
+    self.WhatsNew = self:CreateUIWhatsNew({
+        name = "TrainerSpellsWhatsNew",
+        title = self:GetSettingsWindowTitle(),
+        db = TrainerSpells_Global.whatsNew,
+        since = "2026-11-12",
+        getSettings = function() return self:GetSettingsWindow() end,
+        addLanguageButton = function(win) return self:AddLanguageButton(win) end
+    })
+
     self:LoadTabSettings()
     self.SettingsReady = true
     if TrainerSpells_Character.showMinimapButton == nil then TrainerSpells_Character.showMinimapButton = true end

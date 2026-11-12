@@ -405,7 +405,7 @@ local function InstallTrainerSelectionList(trainer)
         overlay:Show()
         local retain = retainScrollPosition ~= false and ScrollBoxConstants.RetainScrollPosition
         scroll:SetDataProvider(CreateDataProvider(entries), retain)
-        local showTrainAll = TrainerSpells_Character.showTrainAll ~= false
+        local showTrainAll = TrainerSpells:IsTrainAllEnabled()
         if not showTrainAll then batch = nil end
         UpdateSelection()
         learnAll:SetShown(showTrainAll)
@@ -419,7 +419,7 @@ local function InstallTrainerSelectionList(trainer)
     end)
 
     local function CanTrainAll(guid)
-        return TrainerSpells_Character.showTrainAll ~= false and not batch and guid and guid == trainerGUID and overlay:IsVisible() and guid == GetSupportedTrainerGUID()
+        return TrainerSpells:IsTrainAllEnabled() and not batch and guid and guid == trainerGUID and overlay:IsVisible() and guid == GetSupportedTrainerGUID()
     end
 
     local function StartTraining(session)

@@ -24,11 +24,23 @@ local function GetRealm()
     return GetRealmName and GetRealmName() or ""
 end
 
-local function GetCharacterRecord()
-    local name = UnitName("player")
-    if not name then return nil end
+local function GetCharacterIdentity()
+    local getName = UnitNameUnmodified or UnitName
+    local name, surname = getName("player")
+    if not TrainerSpells:CanAccessValues(name, surname) or not name or name == "" or name == UNKNOWNOBJECT then return end
+    if TrainerSpells:IsForever() and not name:find(" ", 1, true) then
+        if not surname or surname == "" then return end
+        name = name .. " " .. surname
+    end
+
     local realm = GetRealm()
-    local key = name .. "-" .. realm
+    if not realm or realm == "" then return end
+    return name .. "-" .. realm, name, realm
+end
+
+local function GetCharacterRecord()
+    local key, name, realm = GetCharacterIdentity()
+    if not key then return end
     local record = TrainerSpells_Global.characters[key] or {}
     TrainerSpells_Global.characters[key] = record
     record.name = name
@@ -141,6 +153,7 @@ function TrainerSpells:SyncOpenProfessionRecipes()
     local knownRecipes = GetModernKnownRecipes(professionInfo) or GetLegacyKnownRecipes()
     if not knownRecipes then return end
     local record = GetCharacterRecord()
+    if not record then return end
     local profession = UpdateProfessionRecord(record, professionKey, professionName, skillLevel, maxSkillLevel)
     profession.recipes = knownRecipes
     profession.recipesScanned = true
@@ -199,9 +212,7 @@ local function GetCharacterDisplayName(character)
     return character.name
 end
 
-local function IsCurrentCharacterRecipeKnown(characterKey, recipeID)
-    local name = UnitName("player")
-    if not name or characterKey ~= name .. "-" .. GetRealm() then return nil end
+local function IsCurrentCharacterRecipeKnown(recipeID)
     if C_TradeSkillUI and C_TradeSkillUI.GetRecipeInfo then
         local ok, recipeInfo = pcall(C_TradeSkillUI.GetRecipeInfo, recipeID)
         if ok and recipeInfo then return recipeInfo.learned and true or false end
@@ -222,12 +233,16 @@ local function AddRecipeKnowledgeToTooltip(tooltip, tooltipData)
     local professionKey = GetRecipeProfession(recipeID, itemSubclassID)
     if not professionKey then return end
     local missing = {}
+    local currentKey = GetCharacterIdentity()
+    local isForever = TrainerSpells:IsForever()
     for characterKey, character in pairs(TrainerSpells_Global.characters) do
-        local profession = character.professions and character.professions[professionKey]
-        local liveKnown = IsCurrentCharacterRecipeKnown(characterKey, recipeID)
-        local known = liveKnown
-        if known == nil and profession and profession.recipes then known = profession.recipes[recipeID] and true or false end
-        if profession and profession.recipesScanned and known == false then table.insert(missing, GetCharacterDisplayName(character)) end
+        if not isForever or character.name and character.name:find(" ", 1, true) then
+            local profession = character.professions and character.professions[professionKey]
+            local known
+            if characterKey == currentKey then known = IsCurrentCharacterRecipeKnown(recipeID) end
+            if known == nil and profession and profession.recipes then known = profession.recipes[recipeID] and true or false end
+            if profession and profession.recipesScanned and known == false then table.insert(missing, GetCharacterDisplayName(character)) end
+        end
     end
 
     if #missing == 0 then return end
