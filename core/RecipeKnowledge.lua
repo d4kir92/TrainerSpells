@@ -16,30 +16,8 @@ local RECIPE_SUBCLASS_TO_PROFESSION = {
     [11] = "Inscription"
 }
 
-local function GetRealm()
-    if GetNormalizedRealmName then
-        local realm = GetNormalizedRealmName()
-        if realm and realm ~= "" then return realm end
-    end
-    return GetRealmName and GetRealmName() or ""
-end
-
-local function GetCharacterIdentity()
-    local getName = UnitNameUnmodified or UnitName
-    local name, surname = getName("player")
-    if not TrainerSpells:CanAccessValues(name, surname) or not name or name == "" or name == UNKNOWNOBJECT then return end
-    if TrainerSpells:IsForever() and not name:find(" ", 1, true) then
-        if not surname or surname == "" then return end
-        name = name .. " " .. surname
-    end
-
-    local realm = GetRealm()
-    if not realm or realm == "" then return end
-    return name .. "-" .. realm, name, realm
-end
-
 local function GetCharacterRecord()
-    local key, name, realm = GetCharacterIdentity()
+    local key, name, realm = TrainerSpells:GetPlayerCharacterKey()
     if not key then return end
     local record = TrainerSpells_Global.characters[key] or {}
     TrainerSpells_Global.characters[key] = record
@@ -207,8 +185,8 @@ local function GetRecipeProfession(recipeID, itemSubclassID)
     return RECIPE_SUBCLASS_TO_PROFESSION[itemSubclassID]
 end
 
-local function GetCharacterDisplayName(character)
-    if character.realm and character.realm ~= "" and character.realm ~= GetRealm() then return character.name .. "-" .. character.realm end
+local function GetCharacterDisplayName(character, currentRealm)
+    if character.realm and character.realm ~= "" and character.realm ~= currentRealm then return character.name .. "-" .. character.realm end
     return character.name
 end
 
@@ -233,7 +211,7 @@ local function AddRecipeKnowledgeToTooltip(tooltip, tooltipData)
     local professionKey = GetRecipeProfession(recipeID, itemSubclassID)
     if not professionKey then return end
     local missing = {}
-    local currentKey = GetCharacterIdentity()
+    local currentKey, _, currentRealm = TrainerSpells:GetPlayerCharacterKey()
     local isForever = TrainerSpells:IsForever()
     for characterKey, character in pairs(TrainerSpells_Global.characters) do
         if not isForever or character.name and character.name:find(" ", 1, true) then
@@ -241,7 +219,7 @@ local function AddRecipeKnowledgeToTooltip(tooltip, tooltipData)
             local known
             if characterKey == currentKey then known = IsCurrentCharacterRecipeKnown(recipeID) end
             if known == nil and profession and profession.recipes then known = profession.recipes[recipeID] and true or false end
-            if profession and profession.recipesScanned and known == false then table.insert(missing, GetCharacterDisplayName(character)) end
+            if profession and profession.recipesScanned and known == false then table.insert(missing, GetCharacterDisplayName(character, currentRealm)) end
         end
     end
 
