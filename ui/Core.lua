@@ -1154,9 +1154,7 @@ function TrainerSpells:IsOnLightBackground(frame)
     local book = PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
     local own = frame
     while own and own ~= book do
-        local flag = own.tsLightBackground
-        if type(flag) == "function" then return flag() == true end
-        if flag ~= nil then return flag end
+        if own.tsLightBackground ~= nil then return own.tsLightBackground end
         own = own:GetParent()
     end
     if not book then return false end
