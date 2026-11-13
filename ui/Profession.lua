@@ -52,6 +52,7 @@ function professionScrollBox:GetScrollTarget() return self.tsScrollTarget end
 professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
 professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
 TrainerSpells:AddScrollBackground(professionScrollBox)
+if professionScrollBox.tsBackground then professionScrollBox.tsLightBackground = true end
 local professionListBg = professionFrame:CreateTexture("TrainerSpellsProfessionBackground", "BACKGROUND")
 local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionScrollBar", professionFrame, "MinimalScrollBar")
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
@@ -1169,6 +1170,34 @@ local function CloseProfessionsFrameView()
     UpdateProfessionsViewTabSelection()
 end
 
+function professionSubTabs.IsForeignControl(frame)
+    if not frame or frame == ProfessionsFrame or frame == ProfessionsFrame.CloseButton or frame == ProfessionsFrame.MaximizeMinimize then return false end
+    if not (frame.IsObjectType and (frame:IsObjectType("Button") or frame:HasScript("OnMouseUp") and frame:GetScript("OnMouseUp"))) then return false end
+    local parent = frame
+    for _ = 1, 20 do
+        if not parent or parent == professionFrame or parent == ProfessionsFrame.MaximizeMinimize or professionSubTabs.IsOwnSideTab(parent, 0) or (parent:GetName() or ""):find("^TrainerSpells") then return false end
+        if parent == ProfessionsFrame or parent == ProfessionsFrameTabSideBar then return true end
+        parent = parent:GetParent()
+    end
+    return false
+end
+
+professionSubTabs.foreignClickWatcher = CreateFrame("Frame")
+professionSubTabs.foreignClickWatcher:SetScript("OnEvent", function(_, _, button)
+    if button ~= "LeftButton" or not professionsModeActive then return end
+    local foci = GetMouseFoci and GetMouseFoci() or {GetMouseFocus and GetMouseFocus()}
+    for _, focus in ipairs(foci) do
+        if professionSubTabs.IsForeignControl(focus) then
+            CloseProfessionsFrameView()
+            return
+        end
+    end
+end)
+
+function professionSubTabs.HookForeignSideTabs()
+    professionSubTabs.foreignClickWatcher:RegisterEvent("GLOBAL_MOUSE_UP")
+end
+
 local function RestoreProfessionsFramePage()
     if not professionsModeActive then return end
     if IsProfessionsCombatLocked() then
@@ -1235,6 +1264,7 @@ local function OpenProfessionsFrameView(mode)
     UpdateProfessionsViewTabSelection()
 
     if professionsFrameUsesSideTabs then
+        professionSubTabs.HookForeignSideTabs()
         ProfessionsFrame.ProfessionsOverviewTab:SetChecked(false)
         for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
             tab:SetChecked(false)

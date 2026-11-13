@@ -1147,8 +1147,14 @@ TrainerSpells.TextTheme = {
 }
 
 function TrainerSpells:IsOnLightBackground(frame)
+    if not frame then return false end
     local book = PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
-    if not book or not frame then return false end
+    local own = frame
+    while own and own ~= book do
+        if own.tsLightBackground ~= nil then return own.tsLightBackground end
+        own = own:GetParent()
+    end
+    if not book then return false end
     local parent = frame
     while parent and parent ~= book do
         if parent.tsLightBackground ~= nil then return parent.tsLightBackground end
@@ -1187,18 +1193,6 @@ function TrainerSpells:ToLightBackgroundText(text)
     end))
 end
 
-function TrainerSpells:IsNeutralColor(r, g, b)
-    return math.max(r, g, b) - math.min(r, g, b) < 0.15
-end
-
-function TrainerSpells:HasColoredText(text)
-    if type(text) ~= "string" then return false end
-    for r, g, b in text:gmatch("|c%x%x(%x%x)(%x%x)(%x%x)") do
-        if not self:IsNeutralColor(tonumber(r, 16) / 255, tonumber(g, 16) / 255, tonumber(b, 16) / 255) then return true end
-    end
-    return false
-end
-
 function TrainerSpells:ApplyFontStringTheme(fontString, light)
     if not fontString then return end
     if not fontString.tsBaseColor then fontString.tsBaseColor = {fontString:GetTextColor()} end
@@ -1211,7 +1205,7 @@ function TrainerSpells:ApplyFontStringTheme(fontString, light)
     if light then
         fontString:SetTextColor(self:ToLightBackgroundColor(base[1], base[2], base[3]))
     end
-    if light and self:IsNeutralColor(base[1], base[2], base[3]) and not self:HasColoredText(fontString:GetText()) then
+    if light then
         fontString:SetShadowColor(0, 0, 0, 0)
         fontString:SetShadowOffset(0, 0)
     else
