@@ -1565,7 +1565,13 @@ end
 tradeSkillWatcher:SetScript("OnEvent", function(_, event)
     EnsureTradeSkillHooksInstalled()
     InstallProfessionsFrameIntegration()
-    if event == "TRADE_SKILL_SHOW" and professionsFrameHooksInstalled then C_Timer.After(0, PositionProfessionsFrameModeTabs) end
+    if event == "TRADE_SKILL_SHOW" and professionsFrameHooksInstalled then
+        if professionsModeActive then
+            RestoreProfessionsFramePage()
+            CloseProfessionsFrameView()
+        end
+        C_Timer.After(0, PositionProfessionsFrameModeTabs)
+    end
     if (event == "TRADE_SKILL_UPDATE" or event == "TRADE_SKILL_LIST_UPDATE") and professionFrame:IsShown() then
         TrainerSpells_ProfessionRefresh()
         if not professionFrame.compendiumHost then HideNativeTradeSkillWidgets() end
