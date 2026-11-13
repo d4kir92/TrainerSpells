@@ -51,6 +51,7 @@ professionScrollBox.ScrollTarget = nil
 function professionScrollBox:GetScrollTarget() return self.tsScrollTarget end
 professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
 professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
+TrainerSpells:AddScrollBackground(professionScrollBox)
 local professionListBg = professionFrame:CreateTexture("TrainerSpellsProfessionBackground", "BACKGROUND")
 local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionScrollBar", professionFrame, "MinimalScrollBar")
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
