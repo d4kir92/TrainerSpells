@@ -103,9 +103,12 @@ end
 function TrainerSpells:AddContentBorder(frame, owner)
     owner = owner or frame
     frame.contentBackground = owner:CreateTexture(nil, "BACKGROUND", nil, -8)
-    frame.contentBackground:SetAtlas("collections-background-tile")
-    frame.contentBackground:SetHorizTile(true)
-    frame.contentBackground:SetVertTile(true)
+    if not self:ApplyPageTexture(frame.contentBackground) then
+        frame.contentBackground:SetAtlas("collections-background-tile")
+        frame.contentBackground:SetHorizTile(true)
+        frame.contentBackground:SetVertTile(true)
+    end
+
     frame.contentBackground:SetAllPoints(frame)
     frame.borderFrame = CreateFrame("Frame", nil, owner)
     frame.borderFrame:SetAllPoints(frame)
@@ -1151,7 +1154,9 @@ function TrainerSpells:IsOnLightBackground(frame)
     local book = PlayerSpellsFrame and PlayerSpellsFrame.SpellBookFrame
     local own = frame
     while own and own ~= book do
-        if own.tsLightBackground ~= nil then return own.tsLightBackground end
+        local flag = own.tsLightBackground
+        if type(flag) == "function" then return flag() == true end
+        if flag ~= nil then return flag end
         own = own:GetParent()
     end
     if not book then return false end

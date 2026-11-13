@@ -1428,6 +1428,7 @@ end
 
 function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, isEntryVisible)
     local api = host.contentAPI or AzerothCompendiumAPI
+    host.tsLightBackground = function() return type(api.IsModernDesign) == "function" and not api.IsModernDesign() end
     local view = {host = host, mode = mode, rowHeight = rowHeight, tabs = {}, entries = entries, isEntryVisible = isEntryVisible}
     function view:IsEntryVisible(index)
         return not self.isEntryVisible or self.isEntryVisible(self.entries[index])
@@ -1539,6 +1540,7 @@ function TrainerSpells:CreateCompendiumListView(host, entries, mode, rowHeight, 
         self.scrollBox:SetPoint("TOPLEFT", host, "TOPLEFT", 0, offset)
         self.scrollBox:SetPoint("BOTTOMRIGHT", host, "BOTTOMRIGHT", -24, 0)
         if self.BuildItems then self.scrollBox:SetDataProvider(CreateDataProvider(self:BuildItems()), ScrollBoxConstants.RetainScrollPosition) end
+        TrainerSpells:ApplyPanelTextTheme(host)
     end
     host.OnSearchChanged = function() view:Refresh() end
     host:SetScript("OnSizeChanged", function()
