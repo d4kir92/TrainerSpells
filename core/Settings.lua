@@ -201,12 +201,33 @@ function TrainerSpells:GetSettingsWindow()
             name = "TrainerSpellsSettings",
             title = self:GetSettingsWindowTitle(),
             width = 520,
-            height = 600
+            height = 600,
+            navigation = true
         })
 
         self.SettingsWindow = win
         self:AddLanguageButton(win)
         win:AddSearch()
+        local discord = "https://discord.gg/ccgyNzSnfF"
+        local footer = win:AddFooter({
+            height = 24
+        })
+
+        footer.Discord = CreateFrame("EditBox", "TrainerSpellsSettingsDiscord", footer, "InputBoxTemplate")
+        footer.Discord:SetPoint("LEFT", footer, "LEFT", 12, 0)
+        footer.Discord:SetSize(220, 20)
+        footer.Discord:SetAutoFocus(false)
+        footer.Discord:SetText(discord)
+        footer.Discord:SetCursorPosition(0)
+        footer.Discord:SetScript("OnTextChanged", function(sel, userInput)
+            if userInput then
+                sel:SetText(discord)
+                sel:HighlightText()
+            end
+        end)
+
+        footer.Discord:SetScript("OnEditFocusGained", function(sel) sel:HighlightText() end)
+        footer.Discord:SetScript("OnEscapePressed", function(sel) sel:ClearFocus() end)
         win:AddCategory({
             label = "LID_GENERAL",
             key = "general"

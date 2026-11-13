@@ -1450,7 +1450,18 @@ local function InstallProfessionsFrameIntegration()
             PositionProfessionsFrameModeTabs()
             C_Timer.After(0, PositionProfessionsFrameModeTabs)
         end)
-        hooksecurefunc(ProfessionsFrame, "RightTabSelected", CloseProfessionsFrameView)
+        local lastBlizzardTabClick = 0
+        for _, tab in ipairs({ProfessionsFrame.ProfessionsOverviewTab, unpack(ProfessionsFrame.rightProfessionTabs)}) do
+            tab:HookScript("OnMouseDown", function() lastBlizzardTabClick = GetTime() end)
+        end
+        hooksecurefunc(ProfessionsFrame, "RightTabSelected", function()
+            if professionsModeActive and GetTime() - lastBlizzardTabClick > 1 then
+                ProfessionsFrame.ProfessionsOverviewTab:SetChecked(false)
+                for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do tab:SetChecked(false) end
+                return
+            end
+            CloseProfessionsFrameView()
+        end)
         InstallProfessionsFrameShoulderTabs()
     else
         professionsModeTabContainer = CreateFrame("Frame", "TrainerSpellsProfessionsModeTabs", ProfessionsFrame)
