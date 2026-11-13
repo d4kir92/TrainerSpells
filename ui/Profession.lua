@@ -51,9 +51,11 @@ professionScrollBox.ScrollTarget = nil
 function professionScrollBox:GetScrollTarget() return self.tsScrollTarget end
 professionScrollBox:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 8, -4)
 professionScrollBox:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -26, 12)
-TrainerSpells:AddScrollBackground(professionScrollBox)
-if professionScrollBox.tsBackground then professionScrollBox.tsLightBackground = true end
+professionScrollBox.tsLightBackground = true
 local professionListBg = professionFrame:CreateTexture("TrainerSpellsProfessionBackground", "BACKGROUND")
+local function SetProfessionListBgTexture()
+    if not TrainerSpells:ApplyPageTexture(professionListBg) then professionListBg:SetColorTexture(0, 0, 0, 1) end
+end
 local professionScrollBar = CreateFrame("EventFrame", "TrainerSpellsProfessionScrollBar", professionFrame, "MinimalScrollBar")
 professionScrollBar:SetPoint("TOPLEFT", professionScrollBox, "TOPRIGHT", 4, -2)
 professionScrollBar:SetPoint("BOTTOMLEFT", professionScrollBox, "BOTTOMRIGHT", 4, 2)
@@ -511,6 +513,9 @@ function professionSubTabs.Create()
     bar:Layout()
     local panel = CreateFrame("Frame", nil, professionFrame)
     TrainerSpells:AddContentBorder(panel, professionFrame)
+    panel.contentBackground:SetHorizTile(false)
+    panel.contentBackground:SetVertTile(false)
+    if not TrainerSpells:ApplyPageTexture(panel.contentBackground) then panel.contentBackground:SetColorTexture(0, 0, 0, 1) end
     professionSubTabs.panel = panel
     local title = professionFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     title:SetJustifyH("LEFT")
@@ -878,16 +883,19 @@ local function SetTradeSkillView(mode)
                 professionListBg:ClearAllPoints()
                 professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -32)
                 professionListBg:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", 4, -2)
-                professionListBg:SetColorTexture(0, 0, 0, 1)
+                SetProfessionListBgTexture()
                 if DragonflightUIProfessionRankFrame then DragonflightUIProfessionRankFrame:Hide() end
             elseif TrainerSpells:IsLeatrixWideProfessionEnabled() then
                 professionListBg:ClearAllPoints()
                 professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 0, -2)
                 professionListBg:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", -2, -16)
-                professionListBg:SetColorTexture(0, 0, 0, 1)
+                SetProfessionListBgTexture()
             else
-                professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 4, -2)
-                professionListBg:SetTexture("Interface\\AddOns\\TrainerSpells\\media\\inset")
+                professionListBg:ClearAllPoints()
+                professionListBg:SetPoint("TOPLEFT", professionFrame, "TOPLEFT", 0, 0)
+                professionListBg:SetPoint("BOTTOMRIGHT", professionFrame, "BOTTOMRIGHT", 0, 0)
+                SetProfessionListBgTexture()
+                professionListBg:Show()
                 if TradeSkillFrameAvailableFilterCheckButton then TradeSkillFrameAvailableFilterCheckButton:Hide() end
                 if TradeSearchInputBox then TradeSearchInputBox:Hide() end
             end
@@ -1252,7 +1260,7 @@ local function OpenProfessionsFrameView(mode)
     else
         professionListBg:ClearAllPoints()
         professionListBg:SetAllPoints(professionFrame)
-        professionListBg:SetColorTexture(0, 0, 0, 1)
+        SetProfessionListBgTexture()
         professionListBg:Show()
     end
 

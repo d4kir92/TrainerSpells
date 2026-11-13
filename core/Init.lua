@@ -286,14 +286,21 @@ function TrainerSpells:EnsurePetPath(pet, level)
     return TrainerSpells_PetData[pet][level]
 end
 
-function TrainerSpells:AddScrollBackground(scrollBox)
-    local info = not scrollBox.tsBackground and C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo("spellbook-Page-Right-C60")
-    if not info then return end
-    local bg = scrollBox:CreateTexture(nil, "BACKGROUND", nil, -8)
+function TrainerSpells:ApplyPageTexture(tex)
+    local info = C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo("spellbook-Page-Right-C60")
+    if not info then return false end
     local l, r, t, b = info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
     local w, h = r - l, b - t
-    bg:SetTexture(info.file or info.filename)
-    bg:SetTexCoord(l + w * 0.2, r - w * 0.2, t + h * 0.2, b - h * 0.2)
+    tex:SetTexture(info.file or info.filename)
+    tex:SetTexCoord(l + w * 0.2, r - w * 0.2, t + h * 0.2, b - h * 0.2)
+    tex:SetVertexColor(1, 1, 1, 1)
+    return true
+end
+
+function TrainerSpells:AddScrollBackground(scrollBox)
+    if scrollBox.tsBackground then return end
+    local bg = scrollBox:CreateTexture(nil, "BACKGROUND", nil, -8)
+    if not self:ApplyPageTexture(bg) then bg:Hide(); return end
     bg:SetAllPoints(scrollBox)
     scrollBox.tsBackground = bg
 end
