@@ -12,7 +12,7 @@ TrainerSpells shows what you can learn from class, pet, weapon, and profession t
 - Marks quest-taught class spells and names the quest. Left-clicking one sets a waypoint to the quest giver, if its location is known.
 - Lets you ignore single spells, or a spell rank and every rank above it, so they no longer show up as missing.
 - **Spoiler-free:** hides spells more than 2 levels above your level, and all quest spells.
-- **Train All:** learns every spell the open trainer can teach after a confirmation with the number of spells and the total cost. On WoW Forever you have to turn it on in the settings first.
+- **Train All:** learns every spell the open trainer can teach after a confirmation with the number of spells and the total cost. On WoW Forever you have to turn it on in the settings first, and it is not available in the Gamepad UI, which keeps the game's own trainer list.
 - Shift-click a spell to link it in chat.
 
 ### Pets

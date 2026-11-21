@@ -12,6 +12,17 @@ function TrainerSpells:HasClassTrainers()
     return INTERFACE_VERSION < FIRST_VERSION_WITHOUT_CLASS_TRAINERS
 end
 
+-- True while WoW Forever runs the Gamepad UI. InputUtil does not exist in the other clients, and the interface
+-- style is a setting that can change while playing, so ask every time and never keep the answer.
+--
+-- In the Gamepad UI the game's own code reacts synchronously to what this addon does to the action bars, the map and
+-- the trainer. Code that runs inside that reaction is tainted by this addon, so the game can block
+-- SetPreferredGamepadInteractTarget() on the next panel close and the controller stops working. Everything that
+-- needs to call such functions checks this first.
+function TrainerSpells.IsGamepadUIEnabled()
+    return InputUtil ~= nil and InputUtil.IsGamepadUIEnabled ~= nil and InputUtil.IsGamepadUIEnabled() == true
+end
+
 TrainerSpells_Data = TrainerSpells_Data or {}
 TrainerSpells_Ignored = TrainerSpells_Ignored or {}
 TrainerSpells_IgnoredNames = TrainerSpells_IgnoredNames or {}

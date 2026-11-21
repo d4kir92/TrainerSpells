@@ -381,6 +381,11 @@ function TrainerSpells:SortEntries(list)
 end
 
 function TrainerSpells:OpenWorldMapAt(uiMapID)
+    -- Opening the map here runs ShowUIPanel and SetMapID inside this addon's execution. In the Gamepad UI the game
+    -- rebuilds the map's footer bindings and registers the panel in its binding stack right there, so those
+    -- tables can stay tainted by TrainerSpells and the next panel close is blocked with ADDON_ACTION_FORBIDDEN. The
+    -- callers have already set the waypoint or the pins; the player opens the map with the controller.
+    if TrainerSpells.IsGamepadUIEnabled() then return end
     if not WorldMapFrame then return end
     if WorldMapFrame.HandleUserActionOpenSelf then
         if C_Map.OpenWorldMap then

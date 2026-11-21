@@ -389,6 +389,17 @@ local function InstallTrainerSelectionList(trainer)
 
     local function RefreshList(retainScrollPosition)
         if not trainer:IsShown() then return end
+        -- The Gamepad UI has its own trainer flow: the footer's A button trains the game's own selection, and the
+        -- native rows are what Smart Navigation moves over. This list hides those rows and the native Train button,
+        -- so A trains the game's selection, not necessarily the row highlighted here. It also builds its rows with
+        -- ClassTrainerFrame_InitServiceButton from this addon's execution, which writes ClassTrainerFrame fields and
+        -- calls SmartNavigation:SetTargetButtonForFrame. So the native list stays; its ignored rows are still dimmed.
+        if TrainerSpells.IsGamepadUIEnabled() then
+            selected, trainerGUID, batch, pendingPurchase = nil, nil, nil, nil
+            toggle:Hide()
+            overlay:Hide()
+            return
+        end
         local guid = GetSupportedTrainerGUID()
         local debugEnabled = TrainerSpells.DebugTrainerEnabled
         local enabled = not debugEnabled or not TrainerSpells_Character.useBlizzardTrainerList

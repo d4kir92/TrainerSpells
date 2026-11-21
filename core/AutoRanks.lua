@@ -16,6 +16,20 @@ local function OtherAddonLoaded()
     return isLoaded and isLoaded("AutoSpellRanks") and true or false
 end
 
+-- ClearCursor, PickupSpell and PlaceAction fire CURSOR_CHANGED and ACTIONBAR_SLOT_CHANGED, and the game dispatches both
+-- synchronously (SynchronousEvent in the API documentation). So the game's own handlers run inside this addon's
+-- execution and what they write stays tainted by TrainerSpells. In the Gamepad UI that includes the gamepad action bar
+-- (PageUnit.activeBar), and the next panel close or modifier change can then be blocked with
+-- ADDON_ACTION_FORBIDDEN SetPreferredGamepadInteractTarget(). The action buttons run tainted too, which throws on the
+-- secret cooldown values they read while cooldowns are restricted. So the bars are left alone in the Gamepad UI, and
+-- everywhere else they are only rewritten while cooldowns are readable.
+local function CooldownsSecret()
+    local secrets = C_Secrets
+    if not (secrets and secrets.ShouldCooldownsBeSecret) then return false end
+    local ok, hidden = pcall(secrets.ShouldCooldownsBeSecret)
+    return ok and hidden == true
+end
+
 function AutoRanks.Settings()
     local settings = TrainerSpells_Character or {}
     if settings.autoSpellRanks == nil then settings.autoSpellRanks = true end
@@ -24,7 +38,7 @@ function AutoRanks.Settings()
 end
 
 function AutoRanks.IsActive()
-    return AutoRanks.Settings().autoSpellRanks and not AutoRanks.broken and not OtherAddonLoaded()
+    return AutoRanks.Settings().autoSpellRanks and not AutoRanks.broken and not OtherAddonLoaded() and not TrainerSpells.IsGamepadUIEnabled()
 end
 
 function AutoRanks.SpellName(spellID)
@@ -100,6 +114,10 @@ function AutoRanks.Scan()
         AutoRanks.pending = true
         return
     end
+    if CooldownsSecret() then
+        AutoRanks.Schedule(2)
+        return
+    end
     if GetCursorInfo() then
         AutoRanks.Schedule(2)
         return
@@ -154,7 +172,13 @@ for _, event in ipairs({"PLAYER_LOGIN", "SPELLS_CHANGED", "LEARNED_SPELL_IN_SKIL
 end
 events:SetScript("OnEvent", function(_, event)
     if event == "PLAYER_LOGIN" then
-        if AutoRanks.Settings().autoSpellRanks and OtherAddonLoaded() then TrainerSpells:MSG(TrainerSpells:Trans("LID_AUTORANKS_OTHERADDON")) end
+        if AutoRanks.Settings().autoSpellRanks then
+            if OtherAddonLoaded() then
+                TrainerSpells:MSG(TrainerSpells:Trans("LID_AUTORANKS_OTHERADDON"))
+            elseif TrainerSpells.IsGamepadUIEnabled() then
+                TrainerSpells:MSG(TrainerSpells:Trans("LID_AUTORANKS_GAMEPAD"))
+            end
+        end
         AutoRanks.Schedule(3)
     elseif event == "PLAYER_REGEN_ENABLED" then
         if AutoRanks.pending then
