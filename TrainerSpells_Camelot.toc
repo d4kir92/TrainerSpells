@@ -24,7 +24,7 @@
 ## Category-ruRU: Интерфейс пользователя
 ## Category-zhCN: 用户界面
 ## Category-zhTW: 使用者介面
-## OptionalDeps: AzerothCompendium
+## OptionalDeps: AzerothCompendium, DaylightUI
 ## DefaultState: enabled
 ## SavedVariables: TrainerSpells_Global, TrainerSpells_Data, TrainerSpells_PetData, TrainerSpells_PetTrainerData, TrainerSpells_ProfessionData, TrainerSpells_IgnoredProfessions
 ## SavedVariablesPerCharacter: TrainerSpells_Character, TrainerSpells_Ignored, TrainerSpells_IgnoredNames
@@ -111,4 +111,5 @@ ui\HunterBeasts.lua
 ui\HunterBeastsExtras.lua
 ui\Spellbook.lua
 ui\ClassicUIForever.lua
+ui\DaylightUI.lua
 ui\RowHeightSync.lua
