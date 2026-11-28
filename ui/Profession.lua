@@ -2155,7 +2155,10 @@ function TrainerSpells_OpenProfessions(mode)
     if not ProfessionsFrame and C_AddOns and C_AddOns.LoadAddOn then C_AddOns.LoadAddOn("Blizzard_Professions") end
     InstallProfessionsFrameIntegration()
     if not professionsFrameHooksInstalled then return false end
-    if not ProfessionsFrame:IsShown() then ShowUIPanel(ProfessionsFrame) end
+    if not ProfessionsFrame:IsShown() then
+        if TrainerSpells.IsGamepadUIEnabled() then return false end
+        ShowUIPanel(ProfessionsFrame)
+    end
     if not ProfessionsFrame:IsShown() then return false end
     OpenProfessionsFrameView(mode)
     return true

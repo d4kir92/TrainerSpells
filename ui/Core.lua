@@ -318,6 +318,7 @@ function TrainerSpells.SecureMapClick.Release()
 end
 
 function TrainerSpells.SecureMapClick.IsAvailable()
+    if TrainerSpells.IsGamepadUIEnabled() then return false end
     if InCombatLockdown() or not TrainerSpells.HasProtectedPanelShown() then return false end
     if not WorldMapFrame or WorldMapFrame:IsShown() then return false end
     return QuestLogMicroButton ~= nil and QuestLogMicroButton:IsEnabled() and true or false
@@ -621,6 +622,11 @@ function TrainerSpells:SortEntries(list)
 end
 
 function TrainerSpells:OpenWorldMapAt(uiMapID)
+    -- Opening the map or calling SetMapID from addon code in the Gamepad UI runs
+    -- WorldMapMixin:OnMapChanged -> worldMapFooter:Refresh -> RefreshBindingGroup while tainted,
+    -- which taints InputBindingManager and causes ADDON_ACTION_FORBIDDEN SetPreferredGamepadInteractTarget()
+    -- on the next panel close. Callers have already set the waypoint or pins.
+    if TrainerSpells.IsGamepadUIEnabled() then return end
     if not WorldMapFrame then return end
     if TrainerSpells.HasProtectedPanelShown() then
         if WorldMapFrame:IsShown() and WorldMapFrame.SetMapID then WorldMapFrame:SetMapID(uiMapID) end

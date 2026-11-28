@@ -260,6 +260,9 @@ function TrainerSpells:GetSkillReqForService(i)
 end
 
 function TrainerSpells:ExpandAllTrainerHeaders()
+    -- ExpandTrainerSkillLine fires TRAINER_UPDATE synchronously, which refreshes ClassTrainerFrame.footer
+    -- while tainted and taints InputBindingManager in the Gamepad UI.
+    if TrainerSpells.IsGamepadUIEnabled() then return end
     if not GetNumTrainerServices or not GetTrainerServiceInfo or not ExpandTrainerSkillLine then return end
     local i = 1
     while i <= GetNumTrainerServices() do

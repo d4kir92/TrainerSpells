@@ -228,7 +228,9 @@ function Beasts.ScanTrainer()
     local source = isBeastTraining and "craft" or "trainer"
     local found = {}
     for spell in pairs(Beasts.Store().beastKnown[source] or {}) do found[spell] = true end
-    local restoreUsed = GetTrainerServiceTypeFilter and SetTrainerServiceTypeFilter and not GetTrainerServiceTypeFilter("used")
+    -- SetTrainerServiceTypeFilter fires TRAINER_UPDATE synchronously, which refreshes ClassTrainerFrame.footer
+    -- while tainted and taints InputBindingManager in the Gamepad UI.
+    local restoreUsed = not TrainerSpells.IsGamepadUIEnabled() and GetTrainerServiceTypeFilter and SetTrainerServiceTypeFilter and not GetTrainerServiceTypeFilter("used")
     if restoreUsed then
         Beasts.ignoreTrainerUpdateUntil = GetTime() + 2
         SetTrainerServiceTypeFilter("used", true)

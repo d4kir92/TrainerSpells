@@ -229,6 +229,7 @@ function TrainerSpells:ShowProfessionExport()
 end
 
 function TrainerSpells:EnableTrainerDebugFilters()
+    if TrainerSpells.IsGamepadUIEnabled() then return false end
     if not GetTrainerServiceTypeFilter or not SetTrainerServiceTypeFilter then return false end
     local changed = false
     for _, filter in ipairs({"available", "unavailable", "used"}) do
