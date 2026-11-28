@@ -1515,39 +1515,82 @@ function professionSubTabs.IsNativeSideTab(frame)
     return false
 end
 
+function professionSubTabs.IsRestrictedRegion(frame)
+    if not frame then return true end
+    if type(frame.IsForbidden) == "function" and frame:IsForbidden() then return true end
+    if type(frame.IsAnchoringRestricted) == "function" and frame:IsAnchoringRestricted() then return true end
+    return false
+end
+
+function professionSubTabs.SafeGetNumPoints(frame)
+    if professionSubTabs.IsRestrictedRegion(frame) or type(frame.GetNumPoints) ~= "function" then return 0 end
+    local ok, count = pcall(frame.GetNumPoints, frame)
+    if not ok or type(count) ~= "number" or TrainerSpells:IsSecret(count) then return 0 end
+    return count
+end
+
+function professionSubTabs.SafeGetPoint(frame, index)
+    if professionSubTabs.IsRestrictedRegion(frame) or type(frame.GetPoint) ~= "function" then return nil end
+    local ok, point, relativeTo, relativePoint, x, y = pcall(frame.GetPoint, frame, index)
+    if not ok then return nil end
+    if relativeTo and TrainerSpells:IsSecret(relativeTo) then relativeTo = nil end
+    return point, relativeTo, relativePoint, x, y
+end
+
+function professionSubTabs.SafeGetRectMetrics(frame)
+    if professionSubTabs.IsRestrictedRegion(frame) or type(frame.GetLeft) ~= "function" or type(frame.GetBottom) ~= "function" or type(frame.GetWidth) ~= "function" or type(frame.GetHeight) ~= "function" then return nil end
+    local okL, left = pcall(frame.GetLeft, frame)
+    local okB, bottom = pcall(frame.GetBottom, frame)
+    local okW, width = pcall(frame.GetWidth, frame)
+    local okH, height = pcall(frame.GetHeight, frame)
+    if not (okL and okB and okW and okH) then return nil end
+    if type(left) ~= "number" or type(bottom) ~= "number" or type(width) ~= "number" or type(height) ~= "number" then return nil end
+    if TrainerSpells:IsSecret(left) or TrainerSpells:IsSecret(bottom) or TrainerSpells:IsSecret(width) or TrainerSpells:IsSecret(height) then return nil end
+    local scale = 1
+    if type(frame.GetEffectiveScale) == "function" then
+        local okS, effectiveScale = pcall(frame.GetEffectiveScale, frame)
+        if not okS or type(effectiveScale) ~= "number" or TrainerSpells:IsSecret(effectiveScale) then return nil end
+        scale = effectiveScale
+    end
+    return left, bottom, width, height, scale
+end
+
 function professionSubTabs.IsOwnSideTab(frame, depth)
-    if not frame or depth > 10 or (frame.IsForbidden and frame:IsForbidden()) then return false end
+    if not frame or depth > 10 then return false end
     if frame == professionsModeTabs.addon or frame == professionFrame then return true end
     for _, tab in pairs(professionsViewTabs) do
         if frame == tab then return true end
     end
-    if not frame.GetNumPoints then return false end
-    for index = 1, frame:GetNumPoints() do
-        local _, relativeTo = frame:GetPoint(index)
+    if professionSubTabs.IsRestrictedRegion(frame) then return false end
+    local numPoints = professionSubTabs.SafeGetNumPoints(frame)
+    for index = 1, numPoints do
+        local _, relativeTo = professionSubTabs.SafeGetPoint(frame, index)
         if relativeTo and relativeTo ~= ProfessionsFrame and relativeTo ~= UIParent and professionSubTabs.IsOwnSideTab(relativeTo, depth + 1) then return true end
     end
     return false
 end
 
 function professionSubTabs.IsAnchoredToProfessions(frame, depth)
-    if not frame or depth > 10 or (frame.IsForbidden and frame:IsForbidden()) then return false end
+    if not frame or depth > 10 then return false end
     if frame == ProfessionsFrame or (ProfessionsFrameTabSideBar and frame == ProfessionsFrameTabSideBar) or professionSubTabs.IsNativeSideTab(frame) then return true end
+    if professionSubTabs.IsRestrictedRegion(frame) then return false end
     local parent = frame.GetParent and frame:GetParent()
     for _ = 1, 5 do
         if not parent or parent == UIParent then break end
         if parent == ProfessionsFrame or (ProfessionsFrameTabSideBar and parent == ProfessionsFrameTabSideBar) then return true end
+        if parent.IsForbidden and parent:IsForbidden() then break end
         parent = parent.GetParent and parent:GetParent()
     end
-    if not frame.GetNumPoints then return false end
-    for index = 1, frame:GetNumPoints() do
-        local _, relativeTo = frame:GetPoint(index)
+    local numPoints = professionSubTabs.SafeGetNumPoints(frame)
+    for index = 1, numPoints do
+        local _, relativeTo = professionSubTabs.SafeGetPoint(frame, index)
         if relativeTo and relativeTo ~= UIParent and professionSubTabs.IsAnchoredToProfessions(relativeTo, depth + 1) then return true end
     end
     return false
 end
 
 function professionSubTabs.IsSideTabCandidate(frame)
-    if not frame or not ProfessionsFrame then return false end
+    if not frame or not ProfessionsFrame or professionSubTabs.IsRestrictedRegion(frame) then return false end
     if frame == ProfessionsFrame.CloseButton or frame == ProfessionsFrame.MaximizeMinimize or frame == ProfessionsFrame.TabIndicators then return false end
     if frame == ProfessionsFrame.BookPage or frame == ProfessionsFrame.CraftingPage or frame == ProfessionsFrame.SpecPage or frame == ProfessionsFrame.OrdersPage then return false end
     local indicators = ProfessionsFrame.TabIndicators
@@ -1556,6 +1599,7 @@ function professionSubTabs.IsSideTabCandidate(frame)
         for _ = 1, 5 do
             if not parent then break end
             if parent == indicators then return false end
+            if parent.IsForbidden and parent:IsForbidden() then break end
             parent = parent.GetParent and parent:GetParent()
         end
     end
@@ -1565,25 +1609,28 @@ function professionSubTabs.IsSideTabCandidate(frame)
 end
 
 function professionSubTabs.FindForeignSideTab(lastTab, extraIsOwn)
-    if not lastTab or (lastTab.IsForbidden and lastTab:IsForbidden()) then return nil end
-    local refLeft, refBottom = lastTab:GetLeft(), lastTab:GetBottom()
+    local refLeft, refBottom, _, _, refScale = professionSubTabs.SafeGetRectMetrics(lastTab)
     if not refLeft or not refBottom then return nil end
-    local refScale = lastTab.GetEffectiveScale and lastTab:GetEffectiveScale() or 1
     refLeft, refBottom = refLeft * refScale, refBottom * refScale
     local found, foundBottom = nil, refBottom
     local seen = {}
     if not extraIsOwn then wipe(professionSubTabs.foreignSideTabs) end
 
     local function Consider(child, requireProfessionsAnchor)
-        if not child or seen[child] or child == lastTab or (child.IsForbidden and child:IsForbidden()) then return end
+        if not child or seen[child] or child == lastTab or professionSubTabs.IsRestrictedRegion(child) then return end
         seen[child] = true
-        if not child:IsShown() or (child.IsVisible and not child:IsVisible()) then return end
-        if professionSubTabs.IsNativeSideTab(child) or professionSubTabs.IsOwnSideTab(child, 0) or (extraIsOwn and extraIsOwn(child)) then return end
+        local okS, shown = pcall(child.IsShown, child)
+        if not okS or TrainerSpells:IsSecret(shown) or not shown then return end
+        if type(child.IsVisible) == "function" then
+            local okV, visible = pcall(child.IsVisible, child)
+            if not okV or TrainerSpells:IsSecret(visible) or not visible then return end
+        end
+        if professionSubTabs.IsNativeSideTab(child) or (extraIsOwn and extraIsOwn(child)) then return end
         if not professionSubTabs.IsSideTabCandidate(child) then return end
+        if professionSubTabs.IsOwnSideTab(child, 0) then return end
         if requireProfessionsAnchor and not professionSubTabs.IsAnchoredToProfessions(child, 0) then return end
-        local left, bottom, width, height = child:GetLeft(), child:GetBottom(), child:GetWidth(), child:GetHeight()
-        if not (left and bottom and width and height) or width < 16 or width > 64 or height < 16 or height > 64 then return end
-        local scale = child.GetEffectiveScale and child:GetEffectiveScale() or 1
+        local left, bottom, width, height, scale = professionSubTabs.SafeGetRectMetrics(child)
+        if not left or width < 16 or width > 64 or height < 16 or height > 64 then return end
         local cLeft, cBottom = left * scale, bottom * scale
         if math.abs(cLeft - refLeft) <= 16 * refScale and cBottom < refBottom then
             if not extraIsOwn then professionSubTabs.foreignSideTabs[child] = true end
@@ -1593,23 +1640,23 @@ function professionSubTabs.FindForeignSideTab(lastTab, extraIsOwn)
 
     if ProfessionsFrame then
         for _, child in ipairs({ProfessionsFrame:GetChildren()}) do
-            Consider(child, false)
-            if child ~= ProfessionsFrame.BookPage and child ~= ProfessionsFrame.CraftingPage and child ~= ProfessionsFrame.SpecPage and child ~= ProfessionsFrame.OrdersPage and child ~= ProfessionsFrame.TabIndicators and child ~= professionFrame and not (child.IsForbidden and child:IsForbidden()) and child:IsShown() then
+            pcall(Consider, child, false)
+            if child ~= ProfessionsFrame.BookPage and child ~= ProfessionsFrame.CraftingPage and child ~= ProfessionsFrame.SpecPage and child ~= ProfessionsFrame.OrdersPage and child ~= ProfessionsFrame.TabIndicators and child ~= professionFrame and not professionSubTabs.IsRestrictedRegion(child) and type(child.IsShown) == "function" and child:IsShown() then
                 for _, nested in ipairs({child:GetChildren()}) do
-                    Consider(nested, false)
+                    pcall(Consider, nested, false)
                 end
             end
         end
     end
 
-    if ProfessionsFrameTabSideBar and not (ProfessionsFrameTabSideBar.IsForbidden and ProfessionsFrameTabSideBar:IsForbidden()) then
-        for _, child in ipairs(ProfessionsFrameTabSideBar.Tabs or {}) do Consider(child, false) end
-        for _, child in ipairs({ProfessionsFrameTabSideBar:GetChildren()}) do Consider(child, false) end
+    if ProfessionsFrameTabSideBar and not professionSubTabs.IsRestrictedRegion(ProfessionsFrameTabSideBar) then
+        for _, child in ipairs(ProfessionsFrameTabSideBar.Tabs or {}) do pcall(Consider, child, false) end
+        for _, child in ipairs({ProfessionsFrameTabSideBar:GetChildren()}) do pcall(Consider, child, false) end
     end
 
     if UIParent then
         for _, child in ipairs({UIParent:GetChildren()}) do
-            Consider(child, true)
+            pcall(Consider, child, true)
         end
     end
 
@@ -1621,17 +1668,20 @@ local function PositionProfessionsFrameModeTabs()
     if not ProfessionsFrame then return end
     if TrainerSpells.IsClassicUIForeverProfessions and TrainerSpells:IsClassicUIForeverProfessions() then return end
     if not professionsModeTabs.addon then return end
+    local lastTab = nil
+    if professionsFrameUsesSideTabs then
+        lastTab = ProfessionsFrame.ProfessionsOverviewTab
+        for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
+            if tab:IsShown() then lastTab = tab end
+        end
+        local ok, foreign = pcall(professionSubTabs.FindForeignSideTab, lastTab)
+        if ok and foreign then lastTab = foreign end
+    end
     for _, list in ipairs({professionsModeTabs, professionsViewTabs}) do
         for _, tab in pairs(list) do tab:ClearAllPoints() end
     end
     local previous = nil
     if professionsFrameUsesSideTabs then
-        local lastTab = ProfessionsFrame.ProfessionsOverviewTab
-        for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
-            if tab:IsShown() then lastTab = tab end
-        end
-
-        lastTab = professionSubTabs.FindForeignSideTab(lastTab) or lastTab
         for _, tab in ipairs(GetProfessionsActiveTabs()) do
             if previous then
                 tab:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -2)
@@ -1789,7 +1839,7 @@ function professionSubTabs.IsForeignControl(frame)
     for _ = 1, 20 do
         if not parent or (parent.IsForbidden and parent:IsForbidden()) or parent == professionFrame or parent == ProfessionsFrame.MaximizeMinimize or professionSubTabs.IsOwnSideTab(parent, 0) or (parent:GetName() or ""):find("^TrainerSpells") then return false end
         if parent == ProfessionsFrame or parent == ProfessionsFrameTabSideBar or professionSubTabs.foreignSideTabs[parent] then return true end
-        parent = parent:GetParent()
+        parent = parent.GetParent and parent:GetParent()
     end
     return false
 end
@@ -2013,7 +2063,7 @@ local function InstallProfessionsFrameShoulderTabs()
         UpdateLeftBinding(visible and professionsModeActive)
         if not visible then return end
         local rightButton = indicators.RightTabButton
-        if select(2, rightButton:GetPoint(1)) ~= lastTab then
+        if select(2, professionSubTabs.SafeGetPoint(rightButton, 1)) ~= lastTab then
             rightButton:ClearAllPoints()
             rightButton:SetPoint("TOP", lastTab, "BOTTOM", 0, 0)
         end
@@ -2062,8 +2112,9 @@ function professionSubTabs.SyncAnchorIfNeeded()
     for _, tab in ipairs(ProfessionsFrame.rightProfessionTabs) do
         if tab:IsShown() then lastTab = tab end
     end
-    local target = professionSubTabs.FindForeignSideTab(lastTab) or lastTab
-    local _, currentAnchor = firstTab:GetPoint(1)
+    local ok, foreign = pcall(professionSubTabs.FindForeignSideTab, lastTab)
+    local target = ok and foreign or lastTab
+    local _, currentAnchor = professionSubTabs.SafeGetPoint(firstTab, 1)
     if currentAnchor ~= target then PositionProfessionsFrameModeTabs() end
 end
 

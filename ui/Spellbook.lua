@@ -350,10 +350,13 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
     local function IsAnchoredToOwnTabs(frame, depth)
         if not frame or depth > 10 then return false end
         if ownTabs[frame] then return true end
-        if not frame.GetNumPoints then return false end
-        for index = 1, frame:GetNumPoints() do
-            local _, relativeTo = frame:GetPoint(index)
-            if relativeTo and relativeTo ~= SpellBookFrame and IsAnchoredToOwnTabs(relativeTo, depth + 1) then return true end
+        if (frame.IsForbidden and frame:IsForbidden()) or (frame.IsAnchoringRestricted and frame:IsAnchoringRestricted()) then return false end
+        if not frame.GetNumPoints or not frame.GetPoint then return false end
+        local okN, numPoints = pcall(frame.GetNumPoints, frame)
+        if not okN or type(numPoints) ~= "number" or TrainerSpells:IsSecret(numPoints) then return false end
+        for index = 1, numPoints do
+            local okP, _, relativeTo = pcall(frame.GetPoint, frame, index)
+            if okP and relativeTo and not TrainerSpells:IsSecret(relativeTo) and relativeTo ~= SpellBookFrame and IsAnchoredToOwnTabs(relativeTo, depth + 1) then return true end
         end
         return false
     end
@@ -365,9 +368,12 @@ if SpellBookFrame and TrainerSpells:HasClassTrainers() then
         if not refLeft or not floor then return nil end
         local found, foundBottom = nil, floor
         for _, child in ipairs({SpellBookFrame:GetChildren()}) do
-            if not ownTabs[child] and child:IsShown() and child:IsObjectType("Button") then
-                local left, bottom, width, height = child:GetLeft(), child:GetBottom(), child:GetWidth(), child:GetHeight()
-                if left and bottom and math.abs(left - refLeft) <= 8 and width <= 48 and height <= 48 and bottom < foundBottom and not IsAnchoredToOwnTabs(child, 0) then found, foundBottom = child, bottom end
+            if not ownTabs[child] and not (child.IsForbidden and child:IsForbidden()) and not (child.IsAnchoringRestricted and child:IsAnchoringRestricted()) and child:IsShown() and child:IsObjectType("Button") then
+                local okL, left = pcall(child.GetLeft, child)
+                local okB, bottom = pcall(child.GetBottom, child)
+                local okW, width = pcall(child.GetWidth, child)
+                local okH, height = pcall(child.GetHeight, child)
+                if okL and okB and okW and okH and type(left) == "number" and type(bottom) == "number" and type(width) == "number" and type(height) == "number" and not (TrainerSpells:IsSecret(left) or TrainerSpells:IsSecret(bottom) or TrainerSpells:IsSecret(width) or TrainerSpells:IsSecret(height)) and math.abs(left - refLeft) <= 8 and width <= 48 and height <= 48 and bottom < foundBottom and not IsAnchoredToOwnTabs(child, 0) then found, foundBottom = child, bottom end
             end
         end
         return found
