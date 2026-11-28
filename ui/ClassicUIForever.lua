@@ -237,6 +237,12 @@ function integration:Layout()
     local last = self.professionHost and self.book.ProfessionsOverviewTab or nil
     for _, tab in ipairs(self.professionHost and self.book.rightProfessionTabs or self.book.SkillTabs or {}) do if tab:IsShown() then last = tab end end
     if self.book.TrainTab and self.book.TrainTab:IsShown() then last = self.book.TrainTab end
+    if self.professionHost and last and TrainerSpells.FindForeignProfessionsSideTab then
+        last = TrainerSpells.FindForeignProfessionsSideTab(last, function(frame)
+            for _, own in ipairs(self.tabs or {}) do if frame == own then return true end end
+            return false
+        end) or last
+    end
     local bookTop, height = self.book:GetTop(), self.book:GetHeight()
     local lastBottom = last and last:GetBottom()
     local start, center = -65, nil
@@ -339,7 +345,11 @@ function integration:InstallProfessions()
     self.professions = controller
     controller:CreateGroup("professions", TrainerSpells.CreateCompendiumProfessions, TrainerSpells:Trans("LID_PROFESSIONS"), 134708)
     book:HookScript("OnHide", function() controller:Close() end)
-    book:HookScript("OnShow", function() controller:Layout(); controller:QueueLayout() end)
+    book:HookScript("OnShow", function()
+        controller:Layout()
+        controller:QueueLayout()
+        C_Timer.After(0.05, function() controller:Layout() end)
+    end)
     book:HookScript("OnSizeChanged", function() controller:QueueLayout() end)
     book.BookPage:HookScript("OnHide", function() controller:Close(); controller:Layout() end)
     book.BookPage:HookScript("OnShow", function() controller:Layout(); controller:QueueLayout() end)
